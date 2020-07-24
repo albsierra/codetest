@@ -1,25 +1,25 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
-$students = $QW_DAO->getUsersWithAnswers($_SESSION["qw_id"]);
+$students = $CT_DAO->getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
 foreach($students as $student) {
-    $studentAndDate[$student["user_id"]] = new DateTime($QW_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["qw_id"]));
+    $studentAndDate[$student["user_id"]] = new DateTime($CT_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["ct_id"]));
 }
 
-$questions = $QW_DAO->getQuestions($_SESSION["qw_id"]);
+$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
 $totalQuestions = count($questions);
 
 include("menu.php");
@@ -60,15 +60,15 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                     // Sort students by mostRecentDate desc
                     arsort($studentAndDate);
                     foreach ($studentAndDate as $student_id => $mostRecentDate) {
-                        if (!$QW_DAO->isUserInstructor($CONTEXT->id, $student_id)) {
+                        if (!$CT_DAO->isUserInstructor($CONTEXT->id, $student_id)) {
                             $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-                            $numberAnswered = $QW_DAO->getNumberQuestionsAnswered($student_id, $_SESSION["qw_id"]);
+                            $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($student_id, $_SESSION["ct_id"]);
                             ?>
                             <div class="list-group-item response-list-group-item">
                                 <div class="row">
                                     <div class="col-xs-6 header-col">
                                         <a href="#responses<?= $student_id ?>" class="h4 response-collapse-link" data-toggle="collapse">
-                                            <?= $QW_DAO->findDisplayName($student_id) ?>
+                                            <?= $CT_DAO->findDisplayName($student_id) ?>
                                             <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                                         </a>
                                     </div>
@@ -81,7 +81,7 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                                     <div id="responses<?= $student_id ?>" class="col-xs-12 results-collapse collapse">
                                         <?php
                                         foreach ($questions as $question) {
-                                            $response = $QW_DAO->getStudentAnswerForQuestion($question["question_id"], $student_id);
+                                            $response = $CT_DAO->getStudentAnswerForQuestion($question["question_id"], $student_id);
                                             ?>
                                             <div class="row response-row">
                                                 <div class="col-sm-3">

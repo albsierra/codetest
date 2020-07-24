@@ -1,9 +1,9 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CT_DAO.php');
 
-use QW\DAO\QW_DAO;
+use CT\DAO\CT_DAO;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
@@ -11,9 +11,9 @@ $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
-$questions = $QW_DAO->getQuestions($_SESSION["qw_id"]);
+$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
 $totalQuestions = count($questions);
 
 include("menu.php");
@@ -38,7 +38,7 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
             <div class="list-group">
                 <?php
                 foreach ($questions as $question) {
-                    $responses = $QW_DAO->getAllAnswersToQuestion($question["question_id"]);
+                    $responses = $CT_DAO->getAllAnswersToQuestion($question["question_id"]);
                     $numberResponses = count($responses);
                     ?>
                     <div class="list-group-item response-list-group-item">
@@ -60,13 +60,13 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
                                 // Sort by modified date with most recent at the top
                                 usort($responses, 'response_date_compare');
                                 foreach ($responses as $response) {
-                                    if (!$QW_DAO->isUserInstructor($CONTEXT->id, $response["user_id"])) {
+                                    if (!$CT_DAO->isUserInstructor($CONTEXT->id, $response["user_id"])) {
                                         $responseDate = new DateTime($response["modified"]);
                                         $formattedResponseDate = $responseDate->format("m/d/y")." | ".$responseDate->format("h:i A");
                                         ?>
                                         <div class="row response-row">
                                             <div class="col-sm-3">
-                                                <h5><?=$QW_DAO->findDisplayName($response["user_id"])?></h5>
+                                                <h5><?=$CT_DAO->findDisplayName($response["user_id"])?></h5>
                                                 <p><?=$formattedResponseDate?></p>
                                             </div>
                                             <div class="col-sm-offset-1 col-sm-8">

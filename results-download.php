@@ -1,17 +1,17 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 include("menu.php");
 
@@ -34,7 +34,7 @@ $OUTPUT->pageTitle('Download Results', true, false);
         <p class="lead">Click on the link below to download the student results.</p>
         <h4>
             <a href="actions/ExportToFile.php">
-                <span class="fa fa-download" aria-hidden="true"></span> QuickWrite-<?=$CONTEXT->title?>-Results.xls
+                <span class="fa fa-download" aria-hidden="true"></span> CodeTest-<?=$CONTEXT->title?>-Results.xls
             </a>
         </h4>
     </div>

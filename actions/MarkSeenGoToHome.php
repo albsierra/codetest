@@ -1,20 +1,20 @@
 <?php
 require_once "../../config.php";
-require_once "../dao/QW_DAO.php";
+require_once "../dao/CT_DAO.php";
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 if ( $USER->instructor ) {
 
-    $QW_DAO->markAsSeen($_SESSION["qw_id"]);
+    $CT_DAO->markAsSeen($_SESSION["ct_id"]);
 
     header( 'Location: '.addSession('../instructor-home.php') ) ;
 } else {

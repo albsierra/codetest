@@ -1,23 +1,23 @@
 <?php
 require_once "../../config.php";
 require_once "../util/PHPExcel.php";
-require_once "../dao/QW_DAO.php";
+require_once "../dao/CT_DAO.php";
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 if ( $USER->instructor ) {
 
-    $qw_id = $_SESSION["qw_id"];
+    $ct_id = $_SESSION["ct_id"];
 
-    $questions = $QW_DAO->getQuestions($qw_id);
+    $questions = $CT_DAO->getQuestions($ct_id);
 
     $rowCounter = 1;
 
@@ -46,24 +46,24 @@ if ( $USER->instructor ) {
         $exportFile->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
     }
 
-    $StudentList = $QW_DAO->getUsersWithAnswers($qw_id);
+    $StudentList = $CT_DAO->getUsersWithAnswers($ct_id);
 
     $columnIterator = $exportFile->getActiveSheet()->getColumnIterator();
     $columnIterator->next();
 
     foreach ($StudentList as $student ) {
-        if (!$QW_DAO->isUserInstructor($CONTEXT->id, $student["user_id"])) {
+        if (!$CT_DAO->isUserInstructor($CONTEXT->id, $student["user_id"])) {
             $rowCounter++;
 
             $UserID = $student["user_id"];
 
-            $Email = $QW_DAO->findEmail($UserID);
+            $Email = $CT_DAO->findEmail($UserID);
             $UserName = explode("@",$Email);
 
-            $Modified1 = $QW_DAO->getMostRecentAnswerDate($UserID, $qw_id);
+            $Modified1 = $CT_DAO->getMostRecentAnswerDate($UserID, $ct_id);
             $Modified  =  new DateTime($Modified1);
 
-            $displayName = $QW_DAO->findDisplayName($UserID);
+            $displayName = $CT_DAO->findDisplayName($UserID);
             $displayName = trim($displayName);
 
             $lastName = (strpos($displayName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $displayName);
@@ -79,7 +79,7 @@ if ( $USER->instructor ) {
                 $QID = $question["question_id"];
                 $A="";
 
-                $answer = $QW_DAO->getStudentAnswerForQuestion($QID, $UserID);
+                $answer = $CT_DAO->getStudentAnswerForQuestion($QID, $UserID);
                 if ($answer) {
                     $A = $answer["answer_txt"];
                     $A = str_replace("&#39;", "'", $A);
@@ -99,7 +99,7 @@ if ( $USER->instructor ) {
     }
     $exportFile->getActiveSheet()->calculateColumnWidths();
 
-    $filename = 'QuickWrite-'.$CONTEXT->title.'-Results.xls';
+    $filename = 'CodeTest-'.$CONTEXT->title.'-Results.xls';
 
     // Redirect output to a client’s web browser (Excel5)
     header('Content-Type: application/vnd.ms-excel');

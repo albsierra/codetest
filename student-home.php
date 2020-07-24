@@ -1,27 +1,27 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
-$SetID = $_SESSION["qw_id"];
+$SetID = $_SESSION["ct_id"];
 
-$toolTitle = $QW_DAO->getMainTitle($_SESSION["qw_id"]);
+$toolTitle = $CT_DAO->getMainTitle($_SESSION["ct_id"]);
 
 if (!$toolTitle) {
     $toolTitle = "Quick Write";
 }
 
-$questions = $QW_DAO->getQuestions($SetID);
+$questions = $CT_DAO->getQuestions($SetID);
 $totalQuestions = count($questions);
 
 $moreToSubmit = false;
@@ -45,7 +45,7 @@ $OUTPUT->pageTitle($toolTitle, true, false);
 
 if ($totalQuestions > 0) {
         foreach ($questions as $question) {
-            $answer = $QW_DAO->getStudentAnswerForQuestion($question["question_id"], $USER->id);
+            $answer = $CT_DAO->getStudentAnswerForQuestion($question["question_id"], $USER->id);
             ?>
             <h2 class="small-hdr <?= $question["question_num"] == 1 ? 'hdr-notop-mrgn' : '' ?>">
                 <small>Question <?= $question["question_num"] ?></small>

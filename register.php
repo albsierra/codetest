@@ -1,10 +1,10 @@
 <?php
 
 $REGISTER_LTI2 = array(
-    "name" => "Quick Write", // Name of the tool
-    "FontAwesome" => "fa-pencil-square", // Icon for the tool
+    "name" => "Code Test", // Name of the tool
+    "FontAwesome" => "fa-code", // Icon for the tool
     "short_name" => "Quick Write",
-    "description" => "A simple tool to prompt users to respond to short answer questions.", // Tool description
+    "description" => "A SQL-Test tool derived from QuickWrite Tsugi tool (https://github.com/udaytonapps/quickwrite).", // Tool description
     "messages" => array("launch"),
     "license" => "Apache",
     "languages" => array(
@@ -13,15 +13,15 @@ $REGISTER_LTI2 = array(
     "analytics" => array(
         "internal"
     ),
-    "source_url" => "https://github.com/udaytonapps/quickwrite",
+    "source_url" => "https://github.com/albsierra/codetest",
     "screen_shots" => array(
-        "images/QW-Splash.png",
-        "images/QW-InstructorQuestions.png",
-        "images/QW-Instructor-ToolMenu.png",
-        "images/QW-Help.png",
-        "images/QW-Instructor-StudentResults.png",
-        "images/QW-Instructor-QuestionResults.png",
-        "images/QW-StudentView.png",
-        "images/QW-StudentView-Answered.png",
+        "images/CT-Splash.png",
+        "images/CT-InstructorQuestions.png",
+        "images/CT-Instructor-ToolMenu.png",
+        "images/CT-Help.png",
+        "images/CT-Instructor-StudentResults.png",
+        "images/CT-Instructor-QuestionResults.png",
+        "images/CT-StudentView.png",
+        "images/CT-StudentView-Answered.png",
     )
 );

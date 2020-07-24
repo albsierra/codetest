@@ -1,15 +1,15 @@
 <?php
 require_once "../../config.php";
-require_once('../dao/QW_DAO.php');
+require_once('../dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 if ($USER->instructor) {
 
@@ -24,12 +24,12 @@ if ($USER->instructor) {
     if (isset($questionText) && trim($questionText) != '') {
         if ($questionId > -1) {
             // Existing question
-            $QW_DAO->updateQuestion($questionId, $questionText, $currentTime);
+            $CT_DAO->updateQuestion($questionId, $questionText, $currentTime);
         } else {
             // New question
-            $questionId = $QW_DAO->createQuestion($_SESSION["qw_id"], $questionText, $currentTime);
+            $questionId = $CT_DAO->createQuestion($_SESSION["ct_id"], $questionText, $currentTime);
 
-            $question = $QW_DAO->getQuestionById($questionId);
+            $question = $CT_DAO->getQuestionById($questionId);
 
             // Create new question markup
             ob_start();
@@ -72,7 +72,7 @@ if ($USER->instructor) {
     } else {
         if ($questionId > -1) {
             // Blank text means delete question
-            $QW_DAO->deleteQuestion($questionId);
+            $CT_DAO->deleteQuestion($questionId);
             // Set question id to false to remove question line
             $questionId = false;
             $_SESSION['success'] = 'Question Deleted.';

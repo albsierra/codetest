@@ -1,15 +1,15 @@
 <?php
 require_once "../../config.php";
-require_once('../dao/QW_DAO.php');
+require_once('../dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTimeForDB = $currentTime->format("Y-m-d H:i:s");
@@ -23,9 +23,9 @@ if (!isset($answerText) || trim($answerText) == "") {
     $_SESSION['error'] = "Your answer cannot be blank.";
     $result["answer_content"] = false;
 } else {
-    $QW_DAO->createAnswer($USER->id, $questionId, $answerText, $currentTimeForDB);
+    $CT_DAO->createAnswer($USER->id, $questionId, $answerText, $currentTimeForDB);
 
-    $question = $QW_DAO->getQuestionById($questionId);
+    $question = $CT_DAO->getQuestionById($questionId);
     $formattedDate = $currentTime->format("m/d/y")." | ".$currentTime->format("h:i A");
 
     ob_start();
@@ -40,7 +40,7 @@ if (!isset($answerText) || trim($answerText) == "") {
 
     // Notify elearning that there is a new answer
     // the message
-    $msg = "A new quick write was submitted on Learn by ".$QW_DAO->findDisplayName($USER->id)." (".$QW_DAO->findEmail($USER->id).").\n
+    $msg = "A new quick write was submitted on Learn by ".$CT_DAO->findDisplayName($USER->id)." (".$CT_DAO->findEmail($USER->id).").\n
     Question: ".$question["question_txt"]."\n
     Answer: ".$answerText;
 
@@ -50,7 +50,7 @@ if (!isset($answerText) || trim($answerText) == "") {
     $headers  = "From: LEARN < no-reply@learn.udayton.edu >\n";
 
     // send email
-    //mail("elearning@udayton.edu", "A new quickwrite has been submitted on Learn", $msg, $headers);
+    //mail("elearning@udayton.edu", "A new codetest has been submitted on Learn", $msg, $headers);
 }
 
 $OUTPUT->buffer=true;

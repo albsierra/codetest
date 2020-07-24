@@ -1,17 +1,17 @@
 <?php
 
 require_once('../config.php');
-require_once('dao/QW_DAO.php');
+require_once('dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
+use \CT\DAO\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$QW_DAO = new QW_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO($PDOX, $p);
 
 include("menu.php");
 
@@ -22,19 +22,19 @@ include("tool-header.html");
 
 $OUTPUT->bodyStart();
 
-$toolTitle = $QW_DAO->getMainTitle($_SESSION["qw_id"]);
+$toolTitle = $CT_DAO->getMainTitle($_SESSION["ct_id"]);
 
 if (!$toolTitle) {
     $toolTitle = "Quick Write";
 }
 
-$questions = $QW_DAO->getQuestions($_SESSION["qw_id"]);
+$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
 
 // Clear any preview responses if there are questions
 if ($questions) {
-    $instructors = $QW_DAO->findInstructors($CONTEXT->id);
+    $instructors = $CT_DAO->findInstructors($CONTEXT->id);
     foreach($instructors as $instructor) {
-        $QW_DAO->deleteAnswers($questions, $instructor["user_id"]);
+        $CT_DAO->deleteAnswers($questions, $instructor["user_id"]);
     }
 }
 
@@ -50,7 +50,7 @@ $OUTPUT->flashMessages();
             <span class="flx-cntnr flx-row flx-nowrap flx-start">
                 <span class="title-text-span" onclick="editTitleText();" tabindex="0"><?=$toolTitle?></span>
                 <a id="toolTitleEditLink" class="toolTitleAction" href="javascript:void(0);" onclick="editTitleText();">
-                    <span class="fa fa-fw fa-pencil" aria-hidden="true"></span>
+                    <span class="fa fa-fw fa-code" aria-hidden="true"></span>
                     <span class="sr-only">Edit Title Text</span>
                 </a>
             </span>
