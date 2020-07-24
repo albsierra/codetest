@@ -2,7 +2,18 @@
 
 // The SQL to uninstall this tool
 $DATABASE_UNINSTALL = array(
-    // Nothing
+    array( "{$CFG->dbprefix}ct_grade",
+        "drop table if exists {$CFG->dbprefix}ct_grade"),
+    array( "{$CFG->dbprefix}ct_sql_question",
+        "drop table if exists {$CFG->dbprefix}ct_sql_question"),
+    array( "{$CFG->dbprefix}ct_code_question",
+        "drop table if exists {$CFG->dbprefix}ct_code_question"),
+    array( "{$CFG->dbprefix}ct_answer",
+        "drop table if exists {$CFG->dbprefix}ct_answer"),
+    array( "{$CFG->dbprefix}ct_question",
+        "drop table if exists {$CFG->dbprefix}ct_question"),
+    array( "{$CFG->dbprefix}ct_main",
+        "drop table if exists {$CFG->dbprefix}ct_main"),
 );
 
 // The SQL to create the tables if they don't exist
@@ -14,7 +25,9 @@ $DATABASE_INSTALL = array(
     context_id  INTEGER NOT NULL,
 	link_id     INTEGER NOT NULL,
 	title       VARCHAR(255) NULL,
+	type     INTEGER NOT NULL DEFAULT 1,
 	seen_splash BOOL NOT NULL DEFAULT 0,
+	shuffle BOOL NOT NULL DEFAULT 0,
 	points      FLOAT NOT NULL DEFAULT 100,
     modified    datetime NULL,
     
@@ -43,6 +56,7 @@ $DATABASE_INSTALL = array(
     user_id      INTEGER NOT NULL,
     question_id  INTEGER NOT NULL,
 	answer_txt   TEXT NULL,
+	asnwer_success BOOL NOT NULL DEFAULT 0,
     modified     datetime NULL,
     
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_2`
@@ -53,6 +67,37 @@ $DATABASE_INSTALL = array(
     PRIMARY KEY(answer_id)
     
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
+    array( "{$CFG->dbprefix}ct_code_question",
+        "create table {$CFG->dbprefix}ct_code_question (
+    question_id INTEGER NOT NULL,
+    question_language INTEGER NOT NULL DEFAULT '1',
+    question_input_test VARCHAR(255) NULL DEFAULT NULL,
+    question_input_grade VARCHAR(255) NULL DEFAULT NULL,
+    question_output_test TEXT NULL DEFAULT NULL,
+    question_output_grade TEXT NULL DEFAULT NULL,
+    question_solution TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (question_id),
+  CONSTRAINT `{$CFG->dbprefix}ct_ibfk_3`
+    FOREIGN KEY (`question_id`)
+    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
+    array( "{$CFG->dbprefix}ct_sql_question",
+        "create table {$CFG->dbprefix}ct_sql_question (
+    question_id INT(11) NOT NULL,
+    question_type VARCHAR(20) NULL DEFAULT 'SELECT',
+    question_database VARCHAR(100) NULL DEFAULT NULL,
+    question_solution TEXT NULL DEFAULT NULL,
+    question_probe TEXT NULL DEFAULT NULL,
+        
+  PRIMARY KEY (question_id),
+  CONSTRAINT `{$CFG->dbprefix}ct_ibfk_4`
+    FOREIGN KEY (`question_id`)
+    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
     array( "{$CFG->dbprefix}ct_grade",
         "create table {$CFG->dbprefix}ct_grade (
     grade_id        INTEGER NOT NULL AUTO_INCREMENT,
@@ -61,7 +106,7 @@ $DATABASE_INSTALL = array(
     grade           FLOAT NOT NULL DEFAULT 0,
 	modified        datetime NULL,
     
-    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_3`
+    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_5`
         FOREIGN KEY (`ct_id`)
         REFERENCES `{$CFG->dbprefix}ct_main` (`ct_id`)
         ON DELETE CASCADE,
@@ -106,5 +151,5 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryDie($sql);
     }
 
-    return '201909031328';
+    return '201907070902';
 };
