@@ -24,13 +24,7 @@ class CT_DAO {
         $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
         return $this->PDOX->allRowsDie($query, $arr);
     }
-
-    function hasSeenSplash($ct_id) {
-        $query = "SELECT seen_splash FROM {$this->p}ct_main WHERE ct_id = :ctId";
-        $arr = array(':ctId' => $ct_id);
-        return $this->PDOX->rowDie($query, $arr)["seen_splash"];
-    }
-
+    
     function markAsSeen($ct_id) {
         $query = "UPDATE {$this->p}ct_main set seen_splash = 1 WHERE ct_id = :ctId;";
         $arr = array(':ctId' => $ct_id);

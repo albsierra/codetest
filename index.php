@@ -23,9 +23,7 @@ if ( $USER->instructor ) {
 
     $_SESSION["ct_id"] = $main->getCtId();
 
-    $seenSplash = $CT_DAO->hasSeenSplash($_SESSION["ct_id"]);
-
-    if ($seenSplash) {
+    if ($main->getSeenSplash()) {
         // Instructor has already setup this instance
         header( 'Location: '.addSession('instructor-home.php') ) ;
     } else {
