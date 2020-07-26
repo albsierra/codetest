@@ -13,27 +13,10 @@ class CT_DAO {
         $this->p = $CFG->dbprefix;
     }
 
-    function getOrCreateMain($user_id, $context_id, $link_id, $current_time) {
-        $main_id = $this->getMainID($context_id, $link_id);
-        if (!$main_id) {
-            return $this->createMain($user_id, $context_id, $link_id, $current_time);
-        } else {
-            return $main_id;
-        }
-    }
-
-    function getMainID($context_id, $link_id) {
-        $query = "SELECT ct_id FROM {$this->p}ct_main WHERE context_id = :context_id AND link_id = :link_id";
-        $arr = array(':context_id' => $context_id, ':link_id' => $link_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context["ct_id"];
-    }
-
-    function createMain($user_id, $context_id, $link_id, $current_time) {
-        $query = "INSERT INTO {$this->p}ct_main (user_id, context_id, link_id, modified) VALUES (:userId, :contextId, :linkId, :currentTime);";
-        $arr = array(':userId' => $user_id, ':contextId' => $context_id, ':linkId' => $link_id, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-        return $this->PDOX->lastInsertId();
+    public static function getConnection() {
+        global $PDOX;
+        global $CFG;
+        return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
     function findQuestionsForImport($user_id, $ct_id) {
