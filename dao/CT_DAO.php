@@ -6,9 +6,11 @@ class CT_DAO {
     private $PDOX;
     private $p;
 
-    public function __construct($PDOX, $p) {
+    public function __construct() {
+        global $PDOX;
+        global $CFG;
         $this->PDOX = $PDOX;
-        $this->p = $p;
+        $this->p = $CFG->dbprefix;
     }
 
     function getOrCreateMain($user_id, $context_id, $link_id, $current_time) {

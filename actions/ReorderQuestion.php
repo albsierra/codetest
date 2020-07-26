@@ -9,7 +9,7 @@ $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO();
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 

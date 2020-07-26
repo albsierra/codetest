@@ -10,7 +10,7 @@ $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO($PDOX, $p);
+$CT_DAO = new CT_DAO();
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTimeForDB = $currentTime->format("Y-m-d H:i:s");
