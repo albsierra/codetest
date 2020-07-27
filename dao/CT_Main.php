@@ -250,5 +250,11 @@ class CT_Main
         $connection['PDOX']->queryDie($query, $arr);
     }
 
+    function delete($user_id) {
+        $connection = CT_DAO::getConnection();
+        $query = "DELETE FROM {$connection['p']}ct_main WHERE ct_id = :mainId AND user_id = :userId";
+        $arr = array(':mainId' => $this->getCtId(), ':userId' => $user_id);
+        $connection['PDOX']->queryDie($query, $arr);
+    }
 
 }

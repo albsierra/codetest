@@ -25,36 +25,6 @@ class CT_DAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function getMainTitle($ct_id) {
-        $query = "SELECT title FROM {$this->p}ct_main WHERE ct_id = :ctId";
-        $arr = array(':ctId' => $ct_id);
-        return $this->PDOX->rowDie($query, $arr)["title"];
-    }
-
-    function getPointsPossible($ct_id) {
-        $query = "SELECT points FROM {$this->p}ct_main WHERE ct_id = :ctId";
-        $arr = array(':ctId' => $ct_id);
-        return $this->PDOX->rowDie($query, $arr)["points"];
-    }
-
-    function updateMainTitle($ct_id, $title, $current_time) {
-        $query = "UPDATE {$this->p}ct_main set title = :title, modified = :currentTime WHERE ct_id = :ctId;";
-        $arr = array(':title' => $title, ':currentTime' => $current_time, ':ctId' => $ct_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
-    function updatePointsPossible($ct_id, $points, $current_time) {
-        $query = "UPDATE {$this->p}ct_main set points = :points, modified = :currentTime WHERE ct_id = :ctId;";
-        $arr = array(':points' => $points, ':currentTime' => $current_time, ':ctId' => $ct_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
-    function deleteMain($ct_id, $user_id) {
-        $query = "DELETE FROM {$this->p}ct_main WHERE ct_id = :mainId AND user_id = :userId";
-        $arr = array(':mainId' => $ct_id, ':userId' => $user_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function getQuestions($ct_id) {
         $query = "SELECT * FROM {$this->p}ct_question WHERE ct_id = :ctId order by question_num;";
         $arr = array(':ctId' => $ct_id);

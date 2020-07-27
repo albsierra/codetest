@@ -1,9 +1,11 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
+require_once('../dao/CT_Main.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
 
 $LAUNCH = LTIX::requireData();
 
@@ -17,9 +19,11 @@ if ($USER->instructor) {
 
     if (isset($_POST["points_possible"]) && is_numeric($_POST["points_possible"])) {
         $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-        $currentTime = $currentTime->format("Y-m-d H:i:s");
 
-        $CT_DAO->updatePointsPossible($_SESSION["ct_id"], $_POST["points_possible"], $currentTime);
+        $main = new CT_Main($_SESSION["ct_id"]);
+        $main->setModified($currentTime->format("Y-m-d H:i:s"));
+        $main->setPoints($_POST["points_possible"]);
+        $main->save();
 
         $_SESSION['success'] = "Points Possible updated.";
     } else {

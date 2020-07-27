@@ -1,10 +1,12 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
+require_once('../dao/CT_Main.php');
 
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Result;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
 
 $LAUNCH = LTIX::requireData();
 
@@ -35,7 +37,8 @@ if ($USER->instructor) {
         $_SESSION['success'] = "Grade saved.";
 
         // Calculate percentage and post
-        $percentage = ($grade * 1.0) / $CT_DAO->getPointsPossible($ct_id);
+        $main = new CT_Main($ct_id);
+        $percentage = ($grade * 1.0) / $main->getPoints();
 
         // Get result record for user
         $resultqry = "SELECT * FROM {$p}lti_result WHERE user_id = :user_id AND link_id = :link_id";
