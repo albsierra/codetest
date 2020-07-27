@@ -19,7 +19,7 @@ $currentTime = $currentTime->format("Y-m-d H:i:s");
 
 if ( $USER->instructor ) {
 
-    $main = new CT_Main($CONTEXT->id, $LINK->id, $USER->id, $currentTime);
+    $main = CT_Main::getMainFromContext($CONTEXT->id, $LINK->id, $USER->id, $currentTime);
 
     $_SESSION["ct_id"] = $main->getCtId();
 
@@ -31,7 +31,7 @@ if ( $USER->instructor ) {
     }
 } else { // student
 
-    $main = new CT_Main($CONTEXT->id, $LINK->id);
+    $main = CT_Main::getMainFromContext($CONTEXT->id, $LINK->id);
 
     if (!$main) {
         header('Location: '.addSession('splash.php'));

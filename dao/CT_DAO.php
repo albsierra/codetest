@@ -24,12 +24,6 @@ class CT_DAO {
         $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
         return $this->PDOX->allRowsDie($query, $arr);
     }
-    
-    function markAsSeen($ct_id) {
-        $query = "UPDATE {$this->p}ct_main set seen_splash = 1 WHERE ct_id = :ctId;";
-        $arr = array(':ctId' => $ct_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
 
     function getMainTitle($ct_id) {
         $query = "SELECT title FROM {$this->p}ct_main WHERE ct_id = :ctId";
