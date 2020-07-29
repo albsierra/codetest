@@ -24,7 +24,7 @@ foreach($students as $student) {
     $studentAndDate[$student["user_id"]] = new DateTime($CT_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["ct_id"]));
 }
 
-$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+$questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
 include("menu.php");

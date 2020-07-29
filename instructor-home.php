@@ -32,7 +32,7 @@ if (!$toolTitle) {
     $toolTitle = "Code Test";
 }
 
-$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+$questions = $main->getQuestions();
 
 // Clear any preview responses if there are questions
 if ($questions) {

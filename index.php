@@ -38,7 +38,7 @@ if ( $USER->instructor ) {
     } else {
         $_SESSION["ct_id"] = $main->getCtId();
 
-        $questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+        $questions = $main->getQuestions();
 
         if (!$questions || count($questions) == 0) {
             header('Location: '.addSession('splash.php'));

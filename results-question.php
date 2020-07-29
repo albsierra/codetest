@@ -2,8 +2,10 @@
 
 require_once('../config.php');
 require_once('dao/CT_DAO.php');
+require_once('dao/CT_Main.php');
 
 use CT\DAO\CT_DAO;
+use CT\DAO\CT_Main;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
@@ -13,7 +15,8 @@ $p = $CFG->dbprefix;
 
 $CT_DAO = new CT_DAO();
 
-$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+$main = new CT_Main($_SESSION["ct_id"]);
+$questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
 include("menu.php");

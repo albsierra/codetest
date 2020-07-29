@@ -25,7 +25,7 @@ if (!$toolTitle) {
     $toolTitle = "Code Test";
 }
 
-$questions = $CT_DAO->getQuestions($SetID);
+$questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
 $moreToSubmit = false;

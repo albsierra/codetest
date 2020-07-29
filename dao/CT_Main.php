@@ -26,7 +26,7 @@ class CT_Main
             $arr = array(':ct_id' => $ct_id);
             $context = $connection['PDOX']->rowDie($query, $arr);
         }
-        $this->setPropertiesFromArray($context);
+        CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     public static function getMainFromContext($context_id, $link_id, $user_id = null, $current_time = null) {
@@ -51,6 +51,14 @@ class CT_Main
         $arr = array(':userId' => $user_id, ':contextId' => $context_id, ':linkId' => $link_id, ':currentTime' => $current_time);
         $connection['PDOX']->queryDie($query, $arr);
         return new self($connection['PDOX']->lastInsertId());
+    }
+
+    //TODO Crear Array de objetos en lugar de Array de arrays.
+    function getQuestions() {
+        $connection = CT_DAO::getConnection();
+        $query = "SELECT * FROM {$connection['p']}ct_question WHERE ct_id = :ctId order by question_num;";
+        $arr = array(':ctId' => $this->getCtId());
+        return $connection['PDOX']->allRowsDie($query, $arr);
     }
 
     /**
@@ -211,15 +219,6 @@ class CT_Main
     public function setModified($modified)
     {
         $this->modified = $modified;
-    }
-
-    private function setPropertiesFromArray($arrayProperties) {
-        foreach($arrayProperties as $k => $v)
-            $this->$k = $v;
-    }
-
-    private function setPropertiesToArray() {
-        return (array) $this;
     }
 
     public function save() {

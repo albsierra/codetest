@@ -25,12 +25,6 @@ class CT_DAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function getQuestions($ct_id) {
-        $query = "SELECT * FROM {$this->p}ct_question WHERE ct_id = :ctId order by question_num;";
-        $arr = array(':ctId' => $ct_id);
-        return $this->PDOX->allRowsDie($query, $arr);
-    }
-
     function getQuestionById($question_id) {
         $query = "SELECT * FROM {$this->p}ct_question WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id);
@@ -189,4 +183,15 @@ class CT_DAO {
         $role = $this->PDOX->rowDie($query, $arr);
         return $role["role"] == '1000';
     }
+
+    public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
+        foreach($arrayProperties as $k => $v) {
+            call_user_func_array(array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE))), array($v));
+        }
+    }
+
+    public static function setObjectPropertiesToArray($object) {
+        return (array) $object;
+    }
+
 }

@@ -2,9 +2,11 @@
 require_once "../../config.php";
 require_once "../util/PHPExcel.php";
 require_once "../dao/CT_DAO.php";
+require_once "../dao/CT_Main.php";
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -17,7 +19,8 @@ if ( $USER->instructor ) {
 
     $ct_id = $_SESSION["ct_id"];
 
-    $questions = $CT_DAO->getQuestions($ct_id);
+    $main = new CT_Main($ct_id);
+    $questions = $main->getQuestions();
 
     $rowCounter = 1;
 

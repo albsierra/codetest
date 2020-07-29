@@ -1,9 +1,11 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
+require_once('../dao/CT_Main');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
 
 $LAUNCH = LTIX::requireData();
 
@@ -14,7 +16,8 @@ $CT_DAO = new CT_DAO();
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 
 if ( $USER->instructor && $question_id ) {
-    $questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+    $main = new CT_Main($_SESSION["ct_id"]);
+    $questions = $main->getQuestions();
     $prevQuestion = false;
     foreach ($questions as $question) {
         if ($question["question_id"] == $question_id) {

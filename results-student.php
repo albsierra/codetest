@@ -2,9 +2,11 @@
 
 require_once('../config.php');
 require_once('dao/CT_DAO.php');
+require_once('dao/CT_Main.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -19,7 +21,9 @@ foreach($students as $student) {
     $studentAndDate[$student["user_id"]] = new DateTime($CT_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["ct_id"]));
 }
 
-$questions = $CT_DAO->getQuestions($_SESSION["ct_id"]);
+
+$main = new CT_Main($_SESSION["ct_id"]);
+$questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
 include("menu.php");
