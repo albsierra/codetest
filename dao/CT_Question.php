@@ -24,6 +24,14 @@ class CT_Question
         CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
+    public static function getByMain($ct_id)
+    {
+        $connection = CT_DAO::getConnection();
+        $query = "SELECT * FROM {$connection['p']}ct_question WHERE ct_id = :ctId order by question_num;";
+        $arr = array(':ctId' => $ct_id);
+        return CT_DAO::createObjectFromArray(self::class, $connection['PDOX']->allRowsDie($query, $arr));
+    }
+
     /**
      * @return mixed
      */

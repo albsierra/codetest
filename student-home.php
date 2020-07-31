@@ -3,10 +3,12 @@
 require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
+require_once('dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
+use \CT\DAO\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -49,26 +51,27 @@ $OUTPUT->pageTitle($toolTitle, true, false);
 
 if ($totalQuestions > 0) {
         foreach ($questions as $question) {
-            $answer = $CT_DAO->getStudentAnswerForQuestion($question["question_id"], $USER->id);
+            $questionId = $question->getQuestionId();
+            $answer = $CT_DAO->getStudentAnswerForQuestion($questionId, $USER->id);
             ?>
-            <h2 class="small-hdr <?= $question["question_num"] == 1 ? 'hdr-notop-mrgn' : '' ?>">
-                <small>Question <?= $question["question_num"] ?></small>
+            <h2 class="small-hdr <?= $question->getQuestionNum() == 1 ? 'hdr-notop-mrgn' : '' ?>">
+                <small>Question <?= $question->getQuestionNum() ?></small>
             </h2>
-            <div id="questionAnswer<?= $question["question_id"] ?>">
+            <div id="questionAnswer<?= $questionId ?>">
                 <?php
                 if (!$answer) {
                     ?>
-                    <form id="answerForm<?= $question["question_id"] ?>" action="actions/AnswerQuestion.php"
+                    <form id="answerForm<?= $questionId ?>" action="actions/AnswerQuestion.php"
                           method="post">
-                        <input type="hidden" name="questionId" value="<?= $question["question_id"] ?>">
+                        <input type="hidden" name="questionId" value="<?= $questionId ?>">
                         <div class="form-group">
                             <label class="h3"
-                                   for="answerText<?= $question["question_id"] ?>"><?= $question["question_txt"] ?></label>
-                            <textarea class="form-control" id="answerText<?= $question["question_id"] ?>"
+                                   for="answerText<?= $questionId ?>"><?= $question->getQuestionTxt() ?></label>
+                            <textarea class="form-control" id="answerText<?= $questionId ?>"
                                       name="answerText" rows="5"></textarea>
                         </div>
                         <button type="button" class="btn btn-success"
-                                onclick="answerQuestion(<?= $question["question_id"] ?>);">Submit
+                                onclick="answerQuestion(<?= $questionId ?>);">Submit
                         </button>
                     </form>
                     <?php
@@ -76,7 +79,7 @@ if ($totalQuestions > 0) {
                     $dateTime = new DateTime($answer['modified']);
                     $formattedDate = $dateTime->format("m/d/y") . " | " . $dateTime->format("h:i A");
                     ?>
-                    <h3 class="sub-hdr"><?= $question["question_txt"] ?></h3>
+                    <h3 class="sub-hdr"><?= $question->getQuestionTxt() ?></h3>
                     <p><?= $formattedDate ?></p>
                     <p><?= $answer["answer_txt"] ?></p>
                     <?php

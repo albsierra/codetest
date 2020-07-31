@@ -3,10 +3,12 @@ require_once "../../config.php";
 require_once "../util/PHPExcel.php";
 require_once "../dao/CT_DAO.php";
 require_once "../dao/CT_Main.php";
+require_once('../dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
+use \CT\DAO\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -79,7 +81,7 @@ if ( $USER->instructor ) {
 
             $col = 3;
             foreach ($questions as $question ) {
-                $QID = $question["question_id"];
+                $QID = $question->getQuestionId();
                 $A="";
 
                 $answer = $CT_DAO->getStudentAnswerForQuestion($QID, $UserID);

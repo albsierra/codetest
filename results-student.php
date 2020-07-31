@@ -3,10 +3,12 @@
 require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
+require_once('dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
+use \CT\DAO\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -85,14 +87,14 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                                     <div id="responses<?= $student_id ?>" class="col-xs-12 results-collapse collapse">
                                         <?php
                                         foreach ($questions as $question) {
-                                            $response = $CT_DAO->getStudentAnswerForQuestion($question["question_id"], $student_id);
+                                            $response = $CT_DAO->getStudentAnswerForQuestion($question->getQuestionId(), $student_id);
                                             ?>
                                             <div class="row response-row">
                                                 <div class="col-sm-3">
                                                     <h4 class="small-hdr hdr-notop-mrgn">
-                                                        <small>Question <?= $question["question_num"] ?></small>
+                                                        <small>Question <?= $question->getQuestionNum() ?></small>
                                                     </h4>
-                                                    <h5 class="sub-hdr"><?= $question["question_txt"] ?></h5>
+                                                    <h5 class="sub-hdr"><?= $question->getQuestionTxt() ?></h5>
                                                 </div>
                                                 <div class="col-sm-offset-1 col-sm-8">
                                                     <p class="response-text"><?= $response["answer_txt"] ?></p>
@@ -114,7 +116,7 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
     </div>
 <?php
 
-$OUTPUT->helpModal("Quick Write Help", __('
+$OUTPUT->helpModal("Code Test Help", __('
                         <h4>Viewing Results</H4>
                         <p>You are viewing the results by student. Click on a student below to see how that student answered each question.</p>
                         <p>Students are sorted with the most recently submitted at the top of the list.</p>'));

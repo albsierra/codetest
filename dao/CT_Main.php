@@ -53,12 +53,8 @@ class CT_Main
         return new self($connection['PDOX']->lastInsertId());
     }
 
-    //TODO Crear Array de objetos en lugar de Array de arrays.
     function getQuestions() {
-        $connection = CT_DAO::getConnection();
-        $query = "SELECT * FROM {$connection['p']}ct_question WHERE ct_id = :ctId order by question_num;";
-        $arr = array(':ctId' => $this->getCtId());
-        return $connection['PDOX']->allRowsDie($query, $arr);
+        return CT_Question::getByMain($this->getCtId());
     }
 
     /**

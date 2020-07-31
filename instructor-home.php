@@ -3,10 +3,12 @@
 require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
+require_once('dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
+use CT\DAO\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -77,34 +79,35 @@ $OUTPUT->flashMessages();
         <section id="theQuestions">
             <?php
             foreach ($questions as $question) {
+                $questionId = $question->getQuestionId();
                 ?>
-                <div id="questionRow<?=$question["question_id"]?>" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" data-question-number="<?=$question["question_num"]?>">
-                    <div class="question-number"><?=$question["question_num"]?>.</div>
+                <div id="questionRow<?=$questionId?>" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" data-question-number="<?=$question->getQuestionNum()?>">
+                    <div class="question-number"><?=$question->getQuestionNum()?>.</div>
                     <div class="flx-grow-all question-text">
-                        <span class="question-text-span" onclick="editQuestionText(<?=$question["question_id"]?>)" id="questionText<?=$question["question_id"]?>" tabindex="0"><?= $question["question_txt"] ?></span>
-                        <form id="questionTextForm<?=$question["question_id"]?>" onsubmit="return confirmDeleteQuestionBlank(<?=$question["question_id"]?>)" action="actions/AddOrEditQuestion.php" method="post" style="display:none;">
-                            <input type="hidden" name="questionId" value="<?=$question["question_id"]?>">
-                            <label for="questionTextInput<?=$question["question_id"]?>" class="sr-only">Question Text</label>
-                            <textarea class="form-control" id="questionTextInput<?=$question["question_id"]?>" name="questionText" rows="2" required><?=$question["question_txt"]?></textarea>
+                        <span class="question-text-span" onclick="editQuestionText(<?=$questionId?>)" id="questionText<?=$questionId?>" tabindex="0"><?= $question->getQuestionTxt() ?></span>
+                        <form id="questionTextForm<?=$questionId?>" onsubmit="return confirmDeleteQuestionBlank(<?=$questionId?>)" action="actions/AddOrEditQuestion.php" method="post" style="display:none;">
+                            <input type="hidden" name="questionId" value="<?=$questionId?>">
+                            <label for="questionTextInput<?=$questionId?>" class="sr-only">Question Text</label>
+                            <textarea class="form-control" id="questionTextInput<?=$questionId?>" name="questionText" rows="2" required><?=$question->getQuestionTxt()?></textarea>
                         </form>
                     </div>
-                    <a id="questionEditAction<?=$question["question_id"]?>" href="javascript:void(0);" onclick="editQuestionText(<?=$question["question_id"]?>)">
+                    <a id="questionEditAction<?=$questionId?>" href="javascript:void(0);" onclick="editQuestionText(<?=$questionId?>)">
                         <span class="fa fa-fw fa-pencil" aria-hidden="true"></span>
                         <span class="sr-only">Edit Question Text</span>
                     </a>
-                    <a id="questionReorderAction<?=$question["question_id"]?>" href="javascript:void(0);" onclick="moveQuestionUp(<?=$question["question_id"]?>)">
+                    <a id="questionReorderAction<?=$questionId?>" href="javascript:void(0);" onclick="moveQuestionUp(<?=$questionId?>)">
                         <span class="fa fa-fw fa-chevron-circle-up" aria-hidden="true"></span>
                         <span class="sr-only">Move Question Up</span>
                     </a>
-                    <a id="questionDeleteAction<?=$question["question_id"]?>" href="javascript:void(0);" onclick="deleteQuestion(<?=$question["question_id"]?>)">
+                    <a id="questionDeleteAction<?=$questionId?>" href="javascript:void(0);" onclick="deleteQuestion(<?=$questionId?>)">
                         <span aria-hidden="true" class="fa fa-fw fa-trash"></span>
                         <span class="sr-only">Delete Question</span>
                     </a>
-                    <a id="questionSaveAction<?=$question["question_id"]?>" href="javascript:void(0);" style="display:none;">
+                    <a id="questionSaveAction<?=$questionId?>" href="javascript:void(0);" style="display:none;">
                         <span aria-hidden="true" class="fa fa-fw fa-save"></span>
                         <span class="sr-only">Save Question</span>
                     </a>
-                    <a id="questionCancelAction<?=$question["question_id"]?>" href="javascript:void(0);" style="display: none;">
+                    <a id="questionCancelAction<?=$questionId?>" href="javascript:void(0);" style="display: none;">
                         <span aria-hidden="true" class="fa fa-fw fa-times"></span>
                         <span class="sr-only">Cancel Question</span>
                     </a>

@@ -118,7 +118,7 @@ class CT_DAO {
     function deleteAnswers($questions, $user_id) {
         $questionIds = array();
         foreach($questions as $question) {
-            array_push($questionIds, $question["question_id"]);
+            array_push($questionIds, $question->getQuestionId());
         }
         $query = "DELETE FROM {$this->p}ct_answer WHERE user_id = :userId AND question_id in (".implode(',', array_map('intval', $questionIds)).");";
         $arr = array(':userId' => $user_id);
@@ -192,6 +192,16 @@ class CT_DAO {
 
     public static function setObjectPropertiesToArray($object) {
         return (array) $object;
+    }
+
+    public static function createObjectFromArray($class, $array) {
+        $arrayObject = array();
+        foreach($array as $element) {
+            $object = new $class();
+            self::setObjectPropertiesFromArray($object, $element);
+            array_push($arrayObject, $object);
+        }
+        return $arrayObject;
     }
 
 }

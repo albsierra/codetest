@@ -1,11 +1,13 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Main');
+require_once('../dao/CT_Main.php');
+require_once('../dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
+use \CT\DAO\CT_Question;
 
 $LAUNCH = LTIX::requireData();
 
@@ -20,17 +22,17 @@ if ( $USER->instructor && $question_id ) {
     $questions = $main->getQuestions();
     $prevQuestion = false;
     foreach ($questions as $question) {
-        if ($question["question_id"] == $question_id) {
+        if ($question->getQuestionId() == $question_id) {
             // Move this one up
-            if($question["question_num"] == 1) {
+            if($question->getQuestionNum() == 1) {
                 // This was the first so put it at the end
                 $CT_DAO->updateQuestionNumber($question_id, count($questions) + 1);
                 $CT_DAO->fixUpQuestionNumbers($_SESSION["ct_id"]);
                 break;
             } else {
                 // This was one of the other questions so swap with previous
-                $CT_DAO->updateQuestionNumber($question_id, $prevQuestion["question_num"]);
-                $CT_DAO->updateQuestionNumber($prevQuestion["question_id"], $question["question_num"]);
+                $CT_DAO->updateQuestionNumber($question_id, $prevQuestion->getQuestionNum());
+                $CT_DAO->updateQuestionNumber($prevQuestion->getQuestionId(), $question->getQuestionNum());
                 break;
             }
         }
