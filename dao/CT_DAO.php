@@ -31,18 +31,6 @@ class CT_DAO {
         return $this->PDOX->rowDie($query, $arr)["total"];
     }
 
-    function fixUpQuestionNumbers($ct_id) {
-        $query = "SET @question_num = 0; UPDATE {$this->p}ct_question set question_num = (@question_num:=@question_num+1) WHERE ct_id = :ctId ORDER BY question_num";
-        $arr = array(':ctId' => $ct_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
-    function updateQuestionNumber($question_id, $new_number) {
-        $query = "UPDATE {$this->p}ct_question set question_num = :questionNumber WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id, ':questionNumber' => $new_number);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function getUsersWithAnswers($ct_id) {
         $query = "SELECT DISTINCT user_id FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE q.ct_id = :ctId;";
         $arr = array(':ctId' => $ct_id);

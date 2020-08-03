@@ -81,12 +81,25 @@ class CT_Question
     }
 
     function getNextQuestionNumber() {
-
         $connection = CT_DAO::getConnection();
         $query = "SELECT MAX(question_num) as lastNum FROM {$connection['p']}ct_question WHERE ct_id = :ctId";
         $arr = array(':ctId' => $this->getCtId());
         $lastNum = $connection['PDOX']->rowDie($query, $arr)["lastNum"];
         return $lastNum + 1;
+    }
+
+    static function fixUpQuestionNumbers($ct_id) {
+        $connection = CT_DAO::getConnection();
+        $query = "SET @question_num = 0; UPDATE {$connection['p']}ct_question set question_num = (@question_num:=@question_num+1) WHERE ct_id = :ctId ORDER BY question_num";
+        $arr = array(':ctId' => $ct_id);
+        $connection['PDOX']->queryDie($query, $arr);
+    }
+
+    function updateQuestionNumber($new_number) {
+        $connection = CT_DAO::getConnection();
+        $query = "UPDATE {$connection['p']}ct_question set question_num = :questionNumber WHERE question_id = :questionId;";
+        $arr = array(':questionId' => $this->getQuestionId(), ':questionNumber' => $new_number);
+        $connection['PDOX']->queryDie($query, $arr);
     }
 
     /**

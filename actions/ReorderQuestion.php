@@ -16,23 +16,28 @@ $p = $CFG->dbprefix;
 $CT_DAO = new CT_DAO();
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
+$questionToMove = new CT_Question($question_id);
 
 if ( $USER->instructor && $question_id ) {
     $main = new CT_Main($_SESSION["ct_id"]);
     $questions = $main->getQuestions();
     $prevQuestion = false;
     foreach ($questions as $question) {
-        if ($question->getQuestionId() == $question_id) {
+        if ($question->getQuestionId() == $questionToMove->getQuestionId()) {
             // Move this one up
             if($question->getQuestionNum() == 1) {
                 // This was the first so put it at the end
-                $CT_DAO->updateQuestionNumber($question_id, count($questions) + 1);
-                $CT_DAO->fixUpQuestionNumbers($_SESSION["ct_id"]);
+                $questionToMove->setQuestionNum(count($questions) + 1);
+                $questionToMove->save();
+                CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
                 break;
             } else {
                 // This was one of the other questions so swap with previous
-                $CT_DAO->updateQuestionNumber($question_id, $prevQuestion->getQuestionNum());
-                $CT_DAO->updateQuestionNumber($prevQuestion->getQuestionId(), $question->getQuestionNum());
+                $number = $questionToMove->getQuestionNum();
+                $questionToMove->setQuestionNum($prevQuestion->getQuestionNum());
+                $questionToMove->save();
+                $prevQuestion->setQuestionNum($number);
+                $prevQuestion->save();
                 break;
             }
         }

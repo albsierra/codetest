@@ -21,7 +21,7 @@ if ( $USER->instructor && $question_id ) {
     $question = new CT_Question($question_id);
     $question->delete();
 
-    $CT_DAO->fixUpQuestionNumbers($_SESSION["ct_id"]);
+    CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
 
     $_SESSION['success'] = "Question Deleted.";
 
