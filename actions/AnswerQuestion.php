@@ -1,9 +1,11 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
+require_once('../dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Question;
 
 $LAUNCH = LTIX::requireData();
 
@@ -25,12 +27,12 @@ if (!isset($answerText) || trim($answerText) == "") {
 } else {
     $CT_DAO->createAnswer($USER->id, $questionId, $answerText, $currentTimeForDB);
 
-    $question = $CT_DAO->getQuestionById($questionId);
+    $question = new CT_Question($questionId);
     $formattedDate = $currentTime->format("m/d/y")." | ".$currentTime->format("h:i A");
 
     ob_start();
     ?>
-    <h3 class="sub-hdr"><?= $question["question_txt"] ?></h3>
+    <h3 class="sub-hdr"><?= $question->getQuestionTxt() ?></h3>
     <p><?=$formattedDate?></p>
     <p><?=$answerText?></p>
     <?php
@@ -41,7 +43,7 @@ if (!isset($answerText) || trim($answerText) == "") {
     // Notify elearning that there is a new answer
     // the message
     $msg = "A new quick write was submitted on Learn by ".$CT_DAO->findDisplayName($USER->id)." (".$CT_DAO->findEmail($USER->id).").\n
-    Question: ".$question["question_txt"]."\n
+    Question: ".$question->setQuestionTxt()."\n
     Answer: ".$answerText;
 
     // use wordwrap() if lines are longer than 70 characters

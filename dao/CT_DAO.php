@@ -25,12 +25,6 @@ class CT_DAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function getQuestionById($question_id) {
-        $query = "SELECT * FROM {$this->p}ct_question WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
     function updateQuestion($question_id, $question_text, $current_time) {
         $query = "UPDATE {$this->p}ct_question set question_txt = :questionText, modified = :currentTime WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id, ':questionText' => $question_text, ':currentTime' => $current_time);
