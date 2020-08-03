@@ -1,9 +1,13 @@
 <?php
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
+require_once('../dao/CT_Main.php');
+require_once('../dao/CT_Question.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Main;
+use \CT\DAO\CT_Question;
 
 $LAUNCH = LTIX::requireData();
 
@@ -18,14 +22,12 @@ if ($USER->instructor) {
     if (!$questions) {
         $_SESSION["error"] = "Question(s) failed to save. Please try again.";
     } else {
-        $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-        $currentTime = $currentTime->format("Y-m-d H:i:s");
-
         foreach($questions as $question) {
-            $origQuestion = $CT_DAO->getQuestionById($question);
+            $origQuestion = new CT_Question($question);
 
-            if($origQuestion) {
-                $CT_DAO->createQuestion($_SESSION["ct_id"], $origQuestion["question_txt"], $currentTime);
+            if($origQuestion->getQuestionId()) {
+                $main = new CT_Main($_SESSION["ct_id"]);
+                $question = $main->createQuestion($origQuestion->getQuestionTxt());
             }
         }
 

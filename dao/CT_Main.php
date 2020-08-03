@@ -57,6 +57,14 @@ class CT_Main
         return CT_Question::getByMain($this->getCtId());
     }
 
+    function createQuestion($questionText) {
+        $question = new CT_Question();
+        $question->setCtId($this->getCtId());
+        $question->setQuestionTxt($questionText);
+        $question->save();
+        return $question;
+    }
+
     /**
      * @return mixed
      */

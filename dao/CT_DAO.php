@@ -31,25 +31,10 @@ class CT_DAO {
         return $this->PDOX->rowDie($query, $arr);
     }
 
-    function createQuestion($ct_id, $question_text, $current_time) {
-        $nextNumber = $this->getNextQuestionNumber($ct_id);
-        $query = "INSERT INTO {$this->p}ct_question (ct_id, question_num, question_txt, modified) VALUES (:ctId, :questionNum, :questionText, :currentTime);";
-        $arr = array(':ctId' => $ct_id, ':questionNum' => $nextNumber, ':questionText' => $question_text, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-        return $this->PDOX->lastInsertId();
-    }
-
     function updateQuestion($question_id, $question_text, $current_time) {
         $query = "UPDATE {$this->p}ct_question set question_txt = :questionText, modified = :currentTime WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id, ':questionText' => $question_text, ':currentTime' => $current_time);
         $this->PDOX->queryDie($query, $arr);
-    }
-
-    function getNextQuestionNumber($ct_id) {
-        $query = "SELECT MAX(question_num) as lastNum FROM {$this->p}ct_question WHERE ct_id = :ctId";
-        $arr = array(':ctId' => $ct_id);
-        $lastNum = $this->PDOX->rowDie($query, $arr)["lastNum"];
-        return $lastNum + 1;
     }
 
     function countAnswersForQuestion($question_id) {
