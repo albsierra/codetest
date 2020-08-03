@@ -74,7 +74,8 @@ if ($USER->instructor) {
     } else {
         if ($questionId > -1) {
             // Blank text means delete question
-            $CT_DAO->deleteQuestion($questionId);
+            $question = new CT_Question($questionId);
+            $question->delete();
             // Set question id to false to remove question line
             $questionId = false;
             $_SESSION['success'] = 'Question Deleted.';

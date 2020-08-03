@@ -31,12 +31,6 @@ class CT_DAO {
         return $this->PDOX->rowDie($query, $arr)["total"];
     }
 
-    function deleteQuestion($question_id) {
-        $query = "DELETE FROM {$this->p}ct_question WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function fixUpQuestionNumbers($ct_id) {
         $query = "SET @question_num = 0; UPDATE {$this->p}ct_question set question_num = (@question_num:=@question_num+1) WHERE ct_id = :ctId ORDER BY question_num";
         $arr = array(':ctId' => $ct_id);

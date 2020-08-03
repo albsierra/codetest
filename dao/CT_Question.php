@@ -156,5 +156,11 @@ class CT_Question
         if($this->isNew()) $this->setQuestionId($connection['PDOX']->lastInsertId());
     }
 
+    function delete() {
+        $connection = CT_DAO::getConnection();
+        $query = "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;";
+        $arr = array(':questionId' => $this->getQuestionId());
+        $connection['PDOX']->queryDie($query, $arr);
+    }
 
 }

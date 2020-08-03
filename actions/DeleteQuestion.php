@@ -1,9 +1,11 @@
 <?php
 require_once "../../config.php";
 require_once "../dao/CT_DAO.php";
+require_once "../dao/CT_Question.php";
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
+use \CT\DAO\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -16,7 +18,8 @@ $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 
 if ( $USER->instructor && $question_id ) {
 
-    $CT_DAO->deleteQuestion($question_id);
+    $question = new CT_Question($question_id);
+    $question->delete();
 
     $CT_DAO->fixUpQuestionNumbers($_SESSION["ct_id"]);
 
