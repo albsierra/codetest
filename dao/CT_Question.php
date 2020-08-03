@@ -32,6 +32,18 @@ class CT_Question
         return CT_DAO::createObjectFromArray(self::class, $connection['PDOX']->allRowsDie($query, $arr));
     }
 
+    //TODO Convertir en array de objetos
+    static function findQuestionsForImport($user_id, $ct_id) {
+        $connection = CT_DAO::getConnection();
+        $query = "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
+            . "FROM {$connection['p']}ct_question q "
+            . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
+            . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
+            . "WHERE m.user_id = :userId AND m.ct_id != :ct_id";
+        $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
+        return $connection['PDOX']->allRowsDie($query, $arr);
+    }
+
     /**
      * @return mixed
      */
@@ -92,13 +104,6 @@ class CT_Question
         $connection = CT_DAO::getConnection();
         $query = "SET @question_num = 0; UPDATE {$connection['p']}ct_question set question_num = (@question_num:=@question_num+1) WHERE ct_id = :ctId ORDER BY question_num";
         $arr = array(':ctId' => $ct_id);
-        $connection['PDOX']->queryDie($query, $arr);
-    }
-
-    function updateQuestionNumber($new_number) {
-        $connection = CT_DAO::getConnection();
-        $query = "UPDATE {$connection['p']}ct_question set question_num = :questionNumber WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $this->getQuestionId(), ':questionNumber' => $new_number);
         $connection['PDOX']->queryDie($query, $arr);
     }
 

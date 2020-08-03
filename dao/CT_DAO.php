@@ -19,12 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function findQuestionsForImport($user_id, $ct_id) {
-        $query = "SELECT q.*, m.title as tooltitle, c.title as sitetitle FROM {$this->p}ct_question q join {$this->p}ct_main m on q.ct_id = m.ct_id join {$this->p}lti_context c on m.context_id = c.context_id WHERE m.user_id = :userId AND m.ct_id != :ct_id";
-        $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
-        return $this->PDOX->allRowsDie($query, $arr);
-    }
-
     function countAnswersForQuestion($question_id) {
         $query = "SELECT COUNT(*) as total FROM {$this->p}ct_answer WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id);

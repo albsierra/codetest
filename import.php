@@ -1,6 +1,6 @@
 <?php
 
-$questionsForImport = $CT_DAO->findQuestionsForImport($USER->id, $_SESSION["ct_id"]);
+$questionsForImport = \CT\DAO\CT_Question::findQuestionsForImport($USER->id, $_SESSION["ct_id"]);
 
 ?>
 <div id="importModal" class="modal fade" role="dialog">
