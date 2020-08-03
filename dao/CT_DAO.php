@@ -25,12 +25,6 @@ class CT_DAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function updateQuestion($question_id, $question_text, $current_time) {
-        $query = "UPDATE {$this->p}ct_question set question_txt = :questionText, modified = :currentTime WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id, ':questionText' => $question_text, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function countAnswersForQuestion($question_id) {
         $query = "SELECT COUNT(*) as total FROM {$this->p}ct_answer WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id);
