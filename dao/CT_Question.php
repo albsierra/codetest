@@ -44,6 +44,15 @@ class CT_Question
         return $connection['PDOX']->allRowsDie($query, $arr);
     }
 
+    function createAnswer($user_id, $answer_txt) {
+        $answer = new CT_Answer();
+        $answer->setUserId($user_id);
+        $answer->setQuestionId($this->getQuestionId());
+        $answer->setAnswerTxt($answer_txt);
+        $answer->save();
+        return $answer;
+    }
+
     /**
      * @return mixed
      */

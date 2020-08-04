@@ -94,7 +94,7 @@ class CT_Answer
      */
     public function getAnswerSuccess()
     {
-        return $this->answer_success;
+        return $this->answer_success ? $this->answer_success : 0;
     }
 
     /**
@@ -133,22 +133,24 @@ class CT_Answer
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if($this->isNew()) {
-            $query = "INSERT INTO {$this->p}ct_answer "
-                . "(user_id, question_id, answer_txt, modified) "
-                . "VALUES (:userId, :questionId, :answerTxt, :currentTime)";
+            $query = "INSERT INTO {$connection['p']}ct_answer "
+                . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`) "
+                . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified)";
         } else {
             $query = "UPDATE {$connection['p']}ct_answer set "
-                . "`ct_id` = :ctId, "
-                . "`question_num` = :question_num, "
-                . "`question_txt` = :question_txt, "
+                . "`user_id` = :userId, "
+                . "`question_id` = :questionId, "
+                . "`answer_txt` = :answerTxt, "
+                . "`answer_success` = :answerSuccess"
                 . "`modified` = :modified "
                 . "WHERE answer_id = :answer_id";
         }
         $arr = array(
             ':modified' => $currentTime,
-            ':ctId' => $this->getCtId(),
-            ':question_num' => $this->getQuestionNum(),
-            ':question_txt' => $this->getQuestionTxt(),
+            ':userId' => $this->getUserId(),
+            ':questionId' => $this->getQuestionId(),
+            ':answerTxt' => $this->getAnswerTxt(),
+            'answerSuccess' => $this->getAnswerSuccess(),
         );
         if(!$this->isNew()) $arr[':answer_id'] = $this->getAnswerId();
         $connection['PDOX']->queryDie($query, $arr);
