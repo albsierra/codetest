@@ -24,14 +24,6 @@ class CT_Question
         CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
-    // TODO aplicar la misma solución que para getAnswers()
-    public static function getByMain($ct_id)
-    {
-        $query = CT_DAO::getQuery('question', 'getByMain');
-        $arr = array(':ctId' => $ct_id);
-        return CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
-    }
-
     //TODO Convertir en array de objetos
     static function findQuestionsForImport($user_id, $ct_id) {
         $query = CT_DAO::getQuery('question', 'findQuestionsForImport');

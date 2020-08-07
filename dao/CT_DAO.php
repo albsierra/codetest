@@ -120,10 +120,13 @@ class CT_DAO {
 
     public static function getQuery($class, $name)
     {
-        $connection = CT_DAO::getConnection();
+        $connection = self::getConnection();
         $MainQueries = array(
             'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
             'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main WHERE context_id = :context_id AND link_id = :link_id",
+            'getQuestionsId' => "SELECT question_id FROM {$connection['p']}ct_question "
+                . "WHERE ct_id = :ctId "
+                . "order by question_num",
             'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) VALUES (:userId, :contextId, :linkId, :currentTime)",
             'update' => "UPDATE {$connection['p']}ct_main set "
                 . "`user_id` = :user_id, "
@@ -149,7 +152,7 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE question_id = :question_id",
             'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",
-            'getAnswersId' => "SELECT * FROM {$connection['p']}ct_answer WHERE question_id = :questionId;",
+            'getAnswersId' => "SELECT answer_id FROM {$connection['p']}ct_answer WHERE question_id = :questionId;",
             'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
                 . "set question_num = (@question_num:=@question_num+1) "
                 . "WHERE ct_id = :ctId ORDER BY question_num",
@@ -160,8 +163,6 @@ class CT_DAO {
                 . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
                 . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
                 . "WHERE m.user_id = :userId AND m.ct_id != :ct_id",
-            'getByMain' => "SELECT * FROM {$connection['p']}ct_question "
-                . "WHERE ct_id = :ctId order by question_num",
             'getById' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE question_id = :question_id",
         );

@@ -16,6 +16,7 @@ class CT_Main
     private $shuffle;
     private $points;
     private $modified;
+    private $questions;
 
     public function __construct($ct_id = null)
     {
@@ -50,8 +51,20 @@ class CT_Main
         return new self($query['PDOX']->lastInsertId());
     }
 
+    /**
+     * @return CT_Question[] $questions
+     */
     function getQuestions() {
-        return CT_Question::getByMain($this->getCtId());
+        if(!is_array($this->questions)) {
+            $this->questions = array();
+            $query = CT_DAO::getQuery('main', 'getQuestionsId');
+            $arr = array(':ctId' => $this->getCtId());
+            $questions = $query['PDOX']->allRowsDie($query['sentence'], $arr);
+            foreach ($questions as $question) {
+                array_push($this->questions, new CT_Question($question['question_id']));
+            }
+        }
+        return $this->questions;
     }
 
     function createQuestion($questionText) {
