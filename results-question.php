@@ -4,10 +4,12 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
+require_once('dao/CT_Answer.php');
 
 use CT\DAO\CT_DAO;
 use CT\DAO\CT_Main;
 use CT\DAO\CT_Question;
+use CT\DAO\CT_Answer;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
@@ -67,7 +69,7 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
                                 usort($responses, 'response_date_compare');
                                 foreach ($responses as $response) {
                                     if (!$CT_DAO->isUserInstructor($CONTEXT->id, $response->getUserId())) {
-                                        $responseDate = new DateTime($response["modified"]);
+                                        $responseDate = new DateTime($response->getModified());
                                         $formattedResponseDate = $responseDate->format("m/d/y")." | ".$responseDate->format("h:i A");
                                         ?>
                                         <div class="row response-row">

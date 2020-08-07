@@ -121,7 +121,23 @@ class CT_DAO {
     public static function getQuery($class, $name)
     {
         $connection = CT_DAO::getConnection();
-        $MainQueries = array();
+        $MainQueries = array(
+            'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
+            'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main WHERE context_id = :context_id AND link_id = :link_id",
+            'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) VALUES (:userId, :contextId, :linkId, :currentTime)",
+            'update' => "UPDATE {$connection['p']}ct_main set "
+                . "`user_id` = :user_id, "
+                . "`context_id` = :context_id, "
+                . "`link_id` = :link_id, "
+                . "`title` = :title, "
+                . "`type` = :type, "
+                . "`seen_splash` = :seen_splash, "
+                . "`shuffle` = :shuffle, "
+                . "`points` = :points, "
+                . "`modified` = :modified "
+                . "WHERE ct_id = :ctId",
+            'delete' => "DELETE FROM {$connection['p']}ct_main WHERE ct_id = :mainId AND user_id = :userId",
+        );
         $QuestionQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_question  "
                 . "(`ct_id`, `question_num`, `question_txt`, `modified` ) "

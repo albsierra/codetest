@@ -21,10 +21,9 @@ class CT_Main
     {
         $context = array();
         if (isset($ct_id)) {
-            $connection = CT_DAO::getConnection();
-            $query = "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id";
+            $query = CT_DAO::getQuery('main', 'getByCtId');
             $arr = array(':ct_id' => $ct_id);
-            $context = $connection['PDOX']->rowDie($query, $arr);
+            $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
@@ -38,19 +37,17 @@ class CT_Main
     }
 
     public static function getMain($context_id, $link_id) {
-        $connection = CT_DAO::getConnection();
-        $query = "SELECT ct_id FROM {$connection['p']}ct_main WHERE context_id = :context_id AND link_id = :link_id";
+        $query = CT_DAO::getQuery('main','getMain');
         $arr = array(':context_id' => $context_id, ':link_id' => $link_id);
-        $context = $connection['PDOX']->rowDie($query, $arr);
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         return new self($context['ct_id']);
     }
 
     public static function createMain($user_id, $context_id, $link_id, $current_time) {
-        $connection = CT_DAO::getConnection();
-        $query = "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) VALUES (:userId, :contextId, :linkId, :currentTime);";
+        $query = CT_DAO::getQuery('main','insert');
         $arr = array(':userId' => $user_id, ':contextId' => $context_id, ':linkId' => $link_id, ':currentTime' => $current_time);
-        $connection['PDOX']->queryDie($query, $arr);
-        return new self($connection['PDOX']->lastInsertId());
+        $query['PDOX']->queryDie($query['sentence'], $arr);
+        return new self($query['PDOX']->lastInsertId());
     }
 
     function getQuestions() {
@@ -226,18 +223,7 @@ class CT_Main
     }
 
     public function save() {
-        $connection = CT_DAO::getConnection();
-        $query = "UPDATE {$connection['p']}ct_main set "
-            . "`user_id` = :user_id, "
-            . "`context_id` = :context_id, "
-            . "`link_id` = :link_id, "
-            . "`title` = :title, "
-            . "`type` = :type, "
-            . "`seen_splash` = :seen_splash, "
-            . "`shuffle` = :shuffle, "
-            . "`points` = :points, "
-            . "`modified` = :modified "
-            . "WHERE ct_id = :ctId";
+        $query = CT_DAO::getQuery('main','update');
         $arr = array(
             ':user_id' => $this->getUserId(),
             ':context_id' => $this->getContextId(),
@@ -250,14 +236,13 @@ class CT_Main
             ':modified' => $this->getModified(),
             ':ctId' => $this->getCtId()
         );
-        $connection['PDOX']->queryDie($query, $arr);
+        $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
     function delete($user_id) {
-        $connection = CT_DAO::getConnection();
-        $query = "DELETE FROM {$connection['p']}ct_main WHERE ct_id = :mainId AND user_id = :userId";
+        $query = CT_DAO::getQuery('main','delete');
         $arr = array(':mainId' => $this->getCtId(), ':userId' => $user_id);
-        $connection['PDOX']->queryDie($query, $arr);
+        $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
 }
