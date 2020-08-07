@@ -4,11 +4,13 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
+require_once('dao/CT_Answer.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use CT\DAO\CT_Question;
+use CT\DAO\CT_Answer;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -40,7 +42,7 @@ $questions = $main->getQuestions();
 if ($questions) {
     $instructors = $CT_DAO->findInstructors($CONTEXT->id);
     foreach($instructors as $instructor) {
-        $CT_DAO->deleteAnswers($questions, $instructor["user_id"]);
+        CT_Answer::deleteAnswers($questions, $instructor["user_id"]);
     }
 }
 

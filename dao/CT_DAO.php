@@ -51,32 +51,10 @@ class CT_DAO {
         return $context['num_answered'];
     }
 
-    function updateAnswer($answer_id, $answer_txt, $current_time) {
-        $query = "UPDATE {$this->p}ct_answer set answer_txt = :answerTxt, modified = :currentTime where answer_id = :answerId;";
-        $arr = array(':answerId' => $answer_id, ':answerTxt' => $answer_txt, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
-    function deleteAnswers($questions, $user_id) {
-        $questionIds = array();
-        foreach($questions as $question) {
-            array_push($questionIds, $question->getQuestionId());
-        }
-        $query = "DELETE FROM {$this->p}ct_answer WHERE user_id = :userId AND question_id in (".implode(',', array_map('intval', $questionIds)).");";
-        $arr = array(':userId' => $user_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function getAllAnswersToQuestion($question_id) {
         $query = "SELECT * FROM {$this->p}ct_answer WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id);
         return $this->PDOX->allRowsDie($query, $arr);
-    }
-
-    function getAnswerById($answer_id) {
-        $query = "SELECT * FROM {$this->p}ct_answer WHERE answer_id = :answerId;";
-        $arr = array(':answerId' => $answer_id);
-        return $this->PDOX->rowDie($query, $arr);
     }
 
     function getStudentGrade($ct_id, $user_id) {

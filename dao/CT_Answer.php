@@ -164,4 +164,15 @@ class CT_Answer
         $connection['PDOX']->queryDie($query, $arr);
     }
 
+    static function deleteAnswers($questions, $user_id) {
+        $connection = CT_DAO::getConnection();
+        $questionIds = array();
+        foreach($questions as $question) {
+            array_push($questionIds, $question->getQuestionId());
+        }
+        $query = "DELETE FROM {$connection['p']}ct_answer WHERE user_id = :userId AND question_id in (".implode(',', array_map('intval', $questionIds)).");";
+        $arr = array(':userId' => $user_id);
+        $connection['PDOX']->queryDie($query, $arr);
+    }
+
 }
