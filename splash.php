@@ -15,13 +15,13 @@ $OUTPUT->topNav();
 
 if ($USER->instructor) {
     $OUTPUT->splashPage(
-        "Quick Write",
+        "Code Test",
         __("Add questions to quickly collect<br />feedback from your students."),
         "actions/MarkSeenGoToHome.php"
     );
 } else {
     $OUTPUT->splashPage(
-        "Quick Write",
+        "Code Test",
         __("Your instructor has not yet configured this learning app.")
     );
 }

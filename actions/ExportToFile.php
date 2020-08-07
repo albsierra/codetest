@@ -97,7 +97,7 @@ if ( $USER->instructor ) {
     }
     $columnIterator->next();
 
-    $exportFile->getActiveSheet()->setTitle('Quick_Write');
+    $exportFile->getActiveSheet()->setTitle('Code_Test');
 
     foreach($exportFile->getActiveSheet()->getColumnDimension() as $col) {
         $col->setAutoSize(true);

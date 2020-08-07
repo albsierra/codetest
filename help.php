@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Quick Write Help</h4>
+                <h4 class="modal-title">Code Test Help</h4>
             </div>
             <div class="modal-body">
                 <?php
@@ -23,7 +23,7 @@
                         <h5>Modifying Questions</h5>
                         <p>Use the icons to the right of an added question to edit the text, move it up in the list, or delete it along with any answers.</p>
                         <h5>Editing the Title</h5>
-                        <p>You can edit the title of this Quick Write by clicking the edit icon next to the title at the top of this page.</p>
+                        <p>You can edit the title of this Code Test by clicking the edit icon next to the title at the top of this page.</p>
                         <?php
                         break;
                     case 'student-home.php':
@@ -57,7 +57,7 @@
                     case 'results-download.php':
                         ?>
                         <h4>Downloading Results</H4>
-                        <p>Click on the link to download an Excel file with all of the results for this Quick Write.</p>
+                        <p>Click on the link to download an Excel file with all of the results for this Code Test.</p>
                         <?php
                         break;
                     default:

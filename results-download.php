@@ -40,9 +40,9 @@ $OUTPUT->pageTitle('Download Results', true, false);
     </div>
 <?php
 
-$OUTPUT->helpModal("Quick Write Help", __('
+$OUTPUT->helpModal("Code Test Help", __('
                         <h4>Downloading Results</h4>
-                        <p>Click on the link to download an Excel file with all of the results for this Quick Write.</p>'));
+                        <p>Click on the link to download an Excel file with all of the results for this Code Test.</p>'));
 
 $OUTPUT->footerStart();
 

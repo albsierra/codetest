@@ -99,12 +99,12 @@ if ($totalQuestions > 0) {
 }
 
 if ($USER->instructor) {
-    $OUTPUT->helpModal("Quick Write Help", __('
+    $OUTPUT->helpModal("Code Test Help", __('
                         <h4>Student View</h4>
                         <p>You are seeing what a student will see when they access this tool. However, your answers will be cleared once you leave student view.</p>
                         <p>Your answers will not show up in any of the results.</p>'));
 } else {
-    $OUTPUT->helpModal("Quick Write Help", __('
+    $OUTPUT->helpModal("Code Test Help", __('
                         <h4>What do I do?</h4>
                         <p>Answer each question below. You must submit every question individually. Once you submit an answer to a question you cannot edit your answer.</p>'));
 }

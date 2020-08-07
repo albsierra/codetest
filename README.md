@@ -1,7 +1,7 @@
 # codetest
 A simple Tsugi tool to prompt users to respond to short answer questions.
 
-## TO CONVERT THE SCHEMA FROM THE OLD QUICK WRITE:
+## TO CONVERT THE SCHEMA FROM THE OLD CODE TEST:
 ### ct_main
 * Rename SetID to ct_id and update primary key
 * Rename UserID to user_id and make not null

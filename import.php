@@ -11,11 +11,11 @@ $questionsForImport = \CT\DAO\CT_Question::findQuestionsForImport($USER->id, $_S
                 <h4 class="modal-title">Reuse Questions</h4>
             </div>
             <div class="modal-body import-body">
-                <p class="lead">Add questions from a previously created Quick Write.</p>
+                <p class="lead">Add questions from a previously created Code Test.</p>
                 <?php
                 if (!$questionsForImport) {
                     ?>
-                    <p><em>No questions available from previous Quick Write instances.</em></p>
+                    <p><em>No questions available from previous Code Test instances.</em></p>
                     <?php
                 } else {
                     $questionMap = array();

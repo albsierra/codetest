@@ -3,8 +3,8 @@
 $REGISTER_LTI2 = array(
     "name" => "Code Test", // Name of the tool
     "FontAwesome" => "fa-code", // Icon for the tool
-    "short_name" => "Quick Write",
-    "description" => "A SQL-Test tool derived from QuickWrite Tsugi tool (https://github.com/udaytonapps/quickwrite).", // Tool description
+    "short_name" => "Code Test",
+    "description" => "A Code-Test tool derived from QuickWrite Tsugi tool (https://github.com/udaytonapps/quickwrite).", // Tool description
     "messages" => array("launch"),
     "license" => "Apache",
     "languages" => array(
