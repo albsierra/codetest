@@ -19,12 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function countAnswersForQuestion($question_id) {
-        $query = "SELECT COUNT(*) as total FROM {$this->p}ct_answer WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id);
-        return $this->PDOX->rowDie($query, $arr)["total"];
-    }
-
     function getUsersWithAnswers($ct_id) {
         $query = "SELECT DISTINCT user_id FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE q.ct_id = :ctId;";
         $arr = array(':ctId' => $ct_id);
