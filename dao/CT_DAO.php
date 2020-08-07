@@ -165,7 +165,21 @@ class CT_DAO {
             'getById' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE question_id = :question_id",
         );
-        $AnswerQueries = array();
+        $AnswerQueries = array(
+            'getByAnswerId' => "SELECT * FROM {$connection['p']}ct_answer WHERE answer_id = :answer_id",
+            'insert' => "INSERT INTO {$connection['p']}ct_answer "
+                . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`) "
+                . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified)",
+            'update' => "UPDATE {$connection['p']}ct_answer set "
+                . "`user_id` = :userId, "
+                . "`question_id` = :questionId, "
+                . "`answer_txt` = :answerTxt, "
+                . "`answer_success` = :answerSuccess"
+                . "`modified` = :modified "
+                . "WHERE answer_id = :answer_id",
+            'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
+            'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer WHERE user_id = :userId AND question_id in (/questionsId/)",
+        );
         $queries = array(
             'main' => $MainQueries,
             'question' => $QuestionQueries,
