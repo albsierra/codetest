@@ -51,12 +51,6 @@ class CT_DAO {
         return $context['num_answered'];
     }
 
-    function getAllAnswersToQuestion($question_id) {
-        $query = "SELECT * FROM {$this->p}ct_answer WHERE question_id = :questionId;";
-        $arr = array(':questionId' => $question_id);
-        return $this->PDOX->allRowsDie($query, $arr);
-    }
-
     function getStudentGrade($ct_id, $user_id) {
         $query = "SELECT grade FROM {$this->p}ct_grade WHERE ct_id = :ct_id AND user_id = :user_id";
         $arr = array(':ct_id' => $ct_id, ':user_id' => $user_id);
@@ -122,6 +116,49 @@ class CT_DAO {
             array_push($arrayObject, $object);
         }
         return $arrayObject;
+    }
+
+    public static function getQuery($class, $name)
+    {
+        $connection = CT_DAO::getConnection();
+        $MainQueries = array();
+        $QuestionQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_question  "
+                . "(`ct_id`, `question_num`, `question_txt`, `modified` ) "
+                . "VALUES (:ctId, :question_num, :question_txt, :modified )",
+            'update' => "UPDATE {$connection['p']}ct_question set "
+                . "`ct_id` = :ctId, "
+                . "`question_num` = :question_num, "
+                . "`question_txt` = :question_txt, "
+                . "`modified` = :modified "
+                . "WHERE question_id = :question_id",
+            'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",
+            'getAnswersId' => "SELECT * FROM {$connection['p']}ct_answer WHERE question_id = :questionId;",
+            'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
+                . "set question_num = (@question_num:=@question_num+1) "
+                . "WHERE ct_id = :ctId ORDER BY question_num",
+            'getNextQuestionNumber' => "SELECT MAX(question_num) as lastNum FROM {$connection['p']}ct_question "
+                . "WHERE ct_id = :ctId",
+            'findQuestionsForImport' => "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
+                . "FROM {$connection['p']}ct_question q "
+                . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
+                . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
+                . "WHERE m.user_id = :userId AND m.ct_id != :ct_id",
+            'getByMain' => "SELECT * FROM {$connection['p']}ct_question "
+                . "WHERE ct_id = :ctId order by question_num",
+            'getById' => "SELECT * FROM {$connection['p']}ct_question "
+                . "WHERE question_id = :question_id",
+        );
+        $AnswerQueries = array();
+        $queries = array(
+            'main' => $MainQueries,
+            'question' => $QuestionQueries,
+            'answer' => $AnswerQueries,
+        );
+        return array(
+            'PDOX' => $connection['PDOX'],
+            'sentence' => $queries[$class][$name],
+        );
     }
 
 }

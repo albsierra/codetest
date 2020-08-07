@@ -44,7 +44,7 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
                 <?php
                 foreach ($questions as $question) {
                     $questionId = $question->getQuestionId();
-                    $responses = $CT_DAO->getAllAnswersToQuestion($questionId);
+                    $responses = $question->getAnswers();
                     $numberResponses = count($responses);
                     ?>
                     <div class="list-group-item response-list-group-item">
@@ -66,17 +66,17 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
                                 // Sort by modified date with most recent at the top
                                 usort($responses, 'response_date_compare');
                                 foreach ($responses as $response) {
-                                    if (!$CT_DAO->isUserInstructor($CONTEXT->id, $response["user_id"])) {
+                                    if (!$CT_DAO->isUserInstructor($CONTEXT->id, $response->getUserId())) {
                                         $responseDate = new DateTime($response["modified"]);
                                         $formattedResponseDate = $responseDate->format("m/d/y")." | ".$responseDate->format("h:i A");
                                         ?>
                                         <div class="row response-row">
                                             <div class="col-sm-3">
-                                                <h5><?=$CT_DAO->findDisplayName($response["user_id"])?></h5>
+                                                <h5><?=$CT_DAO->findDisplayName($response->getUserId())?></h5>
                                                 <p><?=$formattedResponseDate?></p>
                                             </div>
                                             <div class="col-sm-offset-1 col-sm-8">
-                                                <p class="response-text"><?=$response["answer_txt"]?></p>
+                                                <p class="response-text"><?=$response->getAnswerTxt()?></p>
                                             </div>
                                         </div>
                                         <?php
@@ -95,7 +95,7 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
 
 <?php
 
-$OUTPUT->helpModal("Quick Write Help", __('
+$OUTPUT->helpModal("Code Test Help", __('
                         <h4>Viewing Results</H4>
                         <p>You are viewing the results by question. Click on a question below to see what students answered for that question.</p>
                         <p>For each question, students are sorted with the most recently modified at the top.</p>'));

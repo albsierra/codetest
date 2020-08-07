@@ -11,37 +11,32 @@ class CT_Question
     private $question_num;
     private $question_txt;
     private $modified;
+    private $answers;
 
     public function __construct($question_id = null)
     {
         $context = array();
         if (isset($question_id)) {
-            $connection = CT_DAO::getConnection();
-            $query = "SELECT * FROM {$connection['p']}ct_question WHERE question_id = :question_id";
+            $query = CT_DAO::getQuery('question', 'getById');
             $arr = array(':question_id' => $question_id);
-            $context = $connection['PDOX']->rowDie($query, $arr);
+            $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
+    // TODO aplicar la misma solución que para getAnswers()
     public static function getByMain($ct_id)
     {
-        $connection = CT_DAO::getConnection();
-        $query = "SELECT * FROM {$connection['p']}ct_question WHERE ct_id = :ctId order by question_num;";
+        $query = CT_DAO::getQuery('question', 'getByMain');
         $arr = array(':ctId' => $ct_id);
-        return CT_DAO::createObjectFromArray(self::class, $connection['PDOX']->allRowsDie($query, $arr));
+        return CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
     }
 
     //TODO Convertir en array de objetos
     static function findQuestionsForImport($user_id, $ct_id) {
-        $connection = CT_DAO::getConnection();
-        $query = "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
-            . "FROM {$connection['p']}ct_question q "
-            . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
-            . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
-            . "WHERE m.user_id = :userId AND m.ct_id != :ct_id";
+        $query = CT_DAO::getQuery('question', 'findQuestionsForImport');
         $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
-        return $connection['PDOX']->allRowsDie($query, $arr);
+        return $query['PDOX']->allRowsDie($query['sentence'], $arr);
     }
 
     function createAnswer($user_id, $answer_txt) {
@@ -50,6 +45,8 @@ class CT_Question
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
         $answer->save();
+        $this->answers = $this->getAnswers();
+        array_push($this->answers, $answer);
         return $answer;
     }
 
@@ -102,18 +99,16 @@ class CT_Question
     }
 
     function getNextQuestionNumber() {
-        $connection = CT_DAO::getConnection();
-        $query = "SELECT MAX(question_num) as lastNum FROM {$connection['p']}ct_question WHERE ct_id = :ctId";
+        $query = CT_DAO::getQuery('question', 'getNextQuestionNumber');
         $arr = array(':ctId' => $this->getCtId());
-        $lastNum = $connection['PDOX']->rowDie($query, $arr)["lastNum"];
+        $lastNum = $query['PDOX']->rowDie($query['sentence'], $arr)["lastNum"];
         return $lastNum + 1;
     }
 
     static function fixUpQuestionNumbers($ct_id) {
-        $connection = CT_DAO::getConnection();
-        $query = "SET @question_num = 0; UPDATE {$connection['p']}ct_question set question_num = (@question_num:=@question_num+1) WHERE ct_id = :ctId ORDER BY question_num";
+        $query = CT_DAO::getQuery('question', 'fixUpQuestionNumbers');
         $arr = array(':ctId' => $ct_id);
-        $connection['PDOX']->queryDie($query, $arr);
+        $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
     /**
@@ -148,6 +143,23 @@ class CT_Question
         $this->modified = $modified;
     }
 
+    /**
+     * @return CT_Answer[] $answers
+     */
+    public function getAnswers()
+    {
+        if(!is_array($this->answers)) {
+            $this->answers = array();
+            $query = CT_DAO::getQuery('question', 'getAnswersId');
+            $arr = array(':questionId' => $this->getQuestionId());
+            $answers = $query['PDOX']->allRowsDie($query['sentence'], $arr);
+            foreach ($answers as $answer) {
+                array_push($this->answers, new CT_Answer($answer['answer_id']));
+            }
+        }
+        return $this->answers;
+    }
+
     public function isNew()
     {
         $question_id = $this->getQuestionId();
@@ -156,21 +168,13 @@ class CT_Question
 
     public function save() {
         global $CFG;
-        $connection = CT_DAO::getConnection();
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if($this->isNew()) {
             $this->setQuestionNum($this->getNextQuestionNumber());
-            $query = "INSERT INTO {$connection['p']}ct_question  "
-                . "(`ct_id`, `question_num`, `question_txt`, `modified` ) "
-                . "VALUES (:ctId, :question_num, :question_txt, :modified )";
+            $query = CT_DAO::getQuery('question', 'insert');
         } else {
-            $query = "UPDATE {$connection['p']}ct_question set "
-                . "`ct_id` = :ctId, "
-                . "`question_num` = :question_num, "
-                . "`question_txt` = :question_txt, "
-                . "`modified` = :modified "
-                . "WHERE question_id = :question_id";
+            $query = CT_DAO::getQuery('question', 'update');
         }
         $arr = array(
             ':modified' => $currentTime,
@@ -179,15 +183,14 @@ class CT_Question
             ':question_txt' => $this->getQuestionTxt(),
         );
         if(!$this->isNew()) $arr[':question_id'] = $this->getQuestionId();
-        $connection['PDOX']->queryDie($query, $arr);
-        if($this->isNew()) $this->setQuestionId($connection['PDOX']->lastInsertId());
+        $query['PDOX']->queryDie($query['sentence'], $arr);
+        if($this->isNew()) $this->setQuestionId($query['PDOX']->lastInsertId());
     }
 
     function delete() {
-        $connection = CT_DAO::getConnection();
-        $query = "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;";
+        $query = CT_DAO::getQuery('question', 'delete');
         $arr = array(':questionId' => $this->getQuestionId());
-        $connection['PDOX']->queryDie($query, $arr);
+        $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
 }
