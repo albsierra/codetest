@@ -175,10 +175,15 @@ class CT_DAO {
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
             'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer WHERE user_id = :userId AND question_id in (/questionsId/)",
         );
+        $UserQueries = array(
+            'getByUserId' => "SELECT user_id, deleted, profile_id, displayname, email "
+                . "FROM {$connection['p']}lti_user WHERE user_id = :user_id",
+        );
         $queries = array(
             'main' => $MainQueries,
             'question' => $QuestionQueries,
             'answer' => $AnswerQueries,
+            'user' => $UserQueries,
         );
         return array(
             'PDOX' => $connection['PDOX'],
