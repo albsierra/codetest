@@ -12,6 +12,8 @@ class CT_User
     private $displayname;
     private $email;
 
+    const INSTRUCTOR_ROLE = 1000;
+
     public function __construct($user_id = null)
     {
         $context = array();
@@ -21,6 +23,13 @@ class CT_User
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         CT_DAO::setObjectPropertiesFromArray($this, $context);
+    }
+
+    function isInstructor($context_id) {
+        $query = CT_DAO::getQuery('user', 'getUserRoles');
+        $arr = array(':context_id' => $context_id, ':user_id' => $this->getUserId());
+        $role = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return $role["role"] == self::INSTRUCTOR_ROLE;
     }
 
     /**

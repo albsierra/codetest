@@ -85,13 +85,6 @@ class CT_DAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function isUserInstructor($context_id, $user_id) {
-        $query = "SELECT role FROM {$this->p}lti_membership WHERE context_id = :context_id AND user_id = :user_id;";
-        $arr = array(':context_id' => $context_id, ':user_id' => $user_id);
-        $role = $this->PDOX->rowDie($query, $arr);
-        return $role["role"] == '1000';
-    }
-
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         foreach($arrayProperties as $k => $v) {
             call_user_func_array(array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE))), array($v));
@@ -117,11 +110,13 @@ class CT_DAO {
         $connection = self::getConnection();
         $MainQueries = array(
             'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
-            'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main WHERE context_id = :context_id AND link_id = :link_id",
+            'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main "
+                . "WHERE context_id = :context_id AND link_id = :link_id",
             'getQuestionsId' => "SELECT question_id FROM {$connection['p']}ct_question "
                 . "WHERE ct_id = :ctId "
                 . "order by question_num",
-            'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) VALUES (:userId, :contextId, :linkId, :currentTime)",
+            'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) "
+                . "VALUES (:userId, :contextId, :linkId, :currentTime)",
             'update' => "UPDATE {$connection['p']}ct_main set "
                 . "`user_id` = :user_id, "
                 . "`context_id` = :context_id, "
@@ -146,11 +141,13 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE question_id = :question_id",
             'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",
-            'getAnswersId' => "SELECT answer_id FROM {$connection['p']}ct_answer WHERE question_id = :questionId;",
+            'getAnswersId' => "SELECT answer_id FROM {$connection['p']}ct_answer "
+                . "WHERE question_id = :questionId;",
             'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
                 . "set question_num = (@question_num:=@question_num+1) "
                 . "WHERE ct_id = :ctId ORDER BY question_num",
-            'getNextQuestionNumber' => "SELECT MAX(question_num) as lastNum FROM {$connection['p']}ct_question "
+            'getNextQuestionNumber' => "SELECT MAX(question_num) as lastNum "
+                . "FROM {$connection['p']}ct_question "
                 . "WHERE ct_id = :ctId",
             'findQuestionsForImport' => "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
                 . "FROM {$connection['p']}ct_question q "
@@ -173,11 +170,14 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
-            'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer WHERE user_id = :userId AND question_id in (/questionsId/)",
+            'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer "
+                . "WHERE user_id = :userId AND question_id in (/questionsId/)",
         );
         $UserQueries = array(
             'getByUserId' => "SELECT user_id, deleted, profile_id, displayname, email "
                 . "FROM {$connection['p']}lti_user WHERE user_id = :user_id",
+            'getUserRoles' => "SELECT role FROM {$connection['p']}lti_membership "
+                . "WHERE context_id = :context_id AND user_id = :user_id",
         );
         $queries = array(
             'main' => $MainQueries,

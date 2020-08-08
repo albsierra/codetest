@@ -3,12 +3,14 @@ require_once "../../config.php";
 require_once "../util/PHPExcel.php";
 require_once "../dao/CT_DAO.php";
 require_once "../dao/CT_Main.php";
-require_once('../dao/CT_Question.php');
+require_once "../dao/CT_Question.php";
+require_once "../dao/CT_User.php";
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use \CT\DAO\CT_Question;
+use CT\DAO\CT_User;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -57,7 +59,8 @@ if ( $USER->instructor ) {
     $columnIterator->next();
 
     foreach ($StudentList as $student ) {
-        if (!$CT_DAO->isUserInstructor($CONTEXT->id, $student["user_id"])) {
+        $user = new CT_User($student["user_id"]);
+        if (!$user->isInstructor($CONTEXT->id)) {
             $rowCounter++;
 
             $UserID = $student["user_id"];

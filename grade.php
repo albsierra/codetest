@@ -4,11 +4,13 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
+require_once('dao/CT_User.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use \CT\DAO\CT_Question;
+use CT\DAO\CT_User;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -69,7 +71,8 @@ $OUTPUT->pageTitle('Grade', false, false);
 // Sort students by mostRecentDate desc
 arsort($studentAndDate);
 foreach ($studentAndDate as $student_id => $mostRecentDate) {
-    if (!$CT_DAO->isUserInstructor($CONTEXT->id, $student_id)) {
+    $user = new CT_User($student_id);
+    if (!$user->isInstructor($CONTEXT->id)) {
         $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
         $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($student_id, $_SESSION["ct_id"]);
         $grade = $CT_DAO->getStudentGrade($_SESSION["ct_id"], $student_id);
