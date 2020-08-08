@@ -142,12 +142,10 @@ class CT_Question
     {
         if(!is_array($this->answers)) {
             $this->answers = array();
-            $query = CT_DAO::getQuery('question', 'getAnswersId');
+            $query = CT_DAO::getQuery('question', 'getAnswers');
             $arr = array(':questionId' => $this->getQuestionId());
             $answers = $query['PDOX']->allRowsDie($query['sentence'], $arr);
-            foreach ($answers as $answer) {
-                array_push($this->answers, new CT_Answer($answer['answer_id']));
-            }
+            $this->answers = CT_DAO::createObjectFromArray(CT_Answer::class, $answers);
         }
         return $this->answers;
     }

@@ -106,7 +106,7 @@ class CT_DAO {
             'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
             'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id AND link_id = :link_id",
-            'getQuestionsId' => "SELECT question_id FROM {$connection['p']}ct_question "
+            'getQuestions' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE ct_id = :ctId "
                 . "order by question_num",
             'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) "
@@ -135,7 +135,7 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE question_id = :question_id",
             'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",
-            'getAnswersId' => "SELECT answer_id FROM {$connection['p']}ct_answer "
+            'getAnswers' => "SELECT * FROM {$connection['p']}ct_answer "
                 . "WHERE question_id = :questionId;",
             'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
                 . "set question_num = (@question_num:=@question_num+1) "

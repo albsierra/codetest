@@ -57,12 +57,10 @@ class CT_Main
     function getQuestions() {
         if(!is_array($this->questions)) {
             $this->questions = array();
-            $query = CT_DAO::getQuery('main', 'getQuestionsId');
+            $query = CT_DAO::getQuery('main', 'getQuestions');
             $arr = array(':ctId' => $this->getCtId());
             $questions = $query['PDOX']->allRowsDie($query['sentence'], $arr);
-            foreach ($questions as $question) {
-                array_push($this->questions, new CT_Question($question['question_id']));
-            }
+            $this->questions = CT_DAO::createObjectFromArray(CT_Question::class, $questions);
         }
         return $this->questions;
     }
