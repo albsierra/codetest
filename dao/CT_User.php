@@ -32,6 +32,13 @@ class CT_User
         return $role["role"] == self::INSTRUCTOR_ROLE;
     }
 
+    static function findInstructors($context_id) {
+        $query = CT_DAO::getQuery('user', 'findInstructors');
+        $arr = array(':context_id' => $context_id, ':role' => self::INSTRUCTOR_ROLE);
+        $instructorsArray = $query['PDOX']->allRowsDie($query['sentence'], $arr);
+        return CT_DAO::createObjectFromArray(self::class, $instructorsArray);
+    }
+
     /**
      * @return mixed
      */

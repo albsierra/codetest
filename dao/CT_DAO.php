@@ -79,12 +79,6 @@ class CT_DAO {
         return $context["displayname"];
     }
 
-    function findInstructors($context_id) {
-        $query = "SELECT user_id FROM {$this->p}lti_membership WHERE context_id = :context_id AND role = '1000';";
-        $arr = array(':context_id' => $context_id);
-        return $this->PDOX->allRowsDie($query, $arr);
-    }
-
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         foreach($arrayProperties as $k => $v) {
             call_user_func_array(array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE))), array($v));
@@ -178,6 +172,14 @@ class CT_DAO {
                 . "FROM {$connection['p']}lti_user WHERE user_id = :user_id",
             'getUserRoles' => "SELECT role FROM {$connection['p']}lti_membership "
                 . "WHERE context_id = :context_id AND user_id = :user_id",
+            'findInstructors' => "SELECT "
+                . "{$connection['p']}lti_user.user_id, "
+                . "{$connection['p']}lti_user.deleted, "
+                . "{$connection['p']}lti_user.profile_id, "
+                . "{$connection['p']}lti_user.displayname, "
+                . "{$connection['p']}lti_user.email "
+                . "FROM {$connection['p']}lti_membership JOIN {$connection['p']}lti_user USING (user_id)"
+                . "WHERE context_id = :context_id AND role = :role",
         );
         $queries = array(
             'main' => $MainQueries,
