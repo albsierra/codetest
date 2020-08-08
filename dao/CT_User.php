@@ -39,6 +39,12 @@ class CT_User
         return CT_DAO::createObjectFromArray(self::class, $instructorsArray);
     }
 
+    static function getUsersWithAnswers($ct_id) {
+        $query = CT_DAO::getQuery('user', 'getUsersWithAnswers');
+        $arr = array(':ctId' => $ct_id);
+        return CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
+    }
+
     /**
      * @return mixed
      */

@@ -81,7 +81,8 @@ class CT_DAO {
 
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         foreach($arrayProperties as $k => $v) {
-            call_user_func_array(array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE))), array($v));
+            $function = array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE)));
+            if(is_callable($function)) call_user_func_array($function, array($v));
         }
     }
 
@@ -172,14 +173,13 @@ class CT_DAO {
                 . "FROM {$connection['p']}lti_user WHERE user_id = :user_id",
             'getUserRoles' => "SELECT role FROM {$connection['p']}lti_membership "
                 . "WHERE context_id = :context_id AND user_id = :user_id",
-            'findInstructors' => "SELECT "
-                . "{$connection['p']}lti_user.user_id, "
-                . "{$connection['p']}lti_user.deleted, "
-                . "{$connection['p']}lti_user.profile_id, "
-                . "{$connection['p']}lti_user.displayname, "
-                . "{$connection['p']}lti_user.email "
+            'findInstructors' => "SELECT {$connection['p']}lti_user.* "
                 . "FROM {$connection['p']}lti_membership JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE context_id = :context_id AND role = :role",
+            'getUsersWithAnswers' => "SELECT DISTINCT {$connection['p']}lti_user.* "
+                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q on USING (question_id) "
+                . "JOIN {$connection['p']}lti_user USING (user_id)"
+                . "WHERE q.ct_id = :ctId;",
         );
         $queries = array(
             'main' => $MainQueries,
