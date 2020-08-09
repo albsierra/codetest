@@ -65,13 +65,13 @@ if ( $USER->instructor ) {
 
             $UserID = $student["user_id"];
 
-            $Email = $CT_DAO->findEmail($UserID);
+            $Email = $user->getEmail();
             $UserName = explode("@",$Email);
 
             $Modified1 = $CT_DAO->getMostRecentAnswerDate($UserID, $ct_id);
             $Modified  =  new DateTime($Modified1);
 
-            $displayName = $CT_DAO->findDisplayName($UserID);
+            $displayName = $user->getDisplayname();
             $displayName = trim($displayName);
 
             $lastName = (strpos($displayName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $displayName);

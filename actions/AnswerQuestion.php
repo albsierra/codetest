@@ -43,7 +43,7 @@ if (!isset($answerText) || trim($answerText) == "") {
 
     // Notify elearning that there is a new answer
     // the message
-    $msg = "A new code test was submitted on Learn by ".$CT_DAO->findDisplayName($USER->id)." (".$CT_DAO->findEmail($USER->id).").\n
+    $msg = "A new code test was submitted on Learn by ".$USER->displayname." (".$USER->email.").\n
     Question: ".$question->getQuestionTxt()."\n
     Answer: ".$answer->getAnswerTxt();
 

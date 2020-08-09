@@ -71,13 +71,13 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                         $user = new CT_User($student_id);
                         if (!$user->isInstructor($CONTEXT->id)) {
                             $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-                            $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($student_id, $_SESSION["ct_id"]);
+                            $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($user->getUserId(), $_SESSION["ct_id"]);
                             ?>
                             <div class="list-group-item response-list-group-item">
                                 <div class="row">
                                     <div class="col-xs-6 header-col">
-                                        <a href="#responses<?= $student_id ?>" class="h4 response-collapse-link" data-toggle="collapse">
-                                            <?= $CT_DAO->findDisplayName($student_id) ?>
+                                        <a href="#responses<?= $user->getUserId() ?>" class="h4 response-collapse-link" data-toggle="collapse">
+                                            <?= $user->getDisplayname() ?>
                                             <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                                         </a>
                                     </div>
@@ -87,10 +87,10 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                                     <div class="col-xs-3 text-center header-col">
                                         <span class="h5 inline"><?= $numberAnswered . '/' . $totalQuestions ?></span>
                                     </div>
-                                    <div id="responses<?= $student_id ?>" class="col-xs-12 results-collapse collapse">
+                                    <div id="responses<?= $user->getUserId() ?>" class="col-xs-12 results-collapse collapse">
                                         <?php
                                         foreach ($questions as $question) {
-                                            $response = $CT_DAO->getStudentAnswerForQuestion($question->getQuestionId(), $student_id);
+                                            $response = $CT_DAO->getStudentAnswerForQuestion($question->getQuestionId(), $user->getUserId());
                                             ?>
                                             <div class="row response-row">
                                                 <div class="col-sm-3">

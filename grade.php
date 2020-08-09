@@ -74,16 +74,16 @@ foreach ($studentAndDate as $student_id => $mostRecentDate) {
     $user = new CT_User($student_id);
     if (!$user->isInstructor($CONTEXT->id)) {
         $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-        $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($student_id, $_SESSION["ct_id"]);
-        $grade = $CT_DAO->getStudentGrade($_SESSION["ct_id"], $student_id);
+        $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($user->getUserId(), $_SESSION["ct_id"]);
+        $grade = $CT_DAO->getStudentGrade($_SESSION["ct_id"], $user->getUserId());
         ?>
         <tr>
-            <td><?= $CT_DAO->findDisplayName($student_id) ?></td>
+            <td><?= $user->getDisplayname() ?></td>
             <td><?= $formattedMostRecentDate ?></td>
             <td><?= $numberAnswered . '/' . $totalQuestions ?></td>
             <td>
                 <form class="form-inline" action="actions/GradeStudent.php" method="post">
-                    <input type="hidden" name="student_id" value="<?=$student_id?>">
+                    <input type="hidden" name="student_id" value="<?=$user->getUserId()?>">
                     <div class="form-group">
                         <label>
                         <input type="text" class="form-control" name="grade" value="<?=$grade?>">/<?=$pointsPossible?>

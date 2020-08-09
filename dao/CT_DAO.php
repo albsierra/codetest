@@ -65,20 +65,6 @@ class CT_DAO {
         $this->PDOX->queryDie($query, $arr);
     }
 
-    function findEmail($user_id) {
-        $query = "SELECT email FROM {$this->p}lti_user WHERE user_id = :user_id;";
-        $arr = array(':user_id' => $user_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context["email"];
-    }
-
-    function findDisplayName($user_id) {
-        $query = "SELECT displayname FROM {$this->p}lti_user WHERE user_id = :user_id;";
-        $arr = array(':user_id' => $user_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context["displayname"];
-    }
-
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         foreach($arrayProperties as $k => $v) {
             $function = array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE)));

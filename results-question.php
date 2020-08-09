@@ -77,7 +77,7 @@ $OUTPUT->pageTitle('Results <small>by Question</small>', true, false);
                                         ?>
                                         <div class="row response-row">
                                             <div class="col-sm-3">
-                                                <h5><?=$CT_DAO->findDisplayName($response->getUserId())?></h5>
+                                                <h5><?=$user->getDisplayname()?></h5>
                                                 <p><?=$formattedResponseDate?></p>
                                             </div>
                                             <div class="col-sm-offset-1 col-sm-8">
