@@ -19,12 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function getStudentAnswerForQuestion($question_id, $user_id) {
-        $query = "SELECT * FROM {$this->p}ct_answer WHERE question_id = :questionId AND user_id = :userId; ";
-        $arr = array(':questionId' => $question_id, ':userId' => $user_id);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
     function getMostRecentAnswerDate($user_id, $ct_id) {
         $query = "SELECT max(a.modified) as modified FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE a.user_id = :userId AND q.ct_id = :ctId;";
         $arr = array(':userId' => $user_id, ':ctId' => $ct_id);
@@ -60,9 +54,11 @@ class CT_DAO {
     }
 
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
-        foreach($arrayProperties as $k => $v) {
-            $function = array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE)));
-            if(is_callable($function)) call_user_func_array($function, array($v));
+        if(is_array($arrayProperties)){
+            foreach($arrayProperties as $k => $v) {
+                $function = array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE)));
+                if(is_callable($function)) call_user_func_array($function, array($v));
+            }
         }
     }
 
@@ -160,6 +156,7 @@ class CT_DAO {
                 . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE q.ct_id = :ctId;",
+            'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer WHERE question_id = :questionId AND user_id = :userId; ",
         );
         $queries = array(
             'main' => $MainQueries,

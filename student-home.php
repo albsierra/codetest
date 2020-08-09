@@ -4,11 +4,15 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
+require_once('dao/CT_Answer.php');
+require_once('dao/CT_User.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use \CT\DAO\CT_Question;
+use \CT\DAO\CT_Answer;
+use \CT\DAO\CT_User;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -52,14 +56,15 @@ $OUTPUT->pageTitle($toolTitle, true, false);
 if ($totalQuestions > 0) {
         foreach ($questions as $question) {
             $questionId = $question->getQuestionId();
-            $answer = $CT_DAO->getStudentAnswerForQuestion($questionId, $USER->id);
+            $user = new CT_User($USER->id);
+            $answer = $user->getAnswerForQuestion($questionId);
             ?>
             <h2 class="small-hdr <?= $question->getQuestionNum() == 1 ? 'hdr-notop-mrgn' : '' ?>">
                 <small>Question <?= $question->getQuestionNum() ?></small>
             </h2>
             <div id="questionAnswer<?= $questionId ?>">
                 <?php
-                if (!$answer) {
+                if ((!is_object($answer)) || is_null($answer->getAnswerId())) {
                     ?>
                     <form id="answerForm<?= $questionId ?>" action="actions/AnswerQuestion.php"
                           method="post">
@@ -76,12 +81,12 @@ if ($totalQuestions > 0) {
                     </form>
                     <?php
                 } else {
-                    $dateTime = new DateTime($answer['modified']);
+                    $dateTime = new DateTime($answer->getModified());
                     $formattedDate = $dateTime->format("m/d/y") . " | " . $dateTime->format("h:i A");
                     ?>
                     <h3 class="sub-hdr"><?= $question->getQuestionTxt() ?></h3>
                     <p><?= $formattedDate ?></p>
-                    <p><?= $answer["answer_txt"] ?></p>
+                    <p><?= $answer->getAnswerTxt() ?></p>
                     <?php
                 }
                 ?>

@@ -4,12 +4,14 @@ require_once "../util/PHPExcel.php";
 require_once "../dao/CT_DAO.php";
 require_once "../dao/CT_Main.php";
 require_once "../dao/CT_Question.php";
+require_once "../dao/CT_Answer.php";
 require_once "../dao/CT_User.php";
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use \CT\DAO\CT_Question;
+use \CT\DAO\CT_Answer;
 use CT\DAO\CT_User;
 
 // Retrieve the launch data if present
@@ -84,9 +86,9 @@ if ( $USER->instructor ) {
                 $QID = $question->getQuestionId();
                 $A="";
 
-                $answer = $CT_DAO->getStudentAnswerForQuestion($QID, $student->getUserId());
-                if ($answer) {
-                    $A = $answer["answer_txt"];
+                $answer = $student->getAnswerForQuestion($QID);
+                if (is_object($answer) && (!is_null($answer->getAnswerId()))) {
+                    $A = $answer->getAnswerTxt();
                     $A = str_replace("&#39;", "'", $A);
                 }
 

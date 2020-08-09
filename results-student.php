@@ -4,12 +4,14 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
+require_once('dao/CT_Answer.php');
 require_once('dao/CT_User.php');
 
 use \Tsugi\Core\LTIX;
 use \CT\DAO\CT_DAO;
 use \CT\DAO\CT_Main;
 use \CT\DAO\CT_Question;
+use \CT\DAO\CT_Answer;
 use \CT\DAO\CT_User;
 
 // Retrieve the launch data if present
@@ -90,7 +92,7 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                                     <div id="responses<?= $user->getUserId() ?>" class="col-xs-12 results-collapse collapse">
                                         <?php
                                         foreach ($questions as $question) {
-                                            $response = $CT_DAO->getStudentAnswerForQuestion($question->getQuestionId(), $user->getUserId());
+                                            $answer = $user->getAnswerForQuestion($question->getQuestionId());
                                             ?>
                                             <div class="row response-row">
                                                 <div class="col-sm-3">
@@ -100,7 +102,7 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                                                     <h5 class="sub-hdr"><?= $question->getQuestionTxt() ?></h5>
                                                 </div>
                                                 <div class="col-sm-offset-1 col-sm-8">
-                                                    <p class="response-text"><?= $response["answer_txt"] ?></p>
+                                                    <p class="response-text"><?= $answer->getAnswerTxt() ?></p>
                                                 </div>
                                             </div>
                                             <?php

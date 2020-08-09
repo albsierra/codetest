@@ -50,6 +50,19 @@ class CT_User
     }
 
     /**
+     * @param $question_id int
+     * @return CT_Answer
+     */
+    function getAnswerForQuestion($question_id) {
+        $query = CT_DAO::getQuery('user','getAnswerForQuestion');
+        $arr = array(':questionId' => $question_id, ':userId' => $this->getUserId());
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        $answer = new CT_Answer();
+        CT_DAO::setObjectPropertiesFromArray($answer, $context);
+        return $answer;
+    }
+
+    /**
      * @return mixed
      */
     public function getUserId()
