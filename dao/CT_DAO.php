@@ -19,20 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function getMostRecentAnswerDate($user_id, $ct_id) {
-        $query = "SELECT max(a.modified) as modified FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE a.user_id = :userId AND q.ct_id = :ctId;";
-        $arr = array(':userId' => $user_id, ':ctId' => $ct_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context['modified'];
-    }
-
-    function getNumberQuestionsAnswered($user_id, $ct_id) {
-        $query = "SELECT count(*) as num_answered FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null;";
-        $arr = array(':userId' => $user_id, ':ctId' => $ct_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context['num_answered'];
-    }
-
     function getStudentGrade($ct_id, $user_id) {
         $query = "SELECT grade FROM {$this->p}ct_grade WHERE ct_id = :ct_id AND user_id = :user_id";
         $arr = array(':ct_id' => $ct_id, ':user_id' => $user_id);
@@ -156,7 +142,16 @@ class CT_DAO {
                 . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE q.ct_id = :ctId;",
-            'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer WHERE question_id = :questionId AND user_id = :userId; ",
+            'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
+                . "WHERE question_id = :questionId AND user_id = :userId",
+            'getMostRecentAnswerDate' => "SELECT max(a.modified) as modified "
+                . "FROM {$connection['p']}ct_answer a "
+                . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
+                . "WHERE a.user_id = :userId AND q.ct_id = :ctId",
+            'getNumberQuestionsAnswered' => "SELECT count(*) as num_answered "
+                . "FROM {$connection['p']}ct_answer a "
+                . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
+                . "WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null",
         );
         $queries = array(
             'main' => $MainQueries,

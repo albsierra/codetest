@@ -67,7 +67,7 @@ if ( $USER->instructor ) {
             $Email = $student->getEmail();
             $UserName = explode("@",$Email);
 
-            $Modified1 = $CT_DAO->getMostRecentAnswerDate($student->getUserId(), $ct_id);
+            $Modified1 = $student->getMostRecentAnswerDate($ct_id);
             $Modified  =  new DateTime($Modified1);
 
             $displayName = $student->getDisplayname();

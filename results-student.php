@@ -24,7 +24,7 @@ $CT_DAO = new CT_DAO();
 $students = CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
 foreach($students as $student) {
-    $studentAndDate[$student->getUserId()] = new DateTime($CT_DAO->getMostRecentAnswerDate($student->getUserId(), $_SESSION["ct_id"]));
+    $studentAndDate[$student->getUserId()] = new DateTime($student->getMostRecentAnswerDate($_SESSION["ct_id"]));
 }
 
 
@@ -73,7 +73,7 @@ $OUTPUT->pageTitle('Results <small>by Student</small>', true, false);
                         $user = new CT_User($student_id);
                         if (!$user->isInstructor($CONTEXT->id)) {
                             $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-                            $numberAnswered = $CT_DAO->getNumberQuestionsAnswered($user->getUserId(), $_SESSION["ct_id"]);
+                            $numberAnswered = $user->getNumberQuestionsAnswered($_SESSION["ct_id"]);
                             ?>
                             <div class="list-group-item response-list-group-item">
                                 <div class="row">

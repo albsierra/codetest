@@ -62,6 +62,20 @@ class CT_User
         return $answer;
     }
 
+    function getMostRecentAnswerDate($ct_id) {
+        $query = CT_DAO::getQuery('user','getMostRecentAnswerDate');
+        $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return $context['modified'];
+    }
+
+    function getNumberQuestionsAnswered($ct_id) {
+        $query = CT_DAO::getQuery('user','getNumberQuestionsAnswered');
+        $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return $context['num_answered'];
+    }
+
     /**
      * @return mixed
      */
