@@ -22,10 +22,10 @@ $CT_DAO = new CT_DAO();
 $main = new CT_Main($_SESSION["ct_id"]);
 $pointsPossible = $main->getPoints();
 
-$students = $CT_DAO->getUsersWithAnswers($_SESSION["ct_id"]);
+$students = CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
 foreach($students as $student) {
-    $studentAndDate[$student["user_id"]] = new DateTime($CT_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["ct_id"]));
+    $studentAndDate[$student->getUserId()] = new DateTime($CT_DAO->getMostRecentAnswerDate($student->getUserId(), $_SESSION["ct_id"]));
 }
 
 $questions = $main->getQuestions();

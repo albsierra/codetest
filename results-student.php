@@ -19,10 +19,10 @@ $p = $CFG->dbprefix;
 
 $CT_DAO = new CT_DAO();
 
-$students = $CT_DAO->getUsersWithAnswers($_SESSION["ct_id"]);
+$students = CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
 foreach($students as $student) {
-    $studentAndDate[$student["user_id"]] = new DateTime($CT_DAO->getMostRecentAnswerDate($student["user_id"], $_SESSION["ct_id"]));
+    $studentAndDate[$student->getUserId()] = new DateTime($CT_DAO->getMostRecentAnswerDate($student->getUserId(), $_SESSION["ct_id"]));
 }
 
 

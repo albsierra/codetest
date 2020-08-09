@@ -39,6 +39,10 @@ class CT_User
         return CT_DAO::createObjectFromArray(self::class, $instructorsArray);
     }
 
+    /**
+     * @param $ct_id int The context_id
+     * @return CT_User[]
+     */
     static function getUsersWithAnswers($ct_id) {
         $query = CT_DAO::getQuery('user', 'getUsersWithAnswers');
         $arr = array(':ctId' => $ct_id);

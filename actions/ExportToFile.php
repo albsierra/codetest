@@ -53,25 +53,22 @@ if ( $USER->instructor ) {
         $exportFile->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
     }
 
-    $StudentList = $CT_DAO->getUsersWithAnswers($ct_id);
+    $StudentList = CT_User::getUsersWithAnswers($ct_id);
 
     $columnIterator = $exportFile->getActiveSheet()->getColumnIterator();
     $columnIterator->next();
 
     foreach ($StudentList as $student ) {
-        $user = new CT_User($student["user_id"]);
-        if (!$user->isInstructor($CONTEXT->id)) {
+        if (!$student->isInstructor($CONTEXT->id)) {
             $rowCounter++;
 
-            $UserID = $student["user_id"];
-
-            $Email = $user->getEmail();
+            $Email = $student->getEmail();
             $UserName = explode("@",$Email);
 
-            $Modified1 = $CT_DAO->getMostRecentAnswerDate($UserID, $ct_id);
+            $Modified1 = $CT_DAO->getMostRecentAnswerDate($student->getUserId(), $ct_id);
             $Modified  =  new DateTime($Modified1);
 
-            $displayName = $user->getDisplayname();
+            $displayName = $student->getDisplayname();
             $displayName = trim($displayName);
 
             $lastName = (strpos($displayName, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $displayName);
@@ -87,7 +84,7 @@ if ( $USER->instructor ) {
                 $QID = $question->getQuestionId();
                 $A="";
 
-                $answer = $CT_DAO->getStudentAnswerForQuestion($QID, $UserID);
+                $answer = $CT_DAO->getStudentAnswerForQuestion($QID, $student->getUserId());
                 if ($answer) {
                     $A = $answer["answer_txt"];
                     $A = str_replace("&#39;", "'", $A);

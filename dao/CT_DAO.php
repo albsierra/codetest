@@ -19,12 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function getUsersWithAnswers($ct_id) {
-        $query = "SELECT DISTINCT user_id FROM {$this->p}ct_answer a join {$this->p}ct_question q on a.question_id = q.question_id WHERE q.ct_id = :ctId;";
-        $arr = array(':ctId' => $ct_id);
-        return $this->PDOX->allRowsDie($query, $arr);
-    }
-
     function getStudentAnswerForQuestion($question_id, $user_id) {
         $query = "SELECT * FROM {$this->p}ct_answer WHERE question_id = :questionId AND user_id = :userId; ";
         $arr = array(':questionId' => $question_id, ':userId' => $user_id);
@@ -163,7 +157,7 @@ class CT_DAO {
                 . "FROM {$connection['p']}lti_membership JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE context_id = :context_id AND role = :role",
             'getUsersWithAnswers' => "SELECT DISTINCT {$connection['p']}lti_user.* "
-                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q on USING (question_id) "
+                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE q.ct_id = :ctId;",
         );
