@@ -76,6 +76,15 @@ class CT_User
         return $context['num_answered'];
     }
 
+    function getGrade($ct_id) {
+        $query = CT_DAO::getQuery('user','getGrade');
+        $arr = array(':ct_id' => $ct_id, ':user_id' => $this->getUserId());
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        $grade = new CT_Grade();
+        CT_DAO::setObjectPropertiesFromArray($grade, $context);
+        return $grade;
+    }
+
     /**
      * @return mixed
      */

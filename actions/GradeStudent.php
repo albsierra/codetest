@@ -2,20 +2,21 @@
 require_once "../../config.php";
 require_once('../dao/CT_DAO.php');
 require_once('../dao/CT_Main.php');
+require_once('../dao/CT_User.php');
+require_once('../dao/CT_Grade.php');
 
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Result;
-use \CT\DAO\CT_DAO;
-use \CT\DAO\CT_Main;
+use \CT\dao\CT_DAO;
+use \CT\dao\CT_Main;
+use \CT\dao\CT_User;
+use \CT\dao\CT_Grade;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
 $CT_DAO = new CT_DAO();
-
-$currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-$currentTimeForDB = $currentTime->format("Y-m-d H:i:s");
 
 $studentId = $_POST["student_id"];
 $grade = $_POST["grade"];
@@ -25,14 +26,12 @@ if ($USER->instructor) {
     if (!isset($grade) || !is_numeric($grade)) {
         $_SESSION['error'] = "Invalid Grade.";
     } else {
-        $currentGrade = $CT_DAO->getStudentGrade($ct_id, $studentId);
-        if (!$currentGrade && $currentGrade !== 0) {
-            // No grade yet so create it
-            $CT_DAO->createGrade($ct_id, $studentId, $grade, $currentTimeForDB);
-        } else {
-            // Record exists so update it
-            $CT_DAO->updateGrade($ct_id, $studentId, $grade, $currentTimeForDB);
-        }
+        $student = new CT_User($studentId);
+        $currentGrade = $student->getGrade($ct_id);
+        $currentGrade->setCtId($ct_id);
+        $currentGrade->setUserId($student->getUserId());
+        $currentGrade->setGrade($grade);
+        $currentGrade->save();
 
         $_SESSION['success'] = "Grade saved.";
 

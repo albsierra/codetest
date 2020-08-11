@@ -5,12 +5,14 @@ require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
 require_once('dao/CT_User.php');
+require_once('dao/CT_Grade.php');
 
 use \Tsugi\Core\LTIX;
-use \CT\DAO\CT_DAO;
-use \CT\DAO\CT_Main;
-use \CT\DAO\CT_Question;
-use CT\DAO\CT_User;
+use \CT\dao\CT_DAO;
+use \CT\dao\CT_Main;
+use \CT\dao\CT_Question;
+use \CT\dao\CT_User;
+use \CT\dao\CT_Grade;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -75,7 +77,7 @@ foreach ($studentAndDate as $student_id => $mostRecentDate) {
     if (!$user->isInstructor($CONTEXT->id)) {
         $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
         $numberAnswered = $user->getNumberQuestionsAnswered($_SESSION["ct_id"]);
-        $grade = $CT_DAO->getStudentGrade($_SESSION["ct_id"], $user->getUserId());
+        $grade = $user->getGrade($_SESSION["ct_id"]);
         ?>
         <tr>
             <td><?= $user->getDisplayname() ?></td>
@@ -86,7 +88,7 @@ foreach ($studentAndDate as $student_id => $mostRecentDate) {
                     <input type="hidden" name="student_id" value="<?=$user->getUserId()?>">
                     <div class="form-group">
                         <label>
-                        <input type="text" class="form-control" name="grade" value="<?=$grade?>">/<?=$pointsPossible?>
+                        <input type="text" class="form-control" name="grade" value="<?=$grade->getGrade()?>">/<?=$pointsPossible?>
                         </label>
                     </div>
                     <button type="submit" class="btn btn-default">Update</button>

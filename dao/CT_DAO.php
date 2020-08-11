@@ -19,26 +19,6 @@ class CT_DAO {
         return array('PDOX' => $PDOX, 'p' => $CFG->dbprefix);
     }
 
-    function getStudentGrade($ct_id, $user_id) {
-        $query = "SELECT grade FROM {$this->p}ct_grade WHERE ct_id = :ct_id AND user_id = :user_id";
-        $arr = array(':ct_id' => $ct_id, ':user_id' => $user_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return $context["grade"];
-    }
-
-    function createGrade($ct_id, $user_id, $grade, $current_time) {
-        $query = "INSERT INTO {$this->p}ct_grade (ct_id, user_id, grade, modified) VALUES (:ct_id, :user_id, :grade, :currentTime);";
-        $arr = array(':ct_id' => $ct_id,':user_id' => $user_id, ':grade' => $grade, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-        return $this->PDOX->lastInsertId();
-    }
-
-    function updateGrade($ct_id, $user_id, $grade, $current_time) {
-        $query = "UPDATE {$this->p}ct_grade set grade = :grade, modified = :currentTime where user_id = :user_id AND ct_id = :ct_id;";
-        $arr = array(':grade' => $grade, ':currentTime' => $current_time, ':user_id' => $user_id, ':ct_id' => $ct_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         if(is_array($arrayProperties)){
             foreach($arrayProperties as $k => $v) {
@@ -152,12 +132,25 @@ class CT_DAO {
                 . "FROM {$connection['p']}ct_answer a "
                 . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null",
+            'getGrade' => "SELECT * FROM {$connection['p']}ct_grade "
+                . "WHERE ct_id = :ct_id AND user_id = :user_id",
+        );
+        $GradeQueries = array(
+            'getByGradeId' => "SELECT * FROM {$connection['p']}ct_grade "
+                . "WHERE grade_id = :grade_id",
+            'insert' => "INSERT INTO {$connection['p']}ct_grade "
+                . "(ct_id, user_id, grade, modified) "
+                . "VALUES (:ctId, :userId, :grade, :modified)",
+            'update' => "UPDATE {$connection['p']}ct_grade "
+                . "set user_id = :userId, ct_id = :ctId, grade = :grade, modified = :modified "
+                . "WHERE grade_id = :gradeId",
         );
         $queries = array(
             'main' => $MainQueries,
             'question' => $QuestionQueries,
             'answer' => $AnswerQueries,
             'user' => $UserQueries,
+            'grade' => $GradeQueries,
         );
         return array(
             'PDOX' => $connection['PDOX'],

@@ -7,11 +7,11 @@ require_once('dao/CT_Question.php');
 require_once('dao/CT_Answer.php');
 require_once('dao/CT_User.php');
 
-use CT\DAO\CT_DAO;
-use CT\DAO\CT_Main;
-use CT\DAO\CT_Question;
-use CT\DAO\CT_Answer;
-use CT\DAO\CT_User;
+use \CT\dao\CT_DAO;
+use \CT\dao\CT_Main;
+use \CT\dao\CT_Question;
+use \CT\dao\CT_Answer;
+use \CT\dao\CT_User;
 use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present

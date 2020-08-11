@@ -4,8 +4,8 @@ require_once('../dao/CT_DAO.php');
 require_once('../dao/CT_Main.php');
 
 use \Tsugi\Core\LTIX;
-use \CT\DAO\CT_DAO;
-use \CT\DAO\CT_Main;
+use \CT\dao\CT_DAO;
+use \CT\dao\CT_Main;
 
 $LAUNCH = LTIX::requireData();
 

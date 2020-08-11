@@ -4,7 +4,7 @@ require_once('../config.php');
 require_once('dao/CT_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \CT\DAO\CT_DAO;
+use \CT\dao\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
