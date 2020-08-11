@@ -1,6 +1,6 @@
 <?php
 
-require_once('../config.php');
+require_once('config.php');
 require_once('dao/CT_DAO.php');
 require_once('dao/CT_Main.php');
 require_once('dao/CT_Question.php');
