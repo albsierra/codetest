@@ -23,6 +23,7 @@ if ($USER->instructor) {
         $main = new CT_Main($_SESSION["ct_id"]);
         $main->setModified($currentTime->format("Y-m-d H:i:s"));
         $main->setTitle($_POST["toolTitle"]);
+        $main->setType($_POST["mainType"]);
         $main->save();
 
         $_SESSION['success'] = "Title saved.";

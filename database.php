@@ -25,7 +25,7 @@ $DATABASE_INSTALL = array(
     context_id  INTEGER NOT NULL,
 	link_id     INTEGER NOT NULL,
 	title       VARCHAR(255) NULL,
-	type     INTEGER NOT NULL DEFAULT 1,
+	type     INTEGER NOT NULL DEFAULT 0,
 	seen_splash BOOL NOT NULL DEFAULT 0,
 	shuffle BOOL NOT NULL DEFAULT 0,
 	points      FLOAT NOT NULL DEFAULT 100,

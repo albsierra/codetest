@@ -88,6 +88,17 @@ p.response-text {
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
 }
+
+
+.mainType-text-span {
+    font-size: 0.6em;
+    font-style: italic;
+    background-color: rgb(13, 71, 161);
+    color: #BEDCFE;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
 @media (max-width: 525px) {
     .import-link {
         display: block;

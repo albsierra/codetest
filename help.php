@@ -24,6 +24,7 @@
                         <p>Use the icons to the right of an added question to edit the text, move it up in the list, or delete it along with any answers.</p>
                         <h5>Editing the Title</h5>
                         <p>You can edit the title of this Code Test by clicking the edit icon next to the title at the top of this page.</p>
+                        <p>If there are no question in this Code Test, you can also edit its type.</p>
                         <?php
                         break;
                     case 'student-home.php':
