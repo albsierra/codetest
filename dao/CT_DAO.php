@@ -1,5 +1,5 @@
 <?php
-namespace CT\DAO;
+namespace CT;
 
 class CT_DAO {
 

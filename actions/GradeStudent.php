@@ -1,22 +1,15 @@
 <?php
 require_once "../config.php";
-require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Main.php');
-require_once('../dao/CT_User.php');
-require_once('../dao/CT_Grade.php');
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Result;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Main;
-use \CT\dao\CT_User;
-use \CT\dao\CT_Grade;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 $studentId = $_POST["student_id"];
 $grade = $_POST["grade"];
@@ -26,7 +19,7 @@ if ($USER->instructor) {
     if (!isset($grade) || !is_numeric($grade)) {
         $_SESSION['error'] = "Invalid Grade.";
     } else {
-        $student = new CT_User($studentId);
+        $student = new \CT\CT_User($studentId);
         $currentGrade = $student->getGrade($ct_id);
         $currentGrade->setCtId($ct_id);
         $currentGrade->setUserId($student->getUserId());
@@ -36,7 +29,7 @@ if ($USER->instructor) {
         $_SESSION['success'] = "Grade saved.";
 
         // Calculate percentage and post
-        $main = new CT_Main($ct_id);
+        $main = new \CT\CT_Main($ct_id);
         $percentage = ($grade * 1.0) / $main->getPoints();
 
         // Get result record for user

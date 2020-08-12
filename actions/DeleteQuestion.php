@@ -1,27 +1,24 @@
 <?php
 require_once "../config.php";
-require_once "../dao/CT_DAO.php";
-require_once "../dao/CT_Question.php";
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Question;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 
 if ( $USER->instructor && $question_id ) {
 
-    $question = new CT_Question($question_id);
+    $question = new \CT\CT_Question($question_id);
     $question->delete();
 
-    CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
+    \CT\CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
 
     $_SESSION['success'] = "Question Deleted.";
 

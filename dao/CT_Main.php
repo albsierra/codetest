@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CT\DAO;
+namespace CT;
 
 
 class CT_Main
@@ -22,11 +22,11 @@ class CT_Main
     {
         $context = array();
         if (isset($ct_id)) {
-            $query = CT_DAO::getQuery('main', 'getByCtId');
+            $query = \CT\CT_DAO::getQuery('main', 'getByCtId');
             $arr = array(':ct_id' => $ct_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        CT_DAO::setObjectPropertiesFromArray($this, $context);
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     public static function getMainFromContext($context_id, $link_id, $user_id = null, $current_time = null) {
@@ -38,35 +38,35 @@ class CT_Main
     }
 
     public static function getMain($context_id, $link_id) {
-        $query = CT_DAO::getQuery('main','getMain');
+        $query = \CT\CT_DAO::getQuery('main','getMain');
         $arr = array(':context_id' => $context_id, ':link_id' => $link_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         return new self($context['ct_id']);
     }
 
     public static function createMain($user_id, $context_id, $link_id, $current_time) {
-        $query = CT_DAO::getQuery('main','insert');
+        $query = \CT\CT_DAO::getQuery('main','insert');
         $arr = array(':userId' => $user_id, ':contextId' => $context_id, ':linkId' => $link_id, ':currentTime' => $current_time);
         $query['PDOX']->queryDie($query['sentence'], $arr);
         return new self($query['PDOX']->lastInsertId());
     }
 
     /**
-     * @return CT_Question[] $questions
+     * @return \CT\CT_Question[] $questions
      */
     function getQuestions() {
         if(!is_array($this->questions)) {
             $this->questions = array();
-            $query = CT_DAO::getQuery('main', 'getQuestions');
+            $query = \CT\CT_DAO::getQuery('main', 'getQuestions');
             $arr = array(':ctId' => $this->getCtId());
             $questions = $query['PDOX']->allRowsDie($query['sentence'], $arr);
-            $this->questions = CT_DAO::createObjectFromArray(CT_Question::class, $questions);
+            $this->questions = \CT\CT_DAO::createObjectFromArray(\CT\CT_Question::class, $questions);
         }
         return $this->questions;
     }
 
     function createQuestion($questionText) {
-        $question = new CT_Question();
+        $question = new \CT\CT_Question();
         $question->setCtId($this->getCtId());
         $question->setQuestionTxt($questionText);
         $question->save();
@@ -234,7 +234,7 @@ class CT_Main
     }
 
     public function save() {
-        $query = CT_DAO::getQuery('main','update');
+        $query = \CT\CT_DAO::getQuery('main','update');
         $arr = array(
             ':user_id' => $this->getUserId(),
             ':context_id' => $this->getContextId(),
@@ -251,7 +251,7 @@ class CT_Main
     }
 
     function delete($user_id) {
-        $query = CT_DAO::getQuery('main','delete');
+        $query = \CT\CT_DAO::getQuery('main','delete');
         $arr = array(':mainId' => $this->getCtId(), ':userId' => $user_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }

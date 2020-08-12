@@ -1,18 +1,15 @@
 <?php
 require_once('../config.php');
-require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Main.php');
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Main;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$main = new CT_Main($_SESSION["ct_id"]);
+$main = new \CT\CT_Main($_SESSION["ct_id"]);
 
 if ( $USER->instructor ) {
 

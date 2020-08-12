@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CT\DAO;
+namespace CT;
 
 
 class CT_Answer
@@ -17,11 +17,11 @@ class CT_Answer
     {
         $context = array();
         if (isset($answer_id)) {
-            $query = CT_DAO::getQuery('answer','getByAnswerId');
+            $query = \CT\CT_DAO::getQuery('answer','getByAnswerId');
             $arr = array(':answer_id' => $answer_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        CT_DAO::setObjectPropertiesFromArray($this, $context);
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     /**
@@ -131,9 +131,9 @@ class CT_Answer
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if($this->isNew()) {
-            $query = CT_DAO::getQuery('answer','insert');
+            $query = \CT\CT_DAO::getQuery('answer','insert');
         } else {
-            $query = CT_DAO::getQuery('answer','update');
+            $query = \CT\CT_DAO::getQuery('answer','update');
         }
         $arr = array(
             ':modified' => $currentTime,
@@ -148,7 +148,7 @@ class CT_Answer
     }
 
     function delete() {
-        $query = CT_DAO::getQuery('answer','deleteOne');
+        $query = \CT\CT_DAO::getQuery('answer','deleteOne');
         $arr = array(':answerId' => $this->getAnswerId());
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
@@ -158,7 +158,7 @@ class CT_Answer
         foreach($questions as $question) {
             array_push($questionIds, $question->getQuestionId());
         }
-        $query = CT_DAO::getQuery('answer','deleteFromQuestions');
+        $query = \CT\CT_DAO::getQuery('answer','deleteFromQuestions');
         $query['sentence'] = str_replace("/questionsId/", implode(',', array_map('intval', $questionIds)), $query['sentence']);
         $arr = array(':userId' => $user_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);

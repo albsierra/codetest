@@ -1,17 +1,16 @@
 <?php
 
 require_once('config.php');
-require_once('dao/CT_DAO.php');
+require 'vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 include("menu.php");
 

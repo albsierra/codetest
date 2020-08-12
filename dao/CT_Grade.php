@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CT\dao;
+namespace CT;
 
 
 class CT_Grade
@@ -16,11 +16,11 @@ class CT_Grade
     {
         $context = array();
         if (isset($grade_id)) {
-            $query = CT_DAO::getQuery('grade', 'getByGradeId');
+            $query = \CT\CT_DAO::getQuery('grade', 'getByGradeId');
             $arr = array(':question_id' => $grade_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        CT_DAO::setObjectPropertiesFromArray($this, $context);
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     /**
@@ -114,9 +114,9 @@ class CT_Grade
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if($this->isNew()) {
-            $query = CT_DAO::getQuery('grade','insert');
+            $query = \CT\CT_DAO::getQuery('grade','insert');
         } else {
-            $query = CT_DAO::getQuery('grade','update');
+            $query = \CT\CT_DAO::getQuery('grade','update');
         }
         $arr = array(
             ':modified' => $currentTime,

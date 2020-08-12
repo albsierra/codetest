@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CT\DAO;
+namespace CT;
 
 
 class CT_Question
@@ -17,22 +17,22 @@ class CT_Question
     {
         $context = array();
         if (isset($question_id)) {
-            $query = CT_DAO::getQuery('question', 'getById');
+            $query = \CT\CT_DAO::getQuery('question', 'getById');
             $arr = array(':question_id' => $question_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        CT_DAO::setObjectPropertiesFromArray($this, $context);
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     //TODO Convertir en array de objetos
     static function findQuestionsForImport($user_id, $ct_id) {
-        $query = CT_DAO::getQuery('question', 'findQuestionsForImport');
+        $query = \CT\CT_DAO::getQuery('question', 'findQuestionsForImport');
         $arr = array(':userId' => $user_id, ":ct_id" => $ct_id);
         return $query['PDOX']->allRowsDie($query['sentence'], $arr);
     }
 
     function createAnswer($user_id, $answer_txt) {
-        $answer = new CT_Answer();
+        $answer = new \CT\CT_Answer();
         $answer->setUserId($user_id);
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
@@ -91,14 +91,14 @@ class CT_Question
     }
 
     function getNextQuestionNumber() {
-        $query = CT_DAO::getQuery('question', 'getNextQuestionNumber');
+        $query = \CT\CT_DAO::getQuery('question', 'getNextQuestionNumber');
         $arr = array(':ctId' => $this->getCtId());
         $lastNum = $query['PDOX']->rowDie($query['sentence'], $arr)["lastNum"];
         return $lastNum + 1;
     }
 
     static function fixUpQuestionNumbers($ct_id) {
-        $query = CT_DAO::getQuery('question', 'fixUpQuestionNumbers');
+        $query = \CT\CT_DAO::getQuery('question', 'fixUpQuestionNumbers');
         $arr = array(':ctId' => $ct_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
@@ -136,16 +136,16 @@ class CT_Question
     }
 
     /**
-     * @return CT_Answer[] $answers
+     * @return \CT\CT_Answer[] $answers
      */
     public function getAnswers()
     {
         if(!is_array($this->answers)) {
             $this->answers = array();
-            $query = CT_DAO::getQuery('question', 'getAnswers');
+            $query = \CT\CT_DAO::getQuery('question', 'getAnswers');
             $arr = array(':questionId' => $this->getQuestionId());
             $answers = $query['PDOX']->allRowsDie($query['sentence'], $arr);
-            $this->answers = CT_DAO::createObjectFromArray(CT_Answer::class, $answers);
+            $this->answers = \CT\CT_DAO::createObjectFromArray(\CT\CT_Answer::class, $answers);
         }
         return $this->answers;
     }
@@ -162,9 +162,9 @@ class CT_Question
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if($this->isNew()) {
             $this->setQuestionNum($this->getNextQuestionNumber());
-            $query = CT_DAO::getQuery('question', 'insert');
+            $query = \CT\CT_DAO::getQuery('question', 'insert');
         } else {
-            $query = CT_DAO::getQuery('question', 'update');
+            $query = \CT\CT_DAO::getQuery('question', 'update');
         }
         $arr = array(
             ':modified' => $currentTime,
@@ -178,7 +178,7 @@ class CT_Question
     }
 
     function delete() {
-        $query = CT_DAO::getQuery('question', 'delete');
+        $query = \CT\CT_DAO::getQuery('question', 'delete');
         $arr = array(':questionId' => $this->getQuestionId());
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }

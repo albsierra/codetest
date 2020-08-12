@@ -1,30 +1,22 @@
 <?php
 
 require_once('config.php');
-require_once('dao/CT_DAO.php');
-require_once('dao/CT_Main.php');
-require_once('dao/CT_Question.php');
-require_once('dao/CT_User.php');
-require_once('dao/CT_Grade.php');
+require 'vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Main;
-use \CT\dao\CT_Question;
-use \CT\dao\CT_User;
-use \CT\dao\CT_Grade;
+require 'vendor/autoload.php';
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
-$main = new CT_Main($_SESSION["ct_id"]);
+$main = new \CT\CT_Main($_SESSION["ct_id"]);
 $pointsPossible = $main->getPoints();
 
-$students = CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
+$students = \CT\CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
 foreach($students as $student) {
     $studentAndDate[$student->getUserId()] = new DateTime($student->getMostRecentAnswerDate($_SESSION["ct_id"]));
@@ -73,7 +65,7 @@ $OUTPUT->pageTitle('Grade', false, false);
 // Sort students by mostRecentDate desc
 arsort($studentAndDate);
 foreach ($studentAndDate as $student_id => $mostRecentDate) {
-    $user = new CT_User($student_id);
+    $user = new \CT\CT_User($student_id);
     if (!$user->isInstructor($CONTEXT->id)) {
         $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
         $numberAnswered = $user->getNumberQuestionsAnswered($_SESSION["ct_id"]);

@@ -1,19 +1,14 @@
 <?php
 require_once "../config.php";
-require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Main.php');
-require_once('../dao/CT_Question.php');
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Main;
-use \CT\dao\CT_Question;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 if ($USER->instructor) {
 
@@ -25,12 +20,12 @@ if ($USER->instructor) {
     if (isset($questionText) && trim($questionText) != '') {
         if ($questionId > -1) {
             // Existing question
-            $question = new CT_Question($questionId);
+            $question = new \CT\CT_Question($questionId);
             $question->setQuestionTxt($questionText);
             $question->save();
         } else {
             // New question
-            $main = new CT_Main($_SESSION["ct_id"]);
+            $main = new \CT\CT_Main($_SESSION["ct_id"]);
             $question = $main->createQuestion($questionText);
 
             // Create new question markup
@@ -74,7 +69,7 @@ if ($USER->instructor) {
     } else {
         if ($questionId > -1) {
             // Blank text means delete question
-            $question = new CT_Question($questionId);
+            $question = new \CT\CT_Question($questionId);
             $question->delete();
             // Set question id to false to remove question line
             $questionId = false;

@@ -1,19 +1,14 @@
 <?php
 require_once "../config.php";
-require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Question.php');
-require_once('../dao/CT_Answer.php');
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Question;
-use \CT\dao\CT_Answer;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 
@@ -27,7 +22,7 @@ if (!isset($answerText) || trim($answerText) == "") {
     $result["answer_content"] = false;
 } else {
 
-    $question = new CT_Question($questionId);
+    $question = new \CT\CT_Question($questionId);
     $answer = $question->createAnswer($USER->id, $answerText);
     $formattedDate = $currentTime->format("m/d/y")." | ".$currentTime->format("h:i A");
 

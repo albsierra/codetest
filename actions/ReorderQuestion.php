@@ -1,25 +1,20 @@
 <?php
 require_once "../config.php";
-require_once('../dao/CT_DAO.php');
-require_once('../dao/CT_Main.php');
-require_once('../dao/CT_Question.php');
+require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-use \CT\dao\CT_DAO;
-use \CT\dao\CT_Main;
-use \CT\dao\CT_Question;
 
 $LAUNCH = LTIX::requireData();
 
 $p = $CFG->dbprefix;
 
-$CT_DAO = new CT_DAO();
+$CT_DAO = new \CT\CT_DAO();
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
-$questionToMove = new CT_Question($question_id);
+$questionToMove = new \CT\CT_Question($question_id);
 
 if ( $USER->instructor && $question_id ) {
-    $main = new CT_Main($_SESSION["ct_id"]);
+    $main = new \CT\CT_Main($_SESSION["ct_id"]);
     $questions = $main->getQuestions();
     $prevQuestion = false;
     foreach ($questions as $question) {
@@ -29,7 +24,7 @@ if ( $USER->instructor && $question_id ) {
                 // This was the first so put it at the end
                 $questionToMove->setQuestionNum(count($questions) + 1);
                 $questionToMove->save();
-                CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
+                \CT\CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
                 break;
             } else {
                 // This was one of the other questions so swap with previous

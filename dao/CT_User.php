@@ -1,7 +1,7 @@
 <?php
 
 
-namespace CT\DAO;
+namespace CT;
 
 
 class CT_User
@@ -18,70 +18,70 @@ class CT_User
     {
         $context = array();
         if (isset($user_id)) {
-            $query = CT_DAO::getQuery('user', 'getByUserId');
+            $query = \CT\CT_DAO::getQuery('user', 'getByUserId');
             $arr = array(':user_id' => $user_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        CT_DAO::setObjectPropertiesFromArray($this, $context);
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
     function isInstructor($context_id) {
-        $query = CT_DAO::getQuery('user', 'getUserRoles');
+        $query = \CT\CT_DAO::getQuery('user', 'getUserRoles');
         $arr = array(':context_id' => $context_id, ':user_id' => $this->getUserId());
         $role = $query['PDOX']->rowDie($query['sentence'], $arr);
         return $role["role"] == self::INSTRUCTOR_ROLE;
     }
 
     static function findInstructors($context_id) {
-        $query = CT_DAO::getQuery('user', 'findInstructors');
+        $query = \CT\CT_DAO::getQuery('user', 'findInstructors');
         $arr = array(':context_id' => $context_id, ':role' => self::INSTRUCTOR_ROLE);
         $instructorsArray = $query['PDOX']->allRowsDie($query['sentence'], $arr);
-        return CT_DAO::createObjectFromArray(self::class, $instructorsArray);
+        return \CT\CT_DAO::createObjectFromArray(self::class, $instructorsArray);
     }
 
     /**
      * @param $ct_id int The context_id
-     * @return CT_User[]
+     * @return \CT\CT_User[]
      */
     static function getUsersWithAnswers($ct_id) {
-        $query = CT_DAO::getQuery('user', 'getUsersWithAnswers');
+        $query = \CT\CT_DAO::getQuery('user', 'getUsersWithAnswers');
         $arr = array(':ctId' => $ct_id);
-        return CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
+        return \CT\CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
     }
 
     /**
      * @param $question_id int
-     * @return CT_Answer
+     * @return \CT\CT_Answer
      */
     function getAnswerForQuestion($question_id) {
-        $query = CT_DAO::getQuery('user','getAnswerForQuestion');
+        $query = \CT\CT_DAO::getQuery('user','getAnswerForQuestion');
         $arr = array(':questionId' => $question_id, ':userId' => $this->getUserId());
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
-        $answer = new CT_Answer();
-        CT_DAO::setObjectPropertiesFromArray($answer, $context);
+        $answer = new \CT\CT_Answer();
+        \CT\CT_DAO::setObjectPropertiesFromArray($answer, $context);
         return $answer;
     }
 
     function getMostRecentAnswerDate($ct_id) {
-        $query = CT_DAO::getQuery('user','getMostRecentAnswerDate');
+        $query = \CT\CT_DAO::getQuery('user','getMostRecentAnswerDate');
         $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         return $context['modified'];
     }
 
     function getNumberQuestionsAnswered($ct_id) {
-        $query = CT_DAO::getQuery('user','getNumberQuestionsAnswered');
+        $query = \CT\CT_DAO::getQuery('user','getNumberQuestionsAnswered');
         $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         return $context['num_answered'];
     }
 
     function getGrade($ct_id) {
-        $query = CT_DAO::getQuery('user','getGrade');
+        $query = \CT\CT_DAO::getQuery('user','getGrade');
         $arr = array(':ct_id' => $ct_id, ':user_id' => $this->getUserId());
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
-        $grade = new CT_Grade();
-        CT_DAO::setObjectPropertiesFromArray($grade, $context);
+        $grade = new \CT\CT_Grade();
+        \CT\CT_DAO::setObjectPropertiesFromArray($grade, $context);
         return $grade;
     }
 
