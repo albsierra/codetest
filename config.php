@@ -4,6 +4,7 @@
 // http://stackoverflow.com/questions/24753758
 
 require_once dirname(__DIR__)."/config.php";
+require 'vendor/autoload.php';
 
 $CFG->CT_mainTypes = array(
     'sql',

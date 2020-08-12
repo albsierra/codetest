@@ -19,3 +19,6 @@ A simple Tsugi tool to prompt users to respond to short answer questions.
 * Rename QID to question_id and make not null
 * Rename Answer to answer_txt
 * Rename Modified to modified
+
+### post_installation
+> composer install

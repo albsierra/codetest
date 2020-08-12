@@ -27,7 +27,7 @@
     <div class="h3 flx-cntnr flx-row flx-nowrap flx-start">
         <label for="mainType">Type:&nbsp;</label>
         <?php if(count($questions) > 0) : ?>
-            <input type="hidden" name="mainType" value="<?= $CFG->CT_mainTypes[$main->getType()] ?>">
+            <input type="hidden" name="mainType" value="<?= $main->getType() ?>">
             <span class="title-edit-input flx-grow-all" id="mainType"><?= $CFG->CT_mainTypes[$main->getType()] ?></span>
         <?php else : ?>
             <select class="title-edit-input" id="mainType" name="mainType">

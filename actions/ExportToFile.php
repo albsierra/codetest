@@ -1,7 +1,6 @@
 <?php
 require_once "../config.php";
 require_once "../util/PHPExcel.php";
-require '../vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
 

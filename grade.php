@@ -1,10 +1,8 @@
 <?php
 
 require_once('config.php');
-require 'vendor/autoload.php';
 
 use \Tsugi\Core\LTIX;
-require 'vendor/autoload.php';
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
