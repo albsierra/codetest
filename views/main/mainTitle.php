@@ -2,7 +2,7 @@
     <button id="helpButton" type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#helpModal">
         <span class="fa fa-question-circle" aria-hidden="true"></span> Help</button>
     <span class="flx-cntnr flx-row flx-nowrap flx-start">
-                <span class="title-text-span" onclick="editTitleText();" tabindex="0"><?=$toolTitle?></span>
+                <span class="title-text-span" onclick="editTitleText();" tabindex="0"><?=$main->getTitle()?></span>
                 <a id="toolTitleEditLink" class="toolTitleAction" href="javascript:void(0);" onclick="editTitleText();">
                     <span class="fa fa-fw fa-code" aria-hidden="true"></span>
                     <span class="sr-only">Edit Title Text</span>
@@ -14,7 +14,7 @@
 <form id="toolTitleForm" action="actions/UpdateMainTitle.php" method="post" style="display:none;">
     <div class="h1 flx-cntnr flx-row flx-nowrap flx-start">
         <label for="toolTitleInput" class="sr-only">Title Text</label>
-        <textarea class="title-edit-input flx-grow-all" id="toolTitleInput" name="toolTitle" rows="2"><?=$toolTitle?></textarea>
+        <textarea class="title-edit-input flx-grow-all" id="toolTitleInput" name="toolTitle" rows="2"><?=$main->getTitle()?></textarea>
         <a id="toolTitleSaveLink" class="toolTitleAction" href="javascript:void(0);">
             <span class="fa fa-fw fa-save" aria-hidden="true"></span>
             <span class="sr-only">Save Title Text</span>

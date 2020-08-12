@@ -164,4 +164,12 @@ class CT_Answer
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
+    static function deleteInstructorAnswers($questions, $ct_id)
+    {
+        $instructors = \CT\CT_User::findInstructors($ct_id);
+        foreach($instructors as $instructor) {
+            self::deleteAnswers($questions, $instructor->getUserId());
+        }
+    }
+
 }

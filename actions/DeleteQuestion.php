@@ -1,14 +1,5 @@
 <?php
-require_once "../config.php";
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
+require_once "../initTsugi.php";
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 

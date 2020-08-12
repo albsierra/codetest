@@ -1,14 +1,5 @@
 <?php
-require_once('config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
+require_once('initTsugi.php');
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");

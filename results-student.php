@@ -1,15 +1,6 @@
 <?php
 
-require_once('config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
+require_once('initTsugi.php');
 
 $students = \CT\CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 $studentAndDate = array();
@@ -22,12 +13,12 @@ $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
-include("menu.php");
+include('views/dao/menu.php');
 
 // Start of the output
 $OUTPUT->header();
 
-include("tool-header.html");
+include('views/dao/tool-header.html');
 
 $OUTPUT->bodyStart();
 
@@ -119,6 +110,6 @@ $OUTPUT->helpModal("Code Test Help", __('
 
 $OUTPUT->footerStart();
 
-include("tool-footer.html");
+include('views/dao/tool-footer.html');
 
 $OUTPUT->footerEnd();

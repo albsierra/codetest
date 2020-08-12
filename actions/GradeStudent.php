@@ -1,14 +1,7 @@
 <?php
-require_once "../config.php";
+require_once "../initTsugi.php";
 
-use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Result;
-
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
 
 $studentId = $_POST["student_id"];
 $grade = $_POST["grade"];

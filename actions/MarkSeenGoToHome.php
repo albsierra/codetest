@@ -1,12 +1,5 @@
 <?php
-require_once('../config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
+require_once('../initTsugi.php');
 
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 

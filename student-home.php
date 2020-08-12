@@ -1,15 +1,6 @@
 <?php
 
-require_once('config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
+require_once('initTsugi.php');
 
 $SetID = $_SESSION["ct_id"];
 
@@ -26,12 +17,12 @@ $totalQuestions = count($questions);
 
 $moreToSubmit = false;
 
-include("menu.php");
+include('views/dao/menu.php');
 
 // Start of the output
 $OUTPUT->header();
 
-include("tool-header.html");
+include('views/dao/tool-header.html');
 
 $OUTPUT->bodyStart();
 
@@ -106,6 +97,6 @@ if ($USER->instructor) {
 
 $OUTPUT->footerStart();
 
-include("tool-footer.html");
+include('views/dao/tool-footer.html');
 
 $OUTPUT->footerEnd();

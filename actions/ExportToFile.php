@@ -1,15 +1,6 @@
 <?php
-require_once "../config.php";
+require_once "../initTsugi.php";
 require_once "../util/PHPExcel.php";
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
 
 if ( $USER->instructor ) {
 

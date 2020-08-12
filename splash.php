@@ -1,10 +1,5 @@
 <?php
-require_once('config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
+require_once('initTsugi.php');
 
 // Start of the output
 $OUTPUT->header();

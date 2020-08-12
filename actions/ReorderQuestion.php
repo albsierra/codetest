@@ -1,13 +1,5 @@
 <?php
-require_once "../config.php";
-
-use \Tsugi\Core\LTIX;
-
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
+require_once "../initTsugi.php";
 
 $question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
 $questionToMove = new \CT\CT_Question($question_id);

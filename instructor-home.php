@@ -1,46 +1,30 @@
 <?php
-require_once('config.php');
-
-use \Tsugi\Core\LTIX;
-
-// Retrieve the launch data if present
-$LAUNCH = LTIX::requireData();
-
-$p = $CFG->dbprefix;
-
-$CT_DAO = new \CT\CT_DAO();
-
-include("menu.php");
-
-// Start of the output
-$OUTPUT->header();
-
-include("tool-header.html");
-
-$OUTPUT->bodyStart();
+require_once('initTsugi.php');
 
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 
-$toolTitle = $main->getTitle();
-
-if (!$toolTitle) {
-    $toolTitle = "Code Test";
+if (!$main->getTitle()) {
+    $main->setTitle("Code Test");
+    $main->save();
 }
 
 $questions = $main->getQuestions();
 
 // Clear any preview responses if there are questions
-if ($questions) {
-    $instructors = \CT\CT_User::findInstructors($CONTEXT->id);
-    foreach($instructors as $instructor) {
-       \CT\CT_Answer::deleteAnswers($questions, $instructor->getUserId());
-    }
-}
+if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id);
 
+// Start of the output
+$OUTPUT->header();
+
+include('views/dao/tool-header.html');
+
+$OUTPUT->bodyStart();
+
+include('views/dao/menu.php');
 $OUTPUT->topNav($menu);
-
-echo('<div class="container-fluid">');
-
+?>
+    <div class="container-fluid">
+<?php
 $OUTPUT->flashMessages();
 
 include("views/main/mainTitle.php");
@@ -60,11 +44,11 @@ include("views/main/mainTitle.php");
     <input type="hidden" id="sess" value="<?php echo($_GET["PHPSESSID"]) ?>">
 <?php
 
-include("help.php");
-include("import.php");
+include('views/dao/help.php');
+include('views/dao/import.php');
 
 $OUTPUT->footerStart();
 
-include("tool-footer.html");
+include('views/dao/tool-footer.html');
 
 $OUTPUT->footerEnd();
