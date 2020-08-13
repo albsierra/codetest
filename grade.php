@@ -1,94 +1,48 @@
 <?php
-
 require_once('initTsugi.php');
+
+$loader = new \Twig_Loader_Filesystem('views');
+// TODO eliminar debug 0 true y habilitar cache en tmp
+$twig = new \Twig_Environment($loader, [
+    'debug' => true
+]);
+
+include('views/dao/menu.php');
 
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $pointsPossible = $main->getPoints();
 
-$students = \CT\CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
-$studentAndDate = array();
-foreach($students as $student) {
-    $studentAndDate[$student->getUserId()] = new DateTime($student->getMostRecentAnswerDate($_SESSION["ct_id"]));
-}
-
 $questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
-include('views/dao/menu.php');
+echo $twig->render('grade/grade.php', array(
+    'maxPoints' => $pointsPossible,
+    'totalQuestions' => $totalQuestions,
+    'students' => getStudents($main),
+    'OUTPUT' => $OUTPUT,
+    'menu' => $menu,
+));
 
-// Start of the output
-$OUTPUT->header();
-
-include('views/dao/tool-header.html');
-
-$OUTPUT->bodyStart();
-
-$OUTPUT->topNav($menu);
-
-echo '<div class="container-fluid">';
-
-$OUTPUT->flashMessages();
-
-$OUTPUT->pageTitle('Grade', false, false);
-
-?>
-<h3>Set Points Possible <small>Default 100</small></h3>
-<form class="form-inline" action="actions/UpdatePointsPossible.php" method="post">
-    <div class="form-group">
-        <label for="points_possible">Points Possible: </label>
-        <input type="text" class="form-control" id="points_possible" name="points_possible" value="<?=$pointsPossible?>">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
-<h3>Grade Students</h3>
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <thead>
-        <th class="col-sm-5">Student Name</th>
-        <th class="col-sm-2">Last Updated</th>
-        <th class="col-sm-2">Completed</th>
-        <th class="col-sm-3">Grade</th>
-        </thead>
-        <tbody>
-<?php
-// Sort students by mostRecentDate desc
-arsort($studentAndDate);
-foreach ($studentAndDate as $student_id => $mostRecentDate) {
-    $user = new \CT\CT_User($student_id);
-    if (!$user->isInstructor($CONTEXT->id)) {
-        $formattedMostRecentDate = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-        $numberAnswered = $user->getNumberQuestionsAnswered($_SESSION["ct_id"]);
-        $grade = $user->getGrade($_SESSION["ct_id"]);
-        ?>
-        <tr>
-            <td><?= $user->getDisplayname() ?></td>
-            <td><?= $formattedMostRecentDate ?></td>
-            <td><?= $numberAnswered . '/' . $totalQuestions ?></td>
-            <td>
-                <form class="form-inline" action="actions/GradeStudent.php" method="post">
-                    <input type="hidden" name="student_id" value="<?=$user->getUserId()?>">
-                    <div class="form-group">
-                        <label>
-                        <input type="text" class="form-control" name="grade" value="<?=$grade->getGrade()?>">/<?=$pointsPossible?>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-default">Update</button>
-                </form>
-            </td>
-        </tr>
-        <?php
+function getStudents($main) {
+    $studentsUnordered = \CT\CT_User::getUsersWithAnswers($main->getCtId());
+    $studentAndDate = array();
+    foreach($studentsUnordered as $student) {
+        $studentAndDate[$student->getMostRecentAnswerDate($main->getCtId())] = $student;
     }
+// Sort students by mostRecentDate desc
+    krsort($studentAndDate);
+    $students = array();
+    $index = 0;
+    foreach ($studentAndDate as $date => $user) {
+        $mostRecentDate = new DateTime($date);
+        $students[$index]['user'] = $user;
+        $students[$index]['isInstructor'] = $user->isInstructor($main->getContextId());
+        if (!$students[$index]['isInstructor']) {
+            $students[$index]['formattedMostRecentDate'] = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
+            $students[$index]['numberAnswered'] = $user->getNumberQuestionsAnswered($main->getCtId());
+            $students[$index]['grade'] = $user->getGrade($main->getCtId())->getGrade();
+        }
+        $index++;
+    }
+    return $students;
 }
-?>
-        </tbody>
-    </table>
-</div>
-<?php
-
-echo ("</div>"); // End container
-
-$OUTPUT->footerStart();
-
-include('views/dao/tool-footer.html');
-
-$OUTPUT->footerEnd();
