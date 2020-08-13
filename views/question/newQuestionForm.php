@@ -1,5 +1,5 @@
-<div id="newQuestionRow" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" style="display:none;" data-question-number="<?=$questions ? count($questions)+1 : 1?>">
-    <div id="newQuestionNumber"><?=$questions ? count($questions)+1 : 1?>.</div>
+<div id="newQuestionRow" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" style="display:none;" data-question-number="{{ newQuestionNumber }}">
+    <div id="newQuestionNumber">{{ newQuestionNumber }}.</div>
     <div class="flx-grow-all question-text">
         <form id="questionTextForm-1" action="actions/AddOrEditQuestion.php" method="post">
             <input type="hidden" name="questionId" value="-1">
