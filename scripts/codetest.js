@@ -80,6 +80,23 @@ function showNewQuestionRow() {
         addQuestionsSection.show();
     });
 }
+
+function importQuestions() {
+    $.ajax({
+        type: "GET",
+        url: "actions/ImportBody.php?PHPSESSID=" + $("#sess").val(),
+        success: function(data) {
+            $('.import-body').html(data);
+
+            // Display Modal
+            $('#importModal').modal('show');
+        },
+        error: function(data) {
+            console.log(data.responseText);
+        }
+    });
+}
+
 function editQuestionText(questionId) {
     var questionText =$("#questionText"+questionId);
     questionText.hide();
