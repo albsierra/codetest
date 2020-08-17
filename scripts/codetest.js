@@ -81,15 +81,43 @@ function showNewQuestionRow() {
     });
 }
 
-function importQuestions() {
+function importLtiContexts() {
     $.ajax({
         type: "GET",
-        url: "actions/ImportBody.php?PHPSESSID=" + $("#sess").val(),
+        url: "actions/import/ImportLtiContexts.php?PHPSESSID=" + $("#sess").val(),
         success: function(data) {
             $('.import-body').html(data);
 
             // Display Modal
             $('#importModal').modal('show');
+        },
+        error: function(data) {
+            console.log(data.responseText);
+        }
+    });
+}
+
+function importMains(contextId) {
+    $.ajax({
+        type: "GET",
+        url: "actions/import/ImportMains.php?contextId=" + contextId + "&PHPSESSID=" + $("#sess").val(),
+        success: function(data) {
+            $('#site' + contextId).html(data);
+            $('#site' + contextId + '.collapse').collapse();
+        },
+        error: function(data) {
+            console.log(data.responseText);
+        }
+    });
+}
+
+function importQuestions(ctId) {
+    $.ajax({
+        type: "GET",
+        url: "actions/import/ImportQuestions.php?ctId=" + ctId + "&PHPSESSID=" + $("#sess").val(),
+        success: function(data) {
+            $('#main' + ctId).html(data);
+            //$('#site' + contextId + '.collapse').collapse();
         },
         error: function(data) {
             console.log(data.responseText);

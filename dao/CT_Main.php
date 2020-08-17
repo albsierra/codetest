@@ -37,6 +37,12 @@ class CT_Main
         return $object;
     }
 
+    public static function getMainsFromContext($context_id) {
+        $query = \CT\CT_DAO::getQuery('main', 'getMainsFromContext');
+        $arr = array(':context_id' => $context_id);
+        return \CT\CT_DAO::createObjectFromArray(self::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
+    }
+
     public static function getMain($context_id, $link_id) {
         $query = \CT\CT_DAO::getQuery('main','getMain');
         $arr = array(':context_id' => $context_id, ':link_id' => $link_id);

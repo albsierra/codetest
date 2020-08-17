@@ -1,0 +1,9 @@
+                    {% for main in mains %}
+                    <div class="row response-row">
+                        <div class="col-sm-3" onclick="importQuestions({{ main.getCtId() }})">
+                            <h5>{{ main.getTitle() }}</h5>
+                        </div>
+                        <div id="main{{ main.getCtId() }}" class="col-sm-offset-1 col-sm-8">
+                        </div>
+                    </div>
+                    {% endfor %}

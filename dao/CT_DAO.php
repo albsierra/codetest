@@ -52,6 +52,9 @@ class CT_DAO {
             'getQuestions' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE ct_id = :ctId "
                 . "order by question_num",
+            'getMainsFromContext' => "SELECT * FROM {$connection['p']}ct_main "
+                . "WHERE context_id = :context_id "
+                . "order by modified desc",
             'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) "
                 . "VALUES (:userId, :contextId, :linkId, :currentTime)",
             'update' => "UPDATE {$connection['p']}ct_main set "
@@ -134,6 +137,10 @@ class CT_DAO {
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null",
             'getGrade' => "SELECT * FROM {$connection['p']}ct_grade "
                 . "WHERE ct_id = :ct_id AND user_id = :user_id",
+            'getLtiContexts' => "SELECT DISTINCT lti.title as courseName, lti.context_id as ctxId "
+                . "FROM {$connection['p']}ct_main m "
+                . "JOIN {$connection['p']}lti_context lti on m.context_id = lti.context_id "
+                . "WHERE m.user_id = :userId",
         );
         $GradeQueries = array(
             'getByGradeId' => "SELECT * FROM {$connection['p']}ct_grade "

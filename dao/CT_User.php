@@ -85,6 +85,12 @@ class CT_User
         return $grade;
     }
 
+    function getLtiContexts() {
+        $query = \CT\CT_DAO::getQuery('user','getLtiContexts');
+        $arr = array(':userId' => $this->getUserId());
+        return $query['PDOX']->allRowsDie($query['sentence'], $arr);
+    }
+
     /**
      * @return mixed
      */
