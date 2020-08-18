@@ -18,32 +18,8 @@ $totalQuestions = count($questions);
 echo $twig->render('grade/grade.php', array(
     'maxPoints' => $pointsPossible,
     'totalQuestions' => $totalQuestions,
-    'students' => getStudents($main),
+    'students' => $main->getStudentsOrderedByDate(),
     'OUTPUT' => $OUTPUT,
     'menu' => $menu,
     'help' => $help(),
 ));
-
-function getStudents($main) {
-    $studentsUnordered = \CT\CT_User::getUsersWithAnswers($main->getCtId());
-    $studentAndDate = array();
-    foreach($studentsUnordered as $student) {
-        $studentAndDate[$student->getMostRecentAnswerDate($main->getCtId())] = $student;
-    }
-// Sort students by mostRecentDate desc
-    krsort($studentAndDate);
-    $students = array();
-    $index = 0;
-    foreach ($studentAndDate as $date => $user) {
-        $mostRecentDate = new DateTime($date);
-        $students[$index]['user'] = $user;
-        $students[$index]['isInstructor'] = $user->isInstructor($main->getContextId());
-        if (!$students[$index]['isInstructor']) {
-            $students[$index]['formattedMostRecentDate'] = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
-            $students[$index]['numberAnswered'] = $user->getNumberQuestionsAnswered($main->getCtId());
-            $students[$index]['grade'] = $user->getGrade($main->getCtId())->getGrade();
-        }
-        $index++;
-    }
-    return $students;
-}

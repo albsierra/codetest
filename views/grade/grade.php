@@ -32,7 +32,7 @@
                             <input type="hidden" name="student_id" value="{{ student.user.getUserId() }}">
                             <div class="form-group">
                                 <label>
-                                    <input type="text" class="form-control" name="grade" value="{{ student.grade}}">/{{ pointsPossible }}
+                                    <input type="text" class="form-control" name="grade" value="{{ student.grade}}">/{{ maxPoints }}
                                 </label>
                             </div>
                             <button type="submit" class="btn btn-default">Update</button>
@@ -44,5 +44,4 @@
         </tbody>
     </table>
 </div>
-
 {% endblock %}

@@ -79,6 +79,30 @@ class CT_Main
         return $question;
     }
 
+    function getStudentsOrderedByDate() {
+        $studentsUnordered = \CT\CT_User::getUsersWithAnswers($this->getCtId());
+        $studentAndDate = array();
+        foreach($studentsUnordered as $student) {
+            $studentAndDate[$student->getMostRecentAnswerDate($this->getCtId())] = $student;
+        }
+        // Sort students by mostRecentDate desc
+        krsort($studentAndDate);
+        $students = array();
+        $index = 0;
+        foreach ($studentAndDate as $date => $user) {
+            $mostRecentDate = new \DateTime($date);
+            $students[$index]['user'] = $user;
+            $students[$index]['isInstructor'] = $user->isInstructor($this->getContextId());
+            if (!$students[$index]['isInstructor']) {
+                $students[$index]['formattedMostRecentDate'] = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
+                $students[$index]['numberAnswered'] = $user->getNumberQuestionsAnswered($this->getCtId());
+                $students[$index]['grade'] = $user->getGrade($this->getCtId())->getGrade();
+            }
+            $index++;
+        }
+        return $students;
+    }
+
     /**
      * @return mixed
      */
