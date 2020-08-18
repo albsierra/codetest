@@ -150,6 +150,11 @@ class CT_Question
         return $this->answers;
     }
 
+    public function getNumberAnswers()
+    {
+        return count($this->getAnswers());
+    }
+
     public function isNew()
     {
         $question_id = $this->getQuestionId();

@@ -84,7 +84,7 @@ function showNewQuestionRow() {
 function importLtiContexts() {
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportLtiContexts.php?PHPSESSID=" + $("#sess").val(),
+        url: "actions/import/ImportLtiContexts.php?" + _TSUGI.ajax_session,
         success: function(data) {
             $('.import-body').html(data);
 
@@ -100,7 +100,7 @@ function importLtiContexts() {
 function importMains(contextId) {
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportMains.php?contextId=" + contextId + "&PHPSESSID=" + $("#sess").val(),
+        url: "actions/import/ImportMains.php?contextId=" + contextId + "&" + _TSUGI.ajax_session,
         success: function(data) {
             $('#site' + contextId).html(data);
             $('#site' + contextId + '.collapse').collapse();
@@ -114,10 +114,23 @@ function importMains(contextId) {
 function importQuestions(ctId) {
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportQuestions.php?ctId=" + ctId + "&PHPSESSID=" + $("#sess").val(),
+        url: "actions/import/ImportQuestions.php?ctId=" + ctId + "&" + _TSUGI.ajax_session,
         success: function(data) {
             $('#main' + ctId).html(data);
-            //$('#site' + contextId + '.collapse').collapse();
+        },
+        error: function(data) {
+            console.log(data.responseText);
+        }
+    });
+}
+
+function getAnswersFromQuestion(questionId) {
+    $.ajax({
+        type: "GET",
+        url: "actions/answers/getAnswersFromQuestion.php?questionId=" + questionId + "&" + _TSUGI.ajax_session,
+        success: function(data) {
+            $('#responses' + questionId).html(data);
+            $('#responses' + questionId + '.collapse').collapse();
         },
         error: function(data) {
             console.log(data.responseText);

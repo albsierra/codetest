@@ -49,6 +49,14 @@ class CT_Answer
     }
 
     /**
+     * @return CT_User
+     */
+    public function getUser()
+    {
+        return new CT_User($this->user_id);
+    }
+
+    /**
      * @param mixed $user_id
      */
     public function setUserId($user_id)

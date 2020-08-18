@@ -22,7 +22,6 @@ $questions = $main->getQuestions();
 if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id);
 
 echo $twig->render('instructor_home.php', array(
-    'phpsessid' => $_GET["PHPSESSID"],
     'main' => $main,
     'questions' => $questions,
     'newQuestionNumber' => $questions ? count($questions)+1 : 1,

@@ -13,6 +13,5 @@
     {{ include('question/addQuestion.php') }}
 </section>
 
-<input type="hidden" id="sess" value="{{ phpsessid }}">
 {{ include('question/import/importModal.php') }}
 {% endblock %}

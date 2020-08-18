@@ -9,7 +9,7 @@
         <div class="list-group-item response-list-group-item">
             <div class="row">
                 <div class="col-sm-12 header-col">
-                    <a data-toggle="collapse" class="h4 response-collapse-link" onclick="importMains({{ course.ctxId }})">
+                    <a data-toggle="collapse" class="h4 response-collapse-link" data-target="#site{{ course.ctxId }}" onclick="importMains({{ course.ctxId }})">
                         {{ course.courseName }}
                         <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                     </a>

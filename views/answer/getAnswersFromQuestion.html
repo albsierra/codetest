@@ -1,0 +1,12 @@
+                            {% for response in responses %}
+                                {% set user = response.user %}
+                                <div class="row response-row">
+                                    <div class="col-sm-3">
+                                        <h5>{{ user.getDisplayname() }}</h5>
+                                        <p>{{ response.formattedResponseDate }}</p>
+                                    </div>
+                                    <div class="col-sm-offset-1 col-sm-8">
+                                        <p class="response-text">{{ response.answer.getAnswerTxt() }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
