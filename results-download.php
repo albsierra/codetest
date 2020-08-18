@@ -14,8 +14,6 @@ include('views/dao/menu.php');
 echo $twig->render('answer/results-download.php', array(
     'OUTPUT' => $OUTPUT,
     'CONTEXT' => $CONTEXT,
-    'help' => __('
-<h4>Downloading Results</h4>
-<p>Click on the link to download an Excel file with all of the results for this Code Test.</p>'),
+    'help' => $help(),
     'menu' => $menu,
 ));

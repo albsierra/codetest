@@ -30,4 +30,5 @@ echo $twig->render('instructor_home.php', array(
     'OUTPUT' => $OUTPUT,
     'CFG' => $CFG,
     'menu' => $menu,
+    'help' => $help(),
 ));

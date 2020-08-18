@@ -14,6 +14,5 @@
 </section>
 
 <input type="hidden" id="sess" value="{{ phpsessid }}">
-{{ include('dao/help.php') }}
 {{ include('question/import/importModal.php') }}
 {% endblock %}

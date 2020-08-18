@@ -9,7 +9,4 @@
         <span class="fa fa-download" aria-hidden="true"></span> CodeTest-{{ CONTEXT.title }}-Results.xls
     </a>
 </h4>
-
-{{ OUTPUT.helpModal("Code Test Help", help) }}
-
 {% endblock %}

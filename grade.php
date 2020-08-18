@@ -21,6 +21,7 @@ echo $twig->render('grade/grade.php', array(
     'students' => getStudents($main),
     'OUTPUT' => $OUTPUT,
     'menu' => $menu,
+    'help' => $help(),
 ));
 
 function getStudents($main) {

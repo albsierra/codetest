@@ -13,7 +13,9 @@
     <div class="container-fluid">
         {{ OUTPUT.flashMessages() }}
         {% block pageTitle %}{% endblock %}
-        {% block content %} {% endblock %}
+        {% block content %}
+        {% endblock %}
+        {{ include('help/help.php') }}
     </div> <!-- End container -->
 {{ OUTPUT.footerStart() }}
 {% block footer %} {% endblock %}

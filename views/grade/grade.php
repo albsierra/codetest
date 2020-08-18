@@ -1,6 +1,6 @@
 {% extends "mainTemplate.php" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle('Grade', false, false) }}
+{{ OUTPUT.pageTitle('Grade', true, false) }}
 {% endblock %}
 {% block content %}
 <h3>Set Points Possible <small>Default 100</small></h3>
@@ -44,4 +44,5 @@
         </tbody>
     </table>
 </div>
+
 {% endblock %}
