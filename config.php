@@ -10,3 +10,9 @@ $CFG->CT_mainTypes = array(
     'sql',
     'programming',
 );
+
+$CFG->twig = array(
+    'viewsPath' => __DIR__."/views",
+    'debug' => true,
+    'cachePath' => __DIR__."/tmp",
+);

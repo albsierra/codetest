@@ -17,3 +17,10 @@ $help = function() {
     }
     return $filename;
 };
+
+$loader = new \Twig\Loader\FilesystemLoader($CFG->twig['viewsPath']);
+
+$twig = new \Twig\Environment($loader, [
+    'debug' => $CFG->twig['debug'],
+    'cache' => $CFG->twig['cachePath'],
+]);
