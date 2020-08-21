@@ -282,7 +282,7 @@ function moveQuestionUp(questionId) {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "actions/ReorderQuestion.php?PHPSESSID=" + $("#sess").val(),
+        url: "actions/ReorderQuestion.php?" + _TSUGI.ajax_session,
         data: {
             "question_id": questionId
         },
@@ -318,7 +318,7 @@ function deleteQuestion(questionId, skipconfirm = false) {
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "actions/DeleteQuestion.php?PHPSESSID=" + $("#sess").val(),
+            url: "actions/DeleteQuestion.php?" + _TSUGI.ajax_session,
             data: {
                 "question_id": questionId
             },

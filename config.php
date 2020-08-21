@@ -11,6 +11,11 @@ $CFG->CT_mainTypes = array(
     'programming',
 );
 
+$CFG->CT_TypeClasses = array(
+    'sql' => \CT\CT_QuestionSQL::class,
+    'programming' => \CT\CT_QuestionCode::class,
+);
+
 $CFG->twig = array(
     'viewsPath' => __DIR__."/views",
     'debug' => true,

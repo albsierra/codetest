@@ -13,7 +13,9 @@ if ($USER->instructor) {
 
             if($origQuestion->getQuestionId()) {
                 $main = new \CT\CT_Main($_SESSION["ct_id"]);
-                $question = $main->createQuestion($origQuestion->getQuestionTxt());
+                $origQuestion->setQuestionId(null);
+                // $question = $main->createQuestion(\CT\CT_DAO::setObjectPropertiesToArray($origQuestion));
+                $question = $main->createQuestion($origQuestion);
             }
         }
 

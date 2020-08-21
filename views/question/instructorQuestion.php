@@ -3,9 +3,9 @@
     <div class="flx-grow-all question-text">
         <span class="question-text-span" onclick="editQuestionText({{ question.getQuestionId() }})" id="questionText{{ question.getQuestionId() }}" tabindex="0">{{ question.getQuestionTxt() }}</span>
         <form id="questionTextForm{{ question.getQuestionId() }}" onsubmit="return confirmDeleteQuestionBlank({{ question.getQuestionId() }})" action="actions/AddOrEditQuestion.php" method="post" style="display:none;">
-            <input type="hidden" name="questionId" value="{{ question.getQuestionId() }}">
+            <input type="hidden" name="question[questionId]" value="{{ question.getQuestionId() }}">
             <label for="questionTextInput{{ question.getQuestionId() }}" class="sr-only">Question Text</label>
-            <textarea class="form-control" id="questionTextInput{{ question.getQuestionId() }}" name="questionText" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
+            <textarea class="form-control" id="questionTextInput{{ question.getQuestionId() }}" name="question[questionTxt]" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
         </form>
     </div>
     <a id="questionEditAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="editQuestionText({{ question.getQuestionId() }})">

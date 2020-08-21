@@ -61,6 +61,8 @@ class CT_Main
      * @return \CT\CT_Question[] $questions
      */
     function getQuestions() {
+        // TODO Crear array de objetos Code o SQL según corresponda
+        // a través de JOIN con la tabla correspondiente
         if(!is_array($this->questions)) {
             $this->questions = array();
             $query = \CT\CT_DAO::getQuery('main', 'getQuestions');
@@ -71,10 +73,19 @@ class CT_Main
         return $this->questions;
     }
 
-    function createQuestion($questionText) {
-        $question = new \CT\CT_Question();
+    /**
+     * @param $context mixed An array or object with the data to insert or import.
+     * @return CT_Question The created question.
+     */
+    function createQuestion($context) {
+        global $CFG;
+        if(is_array($context)) {
+            $question = new $CFG->CT_TypeClasses[$CFG->CT_mainTypes[$this->getType()]]();
+            \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
+        } else {
+            $question = clone $context;
+        }
         $question->setCtId($this->getCtId());
-        $question->setQuestionTxt($questionText);
         $question->save();
         return $question;
     }

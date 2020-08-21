@@ -29,7 +29,13 @@ class CT_DAO {
     }
 
     public static function setObjectPropertiesToArray($object) {
-        return (array) $object;
+        $objArray = array();
+        $obj = new \ReflectionObject($object);
+        foreach ($obj->getProperties() as $property) {
+            $method = new \ReflectionMethod($property->class, 'get'.preg_replace('/[^\da-z]/i', '', mb_convert_case($property->name, MB_CASE_TITLE)));
+            $objArray[$property->name] = $method->invoke($object);
+        }
+        return $objArray;
     }
 
     public static function createObjectFromArray($class, $array) {
@@ -97,6 +103,34 @@ class CT_DAO {
             'getById' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE question_id = :question_id",
         );
+        $QuestionCodeQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_code_question  "
+                . "(`question_id`, `question_language`, `question_input_test`, `question_input_grade`, `question_output_test`, `question_output_grade`, `question_solution` ) "
+                . "VALUES (:question_id, :question_language, :question_input_test, :question_input_grade, :question_output_test, :question_output_grade, :question_solution )",
+            'update' => "UPDATE {$connection['p']}ct_code_question set "
+                . "`question_language` = :question_language, "
+                . "`question_input_test` = :question_input_test, "
+                . "`question_input_grade` = :question_input_grade, "
+                . "`question_output_test` = :question_output_test "
+                . "`question_output_grade` = :question_output_grade "
+                . "`question_solution` = :question_solution "
+                . "WHERE question_id = :question_id",
+            'getById' => "SELECT * FROM {$connection['p']}ct_code_question "
+                . "WHERE question_id = :question_id",
+        );
+        $QuestionSQLQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_sql_question  "
+                . "(`question_id`, `question_type`, `question_database`, `question_solution`, `question_probe` ) "
+                . "VALUES (:question_id, :question_type, :question_database, :question_solution, :question_probe )",
+            'update' => "UPDATE {$connection['p']}ct_sql_question set "
+                . "`question_type` = :question_type, "
+                . "`question_database` = :question_database, "
+                . "`question_solution` = :question_solution, "
+                . "`question_probe` = :question_probe "
+                . "WHERE question_id = :question_id",
+            'getById' => "SELECT * FROM {$connection['p']}ct_sql_question "
+                . "WHERE question_id = :question_id",
+        );
         $AnswerQueries = array(
             'getByAnswerId' => "SELECT * FROM {$connection['p']}ct_answer WHERE answer_id = :answer_id",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
@@ -155,6 +189,8 @@ class CT_DAO {
         $queries = array(
             'main' => $MainQueries,
             'question' => $QuestionQueries,
+            'questionCode' => $QuestionCodeQueries,
+            'questionSQL' => $QuestionSQLQueries,
             'answer' => $AnswerQueries,
             'user' => $UserQueries,
             'grade' => $GradeQueries,

@@ -2,9 +2,9 @@
     <div id="newQuestionNumber">{{ newQuestionNumber }}.</div>
     <div class="flx-grow-all question-text">
         <form id="questionTextForm-1" action="actions/AddOrEditQuestion.php" method="post">
-            <input type="hidden" name="questionId" value="-1">
+            <input type="hidden" name="question[questionId]" value="-1">
             <label for="questionTextInput-1" class="sr-only">Question Text</label>
-            <textarea class="form-control" id="questionTextInput-1" name="questionText" rows="2" required></textarea>
+            <textarea class="form-control" id="questionTextInput-1" name="question[questionTxt]" rows="2" required></textarea>
         </form>
     </div>
     <a id="questionSaveAction-1" href="javascript:void(0);">
