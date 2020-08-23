@@ -1,11 +1,15 @@
+{% set question = question.getQuestionByType() %}
 <div id="questionRow{{ question.getQuestionId() }}" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" data-question-number="{{ question.getQuestionNum() }}">
     <div class="question-number">{{ question.getQuestionNum() }}.</div>
     <div class="flx-grow-all question-text">
+        {% autoescape false %}
         <span class="question-text-span" onclick="editQuestionText({{ question.getQuestionId() }})" id="questionText{{ question.getQuestionId() }}" tabindex="0">{{ question.getQuestionTxt() }}</span>
+        {% endautoescape %}
         <form id="questionTextForm{{ question.getQuestionId() }}" onsubmit="return confirmDeleteQuestionBlank({{ question.getQuestionId() }})" action="actions/AddOrEditQuestion.php" method="post" style="display:none;">
-            <input type="hidden" name="question[questionId]" value="{{ question.getQuestionId() }}">
+            <input type="hidden" name="question[question_id]" value="{{ question.getQuestionId() }}">
             <label for="questionTextInput{{ question.getQuestionId() }}" class="sr-only">Question Text</label>
-            <textarea class="form-control" id="questionTextInput{{ question.getQuestionId() }}" name="question[questionTxt]" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
+            <textarea class="form-control ckeditor" id="questionTextInput{{ question.getQuestionId() }}" name="question[question_txt]" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
+            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('form')) }}
         </form>
     </div>
     <a id="questionEditAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="editQuestionText({{ question.getQuestionId() }})">

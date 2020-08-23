@@ -32,6 +32,8 @@ function showNewQuestionRow() {
     addQuestionsSection.hide();
     questionRow.fadeIn();
     var theForm = $("#questionTextForm-1");
+
+    editor = getCKEditor( "questionTextInput-1" );
     theForm.find('#questionTextInput-1').focus()
         .off("keypress").on("keypress", function(e) {
             if(e.which === 13) {
@@ -42,7 +44,7 @@ function showNewQuestionRow() {
                     url: theForm.prop("action"),
                     data: theForm.serialize(),
                     success: function(data) {
-                        $("#questionTextInput-1").val('');
+                        resetForm(theForm);
                         var nextNumber = questionRow.data("question-number") + 1;
                         $("#newQuestionNumber").text(nextNumber + '.');
                         questionRow.data("question-number", nextNumber);
@@ -56,6 +58,8 @@ function showNewQuestionRow() {
             }
         });
     $("#questionSaveAction-1").off("click").on("click", function(e) {
+        updateCKeditorElements();
+        if(editor) editor.destroy();
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -63,7 +67,7 @@ function showNewQuestionRow() {
             data: theForm.serialize(),
             success: function(data) {
                 $("#newQuestionRow").before(data.new_question);
-                $("#questionTextInput-1").val('');
+                resetForm(theForm);
                 var nextNumber = $(".question-number").last().parent().data("question-number") + 1;
                 $("#newQuestionNumber").text(nextNumber + '.');
                 questionRow.data("question-number", nextNumber);
@@ -75,7 +79,7 @@ function showNewQuestionRow() {
         });
     });
     $("#questionCancelAction-1").off("click").on("click", function(e) {
-        $("#questionTextInput-1").val('');
+        resetForm(theForm);
         questionRow.hide();
         addQuestionsSection.show();
     });
@@ -147,6 +151,7 @@ function editQuestionText(questionId) {
 
     var theForm = $("#questionTextForm"+questionId);
 
+    editor = getCKEditor( "questionTextInput"+questionId );
     theForm.show();
     theForm.find('#questionTextInput'+questionId).focus()
         .off("keypress").on("keypress", function(e) {
@@ -181,6 +186,8 @@ function editQuestionText(questionId) {
         });
     $("#questionSaveAction"+questionId).show()
         .off("click").on("click", function(e) {
+            updateCKeditorElements();
+            if(editor) editor.destroy();
             if ($('#questionTextInput'+questionId).val().trim() === '') {
                 if(confirmDeleteQuestionBlank(questionId)) {
                     // User entered blank question text and wants to delete.
@@ -191,9 +198,9 @@ function editQuestionText(questionId) {
                 $.ajax({
                     type: "POST",
                     url: theForm.prop("action"),
-                    data: theForm.serialize(),
+                    data: theForm.serialize() + '&' + _TSUGI.ajax_session,
                     success: function(data) {
-                        questionText.text($('#questionTextInput'+questionId).val());
+                        questionText.html($('#questionTextInput'+questionId).val());
                         questionText.show();
                         $("#questionDeleteAction"+questionId).show();
                         $("#questionEditAction"+questionId).show();
@@ -364,4 +371,35 @@ function setupAlertHide() {
     setTimeout(function() {
         $(".alert-banner").slideUp();
     }, 3000);
+}
+
+function getCKEditor(elementName) {
+    let editor;
+    for (var i in CKEDITOR.instances) {
+        if(elementName == CKEDITOR.instances[i].name) editor = CKEDITOR.instances[i];
+    }
+    if(!editor) editor = CKEDITOR.replace(elementName);
+    return editor;
+}
+
+function updateCKeditorElements() {
+    for (var i in CKEDITOR.instances) {
+        CKEDITOR.instances[i].updateElement();
+    }
+}
+
+function resetCKeditorElements() {
+    for (var i in CKEDITOR.instances) {
+        let element = $('#' + i);
+        if(element && element[0]) {
+            CKEDITOR.instances[i].setData(element[0].value);
+        }
+    }
+}
+
+function resetForm($form) {
+    $form.find('input:text, input:password, input:file, textarea').val(''); // agregar select
+    $form.find('input:radio, input:checkbox')
+        .removeAttr('checked').removeAttr('selected');
+    resetCKeditorElements();
 }

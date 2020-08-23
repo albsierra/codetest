@@ -10,9 +10,5 @@ interface CT_QuestionInterfaz
 
     public function save();
 
-    function showQuestionForm();
-
-    function showStudentView();
-
     function grade();
 }

@@ -1,10 +1,12 @@
+{% set question = newQuestion %}
 <div id="newQuestionRow" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" style="display:none;" data-question-number="{{ newQuestionNumber }}">
     <div id="newQuestionNumber">{{ newQuestionNumber }}.</div>
     <div class="flx-grow-all question-text">
         <form id="questionTextForm-1" action="actions/AddOrEditQuestion.php" method="post">
-            <input type="hidden" name="question[questionId]" value="-1">
+            <input type="hidden" name="question[question_id]" value="-1">
             <label for="questionTextInput-1" class="sr-only">Question Text</label>
-            <textarea class="form-control" id="questionTextInput-1" name="question[questionTxt]" rows="2" required></textarea>
+            <textarea class="form-control ckeditor" id="questionTextInput-1" name="question[question_txt]" rows="2" required></textarea>
+            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('form')) }}
         </form>
     </div>
     <a id="questionSaveAction-1" href="javascript:void(0);">

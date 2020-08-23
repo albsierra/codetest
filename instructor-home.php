@@ -11,6 +11,8 @@ if (!$main->getTitle()) {
 }
 
 $questions = $main->getQuestions();
+$class = $main->getTypeProperty('class');
+$newQuestion = new $class();
 
 // Clear any preview responses if there are questions
 if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id);
@@ -18,6 +20,7 @@ if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id)
 echo $twig->render('instructor_home.php', array(
     'main' => $main,
     'questions' => $questions,
+    'newQuestion' => $newQuestion,
     'newQuestionNumber' => $questions ? count($questions)+1 : 1,
     'questionsForImport' => \CT\CT_Question::findQuestionsForImport($USER->id, $_SESSION["ct_id"]),
     'OUTPUT' => $OUTPUT,

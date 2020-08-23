@@ -42,6 +42,11 @@ class CT_Question
         return $answer;
     }
 
+    public function getMain()
+    {
+        return new CT_Main($this->getCtId());
+    }
+
     /**
      * @return mixed
      */
@@ -153,6 +158,27 @@ class CT_Question
     public function getNumberAnswers()
     {
         return count($this->getAnswers());
+    }
+
+    public function getQuestionByType()
+    {
+        global $CFG;
+        $class = $this->getMain()->getTypeProperty('class');
+        $newQuestion = new $class($this->getQuestionId());
+        return $newQuestion;
+    }
+
+    /**
+     * @return CT_Question
+     */
+    public function getQuestionParent()
+    {
+        return new CT_Question($this->getQuestionId());
+    }
+
+    public function setQuestionParentProperties()
+    {
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, \CT\CT_DAO::setObjectPropertiesToArray($this->getQuestionParent()));
     }
 
     public function isNew()

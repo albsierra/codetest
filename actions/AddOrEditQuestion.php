@@ -7,34 +7,36 @@ if ($USER->instructor) {
 
     $questionPost = $_POST["question"];
 
-    if (isset($questionPost['questionTxt']) && trim($questionPost['questionTxt']) != '') {
-        if ($questionPost['questionId'] > -1) {
+    if (isset($questionPost['question_txt']) && trim($questionPost['question_txt']) != '') {
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        if ($questionPost['question_id'] > -1) {
             // Existing question
-            // TODO modificar cada uno de los tipos de Question
-            $question = new \CT\CT_Question($questionPost['questionId']);
-            $question->setQuestionTxt($questionPost['questionTxt']);
+            $class = $CFG->CT_Types['types'][$main->getType()]['class'];
+            $question = new $class($questionPost['question_id']);
+            \CT\CT_DAO::setObjectPropertiesFromArray($question, $questionPost);
             $question->save();
         } else {
             // New question
-            $main = new \CT\CT_Main($_SESSION["ct_id"]);
             $question = $main->createQuestion($questionPost);
 
             // Create new question markup
             ob_start();
 
             echo $twig->render('question/instructorQuestion.php', array(
+                'CFG' => $CFG,
                 'question' => $question,
+                'main' => $main,
             ));
             $result["new_question"] = ob_get_clean();
         }
         $_SESSION['success'] = 'Question Saved.';
     } else {
-        if ($questionPost['questionId'] > -1) {
+        if ($questionPost['question_id'] > -1) {
             // Blank text means delete question
-            $question = new \CT\CT_Question($questionPost['questionId']);
+            $question = new \CT\CT_Question($questionPost['question_id']);
             $question->delete();
             // Set question id to false to remove question line
-            $questionPost['questionId'] = false;
+            $questionPost['question_id'] = false;
             $_SESSION['success'] = 'Question Deleted.';
         } else {
             $_SESSION['error'] = 'Unable to save blank question.';

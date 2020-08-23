@@ -10,7 +10,6 @@ class CT_QuestionSQL extends CT_Question
     private $question_database;
     private $question_solution;
     private $question_probe;
-    private $questionParent;
 
     public function __construct($question_id = null)
     {
@@ -19,9 +18,9 @@ class CT_QuestionSQL extends CT_Question
             $query = \CT\CT_DAO::getQuery('questionSQL', 'getById');
             $arr = array(':question_id' => $question_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
-            $this->setQuestionParent();
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
+        $this->setQuestionParentProperties();
     }
 
     /**
@@ -86,32 +85,6 @@ class CT_QuestionSQL extends CT_Question
     public function setQuestionProbe($question_probe)
     {
         $this->question_probe = $question_probe;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuestionParent()
-    {
-        return $this->questionParent;
-    }
-
-    /**
-     * @param CT_Question $questionParent
-     */
-    public function setQuestionParent()
-    {
-        $this->questionParent = new CT_Question($this->getQuestionId());
-    }
-
-    function showQuestionForm()
-    {
-
-    }
-
-    function showStudentView()
-    {
-
     }
 
     function grade()

@@ -80,7 +80,8 @@ class CT_Main
     function createQuestion($context) {
         global $CFG;
         if(is_array($context)) {
-            $question = new $CFG->CT_TypeClasses[$CFG->CT_mainTypes[$this->getType()]]();
+            $class = $this->getTypeProperty('class');
+            $question = new $class();
             \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
         } else {
             $question = clone $context;
@@ -88,6 +89,11 @@ class CT_Main
         $question->setCtId($this->getCtId());
         $question->save();
         return $question;
+    }
+
+    function getTypeProperty($property) {
+        global $CFG;
+        return $CFG->CT_Types['types'][$this->getType()][$property];
     }
 
     function getStudentsOrderedByDate() {

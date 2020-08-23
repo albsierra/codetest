@@ -7,7 +7,7 @@
                     <span class="fa fa-fw fa-code" aria-hidden="true"></span>
                     <span class="sr-only">Edit Title Text</span>
                 </a>
-                <span class="mainType-text-span" id="mainType" onclick="editTitleText();">{{ CFG.CT_mainTypes[main.getType()] }}</span>
+                <span class="mainType-text-span" id="mainType" onclick="editTitleText();">{{ main.getTypeProperty('name') }}</span>
             </span>
 </div>
 <form id="toolTitleForm" action="actions/UpdateMainTitle.php" method="post" style="display:none;">
@@ -27,12 +27,12 @@
         <label for="mainType">Type:&nbsp;</label>
         {% if newQuestionNumber > 1 %}
             <input type="hidden" id="mainTypeHidden" name="mainType" value="{{ main.getType() }}">
-            <span class="title-edit-input flx-grow-all" id="mainType">{{ CFG.CT_mainTypes[main.getType()] }}</span>
+            <span class="title-edit-input flx-grow-all" id="mainType">{{ main.getTypeProperty('name') }}</span>
         {% else %}
             <select class="title-edit-input" id="mainTypeSelect" name="mainType">
-                {% for type in CFG.CT_mainTypes %}
-                    <option value="{{ loop.index0 }}" {% if main.getType() == loop.index0 %} selected {% endif %}>
-                        {{ type }}
+                {% for key, type in CFG.CT_Types.types %}
+                    <option value="{{ key }}" {% if main.getType() == key %} selected {% endif %}>
+                        {{ type.name }}
                     </option>
                 {% endfor %}
             </select>
