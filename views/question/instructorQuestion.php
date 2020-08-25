@@ -9,7 +9,7 @@
             <input type="hidden" name="question[question_id]" value="{{ question.getQuestionId() }}">
             <label for="questionTextInput{{ question.getQuestionId() }}" class="sr-only">Question Text</label>
             <textarea class="form-control ckeditor" id="questionTextInput{{ question.getQuestionId() }}" name="question[question_txt]" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
-            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('form')) }}
+            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('instructorForm')) }}
         </form>
     </div>
     <a id="questionEditAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="editQuestionText({{ question.getQuestionId() }})">

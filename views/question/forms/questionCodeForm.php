@@ -1,5 +1,5 @@
                                    <select name="question[question_language]" id="questionLanguage">
-                                    {% for index, language in CFG.codeLanguages %}
+                                    {% for index, language in main.getTypeProperty('codeLanguages') %}
                                         <option value="{{ index }}" {{ question.getQuestionLanguage() == index ? "selected" : "" }} . >{{ language }}</option>
                                     {% endfor %}
                                     </select>

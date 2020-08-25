@@ -19,16 +19,16 @@ $CFG->CT_Types = array(
         array (
             'name' => 'sql',
             'class' => \CT\CT_QuestionSQL::class,
-            'form' => 'questionSQLForm.php',
-            'student' => 'questionSQLStudent.php',
+            'instructorForm' => 'questionSQLForm.php',
+            'studentView' => 'questionSQLStudent.php',
+            'sqlTypes' => array ('SELECT', 'DML'),
         ),
         array (
             'name' => 'programming',
             'class' => \CT\CT_QuestionCode::class,
-            'form' => 'questionCodeForm.php',
-            'student' => 'questionCodeStudent.php',
+            'instructorForm' => 'questionCodeForm.php',
+            'studentView' => 'questionCodeStudent.php',
+            'codeLanguages' => array ('PHP', 'Java', 'Javascript'),
         ),
     ),
 );
-
-$CFG->codeLanguages = array ('PHP', 'Java', 'Javascript');

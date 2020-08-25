@@ -6,7 +6,7 @@
             <input type="hidden" name="question[question_id]" value="-1">
             <label for="questionTextInput-1" class="sr-only">Question Text</label>
             <textarea class="form-control ckeditor" id="questionTextInput-1" name="question[question_txt]" rows="2" required></textarea>
-            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('form')) }}
+            {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('instructorForm')) }}
         </form>
     </div>
     <a id="questionSaveAction-1" href="javascript:void(0);">

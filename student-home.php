@@ -20,4 +20,6 @@ echo $twig->render('student-home.php', array(
     'menu' => $menu,
     'user' => $user,
     'questions' => $questions,
+    'main' => $main,
+    'CFG' => $CFG,
 ));
