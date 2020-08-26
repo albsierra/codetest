@@ -61,6 +61,11 @@ class CT_DAO {
             'getMainsFromContext' => "SELECT * FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id "
                 . "order by modified desc",
+            'getResultUser' => "SELECT * FROM {$connection['p']}lti_result "
+                . "WHERE user_id = :user_id AND link_id = :link_id",
+            'getAnswersByUser' => "SELECT DISTINCT {$connection['p']}a.* "
+                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
+                . "WHERE q.ct_id = :ctId AND a.user_id = :userId;",
             'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) "
                 . "VALUES (:userId, :contextId, :linkId, :currentTime)",
             'update' => "UPDATE {$connection['p']}ct_main set "
@@ -158,7 +163,7 @@ class CT_DAO {
             'getUsersWithAnswers' => "SELECT DISTINCT {$connection['p']}lti_user.* "
                 . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
-                . "WHERE q.ct_id = :ctId;",
+                . "WHERE q.ct_id = :ctId",
             'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
                 . "WHERE question_id = :questionId AND user_id = :userId",
             'getMostRecentAnswerDate' => "SELECT max(a.modified) as modified "
@@ -199,6 +204,23 @@ class CT_DAO {
             'PDOX' => $connection['PDOX'],
             'sentence' => $queries[$class][$name],
         );
+    }
+
+    public static function debug($string)
+    {
+        global $USER, $CFG;
+        $displayedName = "";
+        if($CFG->CT_log['debug']) {
+            $fileLog = $CFG->CT_log['filePath'];
+            if(is_object($USER) && isset($USER->id)){
+                $user = new CT_User($USER->id);
+                $displayedName = $user->getDisplayname();
+            }
+            error_log("******************" . $displayedName . "******************************************", 3, $fileLog);
+            error_log(addslashes($string), 3, $fileLog);
+            error_log("--------", 3, $fileLog);
+        }
+
     }
 
 }

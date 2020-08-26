@@ -1,6 +1,6 @@
                                    <select name="question[question_language]" id="questionLanguage">
                                     {% for index, language in main.getTypeProperty('codeLanguages') %}
-                                        <option value="{{ index }}" {{ question.getQuestionLanguage() == index ? "selected" : "" }} . >{{ language }}</option>
+                                        <option value="{{ index }}" {{ question.getQuestionLanguage() == index ? "selected" : "" }} . >{{ language.name }}</option>
                                     {% endfor %}
                                     </select>
                                     <br />

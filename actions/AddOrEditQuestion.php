@@ -11,7 +11,7 @@ if ($USER->instructor) {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
         if ($questionPost['question_id'] > -1) {
             // Existing question
-            $class = $CFG->CT_Types['types'][$main->getType()]['class'];
+            $class = $main->getTypeProperty('class');
             $question = new $class($questionPost['question_id']);
             \CT\CT_DAO::setObjectPropertiesFromArray($question, $questionPost);
             $question->save();

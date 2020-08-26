@@ -36,6 +36,7 @@ class CT_Question
         $answer->setUserId($user_id);
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
+        $this->grade($answer);
         $answer->save();
         $this->answers = $this->getAnswers();
         array_push($this->answers, $answer);
@@ -164,8 +165,7 @@ class CT_Question
     {
         global $CFG;
         $class = $this->getMain()->getTypeProperty('class');
-        $newQuestion = new $class($this->getQuestionId());
-        return $newQuestion;
+        return new $class($this->getQuestionId());
     }
 
     /**

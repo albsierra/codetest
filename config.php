@@ -12,6 +12,11 @@ $CFG->twig = array(
     'cachePath' => __DIR__."/tmp",
 );
 
+$CFG->CT_log = array(
+    'debug' => true,
+    'filePath' => __DIR__."/tmp/ctLog.log",
+);
+
 $CFG->CT_Types = array(
     'formsPath' => 'question/forms/',
     'studentsPath' => 'question/students/',
@@ -28,7 +33,11 @@ $CFG->CT_Types = array(
             'class' => \CT\CT_QuestionCode::class,
             'instructorForm' => 'questionCodeForm.php',
             'studentView' => 'questionCodeStudent.php',
-            'codeLanguages' => array ('PHP', 'Java', 'Javascript'),
+            'codeLanguages' => array (
+                array( 'name' => 'PHP', 'ext' => 'php', 'command' => 'php -f'),
+                array( 'name' => 'Java', 'ext' => 'java', 'command' => 'java -Duser.language=es -Duser.region=ES'),
+                array( 'name' => 'Javascript', 'ext' => 'js', 'command' => 'node'),
+            ),
         ),
     ),
 );

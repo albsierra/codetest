@@ -1,5 +1,5 @@
 {% set question = question.getQuestionByType() %}
-<div id="questionRow{{ question.getQuestionId() }}" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" data-question-number="{{ question.getQuestionNum() }}">
+<div id="questionRow{{ question.getQuestionId() }}" class="inline flx-cntnr flx-row flx-nowrap flx-start question-row" data-question-number="{{ question.getQuestionNum() }}">
     <div class="question-number">{{ question.getQuestionNum() }}.</div>
     <div class="flx-grow-all question-text">
         {% autoescape false %}
@@ -12,6 +12,7 @@
             {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('instructorForm')) }}
         </form>
     </div>
+    <span class="h3">
     <a id="questionEditAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="editQuestionText({{ question.getQuestionId() }})">
         <span class="fa fa-fw fa-pencil" aria-hidden="true"></span>
         <span class="sr-only">Edit Question Text</span>
@@ -32,4 +33,5 @@
         <span aria-hidden="true" class="fa fa-fw fa-times"></span>
         <span class="sr-only">Cancel Question</span>
     </a>
+    </span>
 </div>

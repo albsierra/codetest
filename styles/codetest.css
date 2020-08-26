@@ -115,3 +115,7 @@ p.response-text {
 .h3.inline .question-number{
     line-height: 2.28rem;
 }
+
+.questionText {
+    font: initial !important;
+}

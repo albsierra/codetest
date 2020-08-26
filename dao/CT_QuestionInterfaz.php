@@ -10,5 +10,5 @@ interface CT_QuestionInterfaz
 
     public function save();
 
-    function grade();
+    function grade($answer);
 }

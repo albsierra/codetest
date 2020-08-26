@@ -11,25 +11,8 @@ if ($USER->instructor) {
     if (!isset($grade) || !is_numeric($grade)) {
         $_SESSION['error'] = "Invalid Grade.";
     } else {
-        $student = new \CT\CT_User($studentId);
-        $currentGrade = $student->getGrade($ct_id);
-        $currentGrade->setCtId($ct_id);
-        $currentGrade->setUserId($student->getUserId());
-        $currentGrade->setGrade($grade);
-        $currentGrade->save();
-
-        $_SESSION['success'] = "Grade saved.";
-
-        // Calculate percentage and post
         $main = new \CT\CT_Main($ct_id);
-        $percentage = ($grade * 1.0) / $main->getPoints();
-
-        // Get result record for user
-        $resultqry = "SELECT * FROM {$p}lti_result WHERE user_id = :user_id AND link_id = :link_id";
-        $arr = array(':user_id' => $studentId, ':link_id' => $LINK->id);
-        $row = $PDOX->rowDie($resultqry, $arr);
-
-        Result::gradeSendStatic($percentage, $row);
+        $main->gradeUser($studentId, $grade);
     }
     header( 'Location: '.addSession('../grade.php') ) ;
 } else {

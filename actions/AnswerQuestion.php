@@ -12,8 +12,11 @@ if (!isset($answerText) || trim($answerText) == "") {
     $_SESSION['error'] = "Your answer cannot be blank.";
     $result["answer_content"] = false;
 } else {
-
     $question = new \CT\CT_Question($questionId);
+    $main = $question->getMain();
+    $class = $main->getTypeProperty('class');
+    $question = new $class($questionId);
+
     $answer = $question->createAnswer($USER->id, $answerText);
     $formattedDate = $currentTime->format("m/d/y")." | ".$currentTime->format("h:i A");
 

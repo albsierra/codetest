@@ -11,8 +11,7 @@
         <input type="hidden" name="questionId" value="{{ questionId }}">
         <div class="form-group">
             {% autoescape false %}
-            <label class="h3"
-                   for="answerText{{ questionId }}">{{ question.getQuestionTxt() }}</label>
+            <span class="questionText"> {{ question.getQuestionTxt() }}</span>
             {% endautoescape %}
 
             {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView')) }}

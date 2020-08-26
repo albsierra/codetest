@@ -3,6 +3,7 @@
 
 namespace CT;
 
+use \Tsugi\Core\Result;
 
 class CT_Main
 {
@@ -91,6 +92,37 @@ class CT_Main
         return $question;
     }
 
+    public function gradeUser($userId, $grade = null)
+    {
+        global $USER;
+        if(is_null($grade)) {
+            $corrects = 0;
+            $totalQuestions = count($this->getQuestions());
+            foreach ($this->getAnswersByUser($userId) as $answer) {
+                if($answer->getAnswerSuccess()) $corrects++;
+            }
+            $grade = $corrects * $this->getPoints() / $totalQuestions;
+        }
+        $student = new \CT\CT_User($userId);
+        $currentGrade = $student->getGrade($this->getCtId());
+        $currentGrade->setCtId($this->getCtId());
+        $currentGrade->setUserId($student->getUserId());
+        $currentGrade->setGrade($grade);
+        $currentGrade->save();
+
+        $_SESSION['success'] = "Grade saved.";
+
+        // Calculate percentage and post
+        $percentage = ($grade * 1.0) / $this->getPoints();
+
+        // Get result record for user
+        $query = \CT\CT_DAO::getQuery('main','getResultUser');
+        $arr = array(':user_id' => $userId, ':link_id' => $this->getLinkId());
+        $row = $query['PDOX']->rowDie($query['sentence'], $arr);
+
+        Result::gradeSendStatic($percentage, $row);
+    }
+
     function getTypeProperty($property) {
         global $CFG;
         return $CFG->CT_Types['types'][$this->getType()][$property];
@@ -119,6 +151,14 @@ class CT_Main
         }
         return $students;
     }
+
+    private function getAnswersByUser($userId)
+    {
+        $query = \CT\CT_DAO::getQuery('main', 'getAnswersByUser');
+        $arr = array(':ctId' => $this->getCtId(), ':userId' => $userId);
+        return \CT\CT_DAO::createObjectFromArray(CT_Answer::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
+    }
+
 
     /**
      * @return mixed
@@ -302,5 +342,4 @@ class CT_Main
         $arr = array(':mainId' => $this->getCtId(), ':userId' => $user_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
-
 }
