@@ -27,6 +27,13 @@ $CFG->CT_Types = array(
             'instructorForm' => 'questionSQLForm.php',
             'studentView' => 'questionSQLStudent.php',
             'sqlTypes' => array ('SELECT', 'DML'),
+            'dbConnection' => array(
+                'dbDriver' => 'mysql',
+                'dbHostName' => 'localhost',
+                'dbPort' => 3306,
+                'dbUser' => 'alumno',
+                'dbPassword' => 'alumno',
+            ),
         ),
         array (
             'name' => 'programming',

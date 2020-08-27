@@ -18,14 +18,15 @@ if (!isset($answerText) || trim($answerText) == "") {
     $question = new $class($questionId);
 
     $answer = $question->createAnswer($USER->id, $answerText);
-    $formattedDate = $currentTime->format("m/d/y")." | ".$currentTime->format("h:i A");
 
     ob_start();
-    ?>
-    <h3 class="sub-hdr"><?= $question->getQuestionTxt() ?></h3>
-    <p><?=$formattedDate?></p>
-    <p><?=$answer->getAnswerTxt()?></p>
-    <?php
+    echo $twig->render('question/studentQuestion.php', array(
+        'question' => $question,
+        'answer' => $answer,
+        'main' => $main,
+        'CFG' => $CFG,
+    ));
+
     $result["answer_content"] = ob_get_clean();
 
     $_SESSION['success'] = "Answer saved.";

@@ -23,6 +23,88 @@ class CT_QuestionSQL extends CT_Question
         $this->setQuestionParentProperties();
     }
 
+    public function getConnection() {
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnection');
+        try {
+            $connection =
+                new \PDO(
+                    "{$connectionConfig['dbDriver']}:host={$connectionConfig['dbHostName']};dbname={$this->getQuestionDatabase()}",
+                    $connectionConfig['dbUser'],
+                    $connectionConfig['dbPassword']
+                );
+        }
+        catch(\PDOException $e)
+        {
+            echo $e->getMessage();
+        }
+        return $connection;
+    }
+
+    public function grade($answer) {
+        $outputSolution = $this->getQueryResult();
+        $outputAnswer =  $this->getQueryResult($answer->getAnswerTxt());
+        CT_DAO::debug(print_r($outputSolution, true));
+        CT_DAO::debug(print_r($outputAnswer, true));
+
+        $grade = $outputSolution === $outputAnswer ? 1 : 0;
+        $answer->setAnswerSuccess($grade);
+        $main = $this->getMain();
+        $main->gradeUser($answer->getUserId());
+    }
+
+    private function getQueryResult($answer = null) {
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
+        $query = (isset($answer) ? $answer : $this->getQuestionSolution());
+        $resultQuery = $connection->prepare($query);
+        $resultQuery->execute();
+        if ($this->getQuestionType() == 'DML') {
+            $query = $this->getQuestionProbe();
+            $resultQuery = $connection->prepare($query);
+            $resultQuery->execute();
+        }
+        $resultArray = $resultQuery->fetchAll();
+        $connection->rollBack();
+        return $resultArray;
+    }
+
+    public function getQueryTable() {
+        $connection = $this->getConnection();
+        $resultQueryString = '';
+        if ($this->getQuestionType() == 'SELECT') {
+            $query = $this->getQuestionSolution();
+            $resultQueryString = "<div class='table-results'><table>";
+            $resultQuery = $connection->prepare($query);
+            $resultQuery->execute();
+            $resultQueryString .= $this->getHeaderQueryTable($resultQuery);
+            $resultQueryString .= $this->getBodyQueryTable($resultQuery);
+            $resultQueryString .= "</table></div>";
+        }
+        return $resultQueryString;
+    }
+
+    private function getHeaderQueryTable($resultQuery) {
+        $tableHeader = "<tr>";
+        for ($i = 0; $i < $resultQuery->columnCount(); $i++) {
+            $col = $resultQuery->getColumnMeta($i);
+            $tableHeader .= "<th>" . $col['name'] . "</th>";
+        }
+        $tableHeader .= "</tr>";
+        return $tableHeader;
+    }
+
+    private function getBodyQueryTable($resultQuery) {
+        $tableBody = "";
+        while ($row = $resultQuery->fetch(\PDO::FETCH_NUM)) {
+            $tableBody .= "<tr>";
+            foreach ($row as $column) {
+                $tableBody .= "<td>" . $column . "</td>";
+            }
+            $tableBody .= "</tr>";
+        }
+        return $tableBody;
+    }
+
     /**
      * @return mixed
      */
@@ -85,11 +167,6 @@ class CT_QuestionSQL extends CT_Question
     public function setQuestionProbe($question_probe)
     {
         $this->question_probe = $question_probe;
-    }
-
-    function grade()
-    {
-        
     }
 
     public function save() {

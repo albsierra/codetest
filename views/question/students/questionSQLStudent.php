@@ -1,8 +1,12 @@
                                 <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
-                                <div class="flx-grow-all"><strong>Question Database: </strong><span>{{ question.getQuestionDatabase() }}</span></div>
-                                <div class="flx-grow-all"><strong>Question Type: </strong><span>{{ question.getQuestionType() }}</span></div>
+                                <div class="flx-grow-all"><strong>Database: </strong><span>{{ question.getQuestionDatabase() }}</span></div>
+                                <div class="flx-grow-all"><strong>Type: </strong><span>{{ question.getQuestionType() }}</span></div>
                                 </div>
-                                <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
+                                {% set queryTable = question.getQueryTable() %}
+                                {% if queryTable %}
                                     <div class="flx-grow-all"><strong>Output: </strong>
-                                        <p>{{ question.getOutput() }}</p></div>
-                                </div>
+                                        {% autoescape false %}
+                                        <p>{{ queryTable }}</p>
+                                        {% endautoescape %}
+                                    </div>
+                                {% endif %}

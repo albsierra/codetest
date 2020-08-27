@@ -350,14 +350,15 @@ function deleteQuestion(questionId, skipconfirm = false) {
 }
 function answerQuestion(questionId) {
     var answerForm = $("#answerForm" + questionId);
+    var answerDiv = $("#questionAnswer" + questionId);
     $.ajax({
         type: "POST",
         dataType: "json",
         url: answerForm.prop("action"),
-        data: answerForm.serialize(),
+        data: answerForm.serialize() + '&' + _TSUGI.ajax_session,
         success: function(data) {
             if (data.answer_content) {
-                answerForm.replaceWith(data.answer_content);
+                answerDiv.replaceWith(data.answer_content);
             }
             console.log(data.flashmessage);
             $("#flashmessages").html(data.flashmessage);

@@ -6,6 +6,9 @@
 
 {% if questions|length > 0 %}
         {% for question in questions %}
+            {% set question = question.getQuestionByType() %}
+            {% set questionId = question.getQuestionId() %}
+            {% set answer = user.getAnswerForQuestion(questionId) %}
             {{ include('question/studentQuestion.php') }}
         {% endfor %}
 {% else %}

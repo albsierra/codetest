@@ -8,6 +8,15 @@
 }
 .question-text {
     padding: 0 14px;
+    font-size: initial !important;
+    font-weight: initial !important;
+}
+.question-solution {
+    padding: 0 14px;
+    font-size: initial !important;
+    font-weight: initial !important;
+    width: auto;
+    overflow: scroll;
 }
 .question-row > a, .toolTitleAction {
     padding: 0 8px 0 0;
@@ -116,6 +125,30 @@ p.response-text {
     line-height: 2.28rem;
 }
 
-.questionText {
-    font: initial !important;
+.table-results {
+    border: 1px solid #ddd;
+    position: relative;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: auto;
+    height: 350px;
+    overflow: scroll;
+    padding: 5px;
+}
+
+.table-results td, .table-results th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table-results tr:nth-child(even){background-color: #f2f2f2;}
+
+.table-results tr:hover {background-color: #ddd;}
+
+.table-results th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #357ebd;
+    color: white;
 }

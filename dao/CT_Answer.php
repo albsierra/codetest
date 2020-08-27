@@ -148,7 +148,7 @@ class CT_Answer
             ':userId' => $this->getUserId(),
             ':questionId' => $this->getQuestionId(),
             ':answerTxt' => $this->getAnswerTxt(),
-            'answerSuccess' => $this->getAnswerSuccess(),
+            ':answerSuccess' => $this->getAnswerSuccess(),
         );
         if(!$this->isNew()) $arr[':answer_id'] = $this->getAnswerId();
         $query['PDOX']->queryDie($query['sentence'], $arr);
