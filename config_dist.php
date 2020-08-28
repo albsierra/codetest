@@ -31,8 +31,8 @@ $CFG->CT_Types = array(
                 'dbDriver' => 'mysql',
                 'dbHostName' => 'localhost',
                 'dbPort' => 3306,
-                'dbUser' => 'alumno',
-                'dbPassword' => 'alumno',
+                'dbUser' => 'dbUser',
+                'dbPassword' => 'dbPass',
             ),
         ),
         array (
