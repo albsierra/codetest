@@ -131,7 +131,7 @@ p.response-text {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: auto;
-    height: 350px;
+    max-height: 350px;
     overflow: scroll;
     padding: 5px;
 }

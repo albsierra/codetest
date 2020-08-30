@@ -151,8 +151,6 @@ class CT_QuestionCode extends CT_Question
 
         $grade = ($outputSolution == $outputAnswer);
         $answer->setAnswerSuccess($grade);
-        $main = $this->getMain();
-        $main->gradeUser($answer->getUserId());
     }
 
     function getOutputFromCode($answerCode, $language, $input) {

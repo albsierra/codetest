@@ -48,8 +48,6 @@ class CT_QuestionSQL extends CT_Question
 
         $grade = $outputSolution === $outputAnswer ? 1 : 0;
         $answer->setAnswerSuccess($grade);
-        $main = $this->getMain();
-        $main->gradeUser($answer->getUserId());
     }
 
     private function getQueryResult($answer = null) {

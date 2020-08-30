@@ -19,8 +19,8 @@ if ($USER->instructor) {
 }
 
 function response_date_compare($response1, $response2) {
-    $time1 = strtotime($response1['modified']);
-    $time2 = strtotime($response2['modified']);
+    $time1 = strtotime($response1->getModified());
+    $time2 = strtotime($response2->getModified());
     // Most recent at top
     return $time2 - $time1;
 }

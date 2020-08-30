@@ -71,8 +71,8 @@ $DATABASE_INSTALL = array(
         "create table {$CFG->dbprefix}ct_code_question (
     question_id INTEGER NOT NULL,
     question_language INTEGER NOT NULL DEFAULT '1',
-    question_input_test VARCHAR(255) NULL DEFAULT NULL,
-    question_input_grade VARCHAR(255) NULL DEFAULT NULL,
+    question_input_test TEXT NULL DEFAULT NULL,
+    question_input_grade TEXT NULL DEFAULT NULL,
     question_output_test TEXT NULL DEFAULT NULL,
     question_output_grade TEXT NULL DEFAULT NULL,
     question_solution TEXT NULL DEFAULT NULL,

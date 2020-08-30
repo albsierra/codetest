@@ -12,7 +12,7 @@ $totalQuestions = count($questions);
 echo $twig->render('grade/grade.php', array(
     'maxPoints' => $pointsPossible,
     'totalQuestions' => $totalQuestions,
-    'students' => $main->getStudentsOrderedByDate(),
+    'main' => $main,
     'OUTPUT' => $OUTPUT,
     'menu' => $menu,
     'help' => $help(),

@@ -92,9 +92,28 @@ class CT_Main
         return $question;
     }
 
+    public function getUserGrade($userId)
+    {
+        // Get result record for user
+        $query = \CT\CT_DAO::getQuery('main','getResultUser');
+        $arr = array(':user_id' => $userId, ':link_id' => $this->getLinkId());
+        $row = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return $row;
+    }
+
+    public function getUserGradeValue($userId)
+    {
+        $grade = $this->getUserGrade($userId)['grade'];
+        if(is_null($grade)) {
+            $this->gradeUser($userId);
+            $grade = $this->getUserGrade($userId)['grade'];
+        }
+        $value = $this->getPoints() * $grade;
+        return $value;
+    }
+
     public function gradeUser($userId, $grade = null)
     {
-        global $USER;
         if(is_null($grade)) {
             $corrects = 0;
             $totalQuestions = count($this->getQuestions());
@@ -115,10 +134,7 @@ class CT_Main
         // Calculate percentage and post
         $percentage = ($grade * 1.0) / $this->getPoints();
 
-        // Get result record for user
-        $query = \CT\CT_DAO::getQuery('main','getResultUser');
-        $arr = array(':user_id' => $userId, ':link_id' => $this->getLinkId());
-        $row = $query['PDOX']->rowDie($query['sentence'], $arr);
+        $row = $this->getUserGrade($userId);
 
         Result::gradeSendStatic($percentage, $row);
     }

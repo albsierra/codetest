@@ -37,6 +37,8 @@ class CT_Question
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
         $this->grade($answer);
+        $main = $this->getMain();
+        $main->gradeUser($answer->getUserId());
         $answer->save();
         $this->answers = $this->getAnswers();
         array_push($this->answers, $answer);

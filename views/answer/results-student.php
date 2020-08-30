@@ -43,7 +43,9 @@
                                             <h4 class="small-hdr hdr-notop-mrgn">
                                                 <small>Question {{ question.getQuestionNum() }}</small>
                                             </h4>
-                                            <h5 class="sub-hdr">{{ question.getQuestionTxt() }}</h5>
+                                            {% autoescape false %}
+                                            <div>{{ question.getQuestionTxt() }}</div>
+                                            {% endautoescape %}
                                         </div>
                                         <div class="col-sm-offset-1 col-sm-8">
                                             <p class="response-text">{{ answer.getAnswerTxt() }}</p>

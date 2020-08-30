@@ -18,7 +18,9 @@
                             </div>
                             <div class="col-sm-offset-1 col-sm-8 header-col">
                                 <div class="flx-cntnr flx-row flx-nowrap flx-start">
+                                    {% autoescape false %}
                                     <span class="flx-grow-all">{{ question.getQuestionTxt() }}</span>
+                                    {% endautoescape %}
                                     <span class="badge response-badge">{{ numberResponses }}</span>
                                 </div>
                             </div>
