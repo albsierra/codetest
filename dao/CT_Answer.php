@@ -24,6 +24,17 @@ class CT_Answer
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
+
+    public static function getByUserAndQuestion($userId, $questionId)
+    {
+        $answer = new self();
+        $query = \CT\CT_DAO::getQuery('answer','getByUserQuestion');
+        $arr = array(':user_id' => $userId, ':question_id' => $questionId);
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        \CT\CT_DAO::setObjectPropertiesFromArray($answer, $context);
+        return $answer;
+    }
+
     /**
      * @return mixed
      */

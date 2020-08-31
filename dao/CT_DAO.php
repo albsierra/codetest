@@ -138,6 +138,8 @@ class CT_DAO {
         );
         $AnswerQueries = array(
             'getByAnswerId' => "SELECT * FROM {$connection['p']}ct_answer WHERE answer_id = :answer_id",
+            'getByUserQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
+                . "WHERE user_id = :user_id AND question_id = :question_id",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
                 . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`) "
                 . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified)",
@@ -145,7 +147,7 @@ class CT_DAO {
                 . "`user_id` = :userId, "
                 . "`question_id` = :questionId, "
                 . "`answer_txt` = :answerTxt, "
-                . "`answer_success` = :answerSuccess"
+                . "`answer_success` = :answerSuccess, "
                 . "`modified` = :modified "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
@@ -170,7 +172,7 @@ class CT_DAO {
                 . "FROM {$connection['p']}ct_answer a "
                 . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId",
-            'getNumberQuestionsAnswered' => "SELECT count(*) as num_answered "
+            'getNumberQuestionsAnswered' => "SELECT count(distinct a.user_id, a.question_id) as num_answered "
                 . "FROM {$connection['p']}ct_answer a "
                 . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null",

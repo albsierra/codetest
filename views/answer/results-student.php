@@ -39,7 +39,7 @@
                                 {% for question in questions %}
                                     {% set answer = student.user.getAnswerForQuestion(question.getQuestionId()) %}
                                     <div class="row response-row">
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-5">
                                             <h4 class="small-hdr hdr-notop-mrgn">
                                                 <small>Question {{ question.getQuestionNum() }}</small>
                                             </h4>
@@ -47,8 +47,11 @@
                                             <div>{{ question.getQuestionTxt() }}</div>
                                             {% endautoescape %}
                                         </div>
-                                        <div class="col-sm-offset-1 col-sm-8">
+                                        <div class="col-sm-offset-1 col-sm-5">
                                             <p class="response-text">{{ answer.getAnswerTxt() }}</p>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
                                         </div>
                                     </div>
                                 {% endfor %}

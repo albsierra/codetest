@@ -32,7 +32,7 @@ class CT_Question
     }
 
     function createAnswer($user_id, $answer_txt) {
-        $answer = new \CT\CT_Answer();
+        $answer = \CT\CT_Answer::getByUserAndQuestion($user_id, $this->getQuestionId());
         $answer->setUserId($user_id);
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
