@@ -116,8 +116,8 @@ class CT_DAO {
                 . "`question_language` = :question_language, "
                 . "`question_input_test` = :question_input_test, "
                 . "`question_input_grade` = :question_input_grade, "
-                . "`question_output_test` = :question_output_test "
-                . "`question_output_grade` = :question_output_grade "
+                . "`question_output_test` = :question_output_test, "
+                . "`question_output_grade` = :question_output_grade, "
                 . "`question_solution` = :question_solution "
                 . "WHERE question_id = :question_id",
             'getById' => "SELECT * FROM {$connection['p']}ct_code_question "
