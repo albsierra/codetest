@@ -1,5 +1,4 @@
 {% set question = newQuestion %}
-<div id="newQuestionRow" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" style="display:none;" data-question-number="{{ newQuestionNumber }}">
     <div id="newQuestionNumber">{{ newQuestionNumber }}.</div>
     <div class="flx-grow-all question-text">
         <form id="questionTextForm-1" action="actions/AddOrEditQuestion.php" method="post">
@@ -17,4 +16,3 @@
         <span aria-hidden="true" class="fa fa-fw fa-times"></span>
         <span class="sr-only">Cancel Question</span>
     </a>
-</div>

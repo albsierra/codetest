@@ -7,7 +7,9 @@
     {% for question in questions %}
         {{ include('question/instructorQuestion.php') }}
     {% endfor %}
-    {{ include('question/newQuestionForm.php') }}
+    <div id="newQuestionRow" class="h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row" style="display:none;" data-question-number="{{ newQuestionNumber }}">
+
+    </div>
 </section>
 <section id="addQuestions">
     {{ include('question/addQuestion.php') }}

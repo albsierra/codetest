@@ -26,62 +26,73 @@ function confirmDeleteQuestionBlank(questionId) {
     }
 }
 function showNewQuestionRow() {
-    var addQuestionsSection = $("#addQuestions");
-    var questionRow = $("#newQuestionRow");
+    $.ajax({
+        type: "GET",
+        url: "actions/questions/ShowNewQuestionForm.php?" + _TSUGI.ajax_session,
+        success: function(data) {
+            $('#newQuestionRow').html(data);
+            var addQuestionsSection = $("#addQuestions");
+            var questionRow = $("#newQuestionRow");
 
-    addQuestionsSection.hide();
-    questionRow.fadeIn();
-    var theForm = $("#questionTextForm-1");
+            addQuestionsSection.hide();
+            questionRow.fadeIn();
+            var theForm = $("#questionTextForm-1");
 
-    editor = getCKEditor( "questionTextInput-1" );
-    theForm.find('#questionTextInput-1').focus()
-        .off("keypress").on("keypress", function(e) {
-            if(e.which === 13) {
-                e.preventDefault();
+            editor = getCKEditor( "questionTextInput-1" );
+            theForm.find('#questionTextInput-1').focus()
+                .off("keypress").on("keypress", function(e) {
+                if(e.which === 13) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: theForm.prop("action"),
+                        data: theForm.serialize(),
+                        success: function(data) {
+                            resetForm(theForm);
+                            var nextNumber = questionRow.data("question-number") + 1;
+                            $("#newQuestionNumber").text(nextNumber + '.');
+                            questionRow.data("question-number", nextNumber);
+                            $("#newQuestionRow").before(data.new_question);
+                            $("#flashmessages").html(data.flashmessage);
+                            setupAlertHide();
+                            questionRow.hide();
+                            addQuestionsSection.show();
+                        }
+                    });
+                }
+            });
+            $("#questionSaveAction-1").off("click").on("click", function(e) {
+                updateCKeditorElements();
+                if(editor) editor.destroy();
+                $('#newQuestionRow').html("");
                 $.ajax({
                     type: "POST",
                     dataType: "json",
                     url: theForm.prop("action"),
                     data: theForm.serialize(),
                     success: function(data) {
+                        $("#newQuestionRow").before(data.new_question);
                         resetForm(theForm);
-                        var nextNumber = questionRow.data("question-number") + 1;
+                        var nextNumber = $(".question-number").last().parent().data("question-number") + 1;
                         $("#newQuestionNumber").text(nextNumber + '.');
                         questionRow.data("question-number", nextNumber);
-                        $("#newQuestionRow").before(data.new_question);
                         $("#flashmessages").html(data.flashmessage);
                         setupAlertHide();
                         questionRow.hide();
                         addQuestionsSection.show();
                     }
                 });
-            }
-        });
-    $("#questionSaveAction-1").off("click").on("click", function(e) {
-        updateCKeditorElements();
-        if(editor) editor.destroy();
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: theForm.prop("action"),
-            data: theForm.serialize(),
-            success: function(data) {
-                $("#newQuestionRow").before(data.new_question);
-                resetForm(theForm);
-                var nextNumber = $(".question-number").last().parent().data("question-number") + 1;
-                $("#newQuestionNumber").text(nextNumber + '.');
-                questionRow.data("question-number", nextNumber);
-                $("#flashmessages").html(data.flashmessage);
-                setupAlertHide();
-                questionRow.hide();
+            });
+            $("#questionCancelAction-1").off("click").on("click", function(e) {
+                $('#newQuestionRow').html("");
+                if(editor) editor.destroy();
                 addQuestionsSection.show();
-            }
-        });
-    });
-    $("#questionCancelAction-1").off("click").on("click", function(e) {
-        resetForm(theForm);
-        questionRow.hide();
-        addQuestionsSection.show();
+            });
+        },
+        error: function(data) {
+            console.log(data.responseText);
+        }
     });
 }
 
