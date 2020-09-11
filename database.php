@@ -86,6 +86,7 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
     array( "{$CFG->dbprefix}ct_sql_question",
         "create table {$CFG->dbprefix}ct_sql_question (
     question_id INT(11) NOT NULL,
+    question_dbms TINYINT NOT NULL DEFAULT 0,
     question_type VARCHAR(20) NULL DEFAULT 'SELECT',
     question_database VARCHAR(100) NULL DEFAULT NULL,
     question_solution TEXT NULL DEFAULT NULL,

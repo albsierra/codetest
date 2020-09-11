@@ -125,9 +125,10 @@ class CT_DAO {
         );
         $QuestionSQLQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_sql_question  "
-                . "(`question_id`, `question_type`, `question_database`, `question_solution`, `question_probe` ) "
-                . "VALUES (:question_id, :question_type, :question_database, :question_solution, :question_probe )",
+                . "(`question_id`, `question_dbms`, `question_type`, `question_database`, `question_solution`, `question_probe` ) "
+                . "VALUES (:question_id, :question_dbms, :question_type, :question_database, :question_solution, :question_probe )",
             'update' => "UPDATE {$connection['p']}ct_sql_question set "
+                . "`question_dbms` = :question_dbms, "
                 . "`question_type` = :question_type, "
                 . "`question_database` = :question_database, "
                 . "`question_solution` = :question_solution, "

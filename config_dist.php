@@ -27,12 +27,24 @@ $CFG->CT_Types = array(
             'instructorForm' => 'questionSQLForm.php',
             'studentView' => 'questionSQLStudent.php',
             'sqlTypes' => array ('SELECT', 'DML'),
-            'dbConnection' => array(
-                'dbDriver' => 'mysql',
-                'dbHostName' => 'localhost',
-                'dbPort' => 3306,
-                'dbUser' => 'dbUser',
-                'dbPassword' => 'dbPass',
+            'dbConnections' => array(
+                array(
+                    'name' => 'MySQL',
+                    'dbDriver' => 'mysql',
+                    'dbHostName' => 'localhost',
+                    'dbPort' => 3306,
+                    'dbUser' => 'mysqlUser',
+                    'dbPassword' => 'mysqlPass',
+                ),
+                array(
+                    'name' => 'Oracle',
+                    'dbDriver' => 'oci',
+                    'dbHostName' => 'localhost',
+                    'dbPort' => 1521,
+                    'dbSID' => 'dbSID',
+                    'dbUser' => 'oraUser',
+                    'dbPassword' => 'oraPass',
+                ),
             ),
         ),
         array (
@@ -44,6 +56,7 @@ $CFG->CT_Types = array(
                 array( 'name' => 'PHP', 'ext' => 'php', 'command' => 'php -f'),
                 array( 'name' => 'Java', 'ext' => 'java', 'command' => 'java -Duser.language=es -Duser.region=ES'),
                 array( 'name' => 'Javascript', 'ext' => 'js', 'command' => 'node'),
+                array( 'name' => 'Python', 'ext' => 'py', 'command' => 'python'),
             ),
         ),
     ),

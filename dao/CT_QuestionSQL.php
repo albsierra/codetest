@@ -6,10 +6,14 @@ namespace CT;
 
 class CT_QuestionSQL extends CT_Question
 {
+    private $question_dbms;
     private $question_type;
     private $question_database;
     private $question_solution;
     private $question_probe;
+
+    const DBMS_MYSQL = 0;
+    const DBMS_ORACLE = 1;
 
     public function __construct($question_id = null)
     {
@@ -24,11 +28,23 @@ class CT_QuestionSQL extends CT_Question
     }
 
     public function getConnection() {
-        $connectionConfig = $this->getMain()->getTypeProperty('dbConnection');
+        $dbms = $this->getQuestionDbms();
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+
+        switch ($dbms)
+        {
+            case self::DBMS_MYSQL: //dsn mysql 'mysql:host=127.0.0.1;dbname=testdb'
+                $dsn = "{$connectionConfig['dbDriver']}:host={$connectionConfig['dbHostName']};dbname={$this->getQuestionDatabase()}";
+                break;
+            case self::DBMS_ORACLE: //dsn oracle 'oci:dbname=//localhost:1521/mydb'
+                $dsn = "{$connectionConfig['dbDriver']}:dbname=//{$connectionConfig['dbHostName']}:{$connectionConfig['dbPort']}/{$connectionConfig['dbSID']}";
+                break;
+        }
         try {
+
             $connection =
                 new \PDO(
-                    "{$connectionConfig['dbDriver']}:host={$connectionConfig['dbHostName']};dbname={$this->getQuestionDatabase()}",
+                    $dsn,
                     $connectionConfig['dbUser'],
                     $connectionConfig['dbPassword']
                 );
@@ -74,33 +90,57 @@ class CT_QuestionSQL extends CT_Question
             $resultQueryString = "<div class='table-results'><table>";
             $resultQuery = $connection->prepare($query);
             $resultQuery->execute();
-            $resultQueryString .= $this->getHeaderQueryTable($resultQuery);
-            $resultQueryString .= $this->getBodyQueryTable($resultQuery);
+            $resultQueryString .= $this->getQueryTableContent($resultQuery);
             $resultQueryString .= "</table></div>";
         }
         return $resultQueryString;
     }
 
-    private function getHeaderQueryTable($resultQuery) {
-        $tableHeader = "<tr>";
-        for ($i = 0; $i < $resultQuery->columnCount(); $i++) {
-            $col = $resultQuery->getColumnMeta($i);
-            $tableHeader .= "<th>" . $col['name'] . "</th>";
+    private function getQueryTableContent($resultQuery) {
+        $resultQueryString = '';
+        if (is_array($firstRow = $resultQuery->fetch(\PDO::FETCH_ASSOC))) {
+            $resultQueryString .= $this->getHeaderQueryTable($firstRow);
+            $resultQueryString .= $this->getBodyQueryTable($firstRow, $resultQuery);
         }
-        $tableHeader .= "</tr>";
-        return $tableHeader;
+        return $resultQueryString;
     }
 
-    private function getBodyQueryTable($resultQuery) {
-        $tableBody = "";
+    private function getHeaderQueryTable($firstRow) {
+        $columnNames = array_keys($firstRow);
+        return $this->getQueryTableRow($columnNames, true);
+    }
+
+    private function getBodyQueryTable($firstRow, $resultQuery) {
+        $tableBody = $this->getQueryTableRow(array_values($firstRow), false);
         while ($row = $resultQuery->fetch(\PDO::FETCH_NUM)) {
-            $tableBody .= "<tr>";
-            foreach ($row as $column) {
-                $tableBody .= "<td>" . $column . "</td>";
-            }
-            $tableBody .= "</tr>";
+            $tableBody .= $this->getQueryTableRow($row, false);
         }
         return $tableBody;
+    }
+
+    private function getQueryTableRow($row, $header = false) {
+        $tableRow = "<tr>";
+        foreach ($row as $value) {
+            $tableRow .= ( $header ? "<th>" : "<td>") . $value . ( $header ? "</th>" : "</td>");
+        }
+        $tableRow .= "</tr>";
+        return $tableRow;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuestionDbms()
+    {
+        return $this->question_dbms;
+    }
+
+    /**
+     * @param mixed $question_dbms
+     */
+    public function setQuestionDbms($question_dbms)
+    {
+        $this->question_dbms = $question_dbms;
     }
 
     /**
@@ -173,6 +213,7 @@ class CT_QuestionSQL extends CT_Question
         $query = \CT\CT_DAO::getQuery('questionSQL', $isNew ? 'insert' : 'update');
         $arr = array(
             ':question_id' => $this->getQuestionId(),
+            ':question_dbms' => $this->getQuestionDbms(),
             ':question_type' => $this->getQuestionType(),
             ':question_database' => $this->getQuestionDatabase(),
             ':question_solution' => $this->getQuestionSolution(),
