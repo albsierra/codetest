@@ -10,6 +10,10 @@
             <label for="questionTextInput{{ question.getQuestionId() }}" class="sr-only">Question Text</label>
             <textarea class="form-control ckeditor" id="questionTextInput{{ question.getQuestionId() }}" name="question[question_txt]" rows="2" required>{{ question.getQuestionTxt() }}</textarea>
             {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('instructorForm')) }}
+            <label for="questionMust{{ question.getQuestionId() }}">Must contain (separated by lines)</label>
+            <textarea class="form-control" id="questionMust{{ question.getQuestionId() }}" name="question[question_must]" rows="2" required>{{ question.getQuestionMust() }}</textarea>
+            <label for="questionMusnt{{ question.getQuestionId() }}">Shouldn't contain</label>
+            <textarea class="form-control" id="questionMusnt{{ question.getQuestionId() }}" name="question[question_musnt]" rows="2" required>{{ question.getQuestionMusnt() }}</textarea>
         </form>
     </div>
     <a id="questionEditAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="editQuestionText({{ question.getQuestionId() }})">

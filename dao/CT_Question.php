@@ -10,6 +10,8 @@ class CT_Question
     private $ct_id;
     private $question_num;
     private $question_txt;
+    private $question_must;
+    private $question_musnt;
     private $modified;
     private $answers;
 
@@ -36,7 +38,9 @@ class CT_Question
         $answer->setUserId($user_id);
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
-        $this->grade($answer);
+        if($this->preGrade($answer)) {
+            $this->grade($answer);
+        }
         $main = $this->getMain();
         $main->gradeUser($answer->getUserId());
         $answer->save();
@@ -130,6 +134,38 @@ class CT_Question
     /**
      * @return mixed
      */
+    public function getQuestionMust()
+    {
+        return $this->question_must;
+    }
+
+    /**
+     * @param mixed $question_must
+     */
+    public function setQuestionMust($question_must)
+    {
+        $this->question_must = trim($question_must);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuestionMusnt()
+    {
+        return $this->question_musnt;
+    }
+
+    /**
+     * @param mixed $question_musnt
+     */
+    public function setQuestionMusnt($question_musnt)
+    {
+        $this->question_musnt = trim($question_musnt);
+    }
+
+    /**
+     * @return mixed
+     */
     public function getModified()
     {
         return $this->modified;
@@ -204,6 +240,8 @@ class CT_Question
             ':ctId' => $this->getCtId(),
             ':question_num' => $this->getQuestionNum(),
             ':question_txt' => $this->getQuestionTxt(),
+            ':question_must' => $this->getQuestionMust(),
+            ':question_musnt' => $this->getQuestionMusnt(),
         );
         if(!$this->isNew()) $arr[':question_id'] = $this->getQuestionId();
         $query['PDOX']->queryDie($query['sentence'], $arr);
@@ -214,6 +252,37 @@ class CT_Question
         $query = \CT\CT_DAO::getQuery('question', 'delete');
         $arr = array(':questionId' => $this->getQuestionId());
         $query['PDOX']->queryDie($query['sentence'], $arr);
+    }
+
+    private function preGrade(CT_Answer $answer)
+    {
+        $answerTxt = $answer->getAnswerTxt();
+        $preGrade =
+            $this->contains($answerTxt, $this->getQuestionMust(), true)
+            &&
+            $this->contains($answerTxt, $this->getQuestionMusnt(), false);
+        if(!$preGrade) $answer->setAnswerSuccess(false);
+        return $preGrade;
+    }
+
+    /**
+     * @param $answerTxt
+     * @param $must_musnt
+     * @param $all bool true: must contain all expresions | false: shouldn't contain any
+     * @return bool
+     */
+    private function contains($answerTxt, $must_musnt, $all)
+    {
+        if (strlen($must_musnt) == 0 ) return true;
+        $array_of_expressions = explode(PHP_EOL, $must_musnt);
+        $i = 0;
+        foreach ($array_of_expressions as $expression)
+        {
+            if (stripos($answerTxt, trim($expression)) !== FALSE) $i++;
+        }
+
+        $contains = ($all && $i == count($array_of_expressions)) || (!$all && $i == 0);
+        return $contains;
     }
 
 }

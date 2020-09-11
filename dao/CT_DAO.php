@@ -83,12 +83,14 @@ class CT_DAO {
         );
         $QuestionQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_question  "
-                . "(`ct_id`, `question_num`, `question_txt`, `modified` ) "
-                . "VALUES (:ctId, :question_num, :question_txt, :modified )",
+                . "(`ct_id`, `question_num`, `question_txt`, `question_must`, `question_musnt`, `modified` ) "
+                . "VALUES (:ctId, :question_num, :question_txt, :question_must, :question_musnt, :modified )",
             'update' => "UPDATE {$connection['p']}ct_question set "
                 . "`ct_id` = :ctId, "
                 . "`question_num` = :question_num, "
                 . "`question_txt` = :question_txt, "
+                . "`question_must` = :question_must, "
+                . "`question_musnt` = :question_musnt, "
                 . "`modified` = :modified "
                 . "WHERE question_id = :question_id",
             'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",

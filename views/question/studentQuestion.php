@@ -7,6 +7,12 @@
     <span class="questionText"> {{ question.getQuestionTxt() }}</span>
     {% endautoescape %}
     {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView')) }}
+    <div>
+        <h4>Your solution must contain</h4>
+        <span>{{ question.getQuestionMust()|nl2br }}</span>
+        <h4>Your solution shouldn't contain</h4>
+        <span>{{ question.getQuestionMusnt()|nl2br }}</span>
+    </div>
 
     {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %}
         <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
