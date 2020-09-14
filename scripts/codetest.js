@@ -254,7 +254,9 @@ function editTitleText() {
                 data: titleForm.serialize(),
                 success: function(data) {
                     $(".title-text-span").text($("#toolTitleInput").val());
-                    $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                    if($("#mainTypeSelect") && $("#mainTypeSelect")[0]) {
+                        $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                    }
                     var titleText = $("#toolTitle");
                     titleText.show();
                     titleForm.hide();
@@ -275,7 +277,9 @@ function editTitleText() {
                 data: titleForm.serialize(),
                 success: function(data) {
                     $(".title-text-span").text($("#toolTitleInput").val());
-                    $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                    if($("#mainTypeSelect") && $("#mainTypeSelect")[0]) {
+                        $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                    }
                     var titleText = $("#toolTitle");
                     titleText.show();
                     titleForm.hide();
