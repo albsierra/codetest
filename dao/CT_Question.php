@@ -41,11 +41,11 @@ class CT_Question
         if($this->preGrade($answer)) {
             $this->grade($answer);
         }
-        $main = $this->getMain();
-        $main->gradeUser($answer->getUserId());
         $answer->save();
         $this->answers = $this->getAnswers();
         array_push($this->answers, $answer);
+        $main = $this->getMain();
+        $main->gradeUser($answer->getUserId());
         return $answer;
     }
 
