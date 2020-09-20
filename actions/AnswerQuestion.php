@@ -27,7 +27,8 @@ if (!isset($answerText) || trim($answerText) == "") {
         'CFG' => $CFG,
     ));
 
-    $result["answer_content"] = ob_get_clean();
+    $answer_content = ob_get_clean();
+    $result["answer_content"] = utf8_encode($answer_content) ? utf8_encode($answer_content) : $answer_content;
 
     $_SESSION['success'] = "Answer saved.";
 

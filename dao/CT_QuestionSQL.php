@@ -14,6 +14,7 @@ class CT_QuestionSQL extends CT_Question
 
     const DBMS_MYSQL = 0;
     const DBMS_ORACLE = 1;
+    const MUSNT = array('commit');
 
     public function __construct($question_id = null)
     {
@@ -220,6 +221,18 @@ class CT_QuestionSQL extends CT_Question
             ':question_probe' => $this->getQuestionProbe(),
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
+    }
+
+    protected function preGrade(CT_Answer $answer)
+    {
+        $answerTxt = $answer->getAnswerTxt();
+        $preGrade = $this->contains($answerTxt, implode ( PHP_EOL , self::MUSNT ), false);
+        if(!$preGrade) {
+            $answer->setAnswerSuccess(false);
+        } else {
+            $preGrade = parent::preGrade($answer);
+        }
+        return $preGrade;
     }
 
 }

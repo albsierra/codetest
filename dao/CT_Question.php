@@ -254,7 +254,7 @@ class CT_Question
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
-    private function preGrade(CT_Answer $answer)
+    protected function preGrade(CT_Answer $answer)
     {
         $answerTxt = $answer->getAnswerTxt();
         $preGrade =
@@ -271,7 +271,7 @@ class CT_Question
      * @param $all bool true: must contain all expresions | false: shouldn't contain any
      * @return bool
      */
-    private function contains($answerTxt, $must_musnt, $all)
+    protected function contains($answerTxt, $must_musnt, $all)
     {
         if (strlen($must_musnt) == 0 ) return true;
         $array_of_expressions = explode(PHP_EOL, $must_musnt);
