@@ -14,6 +14,7 @@ class CT_QuestionSQL extends CT_Question
 
     const DBMS_MYSQL = 0;
     const DBMS_ORACLE = 1;
+    const DBMS_SQLITE = 2;
     const MUSNT = array('commit');
 
     public function __construct($question_id = null)
@@ -40,6 +41,8 @@ class CT_QuestionSQL extends CT_Question
             case self::DBMS_ORACLE: //dsn oracle 'oci:dbname=//localhost:1521/mydb'
                 $dsn = "{$connectionConfig['dbDriver']}:dbname=//{$connectionConfig['dbHostName']}:{$connectionConfig['dbPort']}/{$connectionConfig['dbSID']}";
                 break;
+            case self::DBMS_SQLITE: //dsn sqlite currently only in memory.
+                $dsn = "{$connectionConfig['dbDriver']}:{$connectionConfig['dbFile']}";
         }
         try {
 
@@ -52,9 +55,21 @@ class CT_QuestionSQL extends CT_Question
         }
         catch(\PDOException $e)
         {
-            echo $e->getMessage();
+            CT_DAO::debug($e->getMessage());
         }
         return $connection;
+    }
+
+    protected function preGrade(CT_Answer $answer)
+    {
+        $answerTxt = $answer->getAnswerTxt();
+        $preGrade = $this->contains($answerTxt, implode ( PHP_EOL , self::MUSNT ), false);
+        if(!$preGrade) {
+            $answer->setAnswerSuccess(false);
+        } else {
+            $preGrade = parent::preGrade($answer);
+        }
+        return $preGrade;
     }
 
     public function grade($answer) {
@@ -68,19 +83,43 @@ class CT_QuestionSQL extends CT_Question
     }
 
     private function getQueryResult($answer = null) {
+        $resultArray = array();
         $connection = $this->getConnection();
-        $connection->beginTransaction();
+        $this->initTransaction($connection);
         $query = (isset($answer) ? $answer : $this->getQuestionSolution());
-        $resultQuery = $connection->prepare($query);
-        $resultQuery->execute();
-        if ($this->getQuestionType() == 'DML') {
-            $query = $this->getQuestionProbe();
-            $resultQuery = $connection->prepare($query);
+        if($resultQuery = $connection->prepare($query)) {
             $resultQuery->execute();
+            if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
+                $query = $this->getQuestionProbe();
+                if($resultQuery = $connection->prepare($query)) {
+                    $resultQuery->execute();
+                }
+            }
+            $resultArray = $resultQuery->fetchAll();
         }
-        $resultArray = $resultQuery->fetchAll();
-        $connection->rollBack();
+        $this->endTransaction($connection);
         return $resultArray;
+    }
+
+    private function initTransaction(&$connection) {
+        $connection->beginTransaction();
+        if ($this->getQuestionType() == 'DDL') {
+            $this->loadDDL($connection);
+        }
+    }
+
+    private function endTransaction(&$connection) {
+        $connection->rollback();
+        if ($this->getQuestionType() == 'DDL') {
+            $dbms = $this->getQuestionDbms();
+            $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+            if(file_exists($connectionConfig['dbFile'])) unlink($connectionConfig['dbFile']);
+        }
+    }
+
+    private function loadDDL($connection) {
+        $sentences = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'ddl_databases'. DIRECTORY_SEPARATOR . 'world_ddl.sql');
+        $connection->exec($sentences);
     }
 
     public function getQueryTable() {
@@ -221,18 +260,6 @@ class CT_QuestionSQL extends CT_Question
             ':question_probe' => $this->getQuestionProbe(),
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
-    }
-
-    protected function preGrade(CT_Answer $answer)
-    {
-        $answerTxt = $answer->getAnswerTxt();
-        $preGrade = $this->contains($answerTxt, implode ( PHP_EOL , self::MUSNT ), false);
-        if(!$preGrade) {
-            $answer->setAnswerSuccess(false);
-        } else {
-            $preGrade = parent::preGrade($answer);
-        }
-        return $preGrade;
     }
 
 }

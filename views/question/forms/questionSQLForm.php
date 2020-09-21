@@ -8,8 +8,9 @@
                                     </select>
                                     <label for="questionType">Question Type</label>
                                     <select name="question[question_type]" id="questionType">
-                                        <option value="SELECT" {{ question.getQuestionType() == 'SELECT' ? "selected" : "" }}>SELECT</option>
-                                        <option value="DML" {{ question.getQuestionType() == 'DML' ? "selected" : "" }}>DML</option>
+                                        {% for sqlType in main.getTypeProperty('sqlTypes') %}
+                                        <option value="{{ sqlType }}" {{ question.getQuestionType() == sqlType ? "selected" : "" }} . >{{ sqlType }}</option>
+                                        {% endfor %}
                                     </select>
                                     <label for="questionSolution">Question Solution</label>
                                     <textarea class="form-control" name="question[question_solution]" rows="4" required>{{ question.getQuestionSolution() }}</textarea>

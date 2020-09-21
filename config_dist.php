@@ -26,7 +26,7 @@ $CFG->CT_Types = array(
             'class' => \CT\CT_QuestionSQL::class,
             'instructorForm' => 'questionSQLForm.php',
             'studentView' => 'questionSQLStudent.php',
-            'sqlTypes' => array ('SELECT', 'DML'),
+            'sqlTypes' => array ('SELECT', 'DML', 'DDL'),
             'dbConnections' => array(
                 array(
                     'name' => 'MySQL',
@@ -44,6 +44,13 @@ $CFG->CT_Types = array(
                     'dbSID' => 'dbSID',
                     'dbUser' => 'oraUser',
                     'dbPassword' => 'oraPass',
+                ),
+                array(
+                    'name' => 'SQLite',
+                    'dbDriver' => 'sqlite',
+                    'dbFile' => '/path/to/file.sq3',
+                    'dbUser' => '',
+                    'dbPassword' => '',
                 ),
             ),
         ),
