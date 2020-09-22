@@ -48,7 +48,7 @@ $CFG->CT_Types = array(
                 array(
                     'name' => 'SQLite',
                     'dbDriver' => 'sqlite',
-                    'dbFile' => '/path/to/file.sq3',
+                    'dbFile' => '/path/to/file.sq3 or :memory:',
                     'dbUser' => '',
                     'dbPassword' => '',
                 ),

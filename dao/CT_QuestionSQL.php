@@ -83,7 +83,6 @@ class CT_QuestionSQL extends CT_Question
     }
 
     private function getQueryResult($answer = null) {
-        $resultArray = array();
         $connection = $this->getConnection();
         $this->initTransaction($connection);
         $query = (isset($answer) ? $answer : $this->getQuestionSolution());
@@ -95,7 +94,7 @@ class CT_QuestionSQL extends CT_Question
                     $resultQuery->execute();
                 }
             }
-            $resultArray = $resultQuery->fetchAll();
+            $resultArray = $resultQuery ? $resultQuery->fetchAll() : array();
         }
         $this->endTransaction($connection);
         return $resultArray;
