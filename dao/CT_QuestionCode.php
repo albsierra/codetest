@@ -188,6 +188,11 @@ class CT_QuestionCode extends CT_Question
         //foreach ($inputs as $inputLine) {
 
         $command = $languages[$this->getQuestionLanguage()]['command'] . " $pathFile.$fileExtension";
+        // $input after command like parameters
+        $stdin = array_key_exists('stdin', $languages[$this->getQuestionLanguage()])
+            &&
+            $languages[$this->getQuestionLanguage()]['stdin'];
+        if(!$stdin) $command .= " " . $input;
 
         // Run shell command
         $process = proc_open($command, $descriptorspec, $pipes, $cwd, $env);
@@ -198,7 +203,8 @@ class CT_QuestionCode extends CT_Question
             // 1 => readable handle connected to child stdout
             // Any error output will be appended to /tmp/error-output.txt
 
-            fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
+            // $input through stdin.
+            if($stdin) fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
             fclose($pipes[0]);
 
             $output .= trim(stream_get_contents($pipes[1])) . "\n";
