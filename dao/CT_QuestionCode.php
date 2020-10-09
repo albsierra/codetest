@@ -204,7 +204,7 @@ class CT_QuestionCode extends CT_Question
             // Any error output will be appended to /tmp/error-output.txt
 
             // $input through stdin.
-            if($stdin) fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
+            fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
             fclose($pipes[0]);
 
             $output .= trim(stream_get_contents($pipes[1])) . "\n";
