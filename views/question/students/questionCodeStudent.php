@@ -5,5 +5,5 @@
                                     <span><strong>Input: </strong></span><p>{{ question.getQuestionInputTest() }}</p>
                                 </p>
                                 <p class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
-                                    <span><strong>Output: </strong></span><p>{{ question.getQuestionOutputTest() }}</p>
+                                    <span><strong>Output: </strong></span><pre>{{ question.getQuestionOutputTest() }}</pre>
                                 </p>
