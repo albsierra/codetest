@@ -150,6 +150,11 @@ class CT_QuestionCode extends CT_Question
         CT_DAO::debug($outputAnswer);
 
         $grade = ($outputSolution == $outputAnswer);
+        // TODO mejorar el feedback
+        if(!$grade) {
+            similar_text($outputSolution, $outputAnswer, $percentageCorrect);
+            $_SESSION['error'] = "La salida de tu código coincide en un " . round($percentageCorrect) . "% de la correcta";
+        }
         $answer->setAnswerSuccess($grade);
     }
 
