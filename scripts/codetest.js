@@ -384,9 +384,9 @@ function answerQuestion(questionId) {
 }
 function setupAlertHide() {
     // On load hide any alerts after 3 seconds
-    setTimeout(function() {
+    /*setTimeout(function() {
         $(".alert-banner").slideUp();
-    }, 3000);
+    }, 3000);*/
 }
 
 function getCKEditor(elementName) {
