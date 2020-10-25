@@ -59,6 +59,7 @@ $CFG->CT_Types = array(
             'class' => \CT\CT_QuestionCode::class,
             'instructorForm' => 'questionCodeForm.php',
             'studentView' => 'questionCodeStudent.php',
+            'timeout' => 5,
             'codeLanguages' => array (
                 array( 'name' => 'PHP', 'ext' => 'php', 'command' => 'php -f', 'stdin' => false),
                 array( 'name' => 'Java', 'ext' => 'java', 'command' => 'java -Duser.language=es -Duser.region=ES', 'stdin' => true),
