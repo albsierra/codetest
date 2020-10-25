@@ -225,7 +225,7 @@ class CT_QuestionCode extends CT_Question
                 $timeleft = $timeout - time();
 
                 if ($timeleft <= 0) {
-                    self::terminate_process_with_children($process, $pipes);
+                    self::terminate_process_with_children($process, $pipes, true);
                     throw new \Exception("command timeout", 1012);
                 }
 
@@ -241,7 +241,7 @@ class CT_QuestionCode extends CT_Question
             } while ($output_exists && $timeleft > 0);
 
             if ($timeleft <= 0) {
-                self::terminate_process_with_children($process, $pipes);
+                self::terminate_process_with_children($process, $pipes, true);
                 throw new \Exception("command timeout", 1013);
             }
 
@@ -255,7 +255,7 @@ class CT_QuestionCode extends CT_Question
         return $output;
     }
 
-    private static function terminate_process_with_children(&$process, &$pipes) {
+    private static function terminate_process_with_children(&$process, &$pipes, $timeout = false) {
         $status = proc_get_status($process);
         if($status['running'] == true) { //process ran too long, kill it
             //close all pipes that are still open
@@ -271,6 +271,7 @@ class CT_QuestionCode extends CT_Question
                     posix_kill($pid, 9); //9 is the SIGKILL signal
                 }
             }
+            if($timeout) posix_kill(intval($ppid), 9);
             proc_close($process);
         }
     }
