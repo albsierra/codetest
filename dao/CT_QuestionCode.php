@@ -161,7 +161,12 @@ class CT_QuestionCode extends CT_Question
     function getOutputFromCode($answerCode, $language, $input) {
         $tmpfile = tmpfile();
         fwrite($tmpfile, $answerCode);
-        $output = $this->launchCode($tmpfile, $language, $input);
+        try {
+            $output = $this->launchCode($tmpfile, $language, $input);
+        } catch (\Exception $e) {
+            // TODO return exception
+            $output = 'Timeout';
+        }
         return($output);
     }
 
@@ -169,6 +174,7 @@ class CT_QuestionCode extends CT_Question
         global $CFG;
         $main = $this->getMain();
         $languages = $main->getTypeProperty('codeLanguages');
+        $timeout = $main->getTypeProperty('timeout') + time();
         $languageName = $languages[$this->getQuestionLanguage()]['name'];
         $fileExtension = $languages[$this->getQuestionLanguage()]['ext'];
 
@@ -178,13 +184,13 @@ class CT_QuestionCode extends CT_Question
         $descriptorspec = array(
             0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
             1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-            2 => array("file", "/tmp/error-output.txt", "a") // stderr is a file to write to
+            2 => array("pipe", "w") // stderr is a file to write to
         );
 
         $cwd = sys_get_temp_dir(); // '/tmp';
         $env = array();
 
-        $output = "";
+        $output = $error = "";
 
         // Descomentando las siguientes líneas se pueden permitir diferentes casos de prueba
         // separándolos por un EOL
@@ -208,21 +214,65 @@ class CT_QuestionCode extends CT_Question
             // 1 => readable handle connected to child stdout
             // Any error output will be appended to /tmp/error-output.txt
 
+            stream_set_blocking($pipes[1], false);
+            stream_set_blocking($pipes[2], false);
             // $input through stdin.
             fwrite($pipes[0], $input); //fwrite($pipes[0], $inputLine); //para varios casos de prueba
             fclose($pipes[0]);
+            do {
+                $write = null;
+                $exceptions = null;
+                $timeleft = $timeout - time();
 
-            $output .= trim(stream_get_contents($pipes[1])) . "\n";
-            fclose($pipes[1]);
+                if ($timeleft <= 0) {
+                    self::terminate_process_with_children($process, $pipes);
+                    throw new \Exception("command timeout", 1012);
+                }
 
-            // It is important that you close any pipes before calling
-            // proc_close in order to avoid a deadlock
-            $return_value = proc_close($process);
+                $read = array($pipes[1],$pipes[2]);
+                stream_select($read, $write, $exceptions, $timeleft);
+
+                if (!empty($read)) {
+                    $output .= fread($pipes[1], 20);
+                    $error .= fread($pipes[2], 20);
+                }
+
+                $output_exists = (!feof($pipes[1]) || !feof($pipes[2]));
+            } while ($output_exists && $timeleft > 0);
+
+            if ($timeleft <= 0) {
+                self::terminate_process_with_children($process, $pipes);
+                throw new \Exception("command timeout", 1013);
+            }
+
+            // $output .= trim(stream_get_contents($pipes[1])) . "\n";
+            $output = trim($output) . "\n";
+            self::terminate_process_with_children($process, $pipes);
         }
         //} // cierra el foreach que permite varios casos de prueba
         // remove code file
         unlink("$pathFile.$fileExtension");
         return $output;
+    }
+
+    private static function terminate_process_with_children(&$process, &$pipes) {
+        $status = proc_get_status($process);
+        if($status['running'] == true) { //process ran too long, kill it
+            //close all pipes that are still open
+            fclose($pipes[1]); //stdout
+            fclose($pipes[2]); //stderr
+            //get the parent pid of the process we want to kill
+            $ppid = $status['pid'];
+            //use ps to get all the children of this process, and kill them
+            $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $ppid`);
+            foreach($pids as $pid) {
+                if(is_numeric($pid)) {
+                    CT_DAO::debug("Killing $pid\n");
+                    posix_kill($pid, 9); //9 is the SIGKILL signal
+                }
+            }
+            proc_close($process);
+        }
     }
 
     public function save() {
