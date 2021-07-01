@@ -1,5 +1,8 @@
 {
     "autoload": {
         "psr-4": {"CT\\": "dao/"}
+    },
+    "require": {
+        "twig/twig": "^3.3"
     }
 }
