@@ -154,5 +154,13 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryDie($sql);
     }
 
-    return '201907070902';
+    // Add onfly column in question_sql
+    if (!$PDOX->columnExists('onfly', "{$CFG->dbprefix}ct_sql_question")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_sql_question ADD question_onfly TEXT NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    return '202012201622';
 };

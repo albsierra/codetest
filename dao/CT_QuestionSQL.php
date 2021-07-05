@@ -11,6 +11,7 @@ class CT_QuestionSQL extends CT_Question
     private $question_database;
     private $question_solution;
     private $question_probe;
+    private $question_onfly;
 
     const DBMS_MYSQL = 0;
     const DBMS_ORACLE = 1;
@@ -246,6 +247,22 @@ class CT_QuestionSQL extends CT_Question
         $this->question_probe = $question_probe;
     }
 
+    /**
+     * @return String
+     */
+    public function getQuestionOnfly()
+    {
+        return $this->question_onfly;
+    }
+
+    /**
+     * @param String $question_onfly
+     */
+    public function setQuestionOnfly($question_onfly)
+    {
+        $this->question_onfly = $question_onfly;
+    }
+
     public function save() {
         $isNew = $this->isNew();
         parent::save();
@@ -257,6 +274,7 @@ class CT_QuestionSQL extends CT_Question
             ':question_database' => $this->getQuestionDatabase(),
             ':question_solution' => $this->getQuestionSolution(),
             ':question_probe' => $this->getQuestionProbe(),
+            ':question_onfly' => $this->getQuestionOnfly(),
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }

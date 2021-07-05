@@ -16,3 +16,5 @@
                                     <textarea class="form-control" name="question[question_solution]" rows="4" required>{{ question.getQuestionSolution() }}</textarea>
                                     <label for="questionProbe">Question Probe</label>
                                     <textarea class="form-control" name="question[question_probe]" rows="4">{{ question.getQuestionProbe() }}</textarea>
+                                    <label for="questionOnfly">Database Onfly</label>
+                                    <textarea class="form-control" name="question[question_onfly]" rows="4">{{ question.getQuestionOnfly() }}</textarea>
