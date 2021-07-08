@@ -40,6 +40,29 @@
 #addQuestions {
     margin-top: 20px;
 }
+
+#navQuestions p{
+    display: inline;
+    float: left;
+}
+
+#navQuestions ol {
+    list-style-type: none;
+    text-align: center;
+}
+
+#navQuestions li{
+    float: left;
+    text-align: center;
+    margin: 0 10px 0 0;
+}
+
+#navQuestions .navQuestion{
+    background-color: var(--secondary-menu);
+    margin: 0 10px;
+    padding: 0 10px;
+}
+
 .import-link {
     padding-left: 36px;
 }

@@ -30,14 +30,18 @@ class CT_QuestionSQL extends CT_Question
         $this->setQuestionParentProperties();
     }
 
-    public function getConnection() {
+    public function getConnection($dbUser = null, $dbPassword = null, $dbName = null) {
         $dbms = $this->getQuestionDbms();
         $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+
+        $dbUser = $dbUser ? $dbUser : $connectionConfig['dbUser'];
+        $dbPassword = $dbPassword ? $dbPassword : $connectionConfig['dbPassword'];
+        $dbName = $dbName ? $dbName : $this->getQuestionDatabase();
 
         switch ($dbms)
         {
             case self::DBMS_MYSQL: //dsn mysql 'mysql:host=127.0.0.1;dbname=testdb'
-                $dsn = "{$connectionConfig['dbDriver']}:host={$connectionConfig['dbHostName']};dbname={$this->getQuestionDatabase()}";
+                $dsn = "{$connectionConfig['dbDriver']}:host={$connectionConfig['dbHostName']};dbname={$dbName}";
                 break;
             case self::DBMS_ORACLE: //dsn oracle 'oci:dbname=//localhost:1521/mydb'
                 $dsn = "{$connectionConfig['dbDriver']}:dbname=//{$connectionConfig['dbHostName']}:{$connectionConfig['dbPort']}/{$connectionConfig['dbSID']}";
@@ -50,8 +54,8 @@ class CT_QuestionSQL extends CT_Question
             $connection =
                 new \PDO(
                     $dsn,
-                    $connectionConfig['dbUser'],
-                    $connectionConfig['dbPassword']
+                    $dbUser,
+                    $dbPassword
                 );
         }
         catch(\PDOException $e)
@@ -84,8 +88,7 @@ class CT_QuestionSQL extends CT_Question
     }
 
     private function getQueryResult($answer = null) {
-        $connection = $this->getConnection();
-        $this->initTransaction($connection);
+        $connection = $this->initTransaction();
         $query = (isset($answer) ? $answer : $this->getQuestionSolution());
         if($resultQuery = $connection->prepare($query)) {
             $resultQuery->execute();
@@ -95,26 +98,140 @@ class CT_QuestionSQL extends CT_Question
                     $resultQuery->execute();
                 }
             }
-            $resultArray = $resultQuery ? $resultQuery->fetchAll() : array();
         }
+        $resultQueryArray = $resultQuery ? $resultQuery->fetchAll() : array();
+        $resultQuery = null;
         $this->endTransaction($connection);
-        return $resultArray;
+        return $resultQueryArray;
     }
 
-    private function initTransaction(&$connection) {
-        $connection->beginTransaction();
-        if ($this->getQuestionType() == 'DDL') {
-            $this->loadDDL($connection);
+    private function createOnflySchema(&$connection) {
+        $dbms = $this->getQuestionDbms();
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+        if( array_key_exists('onFly', $connectionConfig)
+            && is_array($onFly = $connectionConfig['onFly'])
+            && array_key_exists('allowed', $onFly)
+            && $onFly['allowed']
+            && strlen(trim($this->getQuestionOnfly())) > 0)
+        {
+            switch ($dbms) {
+                case self::DBMS_ORACLE:
+                    if (
+                        array_key_exists('createIsolateUserProcedure', $onFly)
+                        && strlen(trim($onFly['createIsolateUserProcedure'])) > 0
+                    ) {
+                        $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 28);
+                        $createUserSentence =
+                            "BEGIN "
+                            . $onFly['createIsolateUserProcedure'] . "('"
+                            . $nameAndPassword . "', '"
+                            . $nameAndPassword
+                            . "');"
+                            . "END;";
+                        if ($resultQuery = $connection->prepare($createUserSentence)) {
+                            $resultQuery->execute();
+                        }
+                        $connection = $this->getConnection($nameAndPassword, $nameAndPassword);
+                    }
+                    $splitSQL = preg_split('~\([^)]*\)(*SKIP)(*F)|;~', $this->sanitize($this->getQuestionOnfly()));
+                    $queryString = "";
+                    foreach ($splitSQL as $sqlSentence) {
+                        if (strlen(trim($sqlSentence)) > 0) {
+                            $queryString .=
+                                "     stmtOnFly := '" . $sqlSentence . "';\n"
+                                . "     EXECUTE IMMEDIATE stmtOnFly;\n";
+                        }
+                    }
+                    $onFlyQuery =
+                        "DECLARE stmtOnFly LONG;\n"
+                        . " BEGIN\n"
+                        . $queryString
+                        . " END;\n";
+                    if ($resultQuery = $connection->prepare($onFlyQuery)) {
+                        $resultQuery->execute();
+                    }
+                    break;
+                case self::DBMS_MYSQL:
+                    if (
+                        array_key_exists('createIsolateUserProcedure', $onFly)
+                        && strlen(trim($onFly['createIsolateUserProcedure'])) > 0
+                    ) {
+                        $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 28);
+                        $createUserSentence =
+                            "CALL " . $onFly['createIsolateUserProcedure'] . "('"
+                            . $nameAndPassword . "', '"
+                            . $nameAndPassword
+                            . "')";
+                        if ($resultQuery = $connection->prepare($createUserSentence)) {
+                            $resultQuery->execute();
+                        }
+                        $databaseName = $nameAndPassword;
+                        $connection = $this->getConnection($nameAndPassword, $nameAndPassword, $databaseName);
+                    }
+
+                    $connection->exec($this->getQuestionOnfly());
+                    break;
+                case self::DBMS_SQLITE:
+                    $connection->exec($this->getQuestionOnfly());
+            }
         }
+    }
+
+    private function dropOnflySchema(&$connection) {
+        $dbms = $this->getQuestionDbms();
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+        if( array_key_exists('onFly', $connectionConfig)
+            && is_array($onFly = $connectionConfig['onFly'])
+            && array_key_exists('allowed', $onFly)
+            && $onFly['allowed']
+            && strlen(trim($this->getQuestionOnfly())) > 0
+            && array_key_exists('dropIsolateUserProcedure', $onFly)
+            && strlen(trim($onFly['dropIsolateUserProcedure'])) > 0
+        )
+        {
+            $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 28);
+            switch ($dbms) {
+                case self::DBMS_ORACLE:
+                    $dropUserSentence =
+                        "BEGIN "
+                        . $onFly['dropIsolateUserProcedure'] . " ('"
+                        . $nameAndPassword
+                        . "');"
+                        . "END;";
+                    break;
+                case self::DBMS_MYSQL:
+                    $dropUserSentence =
+                        "CALL " . $onFly['dropIsolateUserProcedure'] . "('"
+                        . $nameAndPassword
+                        . "')";
+            }
+            if($resultQuery = $connection->prepare($dropUserSentence)) {
+                $resultQuery->execute();
+            }
+        }
+    }
+
+    private function initTransaction() {
+        $connection = $this->getConnection();
+        $this->createOnflySchema($connection);
+        $connection->beginTransaction();
+/*        if ($this->getQuestionType() == 'DDL') {
+            $this->loadDDL($connection);
+        }*/ // Previously, we did it in SQLite
+        return $connection;
     }
 
     private function endTransaction(&$connection) {
         $connection->rollback();
-        if ($this->getQuestionType() == 'DDL') {
+        // Close statement & connection to drop user
+        $connection = null;
+        $connection = $this->getConnection();
+        $this->dropOnflySchema($connection);
+/*        if ($this->getQuestionType() == 'DDL') {
             $dbms = $this->getQuestionDbms();
             $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
             if(file_exists($connectionConfig['dbFile'])) unlink($connectionConfig['dbFile']);
-        }
+        }*/ //, Previously we did it in SQLite
     }
 
     private function loadDDL($connection) {
@@ -122,16 +239,25 @@ class CT_QuestionSQL extends CT_Question
         $connection->exec($sentences);
     }
 
-    public function getQueryTable() {
-        $connection = $this->getConnection();
+    private function sanitize($stmt) {
+        $sanitizedStmt = str_replace("'", "''", trim($stmt));
+        return $sanitizedStmt;
+    }
+
+    public function getQueryTable(): string
+    {
         $resultQueryString = '';
         if ($this->getQuestionType() == 'SELECT') {
-            $query = $this->getQuestionSolution();
+            $connection = $this->initTransaction();
             $resultQueryString = "<div class='table-results'><table>";
-            $resultQuery = $connection->prepare($query);
-            $resultQuery->execute();
-            $resultQueryString .= $this->getQueryTableContent($resultQuery);
-            $resultQueryString .= "</table></div>";
+            $query = $this->getQuestionSolution();
+            if($resultQuery = $connection->prepare($query)) {
+                $resultQuery->execute();
+                $resultQueryString .= $this->getQueryTableContent($resultQuery);
+                $resultQueryString .= "</table></div>";
+            }
+            $resultQuery = null;
+            $this->endTransaction($connection);
         }
         return $resultQueryString;
     }
