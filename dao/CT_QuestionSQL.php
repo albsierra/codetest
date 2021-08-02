@@ -106,6 +106,7 @@ class CT_QuestionSQL extends CT_Question
     }
 
     private function createOnflySchema(&$connection) {
+        global $USER;
         $dbms = $this->getQuestionDbms();
         $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
         if( array_key_exists('onFly', $connectionConfig)
@@ -114,14 +115,13 @@ class CT_QuestionSQL extends CT_Question
             && $onFly['allowed']
             && strlen(trim($this->getQuestionOnfly())) > 0)
         {
-            // TODO Chose better the name and password
+            $nameAndPassword = $onFly['userPrefix'] . $this->getNameAndPasswordSuffix();
             switch ($dbms) {
                 case self::DBMS_ORACLE:
                     if (
                         array_key_exists('createIsolateUserProcedure', $onFly)
                         && strlen(trim($onFly['createIsolateUserProcedure'])) > 0
                     ) {
-                        $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 28);
                         $createUserSentence =
                             "BEGIN "
                             . $onFly['createIsolateUserProcedure'] . "('"
@@ -157,7 +157,6 @@ class CT_QuestionSQL extends CT_Question
                         array_key_exists('createIsolateUserProcedure', $onFly)
                         && strlen(trim($onFly['createIsolateUserProcedure'])) > 0
                     ) {
-                        $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 15);
                         $createUserSentence =
                             "CALL " . $onFly['createIsolateUserProcedure'] . "('"
                             . $nameAndPassword . "', '"
@@ -190,9 +189,9 @@ class CT_QuestionSQL extends CT_Question
             && strlen(trim($onFly['dropIsolateUserProcedure'])) > 0
         )
         {
+            $nameAndPassword = $onFly['userPrefix'] . $this->getNameAndPasswordSuffix();
             switch ($dbms) {
                 case self::DBMS_ORACLE:
-                    $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 28);
                     $dropUserSentence =
                         "BEGIN "
                         . $onFly['dropIsolateUserProcedure'] . " ('"
@@ -201,7 +200,6 @@ class CT_QuestionSQL extends CT_Question
                         . "END;";
                     break;
                 case self::DBMS_MYSQL:
-                    $nameAndPassword = substr($onFly['userPrefix'] . session_id(), 0, 15);
                     $dropUserSentence =
                         "CALL " . $onFly['dropIsolateUserProcedure'] . "('"
                         . $nameAndPassword
@@ -211,6 +209,10 @@ class CT_QuestionSQL extends CT_Question
                 $resultQuery->execute();
             }
         }
+    }
+
+    private function getNameAndPasswordSuffix() {
+        return $_SESSION['lti']['user_key'];
     }
 
     private function initTransaction() {
