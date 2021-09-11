@@ -185,7 +185,12 @@ class CT_DAO {
             'getLtiContexts' => "SELECT DISTINCT lti.title as courseName, lti.context_id as ctxId "
                 . "FROM {$connection['p']}ct_main m "
                 . "JOIN {$connection['p']}lti_context lti on m.context_id = lti.context_id "
-                . "WHERE m.user_id = :userId",
+                . "WHERE m.user_id in ("
+                    . "SELECT user_id "
+                    . "FROM {$connection['p']}lti_user "
+                    . "WHERE user_key = ("
+                        . "SELECT user_key FROM {$connection['p']}lti_user "
+                        . "WHERE user_id = :userId))",
         );
         $GradeQueries = array(
             'getByGradeId' => "SELECT * FROM {$connection['p']}ct_grade "
