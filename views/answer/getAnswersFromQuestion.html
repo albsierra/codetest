@@ -5,11 +5,14 @@
                                         <h5>{{ user.getDisplayname() }}</h5>
                                         <p>{{ response.formattedResponseDate }}</p>
                                     </div>
-                                    <div class="col-sm-8">
-                                        <p class="response-text">{{ response.answer.getAnswerTxt() }}</p>
+                                    <div class="col-sm-8" style="height:300px;overflow: scroll;">
+                                        <p class="response-text"><pre>{{ response.answer.getAnswerTxt() }}</pre></p>
                                     </div>
                                     <div class="col-sm-2">
                                         <span aria-hidden="true" class="fas fa-thumbs-{{response.answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+									{% if response.answer.getAnswerSuccess() != 1 %}
+										<span><a href="actions/answers/getDiffWithSolution.php?questionId={{ response.answer.getQuestionId() }}&answerId={{ response.answer.getAnswerId() }}" target="_blank">Show Diff</a></span>
+									{% endif %}
                                     </div>
                                 </div>
                             {% endfor %}

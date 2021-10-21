@@ -18,7 +18,7 @@
         {% endif %}
     </div>
 
-    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %}
+{#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
         <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
               method="post">
             <input type="hidden" name="questionId" value="{{ questionId }}">
@@ -31,7 +31,7 @@
                     onclick="answerQuestion({{ questionId }})">Submit
             </button>
         </form>
-    {% endif %}
+{#    {% endif %} #}
     {% if answer %}
         <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start question-row">
             <div class="flx-grow-all question-solution">

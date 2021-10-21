@@ -146,8 +146,7 @@ class CT_QuestionCode extends CT_Question
         $outputAnswer =  $this->getOutputFromCode(
             $answer->getAnswerTxt(), $this->getQuestionLanguage(), $this->getQuestionInputGrade()
         );
-        CT_DAO::debug($outputSolution);
-        CT_DAO::debug($outputAnswer);
+        CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
         $grade = ($outputSolution == $outputAnswer);
         // TODO mejorar el feedback

@@ -191,4 +191,13 @@ class CT_Answer
         }
     }
 
+    public static function getDiffWithSolution($outputAnswer, $solution)
+    {
+		global $CFG;
+		// include the Diff class
+		require_once $CFG->codetestRootDir . '/util/class.Diff.php';
+		// compare two strings line by line
+		return \Diff::toString(\Diff::compare($solution, $outputAnswer));
+    }
+
 }

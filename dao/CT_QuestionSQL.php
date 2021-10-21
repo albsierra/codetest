@@ -80,14 +80,13 @@ class CT_QuestionSQL extends CT_Question
     public function grade($answer) {
         $outputSolution = $this->getQueryResult();
         $outputAnswer =  $this->getQueryResult($answer->getAnswerTxt());
-        CT_DAO::debug(print_r($outputSolution, true));
-        CT_DAO::debug(print_r($outputAnswer, true));
+        CT_DAO::debug(CT_Answer::getDiffWithSolution(print_r($outputSolution, true), print_r($outputAnswer, true)));
 
         $grade = $outputSolution === $outputAnswer ? 1 : 0;
         $answer->setAnswerSuccess($grade);
     }
 
-    private function getQueryResult($answer = null) {
+    public function getQueryResult($answer = null) {
         $connection = $this->initTransaction();
         $query = (isset($answer) ? $answer : $this->getQuestionSolution());
         if($resultQuery = $connection->prepare($query)) {

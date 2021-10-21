@@ -47,11 +47,14 @@
                                             <div>{{ question.getQuestionTxt() }}</div>
                                             {% endautoescape %}
                                         </div>
-                                        <div class="col-sm-offset-1 col-sm-5">
-                                            <p class="response-text">{{ answer.getAnswerTxt() }}</p>
+                                        <div class="col-sm-offset-1 col-sm-5" style="height:300px;overflow: scroll;">
+                                            <p class="response-text"><pre>{{ answer.getAnswerTxt() }}</pre></p>
                                         </div>
                                         <div class="col-sm-1">
                                             <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+									{% if answer.getAnswerSuccess() != 1 %}
+										<span><a href="actions/answers/getDiffWithSolution.php?questionId={{ question.getQuestionId() }}&answerId={{ answer.getAnswerId() }}" target="_blank">Show Diff</a></span>
+									{% endif %}
                                         </div>
                                     </div>
                                 {% endfor %}

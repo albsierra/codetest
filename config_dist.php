@@ -6,6 +6,8 @@
 require_once dirname(__DIR__)."/config.php";
 require 'vendor/autoload.php';
 
+$CFG->codetestRootDir = dirname(__FILE__);
+
 $CFG->twig = array(
     'viewsPath' => __DIR__."/views",
     'debug' => true,
