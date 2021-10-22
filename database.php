@@ -162,5 +162,13 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryDie($sql);
     }
 
+    // Add answer_language column to allow student select the language of the answer
+    if (!$PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD answer_language INTEGER NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
     return '202012201622';
 };

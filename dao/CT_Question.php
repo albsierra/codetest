@@ -33,11 +33,12 @@ class CT_Question
         return $query['PDOX']->allRowsDie($query['sentence'], $arr);
     }
 
-    function createAnswer($user_id, $answer_txt) {
+    function createAnswer($user_id, $answer_txt, $answer_language = null) {
         $answer = \CT\CT_Answer::getByUserAndQuestion($user_id, $this->getQuestionId());
         $answer->setUserId($user_id);
         $answer->setQuestionId($this->getQuestionId());
         $answer->setAnswerTxt($answer_txt);
+        $answer->setAnswerLanguage($answer_language);
         if($this->preGrade($answer)) {
             $this->grade($answer);
         }

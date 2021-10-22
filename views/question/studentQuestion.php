@@ -6,6 +6,11 @@
     {% autoescape false %}
     <span class="questionText"> {{ question.getQuestionTxt() }}</span>
     {% endautoescape %}
+
+    {#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
+    <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
+          method="post">
+
     {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView')) }}
     <div>
         {% if question.getQuestionMust() %}
@@ -17,10 +22,6 @@
             <pre>{{ question.getQuestionMusnt()|nl2br }}</pre>
         {% endif %}
     </div>
-
-{#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
-        <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
-              method="post">
             <input type="hidden" name="questionId" value="{{ questionId }}">
             <div class="form-group">
                 <label for="answerText{{ questionId }}">Your solution is:</label>

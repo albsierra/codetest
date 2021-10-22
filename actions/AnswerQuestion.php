@@ -6,6 +6,9 @@ $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $questionId = $_POST["questionId"];
 $answerText = $_POST["answerText"];
 
+// In databases doesn't exists answer_language, so we use -1
+$answerLanguage = $_POST["answer_language"] ?? -1;
+
 $result = array();
 
 if (!isset($answerText) || trim($answerText) == "") {
@@ -17,7 +20,7 @@ if (!isset($answerText) || trim($answerText) == "") {
     $class = $main->getTypeProperty('class');
     $question = new $class($questionId);
 
-    $answer = $question->createAnswer($USER->id, $answerText);
+    $answer = $question->createAnswer($USER->id, $answerText, $answerLanguage);
 
     ob_start();
     echo $twig->render('question/studentQuestion.php', array(

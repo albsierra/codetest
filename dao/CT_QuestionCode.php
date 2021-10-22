@@ -144,7 +144,7 @@ class CT_QuestionCode extends CT_Question
     function grade($answer) {
         $outputSolution = $this->getQuestionOutputGrade();
         $outputAnswer =  $this->getOutputFromCode(
-            $answer->getAnswerTxt(), $this->getQuestionLanguage(), $this->getQuestionInputGrade()
+            $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputGrade()
         );
         CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
@@ -174,8 +174,8 @@ class CT_QuestionCode extends CT_Question
         $main = $this->getMain();
         $languages = $main->getTypeProperty('codeLanguages');
         $timeout = $main->getTypeProperty('timeout') + time();
-        $languageName = $languages[$this->getQuestionLanguage()]['name'];
-        $fileExtension = $languages[$this->getQuestionLanguage()]['ext'];
+        $languageName = $languages[$language]['name'];
+        $fileExtension = $languages[$language]['ext'];
 
         $pathFile = stream_get_meta_data($file)['uri'];
         rename($pathFile, "$pathFile.$fileExtension");
@@ -197,11 +197,11 @@ class CT_QuestionCode extends CT_Question
 
         //foreach ($inputs as $inputLine) {
 
-        $command = $languages[$this->getQuestionLanguage()]['command'] . " $pathFile.$fileExtension";
+        $command = $languages[$language]['command'] . " $pathFile.$fileExtension";
         // $input after command like parameters
-        $stdin = array_key_exists('stdin', $languages[$this->getQuestionLanguage()])
+        $stdin = array_key_exists('stdin', $languages[$language])
             &&
-            $languages[$this->getQuestionLanguage()]['stdin'];
+            $languages[$language]['stdin'];
         if(!$stdin) $command .= " " . $input;
 
         // Run shell command

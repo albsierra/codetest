@@ -9,6 +9,7 @@ class CT_Answer
     private $answer_id;
     private $user_id;
     private $question_id;
+    private $answer_language;
     private $answer_txt;
     private $answer_success;
     private $modified;
@@ -94,6 +95,22 @@ class CT_Answer
     /**
      * @return mixed
      */
+    public function getAnswerLanguage()
+    {
+        return $this->answer_language;
+    }
+
+    /**
+     * @param mixed $answer_language
+     */
+    public function setAnswerLanguage($answer_language)
+    {
+        $this->answer_language = $answer_language;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getAnswerTxt()
     {
         return $this->answer_txt;
@@ -160,6 +177,7 @@ class CT_Answer
             ':questionId' => $this->getQuestionId(),
             ':answerTxt' => $this->getAnswerTxt(),
             ':answerSuccess' => $this->getAnswerSuccess(),
+            ':answerLanguage' => $this->getAnswerLanguage(),
         );
         if(!$this->isNew()) $arr[':answer_id'] = $this->getAnswerId();
         $query['PDOX']->queryDie($query['sentence'], $arr);

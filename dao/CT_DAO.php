@@ -145,14 +145,15 @@ class CT_DAO {
             'getByUserQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
                 . "WHERE user_id = :user_id AND question_id = :question_id",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
-                . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`) "
-                . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified)",
+                . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
+                . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
             'update' => "UPDATE {$connection['p']}ct_answer set "
                 . "`user_id` = :userId, "
                 . "`question_id` = :questionId, "
                 . "`answer_txt` = :answerTxt, "
                 . "`answer_success` = :answerSuccess, "
-                . "`modified` = :modified "
+                . "`modified` = :modified, "
+                . "`answer_language` = :answerLanguage "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
             'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer "
