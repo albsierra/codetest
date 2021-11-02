@@ -52,8 +52,8 @@
                                         </div>
                                         <div class="col-sm-1">
                                             <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
-									{% if answer.getAnswerSuccess() != 1 %}
-										<span><a href="actions/answers/getDiffWithSolution.php?questionId={{ question.getQuestionId() }}&answerId={{ answer.getAnswerId() }}" target="_blank">Show Diff</a></span>
+									{% if answer.getAnswerSuccess() != 1 %}	
+										{{ include('answer/answer-diffs.php', { 'answer' : answer}) }}
 									{% endif %}
                                         </div>
                                     </div>

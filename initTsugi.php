@@ -21,6 +21,6 @@ $help = function() {
 $loader = new \Twig\Loader\FilesystemLoader($CFG->twig['viewsPath']);
 
 $twig = new \Twig\Environment($loader, [
-    'debug' => $CFG->twig['debug'],
+    'debug' => false, // $CFG->twig['debug'],
     'cache' => $CFG->twig['cachePath'],
 ]);
