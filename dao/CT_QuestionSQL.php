@@ -88,21 +88,28 @@ class CT_QuestionSQL extends CT_Question
 
     public function getQueryResult($answer = null) {
         $connection = $this->initTransaction();
-        $query = (isset($answer) ? $answer : $this->getQuestionSolution());
-        if($resultQuery = $connection->prepare($query)) {
-            $resultQuery->execute();
-            if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
-                $query = $this->getQuestionProbe();
-                if($resultQuery = $connection->prepare($query)) {
-                    $resultQuery->execute();
-                }
-            }
-        }
+        $queries = (isset($answer) ? $answer : $this->getQuestionSolution());
+		foreach(explode(";", $queries) as $query) { // ; not accepted in Oracle driver.
+			if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
+				$resultQuery->execute();
+			}
+		}
+	
+		if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
+			$query = explode(";", $this->getQuestionProbe())[0];
+			if($resultQuery = $connection->prepare($query)) {
+				$resultQuery->execute();
+			}
+		}
         $resultQueryArray = $resultQuery ? $resultQuery->fetchAll() : array();
         $resultQuery = null;
         $this->endTransaction($connection);
         return $resultQueryArray;
     }
+
+    private function isQuery($query) {
+		return strlen(trim($query)) > 1;
+	}
 
     private function createOnflySchema(&$connection) {
         global $USER;
