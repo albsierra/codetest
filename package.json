@@ -1,0 +1,37 @@
+{
+  "name": "codetest",
+  "version": "1.0.0",
+  "description": "A Tsugi tool to authomatic assess programming and database questions.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env TAILWIND_MODE=watch encore dev --watch",
+    "build": "encore production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@source.edf.global:juezlti/codetest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^1.6.1",
+    "autoprefixer": "^10.4.0",
+    "file-loader": "^6.0.0",
+    "postcss-loader": "^6.2.0",
+    "sass": "^1.43.3",
+    "sass-loader": "^10.0.0",
+    "webpack-notifier": "^1.6.0"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ],
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "sortablejs": "^1.14.0",
+    "tailwindcss": "^2.2.19"
+  }
+}

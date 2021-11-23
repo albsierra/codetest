@@ -1,21 +1,51 @@
 <?php
+global $translator;
+
+function renderMenuIcon($iconClass, $textKey){
+    global $translator;
+    $textVal = $translator->trans($textKey);
+    return "<span class='fas $iconClass marginIcon' aria-hidden='true'></span> <span>$textVal</span>";
+};
+
+function addMenuItem($menu, $iconClass, $textKey, $submenuOrUrl){
+    $menu->addRight(renderMenuIcon($iconClass, $textKey), $submenuOrUrl);
+}
+
+function renderMenuEntry($textKey, $to){
+    global $translator;
+    return new \Tsugi\UI\MenuEntry($translator->trans($textKey), $to);
+}
+
+$menu = false;
+
 if ($USER->instructor) {
     $menu = new \Tsugi\UI\MenuSet();
     $menu->setHome('Code Test', 'index.php');
     if ('student-home.php' != basename($_SERVER['PHP_SELF'])) {
-        $menu->addRight('<span class="fas fa-user-graduate" aria-hidden="true"></span> Student View', 'student-home.php');
-        $menu->addRight('<span class="fas fa-clipboard-check" aria-hidden="true"></span> Grade', 'grade.php');
-        $results = array(
-            new \Tsugi\UI\MenuEntry("By Student", "results-student.php"),
-            new \Tsugi\UI\MenuEntry("By Question", "results-question.php"),
-            new \Tsugi\UI\MenuEntry("Download Results", "results-download.php")
-        );
-        $menu->addRight('<span class="fas fa-poll-h" aria-hidden="true"></span> Results', $results);
-        $menu->addRight('<span class="fas fa-edit" aria-hidden="true"></span> Build', 'instructor-home.php');
+        addMenuItem($menu, 'fa-user-graduate', 'navbarmenu.student.view', 'student-home.php');
+        addMenuItem($menu, 'fa-clipboard-check', 'navbarmenu.grade', 'grade.php');
+
+        $resultsSubmenu = [
+            renderMenuEntry("navbarmenu.results.by.student", "results-student.php"),
+            renderMenuEntry("navbarmenu.results.by.question", "results-question.php"),
+            renderMenuEntry("navbarmenu.results.download", "results-download.php")
+        ];
+        addMenuItem($menu, 'fa-poll-h', 'navbarmenu.results', $resultsSubmenu);
+
+        $feedbacksSubmenu = [
+            renderMenuEntry("navbarmenu.feedback.by.student", "feedback-student.php"),
+            renderMenuEntry("navbarmenu.feedback.by.question", "feedback-question.php"),
+        ];
+        addMenuItem($menu, 'fa-comments', 'navbarmenu.feedbacks', $feedbacksSubmenu);
+        
+        $buildSubmenu = [
+            renderMenuEntry("navbarmenu.questions.create", 'create-question.php'),
+            renderMenuEntry("navbarmenu.questions.list", 'questions-list.php'),
+            renderMenuEntry("navbarmenu.questions.authorkit", 'questions-management.php'),
+            renderMenuEntry("navbarmenu.questions.codetest", 'questions-management.php'),
+        ];
+        addMenuItem($menu, 'fa-edit', 'navbarmenu.build', $buildSubmenu);
     } else {
-        $menu->addRight('Exit Student View <span class="fas fa-sign-out-alt" aria-hidden="true"></span>', 'instructor-home.php');
+        addMenuItem($menu, 'fa-sign-out-alt', 'navbarmenu.exit.student.view', 'instructor-home.php');
     }
-} else {
-    // No menu for students
-    $menu = false;
 }

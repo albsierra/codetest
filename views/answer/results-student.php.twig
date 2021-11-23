@@ -1,0 +1,70 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle('pages-title.result.by.student'|trans, true, false) }}
+{% endblock %}
+{% block content %}
+<section id="studentResponses">
+    <div class="panel panel-info">
+        <div class="panel-heading response-panel-header">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h4 class="results-table-hdr">{%trans%}results-table.student-name{%endtrans%}</h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4 class="results-table-hdr">{%trans%}results-table.last-updated{%endtrans%}</h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4 class="results-table-hdr">{%trans%}results-table.completed{%endtrans%}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="list-group">
+            {% for student in students %}
+                {% if not student.isInstructor %}
+                    <div class="list-group-item response-list-group-item">
+                        <div class="row">
+                            <div class="col-xs-6 header-col">
+                                <a href="#responses{{ student.user.getUserId() }}" class="h4 response-collapse-link" data-toggle="collapse">
+                                    {{ student.user.getDisplayname() }}
+                                    <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="col-xs-3 text-center header-col">
+                                <span class="h5 inline">{{ student.formattedMostRecentDate }}</span>
+                            </div>
+                            <div class="col-xs-3 text-center header-col">
+                                <span class="h5 inline">{{ student.numberAnswered }} / {{ totalQuestions }}</span>
+                            </div>
+                            <div id="responses{{ student.user.getUserId() }}" class="col-xs-12 results-collapse collapse">
+                                {% for question in questions %}
+                                    {% set answer = student.user.getAnswerForQuestion(question.getQuestionId(), question.getCtId()) %}
+                                    <div class="row response-row">
+                                        <div class="col-sm-5">
+                                            <h4 class="small-hdr hdr-notop-mrgn">
+                                                <small>{%trans%}general.question{%endtrans%} {{ question.getQuestionNum() }}</small>
+                                            </h4>
+                                            {% autoescape false %}
+                                            <div>{{ question.getTitle() }}</div>
+                                            {% endautoescape %}
+                                        </div>
+                                        <div class="col-sm-offset-1 col-sm-5" style="height:300px;overflow: scroll;">
+                                            <p class="response-text"><pre>{{ answer.getAnswerTxt() }}</pre></p>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+									{% if answer.getAnswerSuccess() != 1 %}	
+										{{ include('answer/answer-diffs.php', { 'answer' : answer}) }}
+									{% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+</div>
+{% endblock %}

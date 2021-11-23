@@ -5,7 +5,7 @@ namespace CT;
 
 use \Tsugi\Core\Result;
 
-class CT_Main
+class CT_Main implements \JsonSerializable
 {
     private $ct_id;
     private $user_id;
@@ -57,14 +57,119 @@ class CT_Main
         $query['PDOX']->queryDie($query['sentence'], $arr);
         return new self($query['PDOX']->lastInsertId());
     }
+    
+    //Save test on the repo
+    function saveTest($tests) {
+        global $CFG;
+        $url = $CFG->repositoryUrl."/api/tests/createTest/";
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST' );
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($tests));
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec($curl);
+        curl_close($curl);
+        return $result;
+       
+    }
+    
+    //Save question on the repo
+    function saveQuestions($questions) {
+        global $REST_CLIENT_REPO;
+
+        $saveQuestionRequest = $REST_CLIENT_REPO->
+                                getClient()->
+                                request('POST','api/questions/createQuestion', [
+                                    'json' => $questions
+                                ]);
+
+        return $saveQuestionRequest->getContent();
+    }
+    
+    //Create question object
+    function createQuestion($context, $type, $difficulty) {
+        global $CFG;
+        if(is_array($context)) {
+            $class = $this->getTypeProperty('class', $type);
+         
+            $question = new $class();
+            \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
+            if (in_array($type, $CFG->programmingLanguajes)) {
+                $array = self::getTypeProperty('codeLanguages', $type);
+               
+                foreach ( $array as $k => $v){
+                 if($v['name'] == $type){
+                      $question->setQuestionLanguage($k);
+                 }
+                }
+            }
+            $question->setType($type);
+            $question->setDifficulty($difficulty);
+        } 
+        $question->setCtId($this->getCtId());
+        return $question;
+    }
+    
+    
+     function importQuestion($context, $type) {
+        global $CFG;
+        if(is_array($context)) {
+            $class = $this->getTypeProperty('class', $type);
+            $question = new $class();
+            \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
+            $question->setType($type);
+        } 
+        $question->setCtId($this->getCtId());
+        return $question;
+    }
+    
+    public static function getTypes(){
+        global $CFG;
+        return $CFG->programmingLanguajes;
+        
+    }
+    
+    function getTypeProperty($property) {
+        global $CFG;
+        $typeNames = array_keys($CFG->CT_Types['types']);
+        $type = $typeNames[$this->getType()];
+        // var_dump($typeNames[$this->getType()]);die;
+        return $CFG->CT_Types['types'][$type][$property];
+    }
 
     /**
      * @return \CT\CT_Question[] $questions
      */
     function getQuestions() {
+        if (!is_array($this->questions)) {
+            $this->questions = array();
+            $query = \CT\CT_DAO::getQuery('main', 'getQuestions');
+            $arr = array(':ct_id' => $this->getCtId());
+            $questions = $query['PDOX']->allRowsDie($query['sentence'], $arr);
+            $this->questions = \CT\CT_DAO::createObjectFromArray(\CT\CT_Question::class, $questions);
+        }
+        return $this->questions;
+    }
+
+    function getQuestionsForImport() {
+        if(!is_array($this->questions)) {
+            $this->questions = array();
+            $query = \CT\CT_DAO::getQuery('main', 'getQuestions');
+            $arr = array(':ct_id' => $this->getCtId());
+            $questions = $query['PDOX']->allRowsDie($query['sentence'], $arr);
+            $this->questions = \CT\CT_DAO::createObjectFromArray(\CT\CT_Question::class, $questions);
+        }
+        return $this->questions;
+    }
+    
+    
+     function getTest() {
         // TODO Crear array de objetos Code o SQL según corresponda
         // a través de JOIN con la tabla correspondiente
-        if(!is_array($this->questions)) {
+        if (!is_array($this->questions)) {
             $this->questions = array();
             $query = \CT\CT_DAO::getQuery('main', 'getQuestions');
             $arr = array(':ctId' => $this->getCtId());
@@ -72,24 +177,17 @@ class CT_Main
             $this->questions = \CT\CT_DAO::createObjectFromArray(\CT\CT_Question::class, $questions);
         }
         return $this->questions;
-    }
 
-    /**
-     * @param $context mixed An array or object with the data to insert or import.
-     * @return CT_Question The created question.
-     */
-    function createQuestion($context) {
-        global $CFG;
-        if(is_array($context)) {
-            $class = $this->getTypeProperty('class');
-            $question = new $class();
-            \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
-        } else {
-            $question = clone $context;
+        $response = \CT\CT_Question::findQuestionsForImport();
+        $questions = array();
+        foreach ($response as $question) {
+            $CTQuestion = new CT_Question();
+            $CTQuestion->setQuestionId($question->id);
+            $CTQuestion->setTitle($question->title);
+            $CTQuestion->setDifficulty($question->difficulty);
+            array_push($questions, $CTQuestion);
         }
-        $question->setCtId($this->getCtId());
-        $question->save();
-        return $question;
+        return $questions;
     }
 
     public function getUserGrade($userId)
@@ -112,8 +210,23 @@ class CT_Main
         return $value;
     }
 
+    public function getGradesCount(){
+        $query = \CT\CT_DAO::getQuery('grade','count');
+        $arr = array(':ctid' => $this->getCtId());
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return $context['count'];
+    }
+
+    public function getGradesCtId(){
+        $query = \CT\CT_DAO::getQuery('grade','gradesCtid');
+        $arr = array(':ctid' => $this->getCtId());
+        return \CT\CT_DAO::createObjectFromArray(CT_Grade::class, $query['PDOX']->allRowsDie($query['sentence'], $arr));
+
+    }
+
     public function gradeUser($userId, $grade = null)
     {
+        global $translator;
         if(is_null($grade)) {
             $corrects = 0;
             $totalQuestions = count($this->getQuestions());
@@ -129,7 +242,7 @@ class CT_Main
         $currentGrade->setGrade($grade);
         $currentGrade->save();
 
-        $_SESSION['success'] = "Grade saved.";
+        $_SESSION['success'] = $translator->trans('backend-messages.grade.saved.success');
 
         // Calculate percentage and post
         $percentage = ($grade * 1.0) / $this->getPoints();
@@ -139,10 +252,6 @@ class CT_Main
         Result::gradeSendStatic($percentage, $row);
     }
 
-    function getTypeProperty($property) {
-        global $CFG;
-        return $CFG->CT_Types['types'][$this->getType()][$property];
-    }
 
     function getStudentsOrderedByDate() {
         $studentsUnordered = \CT\CT_User::getUsersWithAnswers($this->getCtId());
@@ -159,6 +268,7 @@ class CT_Main
             $students[$index]['user'] = $user;
             $students[$index]['isInstructor'] = $user->isInstructor($this->getContextId());
             if (!$students[$index]['isInstructor']) {
+                $students[$index]['mostRecentDate'] = $mostRecentDate;
                 $students[$index]['formattedMostRecentDate'] = $mostRecentDate->format("m/d/y") . " | " . $mostRecentDate->format("h:i A");
                 $students[$index]['numberAnswered'] = $user->getNumberQuestionsAnswered($this->getCtId());
                 $students[$index]['grade'] = $user->getGrade($this->getCtId())->getGrade();
@@ -352,6 +462,22 @@ class CT_Main
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
+
+        //necessary to use json_encode with question objects
+        public function jsonSerialize() {
+            return [
+                'user_id' => $this->getUserId(),
+                'context_id' => $this->getContextId(),
+                'link_id' => $this->getLinkId(),
+                'title' => $this->getTitle(),
+                'type' => $this->getType(),
+                'seen_splash' => $this->getSeenSplash(),
+                'shuffle' => $this->getShuffle(),
+                'points' => $this->getPoints(),
+                'modified' => $this->getModified(),
+                'ctId' => $this->getCtId()
+            ];
+        }
 
     function delete($user_id) {
         $query = \CT\CT_DAO::getQuery('main','delete');

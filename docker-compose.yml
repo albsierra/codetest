@@ -1,0 +1,57 @@
+version: '3'
+services:
+  tsugi-codetest:
+    container_name: tsugi_codetest_container
+    image: tsugi_codetest_img
+    depends_on:
+      - tsugi-mysql-db
+      - spring-codetest
+    build:
+      context: ./
+      dockerfile: Dockerfile_tsugi-ct
+    ports:
+      - 80:80
+    command: bash -c "/var/www/html/tsugi/mod/codetest/init-tsugi.sh"
+    stdin_open: true
+    tty: true
+  spring-codetest:
+    container_name: spring_codetest_container
+    image: spring_codetest_img
+    build:
+      context: ./
+      dockerfile: Dockerfile_repo
+    depends_on:
+      - spring-mongo-db
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.data.mongodb.host": "spring-mongo-db",
+        "spring.data.mongodb.authentication-database": "admin"
+      }'
+    ports:
+      - 8079:8080
+  tsugi-mysql-db:
+    container_name: tsugi_mysql_db_container
+    image: 'mysql:5.7'
+    environment:
+      MYSQL_ROOT_PASSWORD: tsugi_root_pw
+      MYSQL_DATABASE: tsugi
+      MYSQL_USER: tsugi_root
+      MYSQL_PASSWORD: tpass
+    ports:
+      - 3307:3306
+    volumes:
+      - 'mysql_data_container:/var/lib/mysql:delegated'
+  spring-mongo-db:
+    container_name: spring_mongo_db_container
+    image: 'mongo:4.4.9'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root_pass
+      MONGO_INITDB_DATABASE: repository
+    ports:
+      - 27018:27017
+    volumes:
+      - 'mongodb_data_container:/data/db'
+volumes:
+  mongodb_data_container:
+  mysql_data_container:

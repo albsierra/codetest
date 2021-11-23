@@ -1,0 +1,68 @@
+{% set questionId = question.getQuestionId() %}
+{% if question.getQuestionNum() %}
+    {% set questionNum = question.getQuestionNum() %}
+{% endif %}
+<div id="questionAnswer{{ questionId }}">
+    <h2 class="small-hdr {{ questionNum == 1 ? 'hdr-notop-mrgn' : '' }}">
+        <small>{%trans%}student-question.question{%endtrans%} {{ questionNum }}</small>
+    </h2>
+    {% autoescape false %}
+    
+    <span class="questionTitle"> {{ question.getTitle() }}</span>
+    {% endautoescape %}
+    {#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
+    <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
+          method="post">
+
+   {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', question.getType())) }}
+     <div>
+        {% if question.getQuestionMust() %}
+            <h4>{%trans%}student-question.solutionmustcontain{%endtrans%}</h4>
+            <pre>{{ question.getQuestionMust()|nl2br }}</pre>
+        {% endif %}
+        {% if question.getQuestionMusnt() %}
+            <h4>{%trans%}student-question.solutionshouldntcontain{%endtrans%}</h4>
+            <pre>{{ question.getQuestionMusnt()|nl2br }}</pre>
+        {% endif %}
+    </div>
+
+            <input type="hidden" name="questionId" value="{{ questionId }}">
+            <div class="form-group">
+                <label for="answerText{{ questionId }}">{%trans%}student-question.yoursolutionis{%endtrans%}:</label>
+                <textarea class="form-control" id="answerText{{ questionId }}"
+                          name="answerText" rows="5"></textarea>
+            </div>
+            <button type="button" class="btn btn-success"
+                    onclick="answerQuestion('{{ questionId }}','{{questionNum}}')">{%trans%}student-question.submit{%endtrans%}
+            </button>
+        </form>
+    {# {% endif %} #}
+        <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start question-row">
+            <div class="flx-grow-all question-solution">
+                <h4>{%trans%}student-question.answer{%endtrans%}:</h4>
+                <pre id="answerSavedText">{{ answer.getAnswerTxt() }}</pre>
+            </div>
+            <div class="flx-grow-all question-text">
+                 <p id="modified"></p>
+                <span id="answerIcon{{ questionId }}" aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+            </div>
+        </div>
+    <script>
+      function updateDate() {
+        updateDate( '{{ answer.getModified() |date("D M d Y H:i:s O") }}');
+      }
+      window.onload = updateDate;
+    </script>
+
+    {% if questions|first.getQuestionNum() != questionNum %}
+        <a href="student-home.php?questionNum={{questionNum-1}}" class="btn buttonNextPrev">
+            {{ 'student-question.previous'|trans|upper }}
+        </a>
+    {% endif %}
+    {% if questions|length != questionNum   %}
+        <a href="student-home.php?questionNum={{questionNum+1}}" class="btn buttonNextPrev">
+            {{ 'student-question.next'|trans|upper }}
+        </a>
+    {% endif %}
+</div>
+

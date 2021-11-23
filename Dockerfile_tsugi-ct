@@ -1,0 +1,52 @@
+FROM php:7.3.21-apache
+
+WORKDIR /git-clones
+
+RUN apt-get update && apt-get install -y git netcat && apt-get clean -y
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN a2enmod rewrite
+
+
+ENV NODE_VERSION=14.15.1
+ENV NVM_DIR=/root/.nvm
+RUN apt install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+
+
+RUN git clone --branch codetest-customizations https://github.com/KA226-COVID/tsugi.git
+RUN mkdir -p /var/www/html/
+RUN cp -R tsugi/ /var/www/html/
+
+WORKDIR /var/www/html/tsugi
+RUN cp config_docker.php config.php
+
+RUN git clone --branch edf-merge https://github.com/KA226-COVID/codetest.git
+RUN mkdir -p /var/www/html/tsugi/mod/
+RUN cp -R codetest/ /var/www/html/tsugi/mod/
+
+WORKDIR /var/www/html/tsugi/mod/codetest
+RUN cp config_docker.php config.php
+RUN cp init-tsugi.sh /var/www/html/tsugi/admin/init-tsugi.sh
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
+RUN composer update
+
+RUN npm ci
+RUN npm run build
+
+RUN mkdir tmp && chmod 777 tmp
+
+
+WORKDIR /var/www/html/tsugi/mod
+RUN chmod 777 codetest
+
+WORKDIR /var/www/html/tsugi/admin
+
+EXPOSE 80
+
+ENTRYPOINT ["/bin/bash", "init-tsugi.sh"]

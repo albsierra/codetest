@@ -23,6 +23,33 @@ class CT_QuestionCode extends CT_Question
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
         $this->setQuestionParentProperties();
     }
+    
+    
+    //necessary to use json_encode with questionCode objects
+    public function jsonSerialize() {
+        return [
+            'question_id' => $this->getQuestionId(),
+            'ct_id' => $this->getCtId(),
+            'question_num' => $this->getQuestionNum(),
+            'title' => $this->getTitle(),
+            'type' => $this->getType(),
+            'difficulty' => $this->getDifficulty(),
+            'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
+            'averageGradeDifficulty' => $this->getAverageGradeDifficulty(),
+            'averageGradeTime' => $this->getAverageGradeTime(),
+            'averageGrade' => $this->getAverageGrade(),
+            'numberVotes' => $this->getNumberVotes(),
+            'keywords' => $this->getKeywords(),
+            'question_must' => $this->getQuestionMust(),
+            'question_musnt' => $this->getQuestionMusnt(),
+            'question_language' => $this->getQuestionLanguage(),
+            'question_input_test' => $this->getQuestionInputTest(),
+            'question_input_grade' => $this->getQuestionInputGrade(),
+            'question_output_test' => $this->getQuestionOutputTest(),
+            'question_output_grade' => $this->getQuestionOutputGrade(),
+            'question_solution' => $this->getQuestionSolution()
+        ];
+    }
 
     /**
      * @return mixed
@@ -142,18 +169,23 @@ class CT_QuestionCode extends CT_Question
      * @param CT_Answer $answer
      */
     function grade($answer) {
+        global $translator;
         $outputSolution = $this->getQuestionOutputGrade();
+//        var_dump($outputSolution);
+//        var_dump("SA");
         $outputAnswer =  $this->getOutputFromCode(
-            $answer->getAnswerTxt(), $this->getQuestionLanguage(), $this->getQuestionInputGrade()
+            $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputGrade()
         );
-        CT_DAO::debug($outputSolution);
-        CT_DAO::debug($outputAnswer);
+        CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
         $grade = ($outputSolution == $outputAnswer);
         // TODO mejorar el feedback
         if(!$grade) {
-            similar_text($outputSolution, $outputAnswer, $percentageCorrect);
-            $_SESSION['error'] = "La salida de tu código coincide en un " . round($percentageCorrect) . "% de la correcta";
+			$outputAnswer =  $this->getOutputFromCode(
+				$answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputTest()
+			);
+			$diff = CT_Answer::getDiffWithSolution($outputAnswer, $this->getQuestionOutputTest());
+            $_SESSION['error'] = "Below, it shows the differences between output expected and output obtained\n<pre>" . htmlentities($diff) . "</pre>";
         }
         $answer->setAnswerSuccess($grade);
     }
@@ -175,8 +207,8 @@ class CT_QuestionCode extends CT_Question
         $main = $this->getMain();
         $languages = $main->getTypeProperty('codeLanguages');
         $timeout = $main->getTypeProperty('timeout') + time();
-        $languageName = $languages[$this->getQuestionLanguage()]['name'];
-        $fileExtension = $languages[$this->getQuestionLanguage()]['ext'];
+        $languageName = $languages[$language]['name'];
+        $fileExtension = $languages[$language]['ext'];
 
         $pathFile = stream_get_meta_data($file)['uri'];
         rename($pathFile, "$pathFile.$fileExtension");
@@ -198,11 +230,11 @@ class CT_QuestionCode extends CT_Question
 
         //foreach ($inputs as $inputLine) {
 
-        $command = $languages[$this->getQuestionLanguage()]['command'] . " $pathFile.$fileExtension";
+        $command = $languages[$language]['command'] . " $pathFile.$fileExtension";
         // $input after command like parameters
-        $stdin = array_key_exists('stdin', $languages[$this->getQuestionLanguage()])
+        $stdin = array_key_exists('stdin', $languages[$language])
             &&
-            $languages[$this->getQuestionLanguage()]['stdin'];
+            $languages[$language]['stdin'];
         if(!$stdin) $command .= " " . $input;
 
         // Run shell command
@@ -279,10 +311,12 @@ class CT_QuestionCode extends CT_Question
     public function save() {
         $isNew = $this->isNew();
         parent::save();
+        
         if ($this->recalculateOutputs) $this->setOutputs();
         $query = \CT\CT_DAO::getQuery('questionCode', $isNew ? 'insert' : 'update');
         $arr = array(
             ':question_id' => $this->getQuestionId(),
+            ':ct_id' => $this->getCtId(),
             ':question_language' => $this->getQuestionLanguage(),
             ':question_input_test' => $this->getQuestionInputTest(),
             ':question_input_grade' => $this->getQuestionInputGrade(),

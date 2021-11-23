@@ -1,0 +1,38 @@
+
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle(main.getTitle(), true, false) }}
+{% endblock %}
+{% block content %}
+
+{% if questionNum == null %}
+{% set questionNum = 1 %}
+{% endif %}
+{% if questions|length > 0 %}
+<div id="navQuestions">
+    <p>{%trans%}student-home.questions.list{%endtrans%}</p>
+        <ol>
+            {% for i in 0..questions|length -1 %}
+            <li>
+                <a href="student-home.php?questionNum={{ i+1 }}">
+                    {% set answer = user.getAnswerForQuestion(questions[i].getQuestionId(), questions[i].getCtId()) %}
+                    <div class="navQuestion">
+                        {{ i+1 }} <span id="listIcon{{questions[i].getQuestionId()}}" aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ol>
+</div>
+<div style="clear: both"></div>
+    {% set question = questions[questionNum-1].getQuestionByType() %}
+            {% set questionId = question.getQuestionId() %}
+            {% set answer = user.getAnswerForQuestion(questionId, question.getCtId()) %}
+            {{ include('question/studentQuestion.php.twig') }}
+            {% if not answer %}
+               {{ include('question/feedbackModal.php.twig') }}
+            {% endif %}
+{% else %}
+        <p class="lead">{%trans%}student-home.lead{%endtrans%}</p>
+{% endif %}
+{% endblock %}

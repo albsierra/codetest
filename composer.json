@@ -1,5 +1,13 @@
 {
     "autoload": {
         "psr-4": {"CT\\": "dao/"}
+    },
+    "require": {
+        "twig/twig": "^3.3",
+        "symfony/translation": "^5.3",
+        "symfony/config": "^5.3",
+        "symfony/twig-bridge": "^5.3",
+        "symfony/http-client": "^5.3",
+        "symfony/property-access": "^5.3"
     }
 }

@@ -1,0 +1,49 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle('pages-title.grade'|trans, true, false) }}
+{% endblock %}
+{% block content %}
+<div class="grade-page">
+    <h3>{%trans%}grading.set.points.posible{%endtrans%} <small>{%trans%}grading.default{%endtrans%} 100</small></h3>
+    <form class="form-inline" action="actions/UpdatePointsPossible.php" method="post">
+        <div class="form-group">
+            <label for="points_possible">{%trans%}grading.points-posible{%endtrans%} </label>
+            <input type="text" class="form-control" id="points_possible" name="points_possible" value="{{ maxPoints }}">
+        </div>
+        <button type="submit" class="btn btn-default">{%trans%}grading.submit{%endtrans%}</button>
+    </form>
+    <h3>{%trans%}grading.grade.students{%endtrans%}</h3>
+    <div class="table-responsive table-grades">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <th class="col-sm-5">{%trans%}grading.table.student-name{%endtrans%}</th>
+            <th class="col-sm-2">{%trans%}grading.table.last-updated{%endtrans%}</th>
+            <th class="col-sm-2">{%trans%}grading.table.completed{%endtrans%}</th>
+            <th class="col-sm-3">{%trans%}grading.table.grade{%endtrans%}</th>
+            </thead>
+            <tbody>
+            {% for student in main.getStudentsOrderedByDate() %}
+                {% if not student.isInstructor %}
+                    <tr>
+                        <td>{{ student.user.getDisplayname() }}</td>
+                        <td>{{ student.mostRecentDate|date("m/d/Y H:i:s", "Europe/Paris") }}</td>
+                        <td>{{ student.numberAnswered }}  / {{ totalQuestions }}</td>
+                        <td>
+                            <form class="form-inline" action="actions/GradeStudent.php" method="post">
+                                <input type="hidden" name="student_id" value="{{ student.user.getUserId() }}">
+                                <div class="form-group">
+                                    <label>
+                                        <input type="text" class="form-control" name="grade" value="{{ main.getUserGradeValue(student.user.getUserId())|number_format(2) }}">/{{ maxPoints }}
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-default">{%trans%}grading.update{%endtrans%}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

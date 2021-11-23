@@ -1,0 +1,12 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle('pages-title.download.results'|trans, true, false) }}
+{% endblock %}
+{% block content %}
+<p class="lead">{%trans%}download-student-results{%endtrans%}</p>
+<h4>
+    <a href="actions/ExportToFile.php">
+        <span class="fa fa-download" aria-hidden="true"></span> CodeTest-{{ CONTEXT.title }}-Results.xls
+    </a>
+</h4>
+{% endblock %}

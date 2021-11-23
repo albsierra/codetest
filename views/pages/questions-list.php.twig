@@ -1,0 +1,20 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle("Questions list", true, false) }}
+{% endblock %}
+{% block content %}
+<div>
+    <div class="lead">
+        List of questions for students, drag an drop them to change the order
+    </div>
+    <section id="theQuestions">
+        <ul id="listaPrueba" class="list-group">
+            {% for question in questions %}
+                {{ include('question/instructorQuestion.php.twig') }}
+            {% endfor %}
+        </ul>
+        {{ include('question/deleteModal.php.twig') }}
+        </div>
+    </section>
+</div>
+{% endblock %}

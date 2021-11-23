@@ -2,20 +2,23 @@
 require_once "../../initTsugi.php";
 
 if ($USER->instructor) {
-    $question = new \CT\CT_Question($_GET['questionId']);
-
+    $question = \CT\CT_Question::withId($_GET['questionId']);
     $answers = $question->getAnswers();
     $numberResponses = count($answers);
     // Sort by modified date with most recent at the top
     usort($answers, 'response_date_compare');
     $responses = getResponsesArray($answers);
-
-    echo $twig->render('answer/getAnswersFromQuestion.html', array(
-        'responses' => $responses,
-    ));
-
+    
+    if ($responses) {
+        echo $twig->render('answer/getAnswersFromQuestion.php.twig', array(
+            'responses' => $responses,
+        ));
+    } else {
+        echo $twig->render('answer/noAnswers.php.twig', array(
+        ));
+    }
 } else {
-    header( 'Location: '.addSession('../../student-home.php') ) ;
+    header( 'Location: '.addSession('../../student-home.php')) ;
 }
 
 function response_date_compare($response1, $response2) {

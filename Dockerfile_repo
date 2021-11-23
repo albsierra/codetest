@@ -1,0 +1,17 @@
+FROM openjdk:8-jdk
+
+RUN apt-get update
+
+RUN apt-get install -y git
+
+WORKDIR /app
+
+RUN git clone --branch master https://github.com/KA226-COVID/questions-storage.git
+
+WORKDIR /app/questions-storage
+
+RUN chmod +x mvnw
+
+EXPOSE 8080
+
+ENTRYPOINT [ "./mvnw", "spring-boot:run" ]

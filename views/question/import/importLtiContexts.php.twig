@@ -1,0 +1,71 @@
+<p class="lead" xmlns="http://www.w3.org/1999/html">{%trans%}import-lti-context.addquestionsremository{%endtrans%}</p>
+{% for key, array in tags %}
+    {% for  tag in array %}      
+            <label class="tagsLabel">{{tag}} <a onclick="deleteTag('{{tag}}')"> x</a></label>
+    {% endfor %}
+{% endfor %}
+<form id="importForm" class="form" action="actions/ImportQuestions.php" method="post">
+    <div class="list-group">
+        {% if not testForImport %}
+           {%trans%}import-lti-context.cantconnectrepository{%endtrans%}
+        {% endif %}
+        <!-- Question Map -->
+        {% for test in testForImport %}
+         {% set questions = test.getQuestions() %}
+        <div class="list-group-item response-list-group-item test-list">
+            <div class="row">
+                <div class="col-sm-12 header-col" >
+                    <a data-toggle="collapse" class="h4 response-collapse-link pointer" data-target="#site{{ test.test_id }}" onclick="showTestInfo('{{test.test_id}}')">
+                        {{ test.name }}  || <label class="descriptions pointer">{{test.description}}</label>
+                        <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                        <div id="divTest{{test.test_id}}" hidden>
+                            {{ include('question/import/importTest.php.twig') }}
+                        </div>
+                    </a>
+                </div>
+                <div id="site{{ test.test_id }}" class="col-xs-12 results-collapse collapse">
+                </div>
+            </div>
+        </div>
+        {% set siteCount = siteCount + 1 %}
+        {%endfor %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if tags%}
+                    {% if page >= 4 %}
+                    <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage(0);" class="page-link">{%trans%}import-lti-context.first{%endtrans%}</a></li>
+                    {%endif%}
+                    {%for i in page-3..page+3 %}
+                    {%if i>=0 and i< totalPages %}
+                    {%if page==i %}
+                    <li class="page-item"><a  class="page-link" >{{i+1}}</a></li>
+                    {%else%}
+                     <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage({{i}});" class="page-link">{{i+1}}</a></li>
+                    {% endif %}
+
+                    {%endif%}
+                    {%endfor%}
+                    {% if page < totalPages-4 and page !=null%}
+                        <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage({{totalPages-1}});" class="page-link">{%trans%}import-lti-context.last{%endtrans%}</a></li>
+                    {%endif%}
+                {%else%}
+                    {% if page >= 4 %}
+                    <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts(0);" class="page-link">{%trans%}import-lti-context.first{%endtrans%}</a></li>
+                    {%endif%}
+                    {%for i in page-3..page+3 %}
+                    {%if i>=0 and i< totalPages %}
+                    {%if page==i %}
+                    <li class="page-item"><a  class="page-link" >{{i+1}}</a></li>
+                    {%else%}
+                     <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts({{i}});" class="page-link">{{i+1}}</a></li>
+                    {% endif %}
+                    {%endif%}
+                    {%endfor%}
+                    {% if page < totalPages-4 and page !=null%}
+                        <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts({{totalPages-1}});" class="page-link">{%trans%}import-lti-context.last{%endtrans%}</a></li>
+                    {%endif%}
+                {%endif%}
+            </ul>
+        </nav>
+    </div>
+</form>

@@ -1,0 +1,19 @@
+{% set question = newQuestion %}
+<!--    <div id="newQuestionNumber">{{ newQuestionNumber }}.</div>-->
+<div class="flx-grow-all question-text">
+    <form id="questionTextForm-1" action="actions/AddQuestion.php" method="post">
+        <label for="questionTitleText" class="labelForm" >{%trans%}new-question-form.questiontitle{%endtrans%}</label>
+        <textarea class="form-control ckeditor" id="questionTitleText" name="question[title]" rows="2" required></textarea>
+        <label for="questionKeywords" class="labelForm" >{%trans%}new-question-form.keywordsseparatedlines{%endtrans%}</label>
+        <textarea class="form-control" name="question[keywords]" id="questionKeywords" rows="3" placeholder="keyword1&#10;keyword2"></textarea>
+
+        {# The tilde characther '~' is used to concatenate strings, turns operands in strings and then concatenates #}
+        {{ include (CFG.CT_Types.formsPath ~ main.getTypeProperty('instructorForm', type)) }}
+        
+        <label for="questionMust-1" class="labelForm">{%trans%}new-question-form.mustcontainseparatedlines{%endtrans%}</label>
+        <textarea class="form-control" id="questionMust-1" name="question[question_must]" rows="2"></textarea>
+        <label for="questionMusnt-1" class="labelForm">{%trans%}new-question-form.shouldntcontain{%endtrans%}</label>
+        <textarea class="form-control lastElementForm" id="questionMusnt-1" name="question[question_musnt]" rows="2"></textarea>
+    </form>
+</div>
+

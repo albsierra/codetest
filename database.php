@@ -33,74 +33,89 @@ $DATABASE_INSTALL = array(
     
     PRIMARY KEY(ct_id)
 	
-) ENGINE = InnoDB DEFAULT CHARSET=utf8"),    
-    array( "{$CFG->dbprefix}ct_question",
+) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
+
+    array("{$CFG->dbprefix}ct_question",
         "create table {$CFG->dbprefix}ct_question (
-    question_id   INTEGER NOT NULL AUTO_INCREMENT,
+    question_id   VARCHAR(50) NOT NULL,
     ct_id         INTEGER NOT NULL,
     question_num  INTEGER NULL,
-    question_txt  TEXT NULL,
-    question_must  VARCHAR(255) NULL,
-    question_musnt  VARCHAR(255) NULL,
-    modified      datetime NULL,
+    title         VARCHAR (50) NOT NULL,
+    type          VARCHAR (50) NOT NULL,
+    question_must VARCHAR (50) ,
+    question_musnt VARCHAR (50) ,
     
-    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_1`
+    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_6`
         FOREIGN KEY (`ct_id`)
         REFERENCES `{$CFG->dbprefix}ct_main` (`ct_id`)
         ON DELETE CASCADE,
-
-    PRIMARY KEY(question_id)
+    PRIMARY KEY(question_id, ct_id)
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
+
     array( "{$CFG->dbprefix}ct_answer",
         "create table {$CFG->dbprefix}ct_answer (
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
-    question_id  INTEGER NOT NULL,
-	answer_txt   TEXT NULL,
-	answer_success BOOL NOT NULL DEFAULT 0,
+    question_id  VARCHAR(50) NOT NULL,
+    ct_id        INTEGER NOT NULL,
+    answer_txt   TEXT NULL,
+    answer_success BOOL NOT NULL DEFAULT 0,
     modified     datetime NULL,
     
-    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_2`
-        FOREIGN KEY (`question_id`)
+    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_7`
+        FOREIGN KEY (`question_id` )
         REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
         ON DELETE CASCADE,
+        
+    CONSTRAINT `{$CFG->dbprefix}ct_ibfk_8`
+        FOREIGN KEY (`ct_id`)
+        REFERENCES `{$CFG->dbprefix}ct_main` (`ct_id`)
+        ON DELETE CASCADE,
     
+    UNIQUE (user_id, question_id, ct_id),
     PRIMARY KEY(answer_id)
     
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
+
     array( "{$CFG->dbprefix}ct_code_question",
         "create table {$CFG->dbprefix}ct_code_question (
-    question_id INTEGER NOT NULL,
+    question_id VARCHAR(50) NOT NULL,
+    ct_id INT(11) NOT NULL,
     question_language INTEGER NOT NULL DEFAULT '1',
     question_input_test TEXT NULL DEFAULT NULL,
     question_input_grade TEXT NULL DEFAULT NULL,
     question_output_test TEXT NULL DEFAULT NULL,
     question_output_grade TEXT NULL DEFAULT NULL,
     question_solution TEXT NULL DEFAULT NULL,
-  PRIMARY KEY (question_id),
+    
+  PRIMARY KEY (question_id, ct_id),
   CONSTRAINT `{$CFG->dbprefix}ct_ibfk_3`
-    FOREIGN KEY (`question_id`)
-    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
+    FOREIGN KEY (`question_id`, `ct_id`)
+    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`, `ct_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
+
     array( "{$CFG->dbprefix}ct_sql_question",
         "create table {$CFG->dbprefix}ct_sql_question (
-    question_id INT(11) NOT NULL,
+    question_id VARCHAR(50) NOT NULL,
+    ct_id INT(11) NOT NULL,
     question_dbms TINYINT NOT NULL DEFAULT 0,
-    question_type VARCHAR(20) NULL DEFAULT 'SELECT',
+    question_sql_type VARCHAR(20) NULL DEFAULT 'SELECT',
     question_database VARCHAR(100) NULL DEFAULT NULL,
     question_solution TEXT NULL DEFAULT NULL,
     question_probe TEXT NULL DEFAULT NULL,
+    question_onfly LONGTEXT NULL DEFAULT NULL,
         
-  PRIMARY KEY (question_id),
+  PRIMARY KEY (question_id, ct_id),
   CONSTRAINT `{$CFG->dbprefix}ct_ibfk_4`
-    FOREIGN KEY (`question_id`)
-    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
+    FOREIGN KEY (`question_id`, `ct_id`)
+    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`, `ct_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
+
     array( "{$CFG->dbprefix}ct_grade",
         "create table {$CFG->dbprefix}ct_grade (
     grade_id        INTEGER NOT NULL AUTO_INCREMENT,
@@ -116,7 +131,7 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
     
     PRIMARY KEY(grade_id)
     
-) ENGINE = InnoDB DEFAULT CHARSET=utf8")
+) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
 );
 
 $DATABASE_UPGRADE = function($oldversion) {
@@ -154,5 +169,21 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryDie($sql);
     }
 
-    return '201907070902';
+    // Add onfly column in question_sql
+    if (!$PDOX->columnExists('question_onfly', "{$CFG->dbprefix}ct_sql_question")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_sql_question ADD question_onfly LONGTEXT NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    // Add answer_language column to allow student select the language of the answer
+    if (!$PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD answer_language INTEGER NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    return '202012201622';
 };

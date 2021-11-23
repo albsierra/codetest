@@ -4,7 +4,7 @@
 namespace CT;
 
 
-class CT_User
+class CT_User implements \JsonSerializable
 {
     private $user_id;
     private $deleted;
@@ -23,6 +23,16 @@ class CT_User
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
+    }
+
+    public function jsonSerialize(){
+         return [
+            'id' =>  $this->getUserId(),
+            'deleted' => $this->getDeleted(),
+            'profile_id' => $this->getProfileId(),
+            'displayname' => $this->getDisplayname(),
+            'email' => $this->getEmail()
+        ];
     }
 
     function isInstructor($context_id) {
@@ -53,13 +63,20 @@ class CT_User
      * @param $question_id int
      * @return \CT\CT_Answer
      */
-    function getAnswerForQuestion($question_id) {
+    function getAnswerForQuestion($question_id, $ct_id) {
         $query = \CT\CT_DAO::getQuery('user','getAnswerForQuestion');
-        $arr = array(':questionId' => $question_id, ':userId' => $this->getUserId());
+        $arr = array(':questionId' => $question_id, ':userId' => $this->getUserId(), ':ctId' => $ct_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        
+        if($context){
         $answer = new \CT\CT_Answer();
         \CT\CT_DAO::setObjectPropertiesFromArray($answer, $context);
+        
         return $answer;
+        
+        }else{
+            return null;
+        }
     }
 
     function getMostRecentAnswerDate($ct_id) {

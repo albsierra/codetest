@@ -12,14 +12,19 @@ $toolTitle = $main->getTitle() ? $main->getTitle() : "Code Test";
 $questions = $main->getQuestions();
 $totalQuestions = count($questions);
 
+$currentQuestionNumber = isset($_GET['questionNumber']) ? $_GET['questionNumber'] : 0;
+
 $user = new \CT\CT_User($USER->id);
 
-echo $twig->render('student-home.php', array(
+echo $twig->render('student-home.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
     'user' => $user,
     'questions' => $questions,
+    'totalQuestions' => $totalQuestions,
+    'currentQuestionNumber' => $currentQuestionNumber,
     'main' => $main,
     'CFG' => $CFG,
 ));
+

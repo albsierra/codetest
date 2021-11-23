@@ -6,7 +6,7 @@ include('views/dao/menu.php');
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $questions = $main->getQuestions();
 
-echo $twig->render('answer/results-question.php', array(
+echo $twig->render('answer/results-question.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'CONTEXT' => $CONTEXT,
     'help' => $help(),
