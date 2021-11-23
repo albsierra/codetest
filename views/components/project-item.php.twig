@@ -1,0 +1,30 @@
+<div class="project-item" data-project-id="{{project.id}}">
+    <div class="project-item__header-row">
+        <div>
+            <span title="{{project.name}}">
+                {{project.name}}
+            </span>
+        </div>
+        <div class="project-item__header-buttons">
+            <div class="project-item__exercises-button" title="Number of exercises: {{project.countExercises}}">
+                <span>
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                </span>
+                <span>
+                    {{project.countExercises}}
+                </span>
+            </div>
+            <div class="project-item__status-button" title="Project status: {{project.status|capitalize}}">
+                <i class="circle-state--{{project.status}}" aria-hidden="true"></i>
+            </div>
+            <div class="project-item__public-button" title="{{project.is_public ? 'Public' : 'Private' }} project">
+                <i class="fa fa-fw {{project.is_public ? 'fa-eye' : 'fa-eye-slash'}}" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <div class="project-item__description-row">
+        <div>
+            {{project.description ? project.description : '-- No descripion --'}}
+        </div>
+    </div>
+</div>

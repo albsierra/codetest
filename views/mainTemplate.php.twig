@@ -1,0 +1,23 @@
+{% block preHeader %}{% endblock %}
+{{ OUTPUT.header() }}
+{% block postHeader %}{% endblock %}
+{{ include('dao/tool-header.php.twig') }}
+{% block postToolHeader %}{% endblock %}
+{{ OUTPUT.bodyStart() }}
+{% block preMenu %}{% endblock %}
+
+{{ OUTPUT.topNav(menu) }}
+
+    {% block postMenu %}{% endblock %}
+
+    <div class="ct-page container-fluid">
+        {{ OUTPUT.flashMessages() }}
+        {% block pageTitle %}{% endblock %}
+        {% block content %}
+        {% endblock %}
+        {{ include('help/help.php.twig') }}
+    </div> <!-- End container -->
+{{ OUTPUT.footerStart() }}
+{% block footer %} {% endblock %}
+{{ include('dao/tool-footer.php.twig') }}
+{{ OUTPUT.footerEnd() }}

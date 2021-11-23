@@ -1,0 +1,78 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle('pages-title.feedback.by.student'|trans, true, false) }}
+{% endblock %}
+{% block content %}
+<section id="studentResponses">
+    <div class="panel panel-info">
+        <div class="panel-heading response-panel-header">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h4 class="results-table-hdr">{%trans%}feedback-table.student-name{%endtrans%}</h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4 class="results-table-hdr"></h4>
+                </div>
+            </div>
+        </div>
+        <div class="list-group">
+            {% for student in students %}
+            {% if not student.isInstructor %}
+            <div class="list-group-item response-list-group-item">
+                <div class="row">
+                    <div class="col-xs-6 header-col">
+                        <a href="#responses{{ student.user.getUserId() }}" class="h4 response-collapse-link" data-toggle="collapse">
+                            {{ student.user.getDisplayname() }}
+                            <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 text-center header-col">
+                    </div>
+                    <div class="col-xs-3 text-center header-col">
+                    </div>
+                    {% set value = false %}
+                    <div id="responses{{ student.user.getUserId() }}" class="col-xs-12 results-collapse collapse">
+                        {% for question in questions %}
+                        {%for feedback in feedbacks %}
+                        {% if feedback.user.getUserId() == student.user.getUserId() and feedback.getIdQuestion() == question.getQuestionId()%}
+                        
+                         {% set value = true %}
+                        <div class="row response-row">
+                            <div class="col-sm-5">
+                                <h4 class="small-hdr hdr-notop-mrgn">
+                                    <small>{{ question.getTitle() }}</small>
+                                </h4>
+                                <div>{%trans%}feedback-table.understand{%endtrans%} {{ feedback.getUnderstandabilityScore() }}</div>
+                                <div>{%trans%}feedback-table.time{%endtrans%} {{ feedback.getTimeScore() }}</div>
+                            </div>
+                            <div class="col-sm-offset-1 col-sm-5">
+                                </br> 
+                                <div>{%trans%}feedback-table.difficulty{%endtrans%} {{ feedback.getDifficultyScore() }}</div>
+                            </div>
+                            <div class="col-sm-1">
+                                </br>
+                                <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                        {% if value != 1 %}
+                        <div class="row response-row">
+                            <div class="col-sm-12">
+                                {%trans%}feedback-table.no.feedback{%endtrans%}
+                            </div>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+</div>
+{% endblock %}

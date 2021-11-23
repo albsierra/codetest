@@ -1,40 +1,40 @@
 <?php
+
 require_once "../initTsugi.php";
 
-$question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
-$questionToMove = new \CT\CT_Question($question_id);
+$questionId = isset($_POST["questionId"]) ? $_POST["questionId"] : false;
+$oldIndex = isset($_POST["oldIndex"]) ? $_POST["oldIndex"] + 1 : false;
+$newIndex = isset($_POST["newIndex"]) ? $_POST["newIndex"] + 1 : false;
 
-if ( $USER->instructor && $question_id ) {
+if ($USER->instructor) {
     $main = new \CT\CT_Main($_SESSION["ct_id"]);
     $questions = $main->getQuestions();
     $prevQuestion = false;
-    foreach ($questions as $question) {
-        if ($question->getQuestionId() == $questionToMove->getQuestionId()) {
-            // Move this one up
-            if($question->getQuestionNum() == 1) {
-                // This was the first so put it at the end
-                $questionToMove->setQuestionNum(count($questions) + 1);
-                $questionToMove->save();
-                \CT\CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
-                break;
-            } else {
-                // This was one of the other questions so swap with previous
-                $number = $questionToMove->getQuestionNum();
-                $questionToMove->setQuestionNum($prevQuestion->getQuestionNum());
-                $questionToMove->save();
-                $prevQuestion->setQuestionNum($number);
-                $prevQuestion->save();
-                break;
-            }
-        }
-        $prevQuestion = $question;
-    }
+    $find = false;
 
+    foreach ($questions as $question) {
+        $questionNum = $question->getQuestionNum();
+        
+        //Set the new position to the moved question
+        if ($question->getQuestionId() == $questionId) {
+            $question->setQuestionNum($newIndex);
+            
+            // -1 position to the question with a lower index than the new
+        } else if (($oldIndex < $newIndex ) && ($questionNum <= $newIndex) && ($questionNum > $oldIndex)) {
+            $question->setQuestionNum($questionNum - 1);
+
+            // +1 position to the question with a higher index than the new
+        } else if (($oldIndex > $newIndex ) && ($questionNum >= $newIndex) && ($questionNum < $oldIndex)) {
+
+            $question->setQuestionNum($questionNum + 1);
+        }
+        $question->update();
+    }
     $_SESSION["success"] = "Question Order Saved.";
 
     $result = array();
 
-    $OUTPUT->buffer=true;
+    $OUTPUT->buffer = true;
     $result["flashmessage"] = $OUTPUT->flashMessages();
 
     header('Content-Type: application/json');
@@ -45,5 +45,5 @@ if ( $USER->instructor && $question_id ) {
 } else if ($USER->instructor) {
     exit;
 } else {
-    header( 'Location: '.addSession('../student-home.php') ) ;
+    header('Location: ' . addSession('../student-home.php'));
 }

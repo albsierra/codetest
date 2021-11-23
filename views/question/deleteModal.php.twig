@@ -1,0 +1,14 @@
+<div id="confirm{{question.getQuestionId()}}" class="modal fade modalDelete" role="dialog">
+    <div class="modal-dialog modal-lg " style="width: 97%; ">
+        <div class="modal-content ">
+            <div class="container modalContainer">
+                {%trans%}delete-question-modal.confirmation{%endtrans%}
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-danger" id="delete">{%trans%}delete-question-modal.delete{%endtrans%}</button>
+                <button type="button" data-dismiss="modal" class="btn">{%trans%}delete-question-modal.cancel{%endtrans%}</button>
+            </div>
+        </div>
+    </div>
+</div>
+

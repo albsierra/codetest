@@ -67,7 +67,7 @@ if ( $USER->instructor ) {
                 $QID = $question->getQuestionId();
                 $A="";
 
-                $answer = $student->getAnswerForQuestion($QID);
+                $answer = $student->getAnswerForQuestion($QID, $ct_id);
                 if (is_object($answer) && (!is_null($answer->getAnswerId()))) {
                     $A = $answer->getAnswerTxt();
                     $A = str_replace("&#39;", "'", $A);
@@ -101,7 +101,7 @@ if ( $USER->instructor ) {
     $objWriter = PHPExcel_IOFactory::createWriter($exportFile, 'Excel5');
     $objWriter->save('php://output');
 } else {
-    header( 'Location: '.addSession('../student-home.php') ) ;
+    header( 'Location: '.addSession('../student-home.php')) ;
 }
 
 

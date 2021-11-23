@@ -1,0 +1,73 @@
+<p class="lead" xmlns="http://www.w3.org/1999/html">{%trans%}import-lti-context-questions.addquestionsremository{%endtrans%}</p>
+{% for key, array in tags %}
+    {% for  tag in array %}
+<label class="tagsLabel">{{tag}} <a onclick="deleteTag('{{tag}}')"> x</a></label>
+    {% endfor %}
+{% endfor %}
+<form id="importQuestionsForm" class="form" action="actions/ImportQuestionsQuestion.php" method="post">
+    <div class="list-group">
+        {% if not questionsForImport %}
+            Can't connect with the repository
+        {% endif %}
+        <!-- Question Map -->
+        {% for question in questionsForImport %}
+        <div class="list-group-item response-list-group-item test-list">
+            <div class="row">
+                <div class="col-sm-12 header-col" >
+                    <a data-toggle="collapse" class="h4 response-collapse-link pointer" data-target="#site{{ question.question_id }}" onclick="showQuestions('{{ question.getQuestionId() }}')">
+                        {{ question.title }}   <label class="descriptions pointer"></label>
+                    </a>
+                    <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                    <div class="row response-question-row">
+                        <div id="main{{question.getQuestionId()}}" class="col-xs-offset-1 col-sm-11" hidden>
+                            {{ include('question/import/importQuestions.php.twig') }}
+                        </div>
+                    </div>
+
+                </div>
+                <div id="site{{ question.question_id }}" class="col-xs-12 results-collapse collapse">
+                </div>
+            </div>
+        </div>
+        {% set siteCount = siteCount + 1 %}
+        {%endfor %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {%if tags%}
+                    {% if page >= 4 %}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage(0, 'question');" class="page-link">{%trans%}import-lti-context-questions.first{%endtrans%}</a></li>
+                    {%endif%}
+                    {%for i in page-3..page+3 %}
+                        {%if i>=0 and i< totalPages %}
+                            {%if page==i %}
+                <li class="page-item"><a  class="page-link" >{{i+1}}</a></li>
+                            {%else%}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage({{i}}, 'question');" class="page-link">{{i+1}}</a></li>
+                            {% endif %}
+
+                        {%endif%}
+                    {%endfor%}
+                    {% if page < totalPages-4 and page !=null%}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContextsPage({{totalPages-1}}, 'question');" class="page-link">{%trans%}import-lti-context-questions.last{%endtrans%}</a></li>
+                    {%endif%}
+                {%else%}
+                    {% if page >= 4 %}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts(0, 'question');" class="page-link">{%trans%}import-lti-context-questions.first{%endtrans%}</a></li>
+                    {%endif%}
+                    {%for i in page-3..page+3 %}
+                        {%if i>=0 and i< totalPages %}
+                            {%if page==i %}
+                <li class="page-item"><a  class="page-link" >{{i+1}}</a></li>
+                            {%else%}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts({{i}}, 'question');" class="page-link">{{i+1}}</a></li>
+                            {% endif %}
+                        {%endif%}
+                    {%endfor%}
+                    {% if page < totalPages-4 and page !=null%}
+                <li class="page-item"><a href="javascript:void(0);" onclick="importLtiContexts({{totalPages-1}}, 'question');" class="page-link">{%trans%}import-lti-context-questions.last{%endtrans%}</a></li>
+                    {%endif%}
+                {%endif%}
+            </ul>
+        </nav>
+    </div>
+</form>

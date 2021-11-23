@@ -1,0 +1,17 @@
+{% if question %}
+    <div class="checkbox">
+        {% if question.getTestId() %}
+            <input type="checkbox" id="question{{question.getQuestionId()}}" name="question[]" value="{{question.getQuestionId()}}/{{question.getTestId()}}">
+        {%else%}
+            <input type="checkbox" id="question{{question.getQuestionId()}}" name="question[]" value="{{question.getQuestionId()}}">
+        {%endif%}
+        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.statement{%endtrans%}:</b> {{question.getTitle()}}</label>
+        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.type{%endtrans%}:</b> {{question.getType()}}</label>
+        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.difficulty{%endtrans%}:</b> {{question.getDifficulty()}}</label>
+        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.averagegrade{%endtrans%}:</b> {{question.getAverageGrade() |round(2)}}</label>
+    </div>
+{% else %}
+    <div class="checkbox">
+        {%trans%}No questions in test.{%endtrans%} 
+    </div>
+{% endif %}

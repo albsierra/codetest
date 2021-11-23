@@ -16,7 +16,7 @@ $currentQuestionNumber = isset($_GET['questionNumber']) ? $_GET['questionNumber'
 
 $user = new \CT\CT_User($USER->id);
 
-echo $twig->render('student-home.php', array(
+echo $twig->render('student-home.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
@@ -27,3 +27,4 @@ echo $twig->render('student-home.php', array(
     'main' => $main,
     'CFG' => $CFG,
 ));
+

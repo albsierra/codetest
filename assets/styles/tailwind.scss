@@ -1,0 +1,142 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.ct-input{
+    @at-root {
+        label#{&} {
+            font-weight: unset;
+            display: block;
+            margin: 0;
+        }
+    }
+    &.inline{
+        @apply flex items-center;
+        > span {
+            @apply mr-2;
+        }
+    }
+    &:focus-within{
+        span{
+            @apply text-sky-700;
+        }
+    }
+    > span{
+        @apply text-greyish;
+        @apply ml-1;
+        @apply font-medium;
+        letter-spacing: 1px;
+    }
+    > input, > select {
+        @apply w-full h-10;
+        @apply px-2;
+        @apply rounded;
+        @apply outline-none;
+        @apply bg-blueGray-50 bg-opacity-30;
+        @apply backdrop-filter backdrop-blur-lg;
+        @apply border border-primary;
+        @apply border-gray-400;
+        @apply caret-primary;
+
+        @apply focus:backdrop-blur-xl focus:bg-opacity-80;
+
+        @apply placeholder-opacity-20 placeholder-gray-600;
+        @apply focus:placeholder-opacity-0;
+        @apply focus:bg-white;
+    
+        @apply transition-all;
+        @apply placeholder-shown:select-none;
+
+        @apply focus:ring-2 ring-secondary ring-opacity-50 ring-offset-1;
+        //@apply focus:border-secondary;
+
+        &::placeholder{
+            font-weight: normal;
+        }
+    }
+}
+
+.ct-textarea{
+    @apply w-full;
+    @apply px-2;
+    @apply rounded;
+    @apply outline-none;
+    @apply bg-blueGray-50 bg-opacity-30;
+    @apply backdrop-filter backdrop-blur-lg;
+    @apply border border-primary;
+    @apply border-gray-400;
+    @apply caret-primary;
+
+    @apply focus:backdrop-blur-xl focus:bg-opacity-80;
+
+    @apply placeholder-opacity-20 placeholder-gray-600;
+    @apply focus:placeholder-opacity-0;
+    @apply focus:bg-white;
+
+    @apply transition-all;
+    @apply placeholder-shown:select-none;
+
+    @apply focus:ring-2 ring-secondary ring-opacity-50 ring-offset-1;
+    //@apply focus:border-secondary;
+
+    &::placeholder{
+        font-weight: normal;
+    }
+}
+
+.ct-input-code{
+    @at-root {
+        label#{&} {
+            font-weight: unset;
+            @apply border;
+            @apply rounded;
+            @apply block;
+            @apply bg-white bg-opacity-30;
+
+            @apply backdrop-filter backdrop-blur-lg;
+            @apply focus-within:backdrop-blur-xl focus-within:bg-opacity-80;
+
+            @apply border-primary;
+            @apply border-gray-400;
+            @apply ring-secondary ring-offset-1 ring-opacity-60;
+            @apply focus-within:ring-2;
+
+            @apply transition-all;
+            @apply overflow-hidden m-0;
+        }
+    }
+    &:focus-within{
+        > div{
+            @apply text-sky-700;
+            @apply bg-opacity-100;
+        }
+    }
+    > div{
+        @apply bg-[#f1f5f8] bg-opacity-30;
+        @apply px-3 py-2;
+        @apply border-b;
+        @apply text-greyish;
+        @apply font-medium;
+        @apply text-left;
+    }
+    > textarea{
+        width: calc(100% - 8px);
+        @apply caret-primary;
+
+        @apply rounded-sm;
+        @apply rounded-t-none;
+
+        @apply flex-1;
+        @apply px-2 pt-1 pb-4 m-1 -mb-1;
+
+        @apply bg-transparent;
+        @apply outline-none;
+        @apply overflow-auto;
+
+        @apply placeholder-opacity-20 placeholder-gray-600;
+        @apply focus:placeholder-opacity-0;
+
+        @apply min-h-[50px];
+    }
+
+}

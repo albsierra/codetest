@@ -1,0 +1,98 @@
+<div class="exercise-item" data-exercise-id="{{exercise.id}}">
+    <div>
+        <span>
+            Title:
+        </span>
+        <span>
+            {{exercise.title}}
+        </span>
+    </div>
+    <div>
+        <span>
+            Module:
+        </span>
+        <span>
+            {{exercise.module}}
+        </span>
+    </div>
+    <div>
+        <span>
+            Difficulty:
+        </span>
+        <span>
+            {{exercise.difficulty|capitalize}}
+        </span>
+    </div>
+    <div>
+        <span>
+            Status:
+        </span>
+        <span>
+            {{exercise.status|capitalize}}
+        </span>
+    </div>
+    <div>
+        <span>
+            Keywords:
+        </span>
+        <span>
+        {% if exercise.keywords %}
+            {% for tag in exercise.keywords %}
+                <span title="{{tag}}">
+                    {{ tag }}
+                </span>
+            {% endfor %}
+        {% else %}
+            <span class="text-muted">
+                -- Not specified  --
+            </span>
+        {% endif %}
+        </span>
+    </div>
+    <div>
+        <span>
+            Type:
+        </span>
+        {% if exercise.type %}
+            <span>
+                {{exercise.type}}
+            </span>
+        {% else %}
+            <span class="text-muted">
+                -- Not specified --
+            </span>
+        {% endif %}
+    </div>
+    <div>
+        <span>
+            Platform:
+        </span>
+        {% if exercise.platform %}
+            <span>
+                {{exercise.platform}}
+            </span>
+        {% else %}
+            <span class="text-muted">
+                -- Not specified --
+            </span>
+        {% endif %}
+    </div>
+    <div>
+        <span>
+            Programming languages:
+        </span>
+        <span>
+        {% if exercise.programmingLanguages %}
+            {% for codeLang in exercise.programmingLanguages %}
+                <span title="{{codeLang}}">
+                    {{ codeLang }}
+                </span>
+            {% endfor %}
+        {% else %}
+            <span class="text-muted">
+                -- Not specified  --
+            </span>
+        {% endif %}
+        </span>
+    </div>
+</div>

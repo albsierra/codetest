@@ -4,10 +4,10 @@
 namespace CT;
 
 
-class CT_QuestionSQL extends CT_Question
+class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
 {
     private $question_dbms;
-    private $question_type;
+    private $question_sql_type;
     private $question_database;
     private $question_solution;
     private $question_probe;
@@ -29,10 +29,54 @@ class CT_QuestionSQL extends CT_Question
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
         $this->setQuestionParentProperties();
     }
+    
+    static function withId($question_id = null)
+    {
+        $question =new CT_QuestionSQL();
+        $context = array();
+        if (isset($question_id)) {
+            $query = \CT\CT_DAO::getQuery('questionSQL', 'getById');
+            $arr = array(':question_id' => $question_id);
+            $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        }
+        \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
+        $question->setQuestionParentProperties();
+          return $question;
+     
+    }
+    
+    //necessary to use json_encode with questionSQL objects
+      public function jsonSerialize() {
+        return [
+            'question_id' => $this->getQuestionId(),
+            'ct_id' => $this->getCtId(),
+            'question_num' => $this->getQuestionNum(),
+            'title' => $this->getTitle(),
+            'type' => $this->getType(),
+            'difficulty' => $this->getDifficulty(),
+            'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
+            'averageGradeDifficulty' => $this->getAverageGradeDifficulty(),
+            'averageGradeTime' => $this->getAverageGradeTime(),
+            'averageGrade' => $this->getAverageGrade(),
+            'numberVotes' => $this->getNumberVotes(),
+            'keywords' => $this->getKeywords(),
+            'question_must' => $this->getQuestionMust(),
+            'question_musnt' => $this->getQuestionMusnt(),
+            'question_dbms' => $this->getQuestionDbms(),
+            'question_sql_type' => $this->getQuestionSQLType(),
+            'question_database' => $this->getQuestionDatabase(),
+            'question_solution' => $this->getQuestionSolution(),
+            'question_probe' => $this->getQuestionProbe(),
+            'question_onfly' => $this->getQuestionOnfly()
+        ];
+    }
 
     public function getConnection($dbUser = null, $dbPassword = null, $dbName = null) {
         $dbms = $this->getQuestionDbms();
-        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', 'MYSQL')[$dbms];
+        $dbUser = $dbUser ? $dbUser : $connectionConfig['dbUser'];
+        $dbPassword = $dbPassword ? $dbPassword : $connectionConfig['dbPassword'];
+        $dbName = $dbName ? $dbName : $this->getQuestionDatabase();
 
         $dbUser = $dbUser ? $dbUser : $connectionConfig['dbUser'];
         $dbPassword = $dbPassword ? $dbPassword : $connectionConfig['dbPassword'];
@@ -114,7 +158,7 @@ class CT_QuestionSQL extends CT_Question
     private function createOnflySchema(&$connection) {
         global $USER;
         $dbms = $this->getQuestionDbms();
-        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', "MYSQL")[$dbms];
         if( array_key_exists('onFly', $connectionConfig)
             && is_array($onFly = $connectionConfig['onFly'])
             && array_key_exists('allowed', $onFly)
@@ -185,7 +229,7 @@ class CT_QuestionSQL extends CT_Question
 
     private function dropOnflySchema(&$connection) {
         $dbms = $this->getQuestionDbms();
-        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
+        $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', 'MYSQL')[$dbms];
         if( array_key_exists('onFly', $connectionConfig)
             && is_array($onFly = $connectionConfig['onFly'])
             && array_key_exists('allowed', $onFly)
@@ -257,7 +301,7 @@ class CT_QuestionSQL extends CT_Question
     public function getQueryTable(): string
     {
         $resultQueryString = '';
-        if ($this->getQuestionType() == 'SELECT') {
+        if ($this->getQuestionSQLType() == 'SELECT') {
             $connection = $this->initTransaction();
             $resultQueryString = "<div class='table-results'><table>";
             $query = $this->getQuestionSolution();
@@ -322,17 +366,17 @@ class CT_QuestionSQL extends CT_Question
     /**
      * @return mixed
      */
-    public function getQuestionType()
+    public function getQuestionSQLType()
     {
-        return $this->question_type;
+        return $this->question_sql_type;
     }
 
     /**
      * @param mixed $question_type
      */
-    public function setQuestionType($question_type)
+    public function setQuestionSQLType($question_sql_type)
     {
-        $this->question_type = $question_type;
+        $this->question_sql_type = $question_sql_type;
     }
 
     /**
@@ -405,14 +449,17 @@ class CT_QuestionSQL extends CT_Question
         $query = \CT\CT_DAO::getQuery('questionSQL', $isNew ? 'insert' : 'update');
         $arr = array(
             ':question_id' => $this->getQuestionId(),
+            ':ct_id' => $this->getCtId(),
             ':question_dbms' => $this->getQuestionDbms(),
-            ':question_type' => $this->getQuestionType(),
+            ':question_sql_type' => $this->getQuestionSQLType(),
             ':question_database' => $this->getQuestionDatabase(),
             ':question_solution' => $this->getQuestionSolution(),
             ':question_probe' => $this->getQuestionProbe(),
             ':question_onfly' => $this->getQuestionOnfly(),
+             
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
+          
     }
 
 }

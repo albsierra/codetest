@@ -1,0 +1,8 @@
+{% if USER.instructor %}
+<h4>{%trans%}student-view{%endtrans%}</h4>
+<p>{%trans%}seeing.student.view{%endtrans%}</p>
+<p>{%trans%}will.show.in.results{%endtrans%}</p>
+{% else %}
+<h4>{%trans%}student-home.what.do.i.do{%endtrans%}</h4>
+<p>{%trans%}student-home.answer.each.below{%endtrans%} {%trans%}student-home.answer.only.once{%endtrans%}</p>
+{% endif %}

@@ -1,0 +1,32 @@
+{% if cardLink is defined %}
+<a href="{{ cardLink }}">
+{% endif %}
+    <div class="dashboard-card">
+        <div class="dashboard-card__header">
+            <div class="dashboard-card__header__icon">
+                {% block icon %}
+                    Card icon
+                {% endblock %}
+            </div>
+            <div class="dashboard-card__header__title">
+                {% block title %}
+                    Card title
+                {% endblock %}
+            </div>
+            {% if amount is defined %}
+                <div class="dashboard-card__header__append numeric">
+                    {% block amount %}
+                        {{ amount }}
+                    {% endblock %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="dashboard-card__body">
+            {% block body %}
+                CARD BODY
+            {% endblock %}
+        </div>
+    </div>
+{% if cardLink is defined %}
+</a>
+{% endif %}

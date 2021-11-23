@@ -3,23 +3,20 @@ vendor/
 tmp/
 composer.lock
 config.php
+/nbproject/private/
 
-.idea/
-vendor/
-tmp/
-composer.lock
-config.php
-
-node_modules/
+node_modules
 
 .env
 
-public/
+nbproject/
 
 rest-data.json
 
+public/build/
+
 test/storageState.json
 
-test/test-results/
-
 test/playwright-report/
+
+test/test-results/

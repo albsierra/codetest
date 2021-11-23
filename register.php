@@ -8,7 +8,8 @@ $REGISTER_LTI2 = array(
     "messages" => array("launch"),
     "license" => "Apache",
     "languages" => array(
-        "English"
+        "English",
+        "Spanish"
     ),
     "analytics" => array(
         "internal"

@@ -4,7 +4,6 @@ namespace CT;
 class CT_DAO {
 
     private $PDOX;
-    private $p;
 
     public function __construct() {
         global $PDOX;
@@ -22,8 +21,17 @@ class CT_DAO {
     public static function setObjectPropertiesFromArray(&$object, $arrayProperties) {
         if(is_array($arrayProperties)){
             foreach($arrayProperties as $k => $v) {
+                if($k== 'keywords'){
+                    if(!is_array($v)){
+                        $v = preg_split('/\r\n|\r|\n/', $v);
+                    }else{
+                        $v = $v;
+                    }
+                }
                 $function = array($object, 'set'.preg_replace('/[^\da-z]/i', '', mb_convert_case($k, MB_CASE_TITLE)));
+                if($v=='')$v=null;
                 if(is_callable($function)) call_user_func_array($function, array($v));
+                
             }
         }
     }
@@ -41,12 +49,17 @@ class CT_DAO {
     public static function createObjectFromArray($class, $array) {
         $arrayObject = array();
         foreach($array as $element) {
-            $object = new $class();
-            self::setObjectPropertiesFromArray($object, $element);
+
+                $object = new $class();
+                 self::setObjectPropertiesFromArray($object, $element); 
+         
             array_push($arrayObject, $object);
-        }
+        } 
+       
         return $arrayObject;
     }
+    
+   
 
     public static function getQuery($class, $name)
     {
@@ -56,7 +69,7 @@ class CT_DAO {
             'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id AND link_id = :link_id",
             'getQuestions' => "SELECT * FROM {$connection['p']}ct_question "
-                . "WHERE ct_id = :ctId "
+                . "WHERE ct_id = :ct_id "
                 . "order by question_num",
             'getMainsFromContext' => "SELECT * FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id "
@@ -80,42 +93,50 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE ct_id = :ctId",
             'delete' => "DELETE FROM {$connection['p']}ct_main WHERE ct_id = :mainId AND user_id = :userId",
+            'codeQuestionsExport' => "SELECT * FROM {$connection['p']}ct_code_question WHERE `question_id` IN (:questions_in )",
+            'sqlQuestionsExport' => "SELECT * FROM {$connection['p']}ct_sql_question WHERE `question_id` IN ( :questions_in )",
         );
         $QuestionQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_question  "
-                . "(`ct_id`, `question_num`, `question_txt`, `question_must`, `question_musnt`, `modified` ) "
-                . "VALUES (:ctId, :question_num, :question_txt, :question_must, :question_musnt, :modified )",
+                . "( `question_id`, `ct_id`, `question_num` , `type`, `title`, `question_must`, `question_musnt` ) "
+                . "VALUES (  :question_id, :ct_id, :question_num, :type, :title, :question_must, :question_musnt)",
             'update' => "UPDATE {$connection['p']}ct_question set "
-                . "`ct_id` = :ctId, "
+                . "`ct_id` = :ct_id, "
                 . "`question_num` = :question_num, "
-                . "`question_txt` = :question_txt, "
-                . "`question_must` = :question_must, "
-                . "`question_musnt` = :question_musnt, "
-                . "`modified` = :modified "
-                . "WHERE question_id = :question_id",
-            'delete' => "DELETE FROM {$connection['p']}ct_question WHERE question_id = :questionId;",
+                . "`question_id` = :question_id "
+                . "WHERE question_id = :question_id AND ct_id = :ct_id",
+            'updateNum' => "UPDATE {$connection['p']}ct_question set "
+                . "`ct_id` = :ct_id, "
+                . "`question_num` = :question_num, "
+                . "`question_id` = :question_id, "
+                . "WHERE question_id = :question_id AND ct_id = :ct_id",
+                    
+            'delete' => "DELETE FROM {$connection['p']}ct_question WHERE `question_id` = :question_id AND `ct_id` = :ct_id;",
+            'exists' => "SELECT question_id as questionId FROM {$connection['p']}ct_question WHERE "
+            . "question_id = :question_id AND ct_id = :ct_id;",
             'getAnswers' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE question_id = :questionId;",
+                . "WHERE question_id = :questionId AND ct_id = :ctId",
             'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
                 . "set question_num = (@question_num:=@question_num+1) "
                 . "WHERE ct_id = :ctId ORDER BY question_num",
             'getNextQuestionNumber' => "SELECT MAX(question_num) as lastNum "
                 . "FROM {$connection['p']}ct_question "
-                . "WHERE ct_id = :ctId",
+                . "WHERE ct_id = :ct_id",
             'findQuestionsForImport' => "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
                 . "FROM {$connection['p']}ct_question q "
                 . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
                 . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
                 . "WHERE m.user_id = :userId AND m.ct_id != :ct_id",
             'getById' => "SELECT * FROM {$connection['p']}ct_question "
-                . "WHERE question_id = :question_id",
+                . "WHERE question_id = :question_id AND ct_id = :ct_id",
         );
         $QuestionCodeQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_code_question  "
-                . "(`question_id`, `question_language`, `question_input_test`, `question_input_grade`, `question_output_test`, `question_output_grade`, `question_solution` ) "
-                . "VALUES (:question_id, :question_language, :question_input_test, :question_input_grade, :question_output_test, :question_output_grade, :question_solution )",
+                . "(`question_id`,  `ct_id`, `question_language`, `question_input_test`, `question_input_grade`, `question_output_test`, `question_output_grade`, `question_solution` ) "
+                . "VALUES (:question_id, :ct_id, :question_language, :question_input_test, :question_input_grade, :question_output_test, :question_output_grade, :question_solution )",
             'update' => "UPDATE {$connection['p']}ct_code_question set "
                 . "`question_language` = :question_language, "
+                . " `ct_id` = :ct_id,"
                 . "`question_input_test` = :question_input_test, "
                 . "`question_input_grade` = :question_input_grade, "
                 . "`question_output_test` = :question_output_test, "
@@ -127,15 +148,16 @@ class CT_DAO {
         );
         $QuestionSQLQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_sql_question  "
-                . "(`question_id`, `question_dbms`, `question_type`, `question_database`, `question_solution`, `question_probe`, `question_onfly` ) "
-                . "VALUES (:question_id, :question_dbms, :question_type, :question_database, :question_solution, :question_probe, :question_onfly )",
+                . "(`question_id`,  `ct_id`, `question_dbms`, `question_sql_type`, `question_database`, `question_solution`, `question_probe`, `question_onfly` ) "
+                . "VALUES (:question_id, :ct_id, :question_dbms, :question_sql_type, :question_database, :question_solution, :question_probe, :question_onfly )",
             'update' => "UPDATE {$connection['p']}ct_sql_question set "
                 . "`question_dbms` = :question_dbms, "
-                . "`question_type` = :question_type, "
+                . "`ct_id` = :ct_id,"
+                . "`question_sql_type` = :question_sql_type, "
                 . "`question_database` = :question_database, "
                 . "`question_solution` = :question_solution, "
                 . "`question_probe` = :question_probe, "
-                . "`question_onfly` = :question_onfly "
+                . "`question_onfly` = :question_onfly "   
                 . "WHERE question_id = :question_id",
             'getById' => "SELECT * FROM {$connection['p']}ct_sql_question "
                 . "WHERE question_id = :question_id",
@@ -143,16 +165,17 @@ class CT_DAO {
         $AnswerQueries = array(
             'getByAnswerId' => "SELECT * FROM {$connection['p']}ct_answer WHERE answer_id = :answer_id",
             'getByUserQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE user_id = :user_id AND question_id = :question_id",
+                . "WHERE user_id = :userId AND question_id = :questionId AND ct_id = :ctId",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
-                . "(`user_id`, `question_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
-                . "VALUES (:userId, :questionId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
+                . "(`user_id`, `question_id`, `ct_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
+                . "VALUES (:userId, :questionId, :ctId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
             'update' => "UPDATE {$connection['p']}ct_answer set "
                 . "`user_id` = :userId, "
                 . "`question_id` = :questionId, "
+                . "`ct_id` = :ctId,"
                 . "`answer_txt` = :answerTxt, "
                 . "`answer_success` = :answerSuccess, "
-                . "`modified` = :modified, "
+                . "`modified` = :modified "
                 . "`answer_language` = :answerLanguage "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
@@ -170,9 +193,9 @@ class CT_DAO {
             'getUsersWithAnswers' => "SELECT DISTINCT {$connection['p']}lti_user.* "
                 . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
-                . "WHERE q.ct_id = :ctId",
+                . "WHERE q.ct_id = :ctId and a.ct_id = :ctId",
             'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE question_id = :questionId AND user_id = :userId",
+                . "WHERE question_id = :questionId AND user_id = :userId AND ct_id = :ctId",
             'getMostRecentAnswerDate' => "SELECT max(a.modified) as modified "
                 . "FROM {$connection['p']}ct_answer a "
                 . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
@@ -196,6 +219,8 @@ class CT_DAO {
         $GradeQueries = array(
             'getByGradeId' => "SELECT * FROM {$connection['p']}ct_grade "
                 . "WHERE grade_id = :grade_id",
+            'count' => "SELECT COUNT(*) as count FROM {$connection['p']}ct_grade WHERE ct_id = :ctid",
+            'gradesCtid' => "SELECT ct_id, grade FROM {$connection['p']}ct_grade WHERE ct_id = :ctid",
             'insert' => "INSERT INTO {$connection['p']}ct_grade "
                 . "(ct_id, user_id, grade, modified) "
                 . "VALUES (:ctId, :userId, :grade, :modified)",

@@ -1,0 +1,80 @@
+<div id="feedbackModal{{questionId}}" class="modal fade " role="dialog">
+    <div class="modal-dialog modal-lg " style="width: 97%; ">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title">{%trans%}question-modal-feedback.score.question{%endtrans%}</h4>
+            </div>
+            <div class="container modalContainer">
+                <form id="feedbackForm{{questionId}}" action="actions/SendFeedback.php" method="post">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="labelFeedback">{%trans%}question-modal-feedback.understand{%endtrans%}:</label> 
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="stars">
+                                <div class="star-widget">
+                                    <input type="radio" name="rateUnderstandability" value="5" id="rateUnderstandability-5">
+                                    <label for="rateUnderstandability-5" class="fas fa-star"></label>
+                                    <input type="radio" name="rateUnderstandability" value="4" id="rateUnderstandability-4">
+                                    <label for="rateUnderstandability-4" class="fas fa-star"></label>
+                                    <input type="radio" name="rateUnderstandability" value="3" id="rateUnderstandability-3" checked>
+                                    <label for="rateUnderstandability-3" class="fas fa-star"></label>
+                                    <input type="radio" name="rateUnderstandability" value="2" id="rateUnderstandability-2">
+                                    <label for="rateUnderstandability-2" class="fas fa-star"></label>
+                                    <input type="radio" name="rateUnderstandability" value="1" id="rateUnderstandability-1">
+                                    <label for="rateUnderstandability-1" class="fas fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="labelFeedback">{%trans%}question-modal-feedback.difficulty{%endtrans%}:</label> 
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="stars">
+                                <div class="star-widget">
+                                    <input type="radio" name="rateDifficulty" value="5" id="rateDifficulty-5">
+                                    <label for="rateDifficulty-5" class="fas fa-star"></label>
+                                    <input type="radio" name="rateDifficulty" value="4" id="rateDifficulty-4">
+                                    <label for="rateDifficulty-4" class="fas fa-star"></label>
+                                    <input type="radio" name="rateDifficulty" value="3" id="rateDifficulty-3" checked>
+                                    <label for="rateDifficulty-3" class="fas fa-star"></label>
+                                    <input type="radio" name="rateDifficulty" value="2" id="rateDifficulty-2">
+                                    <label for="rateDifficulty-2" class="fas fa-star"></label>
+                                    <input type="radio" name="rateDifficulty" value="1" id="rateDifficulty-1">
+                                    <label for="rateDifficulty-1" class="fas fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="labelFeedback">{%trans%}question-modal-feedback.time{%endtrans%}:</label> 
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="stars">
+                                <div class="star-widget">
+                                    <input type="radio" name="rateTime" value="5" id="rateTime-5">
+                                    <label for="rateTime-5" class="fas fa-star"></label>
+                                    <input type="radio" name="rateTime" value="4" id="rateTime-4">
+                                    <label for="rateTime-4" class="fas fa-star"></label>
+                                    <input type="radio" name="rateTime" value="3" id="rateTime-3" checked>
+                                    <label for="rateTime-3" class="fas fa-star"></label>
+                                    <input type="radio" name="rateTime" value="2" id="rateTime-2">
+                                    <label for="rateTime-2" class="fas fa-star"></label>
+                                    <input type="radio" name="rateTime" value="1" id="rateTime-1">
+                                    <label for="rateTime-1" class="fas fa-star"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="sendFeedback('{{question.getQuestionId()}}')">{%trans%}question-modal-feedback.send.feedback{%endtrans%}</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,15 @@
+<label class="ct-input-code">
+    {% block text %}
+        <div>{{label}}</div>
+    {% endblock %}
+    {% block input %}
+        <textarea 
+            wrap="off"
+            title="{{label}}"
+            id="{{id}}"
+            rows="{{rows|default('2')}}"
+            placeholder="{{placeholder|default(label)}}"
+            name="{{name}}"
+        >{{value}}</textarea>
+    {% endblock %}
+</label>

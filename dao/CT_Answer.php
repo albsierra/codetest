@@ -9,6 +9,7 @@ class CT_Answer
     private $answer_id;
     private $user_id;
     private $question_id;
+    private $ct_id;
     private $answer_language;
     private $answer_txt;
     private $answer_success;
@@ -25,12 +26,11 @@ class CT_Answer
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
-
-    public static function getByUserAndQuestion($userId, $questionId)
+    public static function getByUserAndQuestion($userId, $questionId, $ctId)
     {
         $answer = new self();
         $query = \CT\CT_DAO::getQuery('answer','getByUserQuestion');
-        $arr = array(':user_id' => $userId, ':question_id' => $questionId);
+        $arr = array(':userId' => $userId, ':questionId' => $questionId,  ':ctId' => $ctId);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         \CT\CT_DAO::setObjectPropertiesFromArray($answer, $context);
         return $answer;
@@ -147,7 +147,7 @@ class CT_Answer
     {
         return $this->modified;
     }
-
+     
     /**
      * @param mixed $modified
      */
@@ -155,7 +155,24 @@ class CT_Answer
     {
         $this->modified = $modified;
     }
+    
+    public function getTestId() {
+        return $this->test_id;
+    }
 
+    public function setTestId($test_id): void {
+        $this->test_id = $test_id;
+    }
+
+    public function getCtId() {
+        return $this->ct_id;
+    }
+
+    public function setCtId($ct_id): void {
+        $this->ct_id = $ct_id;
+    }
+
+        
     public function isNew()
     {
         $answer_id = $this->getAnswerId();
@@ -166,15 +183,18 @@ class CT_Answer
         global $CFG;
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
-        if($this->isNew()) {
+        if($this->isNew()) { 
             $query = \CT\CT_DAO::getQuery('answer','insert');
         } else {
             $query = \CT\CT_DAO::getQuery('answer','update');
         }
+        
         $arr = array(
             ':modified' => $currentTime,
             ':userId' => $this->getUserId(),
+            ':ctId' => $this->getCtId(),
             ':questionId' => $this->getQuestionId(),
+            ':modified' => $currentTime,
             ':answerTxt' => $this->getAnswerTxt(),
             ':answerSuccess' => $this->getAnswerSuccess(),
             ':answerLanguage' => $this->getAnswerLanguage(),

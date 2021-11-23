@@ -23,6 +23,33 @@ class CT_QuestionCode extends CT_Question
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
         $this->setQuestionParentProperties();
     }
+    
+    
+    //necessary to use json_encode with questionCode objects
+    public function jsonSerialize() {
+        return [
+            'question_id' => $this->getQuestionId(),
+            'ct_id' => $this->getCtId(),
+            'question_num' => $this->getQuestionNum(),
+            'title' => $this->getTitle(),
+            'type' => $this->getType(),
+            'difficulty' => $this->getDifficulty(),
+            'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
+            'averageGradeDifficulty' => $this->getAverageGradeDifficulty(),
+            'averageGradeTime' => $this->getAverageGradeTime(),
+            'averageGrade' => $this->getAverageGrade(),
+            'numberVotes' => $this->getNumberVotes(),
+            'keywords' => $this->getKeywords(),
+            'question_must' => $this->getQuestionMust(),
+            'question_musnt' => $this->getQuestionMusnt(),
+            'question_language' => $this->getQuestionLanguage(),
+            'question_input_test' => $this->getQuestionInputTest(),
+            'question_input_grade' => $this->getQuestionInputGrade(),
+            'question_output_test' => $this->getQuestionOutputTest(),
+            'question_output_grade' => $this->getQuestionOutputGrade(),
+            'question_solution' => $this->getQuestionSolution()
+        ];
+    }
 
     /**
      * @return mixed
@@ -142,7 +169,10 @@ class CT_QuestionCode extends CT_Question
      * @param CT_Answer $answer
      */
     function grade($answer) {
+        global $translator;
         $outputSolution = $this->getQuestionOutputGrade();
+//        var_dump($outputSolution);
+//        var_dump("SA");
         $outputAnswer =  $this->getOutputFromCode(
             $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputGrade()
         );
@@ -281,10 +311,12 @@ class CT_QuestionCode extends CT_Question
     public function save() {
         $isNew = $this->isNew();
         parent::save();
+        
         if ($this->recalculateOutputs) $this->setOutputs();
         $query = \CT\CT_DAO::getQuery('questionCode', $isNew ? 'insert' : 'update');
         $arr = array(
             ':question_id' => $this->getQuestionId(),
+            ':ct_id' => $this->getCtId(),
             ':question_language' => $this->getQuestionLanguage(),
             ':question_input_test' => $this->getQuestionInputTest(),
             ':question_input_grade' => $this->getQuestionInputGrade(),

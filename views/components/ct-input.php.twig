@@ -1,0 +1,17 @@
+<label class="ct-input {{ inline is defined ? 'inline' : '' }}">
+    {% if hideLabel != true %}
+        {% block text %}
+            <span>{{label}}</span>
+        {% endblock %}
+    {% endif %}
+    {% block input %}
+        <input
+            placeholder="{{placeholder|default(label)}}"
+            id="{{id}}"
+            title="{{label}}"
+            name="{{name}}"
+            type="{{type|default('text')}}"
+            value="{{value}}"
+        >
+    {% endblock %}
+</label>

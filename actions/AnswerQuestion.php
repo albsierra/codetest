@@ -1,56 +1,56 @@
 <?php
+
 require_once "../initTsugi.php";
+global $translator;
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-
 $questionId = $_POST["questionId"];
 $answerText = $_POST["answerText"];
+$questionNum = $_POST["questionNum"];
 
 // In databases doesn't exists answer_language, so we use -1
 $answerLanguage = $_POST["answer_language"] ?? -1;
 
 $result = array();
 
+//if the answer is blank
 if (!isset($answerText) || trim($answerText) == "") {
-    $_SESSION['error'] = "Your answer cannot be blank.";
+    $_SESSION['error'] = $translator->trans('backend-messages.answer.question.failed');
     $result["answer_content"] = false;
 } else {
-    $question = new \CT\CT_Question($questionId);
+    //Search for the question on the db and map
+    $question = \CT\CT_Question::withId($questionId);
     $main = $question->getMain();
-    $class = $main->getTypeProperty('class');
-    $question = new $class($questionId);
+    if ($main->getType() == '1') {
+        $question1 = new \CT\CT_QuestionCode($question->getQuestionId());
+    } else {
+        $question1 = \CT\CT_QuestionSQL::withId($question->getQuestionId());
+    }
 
-    $answer = $question->createAnswer($USER->id, $answerText, $answerLanguage);
+    $array = $question1->createAnswer($USER->id, $answerText, $answerLanguage);
+    $answer = $array['answer'];
 
-    ob_start();
-    echo $twig->render('question/studentQuestion.php', array(
-        'question' => $question,
-        'answer' => $answer,
-        'main' => $main,
-        'CFG' => $CFG,
-    ));
+    $result["answer_content"] = true;
+    $result['exists'] = $array['exists'];
+    $result['success'] = $answer->getAnswerSuccess();
 
-    $answer_content = ob_get_clean();
-    $result["answer_content"] = utf8_encode($answer_content) ? utf8_encode($answer_content) : $answer_content;
-
-    $_SESSION['success'] = "Answer saved.";
+    $result['answerText'] = $answer->getAnswerTxt();
 
     // Notify elearning that there is a new answer
     // the message
-    $msg = "A new code test was submitted on Learn by ".$USER->displayname." (".$USER->email.").\n
-    Question: ".$question->getQuestionTxt()."\n
-    Answer: ".$answer->getAnswerTxt();
+    $msg = "A new code test was submitted on Learn by " . $USER->displayname . " (" . $USER->email . ").\n
+    Question: " . $question->getTitle() . "\n
+    Answer: " . $answer->getAnswerTxt();
 
     // use wordwrap() if lines are longer than 70 characters
-    $msg = wordwrap($msg,70);
+    $msg = wordwrap($msg, 70);
 
-    $headers  = "From: LEARN < no-reply@learn.udayton.edu >\n";
+    $headers = "From: LEARN < @gmail.com >\n";
 
-    // send email
-    //mail("elearning@udayton.edu", "A new codetest has been submitted on Learn", $msg, $headers);
+    $_SESSION['success'] = $translator->trans('backend-messages.answer.question.saved');
 }
 
-$OUTPUT->buffer=true;
+$OUTPUT->buffer = true;
 $result["flashmessage"] = $OUTPUT->flashMessages();
 
 header('Content-Type: application/json');
