@@ -2,8 +2,8 @@ FROM php:7.3.21-apache
 
 WORKDIR /git-clones
 
-RUN apt-get update && apt-get install -y git netcat && apt-get clean -y
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN apt-get update && apt-get install -y git netcat libzip-dev zip && apt-get clean -y
+RUN docker-php-ext-install pdo pdo_mysql mysqli zip
 RUN a2enmod rewrite
 
 
