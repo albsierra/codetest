@@ -27,7 +27,15 @@ $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
 $main = \CT\CT_Main::getMainFromContext($CONTEXT->id, $LINK->id, $USER->id, $currentTime);
 
-// Main updated <<
+// Main update >>
+
+$main->setTitle($mainContentArr['title']);
+$main->setSeenSplash($mainContentArr['seen_splash']);
+$main->setShuffle($mainContentArr['shuffle']);
+$main->setPoints($mainContentArr['points']);
+$main->save();
+
+// Main update <<
 
 $getTypeProperty = function ($property, $language) {
     global $CFG;
@@ -50,7 +58,11 @@ foreach($questionsContentArr as $question) {
 
     $type = $question['type'];
     $difficulty = $question['difficulty'];
-    $class = $getTypeProperty('class', $type);
+    if($main->getType() == '1'){
+        $class = \CT\CT_QuestionCode::class;
+    }else{
+        $class = \CT\CT_QuestionSQL::class;
+    }
 
 
     $questionCls = new $class();
@@ -69,7 +81,7 @@ foreach($questionsContentArr as $question) {
     $result = $main->saveQuestions([$questionCls]);
 
     $object = json_decode($result);
-    if (in_array($object->type, $CFG->programmingLanguajes)) {
+    if ($main->getType() == '1') {
         $question1 = \CT\CT_Test::mapObjectToCodeQuestion($object);
     } else {
         $question1 = \CT\CT_Test::mapObjectToSQLQuestion($object);

@@ -1,5 +1,5 @@
 /*Main Javascript File*/
-$(function(){
+$(() => {
     $('.results-collapse.collapse').on('show.bs.collapse', function(){
         var rowDiv = $(this).parent();
         rowDiv.find(".fa.rotate").addClass("open");
@@ -21,7 +21,45 @@ $(function(){
     let navBarHeight = hasNavbar ? 62 : 0;
     
     $bodyContainer.get(0).style.setProperty("--navbarHeight", `${navBarHeight}px`);
+
+    $('#import-file-field').on('change', (ev) => {
+        $('#import-confirmation').removeClass('hidden')
+        $('#import-file-label').addClass('hidden')
+        const inputEl = ev.target;
+        const { files } = inputEl;
+        if(files.length <= 0){
+            return
+        }
+        const firstFile = files[0]
+
+        $('#import-confirmation .file-info').text(`${firstFile.name}`)
+        $('#import-confirmation .file-info').prop('title',`${firstFile.name}`)
+        $('#import-confirmation .file-size').text(bytesToHuman(firstFile.size))
+    })
+
+    $('#import-confirmation').on('click', () => {
+        let confirmation = confirm("Confirm import?")
+        if(confirmation){
+            document.querySelector('#form-confirm-import').submit()
+        }
+    })
+    $('#import-confirmation .file-cancel').on('click', () => {
+        console.log('Cancel');
+        document.querySelector('#form-confirm-import').reset()
+        $('#import-confirmation').addClass('hidden')
+        $('#import-file-label').removeClass('hidden')
+
+        $('#import-confirmation .file-info').text("")
+        $('#import-confirmation .file-info').prop('title', null)
+        $('#import-confirmation .file-size').text("")
+    })
 });
+
+function bytesToHuman(bytes) {
+    var i = Math.floor(Math.log(bytes) / Math.log(1024)),
+        sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
+}
 
 global.confirmDeleteQuestion = function() {
     return confirm("Are you sure you want to delete this question? This action cannot be undone.");

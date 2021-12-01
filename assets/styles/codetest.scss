@@ -773,9 +773,12 @@ body{
         flex-direction: column;
         gap: 5px;
         letter-spacing: 0.5px;
-        a{
+        a, label{
             border-bottom: 1px solid #035bb41c;
             color: #0059b3;
+            font-weight: unset;
+            cursor: pointer;
+            display: block;
             .fa{
                 font-size: 12px;
             }
@@ -786,11 +789,36 @@ body{
     }
 }
 
-a.link-with-icon{
-    > *:first-of-type{
-        min-width: 170px;
-        display: inline-block;
-        margin-right: 6px;
+#import-confirmation{
+    margin-top: 4px;
+    padding: 3px 8px 3px 10px;
+    border: 1px solid #035bb41c;
+    &:hover{
+        background: white;
+    }
+    span{
+        @apply text-green-700;
+    }
+    > span:first-of-type {
+        display: flex;
+        > span:last-of-type{
+            font-size: 12px;
+            filter: brightness(0.5);
+        }
+    }
+    > span:last-of-type{
+        font-size: 12px;
+        filter: brightness(0.5);
+    }
+}
+
+a,label{
+    &.link-with-icon{
+        > *:first-of-type{
+            min-width: 170px;
+            display: inline-block;
+            margin-right: 6px;
+        }
     }
 }
 
@@ -814,30 +842,28 @@ a.link-with-icon{
 .hover-underline-animation {
     display: inline-block;
     position: relative;
+    &.confirmation{
+        &:after{
+            background-image: linear-gradient(to right, #05e66a, #74c1c1);
+        }
+    }
+    &:after{
+        content: '';
+        position: absolute;
+        width: 100%;
+        transform: scaleX(0);
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-image: linear-gradient(to right, #05A1E6, #A274C1);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease-out;
+    }
+    &:hover:after{
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
 }
-
-.hover-underline-animation:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    transform: scaleX(0);
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-image: linear-gradient(to right, #05A1E6, #A274C1);
-    transform-origin: bottom right;
-    transition: transform 0.3s ease-out;
-}
-
-.hover-underline-animation:hover:after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-}
-
-
-
-
-
 
 
 
