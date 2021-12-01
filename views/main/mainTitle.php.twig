@@ -42,7 +42,7 @@
                 {% block input %}
                     <select class="title-edit-input" id="mainTypeSelect" name="mainType">
                         {% for key, type in types %}
-                            <option value="{{ loop.index0 }}" {% if mainType == key %} selected {% endif %}>
+                            <option value="{{ loop.index0 }}" {% if mainType == loop.index0 %}selected{% endif %}>
                                 {{ type.name|upper }}
                             </option>
                         {% endfor %}
