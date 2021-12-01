@@ -19,19 +19,19 @@ $typeName = $CFG->CT_Types['types'][$type]['name'];
 // Clear any preview responses if there are questions
 if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id);
 
-$feedbackCount = 0;
+$usageCount = 0;
 if($REST_CLIENT_REPO->getIsOnline()){
     try {
-        $feedbacksCountRequest = $REST_CLIENT_REPO->
+        $usagesCountRequest = $REST_CLIENT_REPO->
                                     getClient()->
-                                    request('GET','api/feedback/feedbacksCount', [
+                                    request('GET','api/usage/usagesCount', [
                                         'query' => [
                                             'ctid' => $main->getCtId()
                                         ]
                                     ]);
-        $feedbackCount = $feedbacksCountRequest->getContent();
+        $usageCount = $usagesCountRequest->getContent();
     } catch (Exception $ex) {
-        $errorMessage = "Couldn't fetch feedbacks";
+        $errorMessage = "Couldn't fetch usages";
         logg($ex->getMessage());
         logg($errorMessage);
         $_SESSION["error"] = $errorMessage;
@@ -77,7 +77,7 @@ echo $twig->render('instructor-home.php.twig', array(
     'main' => $main,
     'type' => $typeName,
     'questions' => $questions,
-    'feedbacksCount' => $feedbackCount,
+    'usagesCount' => $usageCount,
     'gradesCount' => $gradesCount,
     'gradesMap' => $gradesMap,
     'OUTPUT' => $OUTPUT,

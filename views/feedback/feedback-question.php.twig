@@ -1,6 +1,6 @@
 {% extends "mainTemplate.php.twig" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle('pages-title.feedback.by.question'|trans, true, false) }}
+{{ OUTPUT.pageTitle('pages-title.usage.by.question'|trans, true, false) }}
 {% endblock %}
 {% block content %}
 <section id="questionResponses">
@@ -8,12 +8,12 @@
         <div class="panel-heading response-panel-header">
             <div class="row">
                 <div class="col-xs-6">
-                    <h4 class="results-table-hdr">{%trans%}feedback-table.question{%endtrans%}</h4>
+                    <h4 class="results-table-hdr">{%trans%}usage-table.question{%endtrans%}</h4>
                 </div>
                 <div class="col-xs-3 text-center">
                 </div>
                 <div class="col-xs-3 text-center">
-                    <h4 class="results-table-hdr">{%trans%}feedback-table.completed{%endtrans%}</h4>
+                    <h4 class="results-table-hdr">{%trans%}usage-table.completed{%endtrans%}</h4>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-sm-3 header-col">
                         <a class="h4 response-collapse-link" data-toggle="collapse" data-target="#responses{{ questionId }}" >
-                            {%trans%}feedback-table.question{%endtrans%} {{ question.getQuestionNum() }}
+                            {%trans%}usage-table.question{%endtrans%} {{ question.getQuestionNum() }}
                             <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -38,21 +38,21 @@
                     {% set value = false %}
                     <div id="responses{{ questionId }}" class="col-xs-12 results-collapse collapse"> 
                         {% for student in students %}
-                        {%for feedback in feedbacks %}
-                        {% if feedback.user.getUserId() == student.user.getUserId() and feedback.getIdQuestion() == question.getQuestionId()%}
+                        {%for usage in usages %}
+                        {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdQuestion() == question.getQuestionId()%}
 
                         {% set value = true %}
                         <div class="row response-row">
                             <div class="col-sm-5">
                                 <h4 class="small-hdr hdr-notop-mrgn">
-                                     <small>{{ feedback.user.getDisplayname() }}  </small>
+                                     <small>{{ usage.user.getDisplayname() }}  </small>
                                 </h4>
-                                <div>{%trans%}feedback-table.understand{%endtrans%} {{ feedback.getUnderstandabilityScore() }}</div>
-                                <div>{%trans%}feedback-table.time{%endtrans%} {{ feedback.getTimeScore() }}</div>
+                                <div>{%trans%}usage-table.understand{%endtrans%} {{ usage.getUnderstandabilityScore() }}</div>
+                                <div>{%trans%}usage-table.time{%endtrans%} {{ usage.getTimeScore() }}</div>
                             </div>
                             <div class="col-sm-offset-1 col-sm-5">
                                 </br>
-                                <div>{%trans%}feedback-table.difficulty{%endtrans%} {{ feedback.getDifficultyScore() }}</div>
+                                <div>{%trans%}usage-table.difficulty{%endtrans%} {{ usage.getDifficultyScore() }}</div>
                             </div>
                             <div class="col-sm-1">
                                 </br>
@@ -65,7 +65,7 @@
                         {% if value != 1 %}
                         <div class="row response-row">
                             <div class="col-sm-12">
-                                {%trans%}feedback-table.no.feedback{%endtrans%}
+                                {%trans%}usage-table.no.usage{%endtrans%}
                             </div>
                         </div>
                         {%endif%}

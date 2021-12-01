@@ -456,10 +456,10 @@ global.answerQuestion = function(questionId, questionNum) {
         data: answerForm.serialize() + '&questionNum=' + questionNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
             
-            //If the answer is not empty and it is the first time it has been answered, the feedback modal opens
+            //If the answer is not empty and it is the first time it has been answered, the usage modal opens
             if (data.answer_content) {
                 if (!data.exists) {
-                    $('#feedbackModal' + questionId).modal('show');
+                    $('#usageModal' + questionId).modal('show');
                 }
             }
             
@@ -549,19 +549,19 @@ global.resetForm = function($form) {
     resetCKeditorElements();
 }
 
-//This method calls the action that sends the feedback to the repository
-global.sendFeedback = function(questionId) {
-    var feedbackForm = $("#feedbackForm"+questionId);
+//This method calls the action that sends the usage to the repository
+global.sendUsage = function(questionId) {
+    var usageForm = $("#usageForm"+questionId);
     
-    //url = actions/SendFeedback.php
+    //url = actions/SendUsage.php
     $.ajax({
         type: "POST",
         dataType: "text",
-        url: feedbackForm.prop("action"),
-        data: feedbackForm.serialize() + '&questionId='+questionId+'&' + _TSUGI.ajax_session,
+        url: usageForm.prop("action"),
+        data: usageForm.serialize() + '&questionId='+questionId+'&' + _TSUGI.ajax_session,
         success: function(data) {
-            $('#feedbackModal'+questionId).modal('hide');
-            $('#feedbackForm'+questionId).trigger("reset");
+            $('#usageModal'+questionId).modal('hide');
+            $('#usageForm'+questionId).trigger("reset");
             $("#flashmessages").html(data.flashmessage);
             setupAlertHide();
         },

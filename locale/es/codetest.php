@@ -8,9 +8,9 @@ return [
         "results.by.student" => "Por estudiante",
         "results.by.question" => "Por pregunta",
         "results.download" => "Descargar resultados",
-        "feedbacks" => "Opiniones",
-        "feedback.by.student" => "Por estudiantes",
-        "feedback.by.question" => "Por pregunta",
+        "usages" => "Opiniones",
+        "usage.by.student" => "Por estudiantes",
+        "usage.by.question" => "Por pregunta",
         "build" => "Crear",
         "exit.student.view" => "Salir de la vista de estudiante",
     ],
@@ -19,8 +19,8 @@ return [
         "download.results" => "Descargar resultados",
         "result.by.question" => "Resultado <small>por la pregunta</small>",
         "result.by.student" => "Resultados <small>por estudiante</small>",
-        "feedback.by.question" => "Comentarios <small>por pregunta</small>",
-        "feedback.by.student" => "Comentarios <small>por Estudiante</small>",
+        "usage.by.question" => "Comentarios <small>por pregunta</small>",
+        "usage.by.student" => "Comentarios <small>por Estudiante</small>",
     ],
     "main-title" => [
         "lead" => "Añade preguntas para obtener rápidamente comentarios de tu estudiante",
@@ -45,7 +45,7 @@ return [
         "questions.list" => "Lista de preguntas:"
     ],
     "general" => [
-        "no-feedback-found" => "No se encontraron opiniones",
+        "no-usage-found" => "No se encontraron opiniones",
         "question" => "Pregunta"
     ],
     "download-student-results" => "Haga clic en el enlace de abajo para descargar los resultados del estudiante.",
@@ -54,11 +54,11 @@ return [
         "last-updated" => "Última actualización",
         "completed" => "Completado",
     ],
-    "feedback-table" => [
+    "usage-table" => [
         "question" => "Pregunta",
         "completed" => "Completado",
         "student-name" => "Nombre del estudiante",
-        "no.feedback" => "No se encontraron opiniones",
+        "no.usage" => "No se encontraron opiniones",
         "understand" => "Comprensibilidad:",
         "time" => "Duración:",
         "difficulty" => "Dificultad:",
@@ -78,12 +78,12 @@ return [
         ],
         "update" => "Actualizar"
     ],
-    "feedback-question" => [
-        "view-feedbacks" => "Ver comentarios",
-        "you.are.viewing.feedbacks" => "Estás viendo los comentarios por pregunta. Haz clic en una pregunta a continuación para ver cómo los estudiantes puntuaron esa pregunta.",
+    "usage-question" => [
+        "view-usages" => "Ver comentarios",
+        "you.are.viewing.usages" => "Estás viendo los comentarios por pregunta. Haz clic en una pregunta a continuación para ver cómo los estudiantes puntuaron esa pregunta.",
         "student" => [
-            "view-feedbacks" => "Viendo comentarios",
-            "you.are.viewing.feedbacks" => "Estás viendo los comentarios por pregunta. Haz clic en una pregunta a continuación para ver cómo los estudiantes puntuaron esa pregunta.",
+            "view-usages" => "Viendo comentarios",
+            "you.are.viewing.usages" => "Estás viendo los comentarios por pregunta. Haz clic en una pregunta a continuación para ver cómo los estudiantes puntuaron esa pregunta.",
         ]
     ],
     "help" => [
@@ -135,12 +135,12 @@ return [
         "delete" => "Eliminar",
         "cancel" => "Cancelar",
     ],
-    "question-modal-feedback" => [
+    "question-modal-usage" => [
         "score.question" => "Puntuar la pregunta",
         "understand" => "Comprensibilidad",
         "difficulty" => "Dificultad",
         "time" => "Duración",
-        "send.feedback" => "Enviar opinión",
+        "send.usage" => "Enviar opinión",
     ],
     "student-code-question" => [
         "language" => "Lenguaje",
@@ -229,8 +229,8 @@ return [
         "import.question.failed" => "Pregunta(s) no se han podido guardar. Por favor, inténtalo de nuevo.",
         "import.question.success" => "Pregunta(s) importadas: %questions%",
         "import.question.imported" => "Pregunta(s) importadas.",
-        "feedback.send.success" => "Comentarios enviados.",
-        "feedback.send.error" => "Error al enviar comentarios.",
+        "usage.send.success" => "Comentarios enviados.",
+        "usage.send.error" => "Error al enviar comentarios.",
         "points.posible.updated" => "Puntos posibles actualizados.",
         "points.posible.failed" => "Fallo al guardar los puntos o proporcionaste un número no válido. Vuelve a intentarlo.",
         "grade.saved.success" => "Nota guardada.",

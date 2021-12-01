@@ -179,7 +179,7 @@ class CT_QuestionCode extends CT_Question
         CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
         $grade = ($outputSolution == $outputAnswer);
-        // TODO mejorar el feedback
+        // TODO mejorar el usage
         if(!$grade) {
 			$outputAnswer =  $this->getOutputFromCode(
 				$answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputTest()

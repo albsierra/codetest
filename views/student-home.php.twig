@@ -30,7 +30,7 @@
             {% set answer = user.getAnswerForQuestion(questionId, question.getCtId()) %}
             {{ include('question/studentQuestion.php.twig') }}
             {% if not answer %}
-               {{ include('question/feedbackModal.php.twig') }}
+               {{ include('question/usageModal.php.twig') }}
             {% endif %}
 {% else %}
         <p class="lead">{%trans%}student-home.lead{%endtrans%}</p>

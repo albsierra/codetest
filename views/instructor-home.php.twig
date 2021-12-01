@@ -60,10 +60,10 @@
                 </div>
             {% endblock %}
         {% endembed %}
-        <!-- Feedbacks -->
-        {% embed "components/dashboard-card.php.twig" with {amount: feedbacksCount} %}
+        <!-- Usages -->
+        {% embed "components/dashboard-card.php.twig" with {amount: usagesCount} %}
             {% block title %}
-                Feedbacks
+                Usages
             {% endblock %}
 
             {% block icon %}
@@ -71,7 +71,7 @@
             {% endblock %}
             {% block body %}
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="feedback-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-question.php">
                         <span>
                             By question
                         </span>
@@ -81,7 +81,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="feedback-student.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-student.php">
                         <span>
                             By user
                         </span>
@@ -246,7 +246,7 @@
                     <i class="fa fa-comments" aria-hidden="true"></i>
                 </div>
                 <div class="dashboard-card__header__title">
-                    Feedback
+                    Usage
                 </div>
                 <div class="dashboard-card__header__append numeric">
                     24
@@ -254,7 +254,7 @@
             </div>
             <div class="dashboard-card__body">
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="feedback-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-question.php">
                         <span>
                             By question
                         </span>
@@ -264,7 +264,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="feedback-student.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-student.php">
                         <span>
                             By user
                         </span>

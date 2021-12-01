@@ -32,11 +32,11 @@ if ($USER->instructor) {
         ];
         addMenuItem($menu, 'fa-poll-h', 'navbarmenu.results', $resultsSubmenu);
 
-        $feedbacksSubmenu = [
-            renderMenuEntry("navbarmenu.feedback.by.student", "feedback-student.php"),
-            renderMenuEntry("navbarmenu.feedback.by.question", "feedback-question.php"),
+        $usagesSubmenu = [
+            renderMenuEntry("navbarmenu.usage.by.student", "usage-student.php"),
+            renderMenuEntry("navbarmenu.usage.by.question", "usage-question.php"),
         ];
-        addMenuItem($menu, 'fa-comments', 'navbarmenu.feedbacks', $feedbacksSubmenu);
+        addMenuItem($menu, 'fa-comments', 'navbarmenu.usages', $usagesSubmenu);
         
         $buildSubmenu = [
             renderMenuEntry("navbarmenu.questions.create", 'create-question.php'),

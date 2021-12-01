@@ -1,14 +1,14 @@
-<div id="feedbackModal{{questionId}}" class="modal fade " role="dialog">
+<div id="usageModal{{questionId}}" class="modal fade " role="dialog">
     <div class="modal-dialog modal-lg " style="width: 97%; ">
         <div class="modal-content ">
             <div class="modal-header">
-                <h4 class="modal-title">{%trans%}question-modal-feedback.score.question{%endtrans%}</h4>
+                <h4 class="modal-title">{%trans%}question-modal-usage.score.question{%endtrans%}</h4>
             </div>
             <div class="container modalContainer">
-                <form id="feedbackForm{{questionId}}" action="actions/SendFeedback.php" method="post">
+                <form id="usageForm{{questionId}}" action="actions/SendUsage.php" method="post">
                     <div class="row">
                         <div class="col-sm-3">
-                            <label class="labelFeedback">{%trans%}question-modal-feedback.understand{%endtrans%}:</label> 
+                            <label class="labelUsage">{%trans%}question-modal-usage.understand{%endtrans%}:</label> 
                         </div>
                         <div class="col-sm-9">
                             <div class="stars">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <label class="labelFeedback">{%trans%}question-modal-feedback.difficulty{%endtrans%}:</label> 
+                            <label class="labelUsage">{%trans%}question-modal-usage.difficulty{%endtrans%}:</label> 
                         </div>
                         <div class="col-sm-9">
                             <div class="stars">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-3">
-                            <label class="labelFeedback">{%trans%}question-modal-feedback.time{%endtrans%}:</label> 
+                            <label class="labelUsage">{%trans%}question-modal-usage.time{%endtrans%}:</label> 
                         </div>
                         <div class="col-sm-9">
                             <div class="stars">
@@ -72,7 +72,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="sendFeedback('{{question.getQuestionId()}}')">{%trans%}question-modal-feedback.send.feedback{%endtrans%}</button>
+                <button type="button" class="btn btn-success" onclick="sendUsage('{{question.getQuestionId()}}')">{%trans%}question-modal-usage.send.usage{%endtrans%}</button>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ namespace CT;
 
 use \Tsugi\Core\Result;
 
-class CT_Feedback implements \JsonSerializable
+class CT_Usage implements \JsonSerializable
 {
     private $id;
     private $idQuestion;
@@ -34,15 +34,15 @@ public static function constructValues($idQuestion, $user, $understandabilitySco
 public function save() {
         global $CFG;
       
-        //url to save the feedback
-        $url = $CFG->repositoryUrl . "/api/feedback/tickets";
+        //url to save the usage
+        $url = $CFG->repositoryUrl . "/api/usage/tickets";
         //url to update the Test score
-        $urlUpdateTest = $CFG->repositoryUrl . "/api/feedback/updateTest";
+        $urlUpdateTest = $CFG->repositoryUrl . "/api/usage/updateTest";
         
         //url to update the questions score
-        $urlUpdateQuestion = $CFG->repositoryUrl . "/api/feedback/updateQuestion";
+        $urlUpdateQuestion = $CFG->repositoryUrl . "/api/usage/updateQuestion";
         
-        //save Feedback
+        //save Usage
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST' );
@@ -142,29 +142,29 @@ public function saveAverageGrade() {
         return $response;
     }
     
-     static function MapJsonToFeedbacksArray($json) {
+     static function MapJsonToUsagesArray($json) {
         $response = json_decode($json);
-        $feedbacks = array();
-            foreach ($response as $feedback) {  
+        $usages = array();
+            foreach ($response as $usage) {  
                
-                $CTFeedback = new CT_Feedback();
-                $CTFeedback->setId($feedback->id);
-                $CTFeedback->setIdQuestion($feedback->idQuestion);
-                $CTFeedback->setCtId($feedback->ctId);
-                $CTFeedback->setDate($feedback->date);
+                $CTUsage = new CT_Usage();
+                $CTUsage->setId($usage->id);
+                $CTUsage->setIdQuestion($usage->idQuestion);
+                $CTUsage->setCtId($usage->ctId);
+                $CTUsage->setDate($usage->date);
                 $user = new CT_User();
-                $user->setUserId($feedback->user->id);
-                $user->setDisplayname($feedback->user->displayname);
-                $user->setEmail($feedback->user->email);
-                $user->setProfileId($feedback->user->profile_id);
-                $CTFeedback->setUser($user);
-                $CTFeedback->setUnderstandabilityScore($feedback->understandabilityScore);
-                $CTFeedback->setDifficultyScore($feedback->difficultyScore);
-                $CTFeedback->setTimeScore($feedback->timeScore);
+                $user->setUserId($usage->user->id);
+                $user->setDisplayname($usage->user->displayname);
+                $user->setEmail($usage->user->email);
+                $user->setProfileId($usage->user->profile_id);
+                $CTUsage->setUser($user);
+                $CTUsage->setUnderstandabilityScore($usage->understandabilityScore);
+                $CTUsage->setDifficultyScore($usage->difficultyScore);
+                $CTUsage->setTimeScore($usage->timeScore);
                
-                array_push($feedbacks, $CTFeedback);
+                array_push($usages, $CTUsage);
         }
-        return $feedbacks;
+        return $usages;
     }
 
     public function jsonSerialize(){
@@ -179,7 +179,7 @@ public function saveAverageGrade() {
     }
     
     
-    static function getFeedbacks($questions, $students) {
+    static function getUsages($questions, $students) {
         global $CFG;
 
         $questions1 = array_map(function ($a) {
@@ -191,7 +191,7 @@ public function saveAverageGrade() {
         }, $students);
 
         $ctId=[$_SESSION['ct_id']];
-        $url = $CFG->repositoryUrl . "/api/feedback/getFeedbackByIds";
+        $url = $CFG->repositoryUrl . "/api/usage/getUsageByIds";
           
         $array = [$questions1, $students1, $ctId];
 //        array_push($array, $questions, $students, $_SESSION['ct_id']);
@@ -207,7 +207,7 @@ public function saveAverageGrade() {
 
         curl_close($curl);
         
-        return self::MapJsonToFeedbacksArray($result);
+        return self::MapJsonToUsagesArray($result);
     }
 
     public function getId() {

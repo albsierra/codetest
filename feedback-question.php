@@ -14,13 +14,13 @@ foreach($students as $student) {
 // Sort students by mostRecentDate desc
 arsort($studentAndDate);
 
-$feedbacks = CT\CT_Feedback::getFeedbacks($questions, $students);
-echo $twig->render('feedback/feedback-question.php.twig', array(
+$usages = CT\CT_Usage::getUsages($questions, $students);
+echo $twig->render('usage/usage-question.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'CONTEXT' => $CONTEXT,
     'help' => $help(),
     'menu' => $menu,
     'questions' => $questions,
     'students' => $main->getStudentsOrderedByDate(),
-    'feedbacks' => $feedbacks,
+    'usages' => $usages,
 ));
