@@ -68,16 +68,16 @@ class CT_DAO {
             'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
             'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id AND link_id = :link_id",
-            'getQuestions' => "SELECT * FROM {$connection['p']}ct_question "
+            'getExercises' => "SELECT * FROM {$connection['p']}ct_exercise "
                 . "WHERE ct_id = :ct_id "
-                . "order by question_num",
+                . "order by exercise_num",
             'getMainsFromContext' => "SELECT * FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id "
                 . "order by modified desc",
             'getResultUser' => "SELECT * FROM {$connection['p']}lti_result "
                 . "WHERE user_id = :user_id AND link_id = :link_id",
             'getAnswersByUser' => "SELECT DISTINCT {$connection['p']}a.* "
-                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
+                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_exercise q USING (exercise_id) "
                 . "WHERE q.ct_id = :ctId AND a.user_id = :userId;",
             'insert' => "INSERT INTO {$connection['p']}ct_main (user_id, context_id, link_id, modified) "
                 . "VALUES (:userId, :contextId, :linkId, :currentTime)",
@@ -93,85 +93,85 @@ class CT_DAO {
                 . "`modified` = :modified "
                 . "WHERE ct_id = :ctId",
             'delete' => "DELETE FROM {$connection['p']}ct_main WHERE ct_id = :mainId AND user_id = :userId",
-            'codeQuestionsExport' => "SELECT * FROM {$connection['p']}ct_code_question WHERE `question_id` IN (:questions_in )",
-            'sqlQuestionsExport' => "SELECT * FROM {$connection['p']}ct_sql_question WHERE `question_id` IN ( :questions_in )",
+            'codeExercisesExport' => "SELECT * FROM {$connection['p']}ct_code_exercise WHERE `exercise_id` IN (:exercises_in )",
+            'sqlExercisesExport' => "SELECT * FROM {$connection['p']}ct_sql_exercise WHERE `exercise_id` IN ( :exercises_in )",
         );
-        $QuestionQueries = array(
-            'insert' => "INSERT INTO {$connection['p']}ct_question  "
-                . "( `question_id`, `ct_id`, `question_num` , `type`, `title`, `question_must`, `question_musnt` ) "
-                . "VALUES (  :question_id, :ct_id, :question_num, :type, :title, :question_must, :question_musnt)",
-            'update' => "UPDATE {$connection['p']}ct_question set "
+        $ExerciseQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_exercise  "
+                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt` ) "
+                . "VALUES (  :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt)",
+            'update' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
-                . "`question_num` = :question_num, "
-                . "`question_id` = :question_id "
-                . "WHERE question_id = :question_id AND ct_id = :ct_id",
-            'updateNum' => "UPDATE {$connection['p']}ct_question set "
+                . "`exercise_num` = :exercise_num, "
+                . "`exercise_id` = :exercise_id "
+                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
+            'updateNum' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
-                . "`question_num` = :question_num, "
-                . "`question_id` = :question_id, "
-                . "WHERE question_id = :question_id AND ct_id = :ct_id",
+                . "`exercise_num` = :exercise_num, "
+                . "`exercise_id` = :exercise_id, "
+                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
                     
-            'delete' => "DELETE FROM {$connection['p']}ct_question WHERE `question_id` = :question_id AND `ct_id` = :ct_id;",
-            'exists' => "SELECT question_id as questionId FROM {$connection['p']}ct_question WHERE "
-            . "question_id = :question_id AND ct_id = :ct_id;",
+            'delete' => "DELETE FROM {$connection['p']}ct_exercise WHERE `exercise_id` = :exercise_id AND `ct_id` = :ct_id;",
+            'exists' => "SELECT exercise_id as exerciseId FROM {$connection['p']}ct_exercise WHERE "
+            . "exercise_id = :exercise_id AND ct_id = :ct_id;",
             'getAnswers' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE question_id = :questionId AND ct_id = :ctId",
-            'fixUpQuestionNumbers' => "SET @question_num = 0; UPDATE {$connection['p']}ct_question "
-                . "set question_num = (@question_num:=@question_num+1) "
-                . "WHERE ct_id = :ctId ORDER BY question_num",
-            'getNextQuestionNumber' => "SELECT MAX(question_num) as lastNum "
-                . "FROM {$connection['p']}ct_question "
+                . "WHERE exercise_id = :exerciseId AND ct_id = :ctId",
+            'fixUpExerciseNumbers' => "SET @exercise_num = 0; UPDATE {$connection['p']}ct_exercise "
+                . "set exercise_num = (@exercise_num:=@exercise_num+1) "
+                . "WHERE ct_id = :ctId ORDER BY exercise_num",
+            'getNextExerciseNumber' => "SELECT MAX(exercise_num) as lastNum "
+                . "FROM {$connection['p']}ct_exercise "
                 . "WHERE ct_id = :ct_id",
-            'findQuestionsForImport' => "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
-                . "FROM {$connection['p']}ct_question q "
+            'findExercisesForImport' => "SELECT q.*, m.title as tooltitle, c.title as sitetitle "
+                . "FROM {$connection['p']}ct_exercise q "
                 . "join {$connection['p']}ct_main m on q.ct_id = m.ct_id "
                 . "join {$connection['p']}lti_context c on m.context_id = c.context_id "
                 . "WHERE m.user_id = :userId AND m.ct_id != :ct_id",
-            'getById' => "SELECT * FROM {$connection['p']}ct_question "
-                . "WHERE question_id = :question_id AND ct_id = :ct_id",
+            'getById' => "SELECT * FROM {$connection['p']}ct_exercise "
+                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
         );
-        $QuestionCodeQueries = array(
-            'insert' => "INSERT INTO {$connection['p']}ct_code_question  "
-                . "(`question_id`,  `ct_id`, `question_language`, `question_input_test`, `question_input_grade`, `question_output_test`, `question_output_grade`, `question_solution` ) "
-                . "VALUES (:question_id, :ct_id, :question_language, :question_input_test, :question_input_grade, :question_output_test, :question_output_grade, :question_solution )",
-            'update' => "UPDATE {$connection['p']}ct_code_question set "
-                . "`question_language` = :question_language, "
+        $ExerciseCodeQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_code_exercise  "
+                . "(`exercise_id`,  `ct_id`, `exercise_language`, `exercise_input_test`, `exercise_input_grade`, `exercise_output_test`, `exercise_output_grade`, `exercise_solution` ) "
+                . "VALUES (:exercise_id, :ct_id, :exercise_language, :exercise_input_test, :exercise_input_grade, :exercise_output_test, :exercise_output_grade, :exercise_solution )",
+            'update' => "UPDATE {$connection['p']}ct_code_exercise set "
+                . "`exercise_language` = :exercise_language, "
                 . " `ct_id` = :ct_id,"
-                . "`question_input_test` = :question_input_test, "
-                . "`question_input_grade` = :question_input_grade, "
-                . "`question_output_test` = :question_output_test, "
-                . "`question_output_grade` = :question_output_grade, "
-                . "`question_solution` = :question_solution "
-                . "WHERE question_id = :question_id",
-            'getById' => "SELECT * FROM {$connection['p']}ct_code_question "
-                . "WHERE question_id = :question_id",
+                . "`exercise_input_test` = :exercise_input_test, "
+                . "`exercise_input_grade` = :exercise_input_grade, "
+                . "`exercise_output_test` = :exercise_output_test, "
+                . "`exercise_output_grade` = :exercise_output_grade, "
+                . "`exercise_solution` = :exercise_solution "
+                . "WHERE exercise_id = :exercise_id",
+            'getById' => "SELECT * FROM {$connection['p']}ct_code_exercise "
+                . "WHERE exercise_id = :exercise_id",
         );
-        $QuestionSQLQueries = array(
-            'insert' => "INSERT INTO {$connection['p']}ct_sql_question  "
-                . "(`question_id`,  `ct_id`, `question_dbms`, `question_sql_type`, `question_database`, `question_solution`, `question_probe`, `question_onfly` ) "
-                . "VALUES (:question_id, :ct_id, :question_dbms, :question_sql_type, :question_database, :question_solution, :question_probe, :question_onfly )",
-            'update' => "UPDATE {$connection['p']}ct_sql_question set "
-                . "`question_dbms` = :question_dbms, "
+        $ExerciseSQLQueries = array(
+            'insert' => "INSERT INTO {$connection['p']}ct_sql_exercise  "
+                . "(`exercise_id`,  `ct_id`, `exercise_dbms`, `exercise_sql_type`, `exercise_database`, `exercise_solution`, `exercise_probe`, `exercise_onfly` ) "
+                . "VALUES (:exercise_id, :ct_id, :exercise_dbms, :exercise_sql_type, :exercise_database, :exercise_solution, :exercise_probe, :exercise_onfly )",
+            'update' => "UPDATE {$connection['p']}ct_sql_exercise set "
+                . "`exercise_dbms` = :exercise_dbms, "
                 . "`ct_id` = :ct_id,"
-                . "`question_sql_type` = :question_sql_type, "
-                . "`question_database` = :question_database, "
-                . "`question_solution` = :question_solution, "
-                . "`question_probe` = :question_probe, "
-                . "`question_onfly` = :question_onfly "   
-                . "WHERE question_id = :question_id",
-            'getById' => "SELECT * FROM {$connection['p']}ct_sql_question "
-                . "WHERE question_id = :question_id",
+                . "`exercise_sql_type` = :exercise_sql_type, "
+                . "`exercise_database` = :exercise_database, "
+                . "`exercise_solution` = :exercise_solution, "
+                . "`exercise_probe` = :exercise_probe, "
+                . "`exercise_onfly` = :exercise_onfly "   
+                . "WHERE exercise_id = :exercise_id",
+            'getById' => "SELECT * FROM {$connection['p']}ct_sql_exercise "
+                . "WHERE exercise_id = :exercise_id",
         );
         $AnswerQueries = array(
             'getByAnswerId' => "SELECT * FROM {$connection['p']}ct_answer WHERE answer_id = :answer_id",
-            'getByUserQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE user_id = :userId AND question_id = :questionId AND ct_id = :ctId",
+            'getByUserExercise' => "SELECT * FROM {$connection['p']}ct_answer "
+                . "WHERE user_id = :userId AND exercise_id = :exerciseId AND ct_id = :ctId",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
-                . "(`user_id`, `question_id`, `ct_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
-                . "VALUES (:userId, :questionId, :ctId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
+                . "(`user_id`, `exercise_id`, `ct_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
+                . "VALUES (:userId, :exerciseId, :ctId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
             'update' => "UPDATE {$connection['p']}ct_answer set "
                 . "`user_id` = :userId, "
-                . "`question_id` = :questionId, "
+                . "`exercise_id` = :exerciseId, "
                 . "`ct_id` = :ctId,"
                 . "`answer_txt` = :answerTxt, "
                 . "`answer_success` = :answerSuccess, "
@@ -179,8 +179,8 @@ class CT_DAO {
                 . "`answer_language` = :answerLanguage "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
-            'deleteFromQuestions' => "DELETE FROM {$connection['p']}ct_answer "
-                . "WHERE user_id = :userId AND question_id in (/questionsId/)",
+            'deleteFromExercises' => "DELETE FROM {$connection['p']}ct_answer "
+                . "WHERE user_id = :userId AND exercise_id in (/exercisesId/)",
         );
         $UserQueries = array(
             'getByUserId' => "SELECT user_id, deleted, profile_id, displayname, email "
@@ -191,18 +191,18 @@ class CT_DAO {
                 . "FROM {$connection['p']}lti_membership JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE context_id = :context_id AND role = :role",
             'getUsersWithAnswers' => "SELECT DISTINCT {$connection['p']}lti_user.* "
-                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_question q USING (question_id) "
+                . "FROM {$connection['p']}ct_answer a join {$connection['p']}ct_exercise q USING (exercise_id) "
                 . "JOIN {$connection['p']}lti_user USING (user_id)"
                 . "WHERE q.ct_id = :ctId and a.ct_id = :ctId",
-            'getAnswerForQuestion' => "SELECT * FROM {$connection['p']}ct_answer "
-                . "WHERE question_id = :questionId AND user_id = :userId AND ct_id = :ctId",
+            'getAnswerForExercise' => "SELECT * FROM {$connection['p']}ct_answer "
+                . "WHERE exercise_id = :exerciseId AND user_id = :userId AND ct_id = :ctId",
             'getMostRecentAnswerDate' => "SELECT max(a.modified) as modified "
                 . "FROM {$connection['p']}ct_answer a "
-                . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
+                . "join {$connection['p']}ct_exercise q on a.exercise_id = q.exercise_id "
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId",
-            'getNumberQuestionsAnswered' => "SELECT count(distinct a.user_id, a.question_id) as num_answered "
+            'getNumberExercisesAnswered' => "SELECT count(distinct a.user_id, a.exercise_id) as num_answered "
                 . "FROM {$connection['p']}ct_answer a "
-                . "join {$connection['p']}ct_question q on a.question_id = q.question_id "
+                . "join {$connection['p']}ct_exercise q on a.exercise_id = q.exercise_id "
                 . "WHERE a.user_id = :userId AND q.ct_id = :ctId AND a.answer_txt is not null",
             'getGrade' => "SELECT * FROM {$connection['p']}ct_grade "
                 . "WHERE ct_id = :ct_id AND user_id = :user_id",
@@ -230,9 +230,9 @@ class CT_DAO {
         );
         $queries = array(
             'main' => $MainQueries,
-            'question' => $QuestionQueries,
-            'questionCode' => $QuestionCodeQueries,
-            'questionSQL' => $QuestionSQLQueries,
+            'exercise' => $ExerciseQueries,
+            'exerciseCode' => $ExerciseCodeQueries,
+            'exerciseSQL' => $ExerciseSQLQueries,
             'answer' => $AnswerQueries,
             'user' => $UserQueries,
             'grade' => $GradeQueries,

@@ -10,14 +10,14 @@ if (!$main->getTitle()) {
     $main->save();
 }
 
-$questions = $main->getQuestions();
+$exercises = $main->getExercises();
 
 $typeNames = array_keys($CFG->CT_Types['types']);
 $type = $typeNames[$main->getType()];
 $typeName = $CFG->CT_Types['types'][$type]['name'];
 
-// Clear any preview responses if there are questions
-if ($questions) \CT\CT_Answer::deleteInstructorAnswers($questions, $CONTEXT->id);
+// Clear any preview responses if there are exercises
+if ($exercises) \CT\CT_Answer::deleteInstructorAnswers($exercises, $CONTEXT->id);
 
 $usageCount = 0;
 if($REST_CLIENT_REPO->getIsOnline()){
@@ -76,7 +76,7 @@ if(array_key_exists('avg',$gradesMap)){
 echo $twig->render('instructor-home.php.twig', array(
     'main' => $main,
     'type' => $typeName,
-    'questions' => $questions,
+    'exercises' => $exercises,
     'usagesCount' => $usageCount,
     'gradesCount' => $gradesCount,
     'gradesMap' => $gradesMap,

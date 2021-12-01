@@ -1,5 +1,5 @@
 # codetest
-A Tsugi tool to authomatic assess programming and database questions.
+A Tsugi tool to authomatic assess programming and database exercises.
 
 # Project Summary
 This codetest module installed into Tsugi form **LTI-Judge**, a virtual judge that supports programming and database training.

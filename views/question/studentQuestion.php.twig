@@ -1,50 +1,50 @@
-{% set questionId = question.getQuestionId() %}
-{% if question.getQuestionNum() %}
-    {% set questionNum = question.getQuestionNum() %}
+{% set exerciseId = exercise.getExerciseId() %}
+{% if exercise.getExerciseNum() %}
+    {% set exerciseNum = exercise.getExerciseNum() %}
 {% endif %}
-<div id="questionAnswer{{ questionId }}">
-    <h2 class="small-hdr {{ questionNum == 1 ? 'hdr-notop-mrgn' : '' }}">
-        <small>{%trans%}student-question.question{%endtrans%} {{ questionNum }}</small>
+<div id="exerciseAnswer{{ exerciseId }}">
+    <h2 class="small-hdr {{ exerciseNum == 1 ? 'hdr-notop-mrgn' : '' }}">
+        <small>{%trans%}student-exercise.exercise{%endtrans%} {{ exerciseNum }}</small>
     </h2>
     {% autoescape false %}
     
-    <span class="questionTitle"> {{ question.getTitle() }}</span>
+    <span class="exerciseTitle"> {{ exercise.getTitle() }}</span>
     {% endautoescape %}
     {#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
-    <form id="answerForm{{ questionId }}" action="actions/AnswerQuestion.php"
+    <form id="answerForm{{ exerciseId }}" action="actions/AnswerExercise.php"
           method="post">
 
-   {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', question.getType())) }}
+   {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType())) }}
      <div>
-        {% if question.getQuestionMust() %}
-            <h4>{%trans%}student-question.solutionmustcontain{%endtrans%}</h4>
-            <pre>{{ question.getQuestionMust()|nl2br }}</pre>
+        {% if exercise.getExerciseMust() %}
+            <h4>{%trans%}student-exercise.solutionmustcontain{%endtrans%}</h4>
+            <pre>{{ exercise.getExerciseMust()|nl2br }}</pre>
         {% endif %}
-        {% if question.getQuestionMusnt() %}
-            <h4>{%trans%}student-question.solutionshouldntcontain{%endtrans%}</h4>
-            <pre>{{ question.getQuestionMusnt()|nl2br }}</pre>
+        {% if exercise.getExerciseMusnt() %}
+            <h4>{%trans%}student-exercise.solutionshouldntcontain{%endtrans%}</h4>
+            <pre>{{ exercise.getExerciseMusnt()|nl2br }}</pre>
         {% endif %}
     </div>
 
-            <input type="hidden" name="questionId" value="{{ questionId }}">
+            <input type="hidden" name="exerciseId" value="{{ exerciseId }}">
             <div class="form-group">
-                <label for="answerText{{ questionId }}">{%trans%}student-question.yoursolutionis{%endtrans%}:</label>
-                <textarea class="form-control" id="answerText{{ questionId }}"
+                <label for="answerText{{ exerciseId }}">{%trans%}student-exercise.yoursolutionis{%endtrans%}:</label>
+                <textarea class="form-control" id="answerText{{ exerciseId }}"
                           name="answerText" rows="5"></textarea>
             </div>
             <button type="button" class="btn btn-success"
-                    onclick="answerQuestion('{{ questionId }}','{{questionNum}}')">{%trans%}student-question.submit{%endtrans%}
+                    onclick="answerExercise('{{ exerciseId }}','{{exerciseNum}}')">{%trans%}student-exercise.submit{%endtrans%}
             </button>
         </form>
     {# {% endif %} #}
-        <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start question-row">
-            <div class="flx-grow-all question-solution">
-                <h4>{%trans%}student-question.answer{%endtrans%}:</h4>
+        <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start exercise-row">
+            <div class="flx-grow-all exercise-solution">
+                <h4>{%trans%}student-exercise.answer{%endtrans%}:</h4>
                 <pre id="answerSavedText">{{ answer.getAnswerTxt() }}</pre>
             </div>
-            <div class="flx-grow-all question-text">
+            <div class="flx-grow-all exercise-text">
                  <p id="modified"></p>
-                <span id="answerIcon{{ questionId }}" aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+                <span id="answerIcon{{ exerciseId }}" aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
             </div>
         </div>
     <script>
@@ -54,14 +54,14 @@
       window.onload = updateDate;
     </script>
 
-    {% if questions|first.getQuestionNum() != questionNum %}
-        <a href="student-home.php?questionNum={{questionNum-1}}" class="btn buttonNextPrev">
-            {{ 'student-question.previous'|trans|upper }}
+    {% if exercises|first.getExerciseNum() != exerciseNum %}
+        <a href="student-home.php?exerciseNum={{exerciseNum-1}}" class="btn buttonNextPrev">
+            {{ 'student-exercise.previous'|trans|upper }}
         </a>
     {% endif %}
-    {% if questions|length != questionNum   %}
-        <a href="student-home.php?questionNum={{questionNum+1}}" class="btn buttonNextPrev">
-            {{ 'student-question.next'|trans|upper }}
+    {% if exercises|length != exerciseNum   %}
+        <a href="student-home.php?exerciseNum={{exerciseNum+1}}" class="btn buttonNextPrev">
+            {{ 'student-exercise.next'|trans|upper }}
         </a>
     {% endif %}
 </div>

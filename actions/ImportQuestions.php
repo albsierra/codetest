@@ -4,23 +4,23 @@ require_once "../initTsugi.php";
 global $translator;
 
 if ($USER->instructor) {
-    $questions = isset($_POST["question"]) ? $_POST["question"] : false;
+    $exercises = isset($_POST["exercise"]) ? $_POST["exercise"] : false;
 
-    if (!$questions) {
-        $_SESSION["error"] = $translator->trans('backend-messages.import.question.noselect');
+    if (!$exercises) {
+        $_SESSION["error"] = $translator->trans('backend-messages.import.exercise.noselect');
     } else {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        foreach ($questions as $question) {
-            list($question_id, $test_id) = explode("/", $question);
-            $origQuestion = \CT\CT_Test::findTestForImportQuestionId($question_id, $test_id);
-            if ($origQuestion->getQuestionId()) {
-                $origQuestion->save();
+        foreach ($exercises as $exercise) {
+            list($exercise_id, $test_id) = explode("/", $exercise);
+            $origExercise = \CT\CT_Test::findTestForImportExerciseId($exercise_id, $test_id);
+            if ($origExercise->getExerciseId()) {
+                $origExercise->save();
             } else {
-                $_SESSION['error'] = $translator->trans('backend-messages.import.question.failed');
+                $_SESSION['error'] = $translator->trans('backend-messages.import.exercise.failed');
             }
         }
-        $_SESSION['success'] = $translator->trans('backend-messages.import.question.success', [
-            "questions" => $arr
+        $_SESSION['success'] = $translator->trans('backend-messages.import.exercise.success', [
+            "exercises" => $arr
         ])
     }
 

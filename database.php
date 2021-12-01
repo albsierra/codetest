@@ -4,14 +4,14 @@
 $DATABASE_UNINSTALL = array(
     array( "{$CFG->dbprefix}ct_grade",
         "drop table if exists {$CFG->dbprefix}ct_grade"),
-    array( "{$CFG->dbprefix}ct_sql_question",
-        "drop table if exists {$CFG->dbprefix}ct_sql_question"),
-    array( "{$CFG->dbprefix}ct_code_question",
-        "drop table if exists {$CFG->dbprefix}ct_code_question"),
+    array( "{$CFG->dbprefix}ct_sql_exercise",
+        "drop table if exists {$CFG->dbprefix}ct_sql_exercise"),
+    array( "{$CFG->dbprefix}ct_code_exercise",
+        "drop table if exists {$CFG->dbprefix}ct_code_exercise"),
     array( "{$CFG->dbprefix}ct_answer",
         "drop table if exists {$CFG->dbprefix}ct_answer"),
-    array( "{$CFG->dbprefix}ct_question",
-        "drop table if exists {$CFG->dbprefix}ct_question"),
+    array( "{$CFG->dbprefix}ct_exercise",
+        "drop table if exists {$CFG->dbprefix}ct_exercise"),
     array( "{$CFG->dbprefix}ct_main",
         "drop table if exists {$CFG->dbprefix}ct_main"),
 );
@@ -35,21 +35,21 @@ $DATABASE_INSTALL = array(
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
 
-    array("{$CFG->dbprefix}ct_question",
-        "create table {$CFG->dbprefix}ct_question (
-    question_id   VARCHAR(50) NOT NULL,
+    array("{$CFG->dbprefix}ct_exercise",
+        "create table {$CFG->dbprefix}ct_exercise (
+    exercise_id   VARCHAR(50) NOT NULL,
     ct_id         INTEGER NOT NULL,
-    question_num  INTEGER NULL,
+    exercise_num  INTEGER NULL,
     title         VARCHAR (50) NOT NULL,
     type          VARCHAR (50) NOT NULL,
-    question_must VARCHAR (50) ,
-    question_musnt VARCHAR (50) ,
+    exercise_must VARCHAR (50) ,
+    exercise_musnt VARCHAR (50) ,
     
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_6`
         FOREIGN KEY (`ct_id`)
         REFERENCES `{$CFG->dbprefix}ct_main` (`ct_id`)
         ON DELETE CASCADE,
-    PRIMARY KEY(question_id, ct_id)
+    PRIMARY KEY(exercise_id, ct_id)
 	
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
 
@@ -57,15 +57,15 @@ $DATABASE_INSTALL = array(
         "create table {$CFG->dbprefix}ct_answer (
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
-    question_id  VARCHAR(50) NOT NULL,
+    exercise_id  VARCHAR(50) NOT NULL,
     ct_id        INTEGER NOT NULL,
     answer_txt   TEXT NULL,
     answer_success BOOL NOT NULL DEFAULT 0,
     modified     datetime NULL,
     
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_7`
-        FOREIGN KEY (`question_id` )
-        REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`)
+        FOREIGN KEY (`exercise_id` )
+        REFERENCES `{$CFG->dbprefix}ct_exercise` (`exercise_id`)
         ON DELETE CASCADE,
         
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_8`
@@ -73,45 +73,45 @@ $DATABASE_INSTALL = array(
         REFERENCES `{$CFG->dbprefix}ct_main` (`ct_id`)
         ON DELETE CASCADE,
     
-    UNIQUE (user_id, question_id, ct_id),
+    UNIQUE (user_id, exercise_id, ct_id),
     PRIMARY KEY(answer_id)
     
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
 
-    array( "{$CFG->dbprefix}ct_code_question",
-        "create table {$CFG->dbprefix}ct_code_question (
-    question_id VARCHAR(50) NOT NULL,
+    array( "{$CFG->dbprefix}ct_code_exercise",
+        "create table {$CFG->dbprefix}ct_code_exercise (
+    exercise_id VARCHAR(50) NOT NULL,
     ct_id INT(11) NOT NULL,
-    question_language INTEGER NOT NULL DEFAULT '1',
-    question_input_test TEXT NULL DEFAULT NULL,
-    question_input_grade TEXT NULL DEFAULT NULL,
-    question_output_test TEXT NULL DEFAULT NULL,
-    question_output_grade TEXT NULL DEFAULT NULL,
-    question_solution TEXT NULL DEFAULT NULL,
+    exercise_language INTEGER NOT NULL DEFAULT '1',
+    exercise_input_test TEXT NULL DEFAULT NULL,
+    exercise_input_grade TEXT NULL DEFAULT NULL,
+    exercise_output_test TEXT NULL DEFAULT NULL,
+    exercise_output_grade TEXT NULL DEFAULT NULL,
+    exercise_solution TEXT NULL DEFAULT NULL,
     
-  PRIMARY KEY (question_id, ct_id),
+  PRIMARY KEY (exercise_id, ct_id),
   CONSTRAINT `{$CFG->dbprefix}ct_ibfk_3`
-    FOREIGN KEY (`question_id`, `ct_id`)
-    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`, `ct_id`)
+    FOREIGN KEY (`exercise_id`, `ct_id`)
+    REFERENCES `{$CFG->dbprefix}ct_exercise` (`exercise_id`, `ct_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
 
-    array( "{$CFG->dbprefix}ct_sql_question",
-        "create table {$CFG->dbprefix}ct_sql_question (
-    question_id VARCHAR(50) NOT NULL,
+    array( "{$CFG->dbprefix}ct_sql_exercise",
+        "create table {$CFG->dbprefix}ct_sql_exercise (
+    exercise_id VARCHAR(50) NOT NULL,
     ct_id INT(11) NOT NULL,
-    question_dbms TINYINT NOT NULL DEFAULT 0,
-    question_sql_type VARCHAR(20) NULL DEFAULT 'SELECT',
-    question_database VARCHAR(100) NULL DEFAULT NULL,
-    question_solution TEXT NULL DEFAULT NULL,
-    question_probe TEXT NULL DEFAULT NULL,
-    question_onfly LONGTEXT NULL DEFAULT NULL,
+    exercise_dbms TINYINT NOT NULL DEFAULT 0,
+    exercise_sql_type VARCHAR(20) NULL DEFAULT 'SELECT',
+    exercise_database VARCHAR(100) NULL DEFAULT NULL,
+    exercise_solution TEXT NULL DEFAULT NULL,
+    exercise_probe TEXT NULL DEFAULT NULL,
+    exercise_onfly LONGTEXT NULL DEFAULT NULL,
         
-  PRIMARY KEY (question_id, ct_id),
+  PRIMARY KEY (exercise_id, ct_id),
   CONSTRAINT `{$CFG->dbprefix}ct_ibfk_4`
-    FOREIGN KEY (`question_id`, `ct_id`)
-    REFERENCES `{$CFG->dbprefix}ct_question` (`question_id`, `ct_id`)
+    FOREIGN KEY (`exercise_id`, `ct_id`)
+    REFERENCES `{$CFG->dbprefix}ct_exercise` (`exercise_id`, `ct_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
@@ -169,9 +169,9 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryDie($sql);
     }
 
-    // Add onfly column in question_sql
-    if (!$PDOX->columnExists('question_onfly', "{$CFG->dbprefix}ct_sql_question")) {
-        $sql = "ALTER TABLE {$CFG->dbprefix}ct_sql_question ADD question_onfly LONGTEXT NULL DEFAULT NULL";
+    // Add onfly column in exercise_sql
+    if (!$PDOX->columnExists('exercise_onfly', "{$CFG->dbprefix}ct_sql_exercise")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_sql_exercise ADD exercise_onfly LONGTEXT NULL DEFAULT NULL";
         echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);

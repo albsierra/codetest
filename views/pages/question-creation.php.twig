@@ -1,21 +1,21 @@
 {% extends "mainTemplate.php.twig" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle("Create question", true, false) }}
+{{ OUTPUT.pageTitle("Create exercise", true, false) }}
 {% endblock %}
 {% block content %}
-    <div class="questions-creation">
+    <div class="exercises-creation">
         <form
-            id="questionTextForm-1"
-            action="actions/AddQuestion.php"
+            id="exerciseTextForm-1"
+            action="actions/AddExercise.php"
             method="post"
-            class="question-form flex flex-wrap gap-2 justify-between"
+            class="exercise-form flex flex-wrap gap-2 justify-between"
         >
             <div class="w-full mb-2">
                 {% embed "components/ct-input.php.twig"
                     with {
-                        label: "Question title",
-                        name: 'question[title]',
-                        id: 'questionTitleText'
+                        label: "Exercise title",
+                        name: 'exercise[title]',
+                        id: 'exerciseTitleText'
                     } only
                 %}
                 {% endembed %}
@@ -25,8 +25,8 @@
                     {% embed "components/ct-input.php.twig"
                         with {
                             label: "Keywords",
-                            name: 'question[keywords]',
-                            id: 'questionKeywords'
+                            name: 'exercise[keywords]',
+                            id: 'exerciseKeywords'
                         } only
                     %}
                     {% endembed %}
@@ -35,14 +35,14 @@
                     {% embed "components/ct-input.php.twig"
                         with {
                             label: "Difficulty",
-                            name: 'question[title]'
+                            name: 'exercise[title]'
                         } only
                     %}
                         {% block input %}
-                            <select id="difficultySelect" name="question[difficulty]">
-                                <option value="Easy">{%trans%}create-question-modal.easy{%endtrans%}</option>
-                                <option value="Medium">{%trans%}create-question-modal.medium{%endtrans%}</option>
-                                <option value="Hard">{%trans%}create-question-modal.hard{%endtrans%}</option>
+                            <select id="difficultySelect" name="exercise[difficulty]">
+                                <option value="Easy">{%trans%}create-exercise-modal.easy{%endtrans%}</option>
+                                <option value="Medium">{%trans%}create-exercise-modal.medium{%endtrans%}</option>
+                                <option value="Hard">{%trans%}create-exercise-modal.hard{%endtrans%}</option>
                             </select>
                         {% endblock %}
                     {% endembed %}
@@ -51,48 +51,48 @@
             {% if main.getType() == '1' %}
                 <div class="w-full mt-3">
                     {% embed "components/ct-textarea.php.twig"
-                    with { label: "question-code-form.inputforstudent"|trans, name: 'question[question_input_test]' } only
+                    with { label: "exercise-code-form.inputforstudent"|trans, name: 'exercise[exercise_input_test]' } only
                     %}
                     {% endembed %}
                 </div>
                 <div class="w-full mt-4">
                     {% embed "components/ct-textarea.php.twig"
-                        with { label: "question-code-form.inputforgrade"|trans, name: 'question[question_input_grade]' } only
+                        with { label: "exercise-code-form.inputforgrade"|trans, name: 'exercise[exercise_input_grade]' } only
                         %}
                     {% endembed %}
                 </div>
                 <div class="w-full mt-4">
-                    {% set question = newQuestion %}
+                    {% set exercise = newExercise %}
                     {% set languages = main.getTypeProperty('codeLanguages') %}
-                    {% set questionLanguage = question.getQuestionLanguage() %}
+                    {% set exerciseLanguage = exercise.getExerciseLanguage() %}
                     {% embed "components/ct-textarea.php.twig"
                         with {
-                            label: "question-code-form.codesolution"|trans,
-                            name: 'question[question_solution]',
+                            label: "exercise-code-form.codesolution"|trans,
+                            name: 'exercise[exercise_solution]',
                             rows: "10",
                             languages: languages,
-                            questionLanguage: questionLanguage
+                            exerciseLanguage: exerciseLanguage
                         } only
                     %}
                         {% block text %}
                             <div class="flex items-center">
                                 <span>
-                                    {%trans%}question-code-form.codesolution{%endtrans%}
+                                    {%trans%}exercise-code-form.codesolution{%endtrans%}
                                 </span>
                                 <div class="ml-auto">
                                     {% embed "components/ct-input.php.twig"
                                         with {
                                             label: "Language",
-                                            name: 'question[question_language]',
+                                            name: 'exercise[exercise_language]',
                                             hideLabel: true,
                                             languages: languages,
-                                            questionLanguage: questionLanguage
+                                            exerciseLanguage: exerciseLanguage
                                         } only
                                     %}
                                         {% block input %}
-                                            <select id="typeSelect" name="question[question_language]" style="background: #fff;" id="questionLanguagee">
+                                            <select id="typeSelect" name="exercise[exercise_language]" style="background: #fff;" id="exerciseLanguagee">
                                                 {% for index, language in languages %}
-                                                    <option value="{{ index }}" {{ question.getQuestionLanguage() == index ? "selected" : "" }} . >{{ language.name }}</option>
+                                                    <option value="{{ index }}" {{ exercise.getExerciseLanguage() == index ? "selected" : "" }} . >{{ language.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         {% endblock %}
@@ -108,9 +108,9 @@
                     <div class="w-8/12">
                         {% embed "components/ct-input.php.twig"
                             with {
-                                label: "question-sql-form.questiondatabase"|trans,
-                                name: 'question[question_database]',
-                                id: 'questionDatabase',
+                                label: "exercise-sql-form.exercisedatabase"|trans,
+                                name: 'exercise[exercise_database]',
+                                id: 'exerciseDatabase',
                             } only
                         %}
                         {% endembed %}
@@ -118,17 +118,17 @@
                     <div class="w-3/12">
                         {% embed "components/ct-input.php.twig"
                             with {
-                                label: "question-sql-form.questiontype"|trans,
-                                name: 'question[question_sql_type]',
-                                id: 'questionType',
+                                label: "exercise-sql-form.exercisetype"|trans,
+                                name: 'exercise[exercise_sql_type]',
+                                id: 'exerciseType',
                                 sqlTypes: main.getTypeProperty('sqlTypes', type),
-                                question: question,
+                                exercise: exercise,
                             } only
                         %}
                             {% block input %}
-                                <select name="question[question_sql_type]" id="questionType">
+                                <select name="exercise[exercise_sql_type]" id="exerciseType">
                                     {% for sqlType in sqlTypes %}
-                                        <option value="{{ sqlType }}" {{ question.getQuestionType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
+                                        <option value="{{ sqlType }}" {{ exercise.getExerciseType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
                                     {% endfor %}
                                 </select>
                             {% endblock %}
@@ -136,11 +136,11 @@
                     </div>
                 </div>
                 <div class="w-full mt-4">
-                    {% set question = newQuestion %}
+                    {% set exercise = newExercise %}
                     {% embed "components/ct-textarea.php.twig"
                         with {
-                            label: "question-sql-form.questionsolution"|trans,
-                            name: 'question[question_solution]',
+                            label: "exercise-sql-form.exercisesolution"|trans,
+                            name: 'exercise[exercise_solution]',
                             rows: "8",
                             dbConnections: main.getTypeProperty('dbConnections', type),
                             placeholder: "SELECT * FROM mytable WHERE name = 'myname'"
@@ -149,21 +149,21 @@
                         {% block text %}
                             <div class="flex items-center">
                                 <span>
-                                    {%trans%}question-sql-form.questionsolution{%endtrans%}
+                                    {%trans%}exercise-sql-form.exercisesolution{%endtrans%}
                                 </span>
                                 <div class="ml-auto">
                                     {% embed "components/ct-input.php.twig"
                                         with {
-                                            label: "Question DBMS",
-                                            name: 'question[question_language]',
+                                            label: "Exercise DBMS",
+                                            name: 'exercise[exercise_language]',
                                             hideLabel: true,
                                             dbConnections: dbConnections,
                                         } only
                                     %}
                                         {% block input %}
-                                            <select name="question[question_dbms]" style="background: #fff;" id="questionDBMS">
+                                            <select name="exercise[exercise_dbms]" style="background: #fff;" id="exerciseDBMS">
                                                 {% for index, dbms in dbConnections %}
-                                                    <option value="{{ index }}" {{ question.getQuestionDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
+                                                    <option value="{{ index }}" {{ exercise.getExerciseDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         {% endblock %}
@@ -175,35 +175,35 @@
                 </div>
                 <div class="w-full mt-4">
                     {% embed "components/ct-textarea.php.twig"
-                        with { label: "question-sql-form.questionprobe"|trans, name: 'question[question_probe]' } only
+                        with { label: "exercise-sql-form.exerciseprobe"|trans, name: 'exercise[exercise_probe]' } only
                     %}
                     {% endembed %}
                 </div>
                 <div class="w-full mt-4">
                     {% embed "components/ct-textarea.php.twig"
-                        with { label: "question-sql-form.databaseonfly"|trans, name: 'question[question_onfly]' } only
+                        with { label: "exercise-sql-form.databaseonfly"|trans, name: 'exercise[exercise_onfly]' } only
                     %}
                     {% endembed %}
                 </div>
             {% endif %}
             <div class="w-full mt-4">
                 {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-question-form.mustcontainseparatedlines"|trans, name: 'question[question_must]', rows: "1" } only
+                    with { label: "new-exercise-form.mustcontainseparatedlines"|trans, name: 'exercise[exercise_must]', rows: "1" } only
                     %}
                 {% endembed %}
             </div>
             <div class="w-full mt-4">
                 {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-question-form.shouldntcontain"|trans, name: 'question[question_musnt]', rows: "1" } only
+                    with { label: "new-exercise-form.shouldntcontain"|trans, name: 'exercise[exercise_musnt]', rows: "1" } only
                     %}
                 {% endembed %}
             </div>
             <div class="w-full">
                 <div class="flex items-center justify-end py-3 mt-3 gap-3">
-                    <button type="button" class="btn btn-success" onclick="showNewQuestionRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
-                        {%trans%}create-question-modal.save-question{%endtrans%}</button>
+                    <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
+                        {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
-                        {%trans%}create-question-modal.cancel-question{%endtrans%}</button>
+                        {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}</button>
                 </div>
             </div>
         </form>

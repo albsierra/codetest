@@ -9,12 +9,12 @@ if (!$USER->instructor) {
 
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $language = array_keys($_GET, 'language') ? $_GET['language'] : "PHP";
-$newQuestion = new CT\CT_Question();
+$newExercise = new CT\CT_Exercise();
 
-echo $twig->render('pages/question-creation.php.twig', array(
+echo $twig->render('pages/exercise-creation.php.twig', array(
     'main' => $main,
     'type' => $language,
-    'newQuestion' => $newQuestion,
+    'newExercise' => $newExercise,
     'OUTPUT' => $OUTPUT,
     'CFG' => $CFG,
     'menu' => $menu,

@@ -14,14 +14,14 @@ if ($zip->open($importFile['tmp_name']) !== TRUE) {
 $mainContent = $zip->getFromName('main.json');
 $mainContentArr = json_decode($mainContent, true);
 
-$questionsContent = $zip->getFromName('questions/questions.json');
-$questionsContentArr = json_decode($questionsContent, true);
+$exercisesContent = $zip->getFromName('exercises/exercises.json');
+$exercisesContentArr = json_decode($exercisesContent, true);
 
-$codeQuestionsContent = $zip->getFromName('questions/code_questions.json');
-$codeQuestionsContentArr = json_decode($codeQuestionsContent, true);
+$codeExercisesContent = $zip->getFromName('exercises/code_exercises.json');
+$codeExercisesContentArr = json_decode($codeExercisesContent, true);
 
-$sqlQuestionsContent = $zip->getFromName('questions/sql_questions.json');
-$sqlQuestionsContentArr = json_decode($sqlQuestionsContent, true);
+$sqlExercisesContent = $zip->getFromName('exercises/sql_exercises.json');
+$sqlExercisesContentArr = json_decode($sqlExercisesContent, true);
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
@@ -51,44 +51,44 @@ $setCtIdFromMain = function($el) use ($main) {
     return $el;
 };
 
-foreach($questionsContentArr as $question) {
-    $oldId = $question['question_id'];
-    $question['question_id'] = null;
+foreach($exercisesContentArr as $exercise) {
+    $oldId = $exercise['exercise_id'];
+    $exercise['exercise_id'] = null;
 
 
-    $type = $question['type'];
-    $difficulty = $question['difficulty'];
+    $type = $exercise['type'];
+    $difficulty = $exercise['difficulty'];
     if($main->getType() == '1'){
-        $class = \CT\CT_QuestionCode::class;
+        $class = \CT\CT_ExerciseCode::class;
     }else{
-        $class = \CT\CT_QuestionSQL::class;
+        $class = \CT\CT_ExerciseSQL::class;
     }
 
 
-    $questionCls = new $class();
-    \CT\CT_DAO::setObjectPropertiesFromArray($questionCls, $question);
+    $exerciseCls = new $class();
+    \CT\CT_DAO::setObjectPropertiesFromArray($exerciseCls, $exercise);
     if (in_array($type, $CFG->programmingLanguajes)) {
         $array = $getTypeProperty('codeLanguages', $type);
         foreach ( $array as $k => $v){
             if($v['name'] == $type){
-                $questionCls->setQuestionLanguage($k);
+                $exerciseCls->setExerciseLanguage($k);
             }
         }
     }
-    $questionCls->setType($type);
-    $questionCls->setDifficulty($difficulty);
+    $exerciseCls->setType($type);
+    $exerciseCls->setDifficulty($difficulty);
 
-    $result = $main->saveQuestions([$questionCls]);
+    $result = $main->saveExercises([$exerciseCls]);
 
     $object = json_decode($result);
     if ($main->getType() == '1') {
-        $question1 = \CT\CT_Test::mapObjectToCodeQuestion($object);
+        $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
     } else {
-        $question1 = \CT\CT_Test::mapObjectToSQLQuestion($object);
+        $exercise1 = \CT\CT_Test::mapObjectToSQLExercise($object);
     }
-    $question1->setCtId($_SESSION["ct_id"]);
+    $exercise1->setCtId($_SESSION["ct_id"]);
 
-    $question1->save();
+    $exercise1->save();
 }
 
 $_SESSION['success'] = "Main actualizado";

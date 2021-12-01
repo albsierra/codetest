@@ -12,7 +12,7 @@ $(() => {
 
     $("#importModal").on("hidden.bs.modal", function() {
         $(this).find('.results-collapse.collapse').collapse("hide");
-        $(this).find("input[name='question']").prop("checked", false);
+        $(this).find("input[name='exercise']").prop("checked", false);
     });
 
     let $bodyContainer = $('#body_container');
@@ -61,13 +61,13 @@ function bytesToHuman(bytes) {
     return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
 }
 
-global.confirmDeleteQuestion = function() {
-    return confirm("Are you sure you want to delete this question? This action cannot be undone.");
+global.confirmDeleteExercise = function() {
+    return confirm("Are you sure you want to delete this exercise? This action cannot be undone.");
 }
 
-global.confirmDeleteQuestionBlank = function(questionId) {
-    if ($("#questionTextInput"+questionId).val().trim().length < 1) {
-        return confirm("Saving this question with blank text will delete this question. Are you sure you want to delete this question? This action cannot be undone.");
+global.confirmDeleteExerciseBlank = function(exerciseId) {
+    if ($("#exerciseTextInput"+exerciseId).val().trim().length < 1) {
+        return confirm("Saving this exercise with blank text will delete this exercise. Are you sure you want to delete this exercise? This action cannot be undone.");
     } else {
         return true;
     }
@@ -83,12 +83,12 @@ global.importLtiContexts = function(i = 0, object = 'test') {
                 $('#buttonImport').attr('onclick', "document.getElementById('importForm').submit();");
                 
                 if ($('#importModal').is(':hidden')) {
-                    //If question tab is active, it deactivates and test tab is activated
-                    if ($('#li-questions').addClass('active')) {
+                    //If exercise tab is active, it deactivates and test tab is activated
+                    if ($('#li-exercises').addClass('active')) {
                         $('#li-test').addClass('active');
-                        $('#li-questions').removeClass('active');
+                        $('#li-exercises').removeClass('active');
                         $('#tab-test').addClass('active in');
-                        $('#tab-question').removeClass('active in');
+                        $('#tab-exercise').removeClass('active in');
                     }
                     // Display Modal
                     $('#importModal').modal('show');
@@ -99,13 +99,13 @@ global.importLtiContexts = function(i = 0, object = 'test') {
             }
         });
 
-    } else if (object = "question") {
+    } else if (object = "exercise") {
         $.ajax({
             type: "GET",
-            url: "actions/import/ImportLtiContextsQuestions.php?page=" + i + "&" + _TSUGI.ajax_session,
+            url: "actions/import/ImportLtiContextsExercises.php?page=" + i + "&" + _TSUGI.ajax_session,
             success: function (data) {
-                $('.import-body-questions').html(data);
-                $('#buttonImport').attr('onclick', "document.getElementById('importQuestionsForm').submit();");
+                $('.import-body-exercises').html(data);
+                $('#buttonImport').attr('onclick', "document.getElementById('importExercisesForm').submit();");
             },
             error: function (data) {
                 console.error(data.responseText);
@@ -125,9 +125,9 @@ global.importLtiContextsPage = function(i = 0, object='test') {
     if ($("#tab-test").hasClass("active")) {
         object = "test";
         body = ".import-body";
-    } else if ($("#tab-question").hasClass("active")) {
-        object = "question";
-        body = ".import-body-questions";
+    } else if ($("#tab-exercise").hasClass("active")) {
+        object = "exercise";
+        body = ".import-body-exercises";
     }
     $.ajax({
         type: "GET",
@@ -149,9 +149,9 @@ global.importLtiContextsButtons = function(value) {
     if ($("#tab-test").hasClass("active")) {
         object = "test";
         body = ".import-body";
-    } else if ($("#tab-question").hasClass("active")) {
-        object = "question";
-        body = ".import-body-questions";
+    } else if ($("#tab-exercise").hasClass("active")) {
+        object = "exercise";
+        body = ".import-body-exercises";
     }
 
     $.ajax({
@@ -174,9 +174,9 @@ global.deleteTag = function(value) {
     if ($("#tab-test").hasClass("active")) {
         object = "test";
         body = ".import-body";
-    } else if ($("#tab-question").hasClass("active")) {
-        object = "question";
-        body = ".import-body-questions";
+    } else if ($("#tab-exercise").hasClass("active")) {
+        object = "exercise";
+        body = ".import-body-exercises";
     }
 
     $.ajax({
@@ -217,8 +217,8 @@ global.showTestInfo = function(testId) {
 
 }
 
-global.showQuestions = function(questionId) {
-    element = $('#main' + questionId);
+global.showExercises = function(exerciseId) {
+    element = $('#main' + exerciseId);
 
     if ($(element).is(':visible')) {
         $(element).hide();
@@ -228,16 +228,16 @@ global.showQuestions = function(questionId) {
 }
 
 
-global.importQuestions = function(questionId, testId) {
+global.importExercises = function(exerciseId, testId) {
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportQuestions.php?" + _TSUGI.ajax_session,
+        url: "actions/import/ImportExercises.php?" + _TSUGI.ajax_session,
         data: {
-            questionId: questionId,
+            exerciseId: exerciseId,
             testId: testId
         },
         success: function (data) {
-            $('#main' + questionId).html(data);
+            $('#main' + exerciseId).html(data);
         },
         error: function (data) {
             console.error(data.responseText);
@@ -245,13 +245,13 @@ global.importQuestions = function(questionId, testId) {
     });
 }
 
-global.getAnswersFromQuestion = function(questionId) {
+global.getAnswersFromExercise = function(exerciseId) {
     $.ajax({
         type: "GET",
-        url: "actions/answers/getAnswersFromQuestion.php?questionId=" + questionId + "&" + _TSUGI.ajax_session,
+        url: "actions/answers/getAnswersFromExercise.php?exerciseId=" + exerciseId + "&" + _TSUGI.ajax_session,
         success: function (data) {
-            $('#responses' + questionId).html(data);
-            $('#responses' + questionId + '.collapse').collapse();
+            $('#responses' + exerciseId).html(data);
+            $('#responses' + exerciseId + '.collapse').collapse();
         },
         error: function (data) {
             console.error(data.responseText);
@@ -259,40 +259,40 @@ global.getAnswersFromQuestion = function(questionId) {
     });
 }
 
-global.editQuestionText = function(questionId) {
-    var questionText = $("#questionText" + questionId);
-    questionText.hide();
-    $("#questionDeleteAction" + questionId).hide();
-    $("#questionEditAction" + questionId).hide();
-    $("#questionReorderAction" + questionId).hide();
+global.editExerciseText = function(exerciseId) {
+    var exerciseText = $("#exerciseText" + exerciseId);
+    exerciseText.hide();
+    $("#exerciseDeleteAction" + exerciseId).hide();
+    $("#exerciseEditAction" + exerciseId).hide();
+    $("#exerciseReorderAction" + exerciseId).hide();
 
-    var theForm = $("#questionTextForm" + questionId);
+    var theForm = $("#exerciseTextForm" + exerciseId);
 
-    editor = getCKEditor("questionTextInput" + questionId);
+    editor = getCKEditor("exerciseTextInput" + exerciseId);
     theForm.show();
-    theForm.find('#questionTextInput' + questionId).focus()
+    theForm.find('#exerciseTextInput' + exerciseId).focus()
             .off("keypress").on("keypress", function (e) {
         if (e.which === 13) {
             e.preventDefault();
-            if ($('#questionTextInput' + questionId).val().trim() === '') {
-                if (confirmDeleteQuestionBlank(questionId)) {
-                    // User entered blank question text and wants to delete.
-                    deleteQuestion(questionId, true);
+            if ($('#exerciseTextInput' + exerciseId).val().trim() === '') {
+                if (confirmDeleteExerciseBlank(exerciseId)) {
+                    // User entered blank exercise text and wants to delete.
+                    deleteExercise(exerciseId, true);
                 }
             } else {
-                // Still has text in question. Save it.
+                // Still has text in exercise. Save it.
                 $.ajax({
                     type: "POST",
                     url: theForm.prop("action"),
                     data: theForm.serialize(),
                     success: function (data) {
-                        questionText.text($('#questionTextInput' + questionId).val());
-                        questionText.show();
-                        $("#questionDeleteAction" + questionId).show();
-                        $("#questionEditAction" + questionId).show();
-                        $("#questionReorderAction" + questionId).show();
-                        $("#questionSaveAction" + questionId).hide();
-                        $("#questionCancelAction" + questionId).hide();
+                        exerciseText.text($('#exerciseTextInput' + exerciseId).val());
+                        exerciseText.show();
+                        $("#exerciseDeleteAction" + exerciseId).show();
+                        $("#exerciseEditAction" + exerciseId).show();
+                        $("#exerciseReorderAction" + exerciseId).show();
+                        $("#exerciseSaveAction" + exerciseId).hide();
+                        $("#exerciseCancelAction" + exerciseId).hide();
                         theForm.hide();
                         $("#flashmessages").html(data.flashmessage);
                         setupAlertHide();
@@ -301,30 +301,30 @@ global.editQuestionText = function(questionId) {
             }
         }
     });
-    $("#questionSaveAction" + questionId).show()
+    $("#exerciseSaveAction" + exerciseId).show()
             .off("click").on("click", function (e) {
         updateCKeditorElements();
         if (editor)
             editor.destroy();
-        if ($('#questionTextInput' + questionId).val().trim() === '') {
-            if (confirmDeleteQuestionBlank(questionId)) {
-                // User entered blank question text and wants to delete.
-                deleteQuestion(questionId, true);
+        if ($('#exerciseTextInput' + exerciseId).val().trim() === '') {
+            if (confirmDeleteExerciseBlank(exerciseId)) {
+                // User entered blank exercise text and wants to delete.
+                deleteExercise(exerciseId, true);
             }
         } else {
-            // Still has text in question. Save it.
+            // Still has text in exercise. Save it.
             $.ajax({
                 type: "POST",
                 url: theForm.prop("action"),
                 data: theForm.serialize() + '&' + _TSUGI.ajax_session,
                 success: function (data) {
-                    questionText.html($('#questionTextInput' + questionId).val());
-                    questionText.show();
-                    $("#questionDeleteAction" + questionId).show();
-                    $("#questionEditAction" + questionId).show();
-                    $("#questionReorderAction" + questionId).show();
-                    $("#questionSaveAction" + questionId).hide();
-                    $("#questionCancelAction" + questionId).hide();
+                    exerciseText.html($('#exerciseTextInput' + exerciseId).val());
+                    exerciseText.show();
+                    $("#exerciseDeleteAction" + exerciseId).show();
+                    $("#exerciseEditAction" + exerciseId).show();
+                    $("#exerciseReorderAction" + exerciseId).show();
+                    $("#exerciseSaveAction" + exerciseId).hide();
+                    $("#exerciseCancelAction" + exerciseId).hide();
                     theForm.hide();
                     $("#flashmessages").html(data.flashmessage);
                     setupAlertHide();
@@ -333,17 +333,17 @@ global.editQuestionText = function(questionId) {
         }
     });
 
-    $("#questionCancelAction" + questionId).show()
+    $("#exerciseCancelAction" + exerciseId).show()
             .off("click").on("click", function (e) {
-        var theText = $("#questionText" + questionId);
+        var theText = $("#exerciseText" + exerciseId);
         theText.show();
         theForm.hide();
-        $("#questionTextInput" + questionId).val(theText.text());
-        $("#questionDeleteAction" + questionId).show();
-        $("#questionEditAction" + questionId).show();
-        $("#questionReorderAction" + questionId).show();
-        $("#questionSaveAction" + questionId).hide();
-        $("#questionCancelAction" + questionId).hide();
+        $("#exerciseTextInput" + exerciseId).val(theText.text());
+        $("#exerciseDeleteAction" + exerciseId).show();
+        $("#exerciseEditAction" + exerciseId).show();
+        $("#exerciseReorderAction" + exerciseId).show();
+        $("#exerciseSaveAction" + exerciseId).hide();
+        $("#exerciseCancelAction" + exerciseId).hide();
     });
 }
 
@@ -412,35 +412,35 @@ global.editTitleText = function() {
 }
 
 //unused?
-global.moveQuestionUp = function(questionId, testId) {
+global.moveExerciseUp = function(exerciseId, testId) {
     $.ajax({
         type: "POST",
-        url: "actions/ReorderQuestion.php?" + _TSUGI.ajax_session,
+        url: "actions/ReorderExercise.php?" + _TSUGI.ajax_session,
         dataType: 'text',
         data: {
-            question_id: questionId,
+            exercise_id: exerciseId,
             test_id: testId
         },
         success: function (data) {
-            var theQuestionMoved = $("#questionRow" + questionId);
-            theQuestionMoved.hide();
-            var currentNumber = theQuestionMoved.data("question-number");
+            var theExerciseMoved = $("#exerciseRow" + exerciseId);
+            theExerciseMoved.hide();
+            var currentNumber = theExerciseMoved.data("exercise-number");
             if (currentNumber === 1) {
                 // Move to bottom
-                $("#newQuestionRow").before(theQuestionMoved);
+                $("#newExerciseRow").before(theExerciseMoved);
             } else {
                 // Move up one
-                theQuestionMoved.prev().before(theQuestionMoved);
+                theExerciseMoved.prev().before(theExerciseMoved);
             }
-            // Fix up question numbers
-            var questionNum = 1;
-            $(".question-number").each(function () {
-                $(this).text(questionNum + ".");
-                $(this).parent().data("question-number", questionNum);
-                questionNum++;
+            // Fix up exercise numbers
+            var exerciseNum = 1;
+            $(".exercise-number").each(function () {
+                $(this).text(exerciseNum + ".");
+                $(this).parent().data("exercise-number", exerciseNum);
+                exerciseNum++;
             });
 
-            theQuestionMoved.fadeIn("fast");
+            theExerciseMoved.fadeIn("fast");
 
             $("#flashmessages").html(data.flashmessage);
             setupAlertHide();
@@ -448,33 +448,33 @@ global.moveQuestionUp = function(questionId, testId) {
     });
 }
 
-global.answerQuestion = function(questionId, questionNum) {
-    var answerForm = $("#answerForm" + questionId);
+global.answerExercise = function(exerciseId, exerciseNum) {
+    var answerForm = $("#answerForm" + exerciseId);
     $.ajax({
         type: "POST",
         url: answerForm.prop("action"),
-        data: answerForm.serialize() + '&questionNum=' + questionNum + '&' + _TSUGI.ajax_session,
+        data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
             
             //If the answer is not empty and it is the first time it has been answered, the usage modal opens
             if (data.answer_content) {
                 if (!data.exists) {
-                    $('#usageModal' + questionId).modal('show');
+                    $('#usageModal' + exerciseId).modal('show');
                 }
             }
             
             //If the answer is correct, change the hand down to the hand up
             if(data.success){
-                $("#answerForm"+questionId).hide();
-                $("#answerIcon"+questionId).removeClass('fa-thumbs-down');
-                $("#answerIcon"+questionId).addClass('fa-thumbs-up');
-                $("#listIcon"+questionId).removeClass('fa-thumbs-down');
-                $("#listIcon"+questionId).addClass('fa-thumbs-up');
+                $("#answerForm"+exerciseId).hide();
+                $("#answerIcon"+exerciseId).removeClass('fa-thumbs-down');
+                $("#answerIcon"+exerciseId).addClass('fa-thumbs-up');
+                $("#listIcon"+exerciseId).removeClass('fa-thumbs-down');
+                $("#listIcon"+exerciseId).addClass('fa-thumbs-up');
             }
             var date =new Date();
             $("#answerSavedText").text(data.answerText);
             $("#modified").text(formatDate(date));
-            $("#answerText" + questionId).val("");
+            $("#answerText" + exerciseId).val("");
             $("#flashmessages").html(data.flashmessage);
         },
         error: function (data) {
@@ -550,18 +550,18 @@ global.resetForm = function($form) {
 }
 
 //This method calls the action that sends the usage to the repository
-global.sendUsage = function(questionId) {
-    var usageForm = $("#usageForm"+questionId);
+global.sendUsage = function(exerciseId) {
+    var usageForm = $("#usageForm"+exerciseId);
     
     //url = actions/SendUsage.php
     $.ajax({
         type: "POST",
         dataType: "text",
         url: usageForm.prop("action"),
-        data: usageForm.serialize() + '&questionId='+questionId+'&' + _TSUGI.ajax_session,
+        data: usageForm.serialize() + '&exerciseId='+exerciseId+'&' + _TSUGI.ajax_session,
         success: function(data) {
-            $('#usageModal'+questionId).modal('hide');
-            $('#usageForm'+questionId).trigger("reset");
+            $('#usageModal'+exerciseId).modal('hide');
+            $('#usageForm'+exerciseId).trigger("reset");
             $("#flashmessages").html(data.flashmessage);
             setupAlertHide();
         },
@@ -580,9 +580,9 @@ global.keyword = function() {
         if ($("#tab-test").hasClass("active")) {
             object = "test";
             body = ".import-body";
-        } else if ($("#tab-question").hasClass("active")) {
-            object = "question";
-            body = ".import-body-questions";
+        } else if ($("#tab-exercise").hasClass("active")) {
+            object = "exercise";
+            body = ".import-body-exercises";
         }
 
         $.ajax({
@@ -607,9 +607,9 @@ global.score = function() {
         if ($("#tab-test").hasClass("active")) {
             object = "test";
             body = ".import-body";
-        } else if ($("#tab-question").hasClass("active")) {
-            object = "question";
-            body = ".import-body-questions";
+        } else if ($("#tab-exercise").hasClass("active")) {
+            object = "exercise";
+            body = ".import-body-exercises";
         }
         
         //if the punctuation is 0 the parameter is cleared
@@ -628,28 +628,28 @@ global.score = function() {
     });
 }
 
-global.deleteQuestion = function(questionId, skipconfirm = false) {
+global.deleteExercise = function(exerciseId, skipconfirm = false) {
     $('#confirm').modal('show')
             .on('click', '#delete', function (e) {
                 $.ajax({
                     type: "POST",
-                    url: "actions/DeleteQuestion.php?" + _TSUGI.ajax_session,
+                    url: "actions/DeleteExercise.php?" + _TSUGI.ajax_session,
                     dataType: "text",
                     data: {
-                        question_id: questionId,
+                        exercise_id: exerciseId,
                     },
                     success: function (data) {
-                        $("#questionRow" + questionId).remove();
-                        // Fix up question numbers
-                        var questionNum = 1;
-                        $(".question-number").each(function () {
-                            $(this).text(questionNum);
-                            $(this).parent().data("question-number", questionNum);
-                            questionNum++;
+                        $("#exerciseRow" + exerciseId).remove();
+                        // Fix up exercise numbers
+                        var exerciseNum = 1;
+                        $(".exercise-number").each(function () {
+                            $(this).text(exerciseNum);
+                            $(this).parent().data("exercise-number", exerciseNum);
+                            exerciseNum++;
                         });
-                        // Fix new question number
-                        $("#newQuestionRow").data("question-number", questionNum);
-                        $("#newQuestionNumber").text(questionNum + ".");
+                        // Fix new exercise number
+                        $("#newExerciseRow").data("exercise-number", exerciseNum);
+                        $("#newExerciseNumber").text(exerciseNum + ".");
 
                         $("#flashmessages").html(data.flashmessage);
                         setupAlertHide();
@@ -661,27 +661,27 @@ global.deleteQuestion = function(questionId, skipconfirm = false) {
             })
             .on('click', '#cancel', function (e) {
                 e.preventDefault();
-                $('#confirm' + questionId).modal.model('close');
+                $('#confirm' + exerciseId).modal.model('close');
             });
 }
 
-//this method updates the question numbers
-global.updateList = function(questionId, oldIndex, newIndex) {
+//this method updates the exercise numbers
+global.updateList = function(exerciseId, oldIndex, newIndex) {
     $.ajax({
         type: "POST",
-        url: "actions/ReorderQuestion.php?" + _TSUGI.ajax_session,
+        url: "actions/ReorderExercise.php?" + _TSUGI.ajax_session,
         dataType: 'text',
         data: {
-            questionId: questionId,
+            exerciseId: exerciseId,
             oldIndex: oldIndex,
             newIndex: newIndex
         },
         success: function (data) {
-            var questionNum = 1;
-            $(".question-number").each(function () {
-                $(this).text(questionNum+".-");
-                $(this).parent().data("question-number", questionNum);
-                questionNum++;
+            var exerciseNum = 1;
+            $(".exercise-number").each(function () {
+                $(this).text(exerciseNum+".-");
+                $(this).parent().data("exercise-number", exerciseNum);
+                exerciseNum++;
             });
             $("#flashmessages").html(data.flashmessage);
             setupAlertHide();
@@ -699,7 +699,7 @@ global.showCreateModal = function() {
 
     $.ajax({
         type: "GET",
-        url: "actions/newQuestionForm.php?language=" + language + "&" + _TSUGI.ajax_session,
+        url: "actions/newExerciseForm.php?language=" + language + "&" + _TSUGI.ajax_session,
         success: function (data) {
             $('#createBody').html(data);
         },
@@ -715,7 +715,7 @@ global.typeChange = function(){
  
      $.ajax({
         type: "GET",
-        url: "actions/newQuestionForm.php?language=" +language+"&"+ _TSUGI.ajax_session,
+        url: "actions/newExerciseForm.php?language=" +language+"&"+ _TSUGI.ajax_session,
         success: function(data) {
             $('#createBody').html(data);
         },
@@ -726,20 +726,20 @@ global.typeChange = function(){
    
 }
 
-global.showNewQuestionRow = function() {
+global.showNewExerciseRow = function() {
 
-    var theForm = $("#questionTextForm-1");
+    var theForm = $("#exerciseTextForm-1");
     var language = $("#typeSelect").val();
     var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
-    title = $("#questionTitleText").val();
+    title = $("#exerciseTitleText").val();
 
     if (title == "") {
-        $("#questionTitleText").attr("placeholder", "Field Required");
-        $("#questionTitleText").addClass("required");
+        $("#exerciseTitleText").attr("placeholder", "Field Required");
+        $("#exerciseTitleText").addClass("required");
     }  else {
         
-        // $('#newQuestionRow').html("");
+        // $('#newExerciseRow').html("");
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -755,19 +755,19 @@ global.showNewQuestionRow = function() {
             }
         });
     }
-    $("#questionCancelAction-1").off("click").on("click", function (e) {
-        $('#newQuestionRow').html("");
+    $("#exerciseCancelAction-1").off("click").on("click", function (e) {
+        $('#newExerciseRow').html("");
         if (editor)
             editor.destroy();
-        addQuestionsSection.show();
+        addExercisesSection.show();
     });
 
 }
 
-global.showImportQuestion = function() {
-    var theForm = $("#importQuestionsForm");
+global.showImportExercise = function() {
+    var theForm = $("#importExercisesForm");
 
-    $('#newQuestionRow').html("");
+    $('#newExerciseRow').html("");
     $.ajax({
         type: "POST",
         dataType: "json",

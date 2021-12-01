@@ -4,9 +4,9 @@ require_once "../initTsugi.php";
 global $translator;
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-$questionId = $_POST["questionId"];
+$exerciseId = $_POST["exerciseId"];
 $answerText = $_POST["answerText"];
-$questionNum = $_POST["questionNum"];
+$exerciseNum = $_POST["exerciseNum"];
 
 // In databases doesn't exists answer_language, so we use -1
 $answerLanguage = $_POST["answer_language"] ?? -1;
@@ -15,19 +15,19 @@ $result = array();
 
 //if the answer is blank
 if (!isset($answerText) || trim($answerText) == "") {
-    $_SESSION['error'] = $translator->trans('backend-messages.answer.question.failed');
+    $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed');
     $result["answer_content"] = false;
 } else {
-    //Search for the question on the db and map
-    $question = \CT\CT_Question::withId($questionId);
-    $main = $question->getMain();
+    //Search for the exercise on the db and map
+    $exercise = \CT\CT_Exercise::withId($exerciseId);
+    $main = $exercise->getMain();
     if ($main->getType() == '1') {
-        $question1 = new \CT\CT_QuestionCode($question->getQuestionId());
+        $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());
     } else {
-        $question1 = \CT\CT_QuestionSQL::withId($question->getQuestionId());
+        $exercise1 = \CT\CT_ExerciseSQL::withId($exercise->getExerciseId());
     }
 
-    $array = $question1->createAnswer($USER->id, $answerText, $answerLanguage);
+    $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage);
     $answer = $array['answer'];
 
     $result["answer_content"] = true;
@@ -39,7 +39,7 @@ if (!isset($answerText) || trim($answerText) == "") {
     // Notify elearning that there is a new answer
     // the message
     $msg = "A new code test was submitted on Learn by " . $USER->displayname . " (" . $USER->email . ").\n
-    Question: " . $question->getTitle() . "\n
+    Exercise: " . $exercise->getTitle() . "\n
     Answer: " . $answer->getAnswerTxt();
 
     // use wordwrap() if lines are longer than 70 characters
@@ -47,7 +47,7 @@ if (!isset($answerText) || trim($answerText) == "") {
 
     $headers = "From: LEARN < @gmail.com >\n";
 
-    $_SESSION['success'] = $translator->trans('backend-messages.answer.question.saved');
+    $_SESSION['success'] = $translator->trans('backend-messages.answer.exercise.saved');
 }
 
 $OUTPUT->buffer = true;

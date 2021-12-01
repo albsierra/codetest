@@ -3,13 +3,13 @@
 require_once "../initTsugi.php";
 global $translator;
 
-$questionId = $_POST["questionId"];
+$exerciseId = $_POST["exerciseId"];
 $understandabilityScore = $_POST['rateUnderstandability'];
 $difficultyScore = $_POST['rateDifficulty'];
 $timeScore = $_POST['rateTime'];
 
 $user = new \CT\CT_User($USER->id);
-$usage = \CT\CT_Usage::constructValues($questionId, $user, $understandabilityScore, $difficultyScore, $timeScore);
+$usage = \CT\CT_Usage::constructValues($exerciseId, $user, $understandabilityScore, $difficultyScore, $timeScore);
 $code = $usage->save();
 $resulta = array();
 

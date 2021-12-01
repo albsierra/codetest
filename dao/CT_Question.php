@@ -2,11 +2,11 @@
 
 namespace CT;
 
-class CT_Question implements \JsonSerializable {
+class CT_Exercise implements \JsonSerializable {
 
-    private $question_id;
+    private $exercise_id;
     private $ct_id;
-    private $question_num;
+    private $exercise_num;
     private $testId;
     private $title;
     private $type;
@@ -18,49 +18,49 @@ class CT_Question implements \JsonSerializable {
     private $averageGrade;
     private $numberVotes;
     private $keywords;
-    private $question_must;
-    private $question_musnt;
+    private $exercise_must;
+    private $exercise_musnt;
 
-    //get the question from de db
-    static function withId($question_id = null) {
+    //get the exercise from de db
+    static function withId($exercise_id = null) {
         
-        $query = \CT\CT_DAO::getQuery('question', 'getById');
+        $query = \CT\CT_DAO::getQuery('exercise', 'getById');
         $arr = array(
-            ':question_id' => $question_id,
+            ':exercise_id' => $exercise_id,
             ':ct_id' => $_SESSION['ct_id'],
         );
-        $question = new CT_Question();
-        $questions = $query['PDOX']->rowDie($query['sentence'], $arr);
-        \CT\CT_DAO::setObjectPropertiesFromArray($question, $questions);
-        return $question;
+        $exercise = new CT_Exercise();
+        $exercises = $query['PDOX']->rowDie($query['sentence'], $arr);
+        \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $exercises);
+        return $exercise;
     }
 
-    public function __construct($question_id = null, $test_id = null) {
-        if (isset($question_id)) {
+    public function __construct($exercise_id = null, $test_id = null) {
+        if (isset($exercise_id)) {
             $this->testId = $test_id;
-            $question = \CT\CT_Test::findTestForImportQuestionId($question_id, $test_id);
-            $this->question_id = $question_id;
+            $exercise = \CT\CT_Test::findTestForImportExerciseId($exercise_id, $test_id);
+            $this->exercise_id = $exercise_id;
             $this->ct_id = $_SESSION["ct_id"];
-            $this->title = $question->getTitle();
-            $this->type = $question->getType();
-            $this->difficulty = $question->getDifficulty();
-            $this->averageGradeUnderstability = $question->getAverageGradeUnderstability();
-            $this->averageGradeDifficulty = $question->getAverageGradeDifficulty();
-            $this->averageGradeTime = $question->getAverageGradeTime();
-            $this->averageGrade = $question->getAverageGrade();
-            $this->numberVotes = $question->getNumberVotes();
-            $this->keywords = $question->getKeywords();
-            $this->question_must = $question->getQuestionMust();
-            $this->question_musnt = $question->getQuestionMusnt();
+            $this->title = $exercise->getTitle();
+            $this->type = $exercise->getType();
+            $this->difficulty = $exercise->getDifficulty();
+            $this->averageGradeUnderstability = $exercise->getAverageGradeUnderstability();
+            $this->averageGradeDifficulty = $exercise->getAverageGradeDifficulty();
+            $this->averageGradeTime = $exercise->getAverageGradeTime();
+            $this->averageGrade = $exercise->getAverageGrade();
+            $this->numberVotes = $exercise->getNumberVotes();
+            $this->keywords = $exercise->getKeywords();
+            $this->exercise_must = $exercise->getExerciseMust();
+            $this->exercise_musnt = $exercise->getExerciseMusnt();
         }
     }
 
-    //necessary to use json_encode with question objects
+    //necessary to use json_encode with exercise objects
     public function jsonSerialize() {
         return [
-            'question_id' => $this->getQuestionId(),
+            'exercise_id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
-            'question_num' => $this->getQuestionNum(),
+            'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
             'type' => $this->getType(),
             'difficulty' => $this->getDifficulty(),
@@ -70,8 +70,8 @@ class CT_Question implements \JsonSerializable {
             'averageGrade' => $this->getAverageGrade(),
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
-            'question_must' => $this->getQuestionMust(),
-            'question_musnt' => $this->getQuestionMusnt()
+            'exercise_must' => $this->getExerciseMust(),
+            'exercise_musnt' => $this->getExerciseMusnt()
         ];
     }
 
@@ -107,22 +107,22 @@ class CT_Question implements \JsonSerializable {
         return $response;
     }
 
-    //returns the test of the questions
-    static function findQuestions($questions) {
+    //returns the test of the exercises
+    static function findExercises($exercises) {
         global $translator;
         $response = array();
         $url = "getTestId/";
 
-        foreach ($questions as $question) {
-            $result = Self::apiCall($url, $question['test_id']);
+        foreach ($exercises as $exercise) {
+            $result = Self::apiCall($url, $exercise['test_id']);
             if (isset($result)) {
-                foreach ($result->questions as $question1) {
-                    if ($question1->id == $question['question_id']) {
-                        $question1->question_num = $question['question_num'];
-                        $question1->test_id = $question['test_id'];
-                        $question1->ct_id = $question['ct_id'];
+                foreach ($result->exercises as $exercise1) {
+                    if ($exercise1->id == $exercise['exercise_id']) {
+                        $exercise1->exercise_num = $exercise['exercise_num'];
+                        $exercise1->test_id = $exercise['test_id'];
+                        $exercise1->ct_id = $exercise['ct_id'];
 
-                        array_push($response, $question1);
+                        array_push($response, $exercise1);
                     }
                 }
             } else {
@@ -135,7 +135,7 @@ class CT_Question implements \JsonSerializable {
 
     
     function createAnswer($user_id, $answer_txt, $answer_language = null) {
-        $answer = \CT\CT_Answer::getByUserAndQuestion($user_id, $this->getQuestionId(), $this->getCtId());
+        $answer = \CT\CT_Answer::getByUserAndExercise($user_id, $this->getExerciseId(), $this->getCtId());
         if ($answer->getAnswerId() !== null) {
             $exists = true;
         } else {
@@ -145,12 +145,12 @@ class CT_Question implements \JsonSerializable {
         
         //fill the answer
         $answer->setUserId($user_id);
-        $answer->setQuestionId($this->getQuestionId());
+        $answer->setExerciseId($this->getExerciseId());
         $answer->setAnswerTxt($answer_txt);
         $answer->setAnswerLanguage($answer_language);
         $answer->setCtId($this->getCtId());
         
-        //returns if the question has been passed
+        //returns if the exercise has been passed
         if($this->preGrade($answer)) {
             $this->grade($answer);
         }
@@ -168,9 +168,9 @@ class CT_Question implements \JsonSerializable {
     }
 
     
-    static function findQuestionForImportByPage($page) {
+    static function findExerciseForImportByPage($page) {
         global $CFG;
-        $url = $CFG->repositoryUrl . "/api/questions/getAllQuestions/" . $page;
+        $url = $CFG->repositoryUrl . "/api/exercises/getAllExercises/" . $page;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -180,21 +180,21 @@ class CT_Question implements \JsonSerializable {
         
         $decode = json_decode($result);
         $totalPages = $decode[1];
-        $questions = json_encode($decode[0]);
-        $questions = self::MapJsonToQuestionsArray($questions);
-        $array = ['questions' => $questions, 'totalPages' => $totalPages[0]];
+        $exercises = json_encode($decode[0]);
+        $exercises = self::MapJsonToExercisesArray($exercises);
+        $array = ['exercises' => $exercises, 'totalPages' => $totalPages[0]];
 
         return $array;
     }
 
-    //Find the questions on the repo by the tags
-    static function findQuestionForImportByValue($value = null, $page = 0) {
+    //Find the exercises on the repo by the tags
+    static function findExerciseForImportByValue($value = null, $page = 0) {
 
         //if values is passed check if is already on the array
         if ($value) {
             CT_Test::checkerAdd($value);
         }
-        $array = CT_Test::checker("questions");
+        $array = CT_Test::checker("exercises");
         $postData = $array["postData"];
       
         $url = $array["url"] . "/" . $page;
@@ -213,28 +213,28 @@ class CT_Question implements \JsonSerializable {
             $decode = json_decode($result);
             $totalPages = $decode[1];
             
-            //decode the questions from json and maps to Question objects
-            $questions = json_encode($decode[0]);
-            $questions = self::MapJsonToQuestionsArray($questions);
+            //decode the exercises from json and maps to Exercise objects
+            $exercises = json_encode($decode[0]);
+            $exercises = self::MapJsonToExercisesArray($exercises);
             
             
-            $array = ['questions' => $questions, 'totalPages' => $totalPages[0]];
+            $array = ['exercises' => $exercises, 'totalPages' => $totalPages[0]];
         } else {
             //if not tags
             
-            $array = \CT\CT_Question::findQuestionForImportByPage($page);
+            $array = \CT\CT_Exercise::findExerciseForImportByPage($page);
         }
         return $array;
     }
 
-    static function findQuestionsForImportByDeleteValue($value) {
+    static function findExercisesForImportByDeleteValue($value) {
         
         global $CFG;
         //Deletes the value passed
         CT_Test::checkerDelete($value);
         
         //Check if there is any value left
-        $array = CT_Test::checker("questions");
+        $array = CT_Test::checker("exercises");
         $postData = $array["postData"];
         $url = $array["url"] . "/0";
 
@@ -251,21 +251,21 @@ class CT_Question implements \JsonSerializable {
             curl_close($curl);
             $decode = json_decode($result);
             $totalPages = $decode[1];
-            $questions = json_encode($decode[0]);
-            $questions = self::MapJsonToQuestionsArray($questions);
-            $array = ['questions' => $questions, 'totalPages' => $totalPages[0]];
+            $exercises = json_encode($decode[0]);
+            $exercises = self::MapJsonToExercisesArray($exercises);
+            $array = ['exercises' => $exercises, 'totalPages' => $totalPages[0]];
         } else {
             //if there is no value left
             
-            $array = \CT\CT_Question::findQuestionForImportByPage(0);
+            $array = \CT\CT_Exercise::findExerciseForImportByPage(0);
         }
         return $array;
     }
 
-    //Find question by id
-    static function findQuestionForImportId($id) {
+    //Find exercise by id
+    static function findExerciseForImportId($id) {
         global $CFG;
-        $url = $CFG->repositoryUrl . "/api/tests/getQuestion/" . $id;
+        $url = $CFG->repositoryUrl . "/api/tests/getExercise/" . $id;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -274,46 +274,46 @@ class CT_Question implements \JsonSerializable {
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $question = json_decode($result);
+        $exercise = json_decode($result);
         
-        //check what type of question is to choose constructor
-        if ($question->type == 'MYSQL') {
-            $CTQuestion = CT_Test::mapObjectToSQLQuestion($question);
+        //check what type of exercise is to choose constructor
+        if ($exercise->type == 'MYSQL') {
+            $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
         } else {
-            $CTQuestion = CT_Test::mapObjectToCodeQuestion($question);
+            $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
         }
-        return $CTQuestion;
+        return $CTExercise;
     }
 
     
-    static function MapJsonToQuestionsArray($json) {
+    static function MapJsonToExercisesArray($json) {
         $response = json_decode($json);
-        $questions = array();
+        $exercises = array();
         if ($response) {
-            foreach ($response as $question) {
+            foreach ($response as $exercise) {
 
                 
-                //check what type of question is to choose constructor
-                if ($question->type == 'MYSQL') {
-                    $CTQuestion = CT_Test::mapObjectToSQLQuestion($question);
+                //check what type of exercise is to choose constructor
+                if ($exercise->type == 'MYSQL') {
+                    $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
                 } else {
-                    $CTQuestion = CT_Test::mapObjectToCodeQuestion($question);
+                    $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
                 }
-                array_push($questions, $CTQuestion);
+                array_push($exercises, $CTExercise);
             }
-            return $questions;
+            return $exercises;
         }
     }
 
-    function getNextQuestionNumber() {
-        $query = \CT\CT_DAO::getQuery('question', 'getNextQuestionNumber');
+    function getNextExerciseNumber() {
+        $query = \CT\CT_DAO::getQuery('exercise', 'getNextExerciseNumber');
         $arr = array(':ct_id' => $this->getCtId());
         $lastNum = $query['PDOX']->rowDie($query['sentence'], $arr)["lastNum"];
         return $lastNum + 1;
     }
 
-    static function fixUpQuestionNumbers($ct_id) {
-        $query = \CT\CT_DAO::getQuery('question', 'fixUpQuestionNumbers');
+    static function fixUpExerciseNumbers($ct_id) {
+        $query = \CT\CT_DAO::getQuery('exercise', 'fixUpExerciseNumbers');
         $arr = array(':ctId' => $ct_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
@@ -325,8 +325,8 @@ class CT_Question implements \JsonSerializable {
         if (!is_array($this->answers)) {
 
             $this->answers = array();
-            $query = \CT\CT_DAO::getQuery('question', 'getAnswers');
-            $arr = array(':questionId' => $this->getQuestionId(),
+            $query = \CT\CT_DAO::getQuery('exercise', 'getAnswers');
+            $arr = array(':exerciseId' => $this->getExerciseId(),
                 ':ctId' => $this->getCtId());
             $answers = $query['PDOX']->allRowsDie($query['sentence'], $arr);
             $this->answers = \CT\CT_DAO::createObjectFromArray(\CT\CT_Answer::class, $answers);
@@ -339,38 +339,38 @@ class CT_Question implements \JsonSerializable {
         return count($this->getAnswers());
     }
     
-    public function getQuestionByType()
+    public function getExerciseByType()
     {
         global $CFG;
         $class = $this->getMain()->getTypeProperty('class', $this->getType());
-        if($class=='CT\CT_QuestionSQL' ){
-            return CT_QuestionSQL::withId($this->getQuestionId());
+        if($class=='CT\CT_ExerciseSQL' ){
+            return CT_ExerciseSQL::withId($this->getExerciseId());
         }else{
-        return new $class($this->getQuestionId());
+        return new $class($this->getExerciseId());
         }
         
         }
 
     /**
-     * @return CT_Question
+     * @return CT_Exercise
      */
-    public function getQuestionParent() {
-        return CT_Question::withId($this->getQuestionId());
+    public function getExerciseParent() {
+        return CT_Exercise::withId($this->getExerciseId());
     }
 
-    public function setQuestionParentProperties() {
-        \CT\CT_DAO::setObjectPropertiesFromArray($this, \CT\CT_DAO::setObjectPropertiesToArray($this->getQuestionParent()));
+    public function setExerciseParentProperties() {
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, \CT\CT_DAO::setObjectPropertiesToArray($this->getExerciseParent()));
     }
 
     public function isNew() {
-        $query = \CT\CT_DAO::getQuery('question', 'exists');
+        $query = \CT\CT_DAO::getQuery('exercise', 'exists');
 
         $arr = array(
-            ':question_id' => $this->getQuestionId(),
+            ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId(),
         );
-        $questionId = $query['PDOX']->rowDie($query['sentence'], $arr)["questionId"];
-        return !(isset($questionId) && $questionId > 0);
+        $exerciseId = $query['PDOX']->rowDie($query['sentence'], $arr)["exerciseId"];
+        return !(isset($exerciseId) && $exerciseId > 0);
     }
 
     public function save() {
@@ -378,17 +378,17 @@ class CT_Question implements \JsonSerializable {
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
         if ($this->isNew()) {
-            $this->setQuestionNum($this->getNextQuestionNumber());
-            $query = \CT\CT_DAO::getQuery('question', 'insert');
+            $this->setExerciseNum($this->getNextExerciseNumber());
+            $query = \CT\CT_DAO::getQuery('exercise', 'insert');
 
             $arr = array(
-                ':question_id' => $this->getQuestionId(),
+                ':exercise_id' => $this->getExerciseId(),
                 ':ct_id' => $this->getCtId(),
-                ':question_num' => $this->getQuestionNum(),
+                ':exercise_num' => $this->getExerciseNum(),
                 ':type' => $this->getType(),
                 ':title' => $this->getTitle(),
-                ':question_must' => $this->getQuestionMust(),
-                ':question_musnt' => $this->getQuestionMusnt()
+                ':exercise_must' => $this->getExerciseMust(),
+                ':exercise_musnt' => $this->getExerciseMusnt()
             );
             $query['PDOX']->queryDie($query['sentence'], $arr);
             
@@ -397,20 +397,20 @@ class CT_Question implements \JsonSerializable {
 
     public function update() {
 
-        $query = \CT\CT_DAO::getQuery('question', 'update');
+        $query = \CT\CT_DAO::getQuery('exercise', 'update');
 
         $arr = array(
-            ':question_id' => $this->getQuestionId(),
+            ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId(),
-            ':question_num' => $this->getQuestionNum()
+            ':exercise_num' => $this->getExerciseNum()
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
     function delete() {
-        $query = \CT\CT_DAO::getQuery('question', 'delete');
+        $query = \CT\CT_DAO::getQuery('exercise', 'delete');
         $arr = array(
-            ':question_id' => $this->getQuestionId(),
+            ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId()
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
@@ -449,15 +449,15 @@ class CT_Question implements \JsonSerializable {
     /**
      * @return mixed
      */
-    public function getQuestionId() {
-        return $this->question_id;
+    public function getExerciseId() {
+        return $this->exercise_id;
     }
 
     /**
-     * @param mixed $question_id
+     * @param mixed $exercise_id
      */
-    public function setQuestionId($question_id) {
-        $this->question_id = $question_id;
+    public function setExerciseId($exercise_id) {
+        $this->exercise_id = $exercise_id;
     }
 
     /**
@@ -477,15 +477,15 @@ class CT_Question implements \JsonSerializable {
     /**
      * @return mixed
      */
-    public function getQuestionNum() {
-        return $this->question_num;
+    public function getExerciseNum() {
+        return $this->exercise_num;
     }
 
     /**
-     * @param mixed $question_num
+     * @param mixed $exercise_num
      */
-    public function setQuestionNum($question_num) {
-        $this->question_num = $question_num;
+    public function setExerciseNum($exercise_num) {
+        $this->exercise_num = $exercise_num;
     }
 
     public function getType() {
@@ -568,20 +568,20 @@ class CT_Question implements \JsonSerializable {
         $this->keywords = $keywords;
     }
 
-    public function getQuestionMust() {
-        return $this->question_must;
+    public function getExerciseMust() {
+        return $this->exercise_must;
     }
 
-    public function getQuestionMusnt() {
-        return $this->question_musnt;
+    public function getExerciseMusnt() {
+        return $this->exercise_musnt;
     }
 
-    public function setQuestionMust($question_must): void {
-        $this->question_must = $question_must;
+    public function setExerciseMust($exercise_must): void {
+        $this->exercise_must = $exercise_must;
     }
 
-    public function setQuestionMusnt($question_musnt): void {
-        $this->question_musnt = $question_musnt;
+    public function setExerciseMusnt($exercise_musnt): void {
+        $this->exercise_musnt = $exercise_musnt;
     }
 
 }

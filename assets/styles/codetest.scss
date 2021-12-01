@@ -18,7 +18,7 @@
 .toolTitleAction {
     font-size: 24px;
 }
-.question-text {
+.exercise-text {
     padding: 0 14px;
     font-size: initial !important;
     font-weight: initial !important;
@@ -27,21 +27,21 @@
     font-size: 16px;
     padding: 0 14px;
 }
-.question-solution {
+.exercise-solution {
     padding: 0 14px;
     font-size: initial !important;
     font-weight: initial !important;
     width: auto;
     overflow: scroll;
 }
-.question-row > a, .toolTitleAction {
+.exercise-row > a, .toolTitleAction {
     padding: 0 8px 0 0;
     font-weight: normal;
     color: #919191;
 }
-.question-row > a:hover,
-.question-row > a:focus,
-.question-row > a:active,
+.exercise-row > a:hover,
+.exercise-row > a:focus,
+.exercise-row > a:active,
 .toolTitleAction:hover,
 .toolTitleAction:focus,
 .toolTitleAction:active {
@@ -51,7 +51,7 @@
 .bg-highlight {
     background-color: #BEDCFE;
 }
-#addQuestions {
+#addExercises {
     margin-top: 20px;
 }
 .import-link {
@@ -304,7 +304,7 @@ form .btn button:hover{
   background: #1b1b1b;
 }
 
-#navQuestions{
+#navExercises{
     p{
         display: inline;
         float: left;
@@ -318,7 +318,7 @@ form .btn button:hover{
         text-align: center;
         margin: 4px 10px 0 0;
     }
-    .navQuestion{
+    .navExercise{
         background-color: var(--secondary-menu);
         margin: 0 10px;
         padding: 0 10px;
@@ -355,7 +355,7 @@ html{
     }
 }
 
-.import-questions-container{
+.import-exercises-container{
     display: flex;
     align-items: center;
     gap: 10px;
@@ -451,7 +451,7 @@ html{
     margin-bottom: 15px;
 }
 
-.response-question-row {
+.response-exercise-row {
     background-color: #FEF3E1;
 }
 
@@ -469,7 +469,7 @@ html{
     cursor: pointer;
 }
 
-.question-row{
+.exercise-row{
     border: none;
     background-color: transparent;
 }
@@ -501,7 +501,7 @@ html{
     margin-right: 2px;
 }
 
-.questionTitle{
+.exerciseTitle{
     font-size: 16px;
 }
 
@@ -664,7 +664,7 @@ html{
     > li {
         display: flex;
         align-items: center;
-        .question-number{
+        .exercise-number{
             margin-top: 1px;
         }
     }

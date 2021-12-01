@@ -1,7 +1,7 @@
 <?php
 
 // Make this require relative to the parent of the current folder
-// http://stackoverflow.com/questions/24753758
+// http://stackoverflow.com/exercises/24753758
 
 
 require_once dirname(__DIR__) . "/config.php";
@@ -52,14 +52,14 @@ $CFG->programmingLanguajes = array(
 );
 
 $CFG->CT_Types = array(
-    'formsPath' => 'question/forms/',
-    'studentsPath' => 'question/students/',
+    'formsPath' => 'exercise/forms/',
+    'studentsPath' => 'exercise/students/',
     'types' => array(
         'MYSQL' => array(
             'name' => 'sql',
-            'class' => \CT\CT_QuestionSQL::class,
-            'instructorForm' => 'questionSQLForm.php.twig',
-            'studentView' => 'questionSQLStudent.php.twig',
+            'class' => \CT\CT_ExerciseSQL::class,
+            'instructorForm' => 'exerciseSQLForm.php.twig',
+            'studentView' => 'exerciseSQLStudent.php.twig',
             'sqlTypes' => array('SELECT', 'DML', 'DDL'),
             'dbConnections' => array(
                 array(
@@ -105,9 +105,9 @@ $CFG->CT_Types = array(
         ),
         'programming' => array(
             'name' => 'programming',
-            'class' => \CT\CT_QuestionCode::class,
-            'instructorForm' => 'questionCodeForm.php.twig',
-            'studentView' => 'questionCodeStudent.php.twig',
+            'class' => \CT\CT_ExerciseCode::class,
+            'instructorForm' => 'exerciseCodeForm.php.twig',
+            'studentView' => 'exerciseCodeStudent.php.twig',
             'timeout' => 5,
             'codeLanguages' => array(
                 array('name' => 'PHP', 'ext' => 'php', 'command' => 'php -f', 'stdin' => false),

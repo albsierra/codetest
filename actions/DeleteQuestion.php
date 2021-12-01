@@ -3,16 +3,16 @@
 require_once "../initTsugi.php";
 global $translator;
 
-$question_id = isset($_POST["question_id"]) ? $_POST["question_id"] : false;
+$exercise_id = isset($_POST["exercise_id"]) ? $_POST["exercise_id"] : false;
 $ct_id = $_SESSION['ct_id'];
-if ($USER->instructor && $question_id) {
+if ($USER->instructor && $exercise_id) {
 
-    //look for the question in the db and delete it
-    $question = CT\CT_Question::withId($question_id);
-    $question->delete();
-    \CT\CT_Question::fixUpQuestionNumbers($_SESSION["ct_id"]);
+    //look for the exercise in the db and delete it
+    $exercise = CT\CT_Exercise::withId($exercise_id);
+    $exercise->delete();
+    \CT\CT_Exercise::fixUpExerciseNumbers($_SESSION["ct_id"]);
 
-    $_SESSION['success'] = $translator->trans('backend-messages.question.deleted.success');
+    $_SESSION['success'] = $translator->trans('backend-messages.exercise.deleted.success');
     $OUTPUT->buffer = true;
     $result["flashmessage"] = $OUTPUT->flashMessages();
 

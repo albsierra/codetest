@@ -1,12 +1,12 @@
-{% for question in questions %}
+{% for exercise in exercises %}
     <div class="row response-row">
-        <div class="col-sm-12" onclick="showQuestions('{{ question.getQuestionId() }}')">
-            <a class="h5 response-collapse-link pointer" data-toggle="collapse" data-target="#main{{question.getQuestionId()}}">
-                <span class="fa fa-chevron-down rotate" aria-hidden="true"></span><span>{{question.getTitle()}}</span>
+        <div class="col-sm-12" onclick="showExercises('{{ exercise.getExerciseId() }}')">
+            <a class="h5 response-collapse-link pointer" data-toggle="collapse" data-target="#main{{exercise.getExerciseId()}}">
+                <span class="fa fa-chevron-down rotate" aria-hidden="true"></span><span>{{exercise.getTitle()}}</span>
             </a>
         </div>
-        <div id="main{{question.getQuestionId()}}" class="col-xs-offset-1 col-sm-11" hidden>
-            {{ include('question/import/importQuestions.php.twig') }}
+        <div id="main{{exercise.getExerciseId()}}" class="col-xs-offset-1 col-sm-11" hidden>
+            {{ include('exercise/import/importExercises.php.twig') }}
         </div>
     </div>
 {% endfor %}

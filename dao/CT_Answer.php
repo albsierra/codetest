@@ -8,7 +8,7 @@ class CT_Answer
 {
     private $answer_id;
     private $user_id;
-    private $question_id;
+    private $exercise_id;
     private $ct_id;
     private $answer_language;
     private $answer_txt;
@@ -26,11 +26,11 @@ class CT_Answer
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
     }
 
-    public static function getByUserAndQuestion($userId, $questionId, $ctId)
+    public static function getByUserAndExercise($userId, $exerciseId, $ctId)
     {
         $answer = new self();
-        $query = \CT\CT_DAO::getQuery('answer','getByUserQuestion');
-        $arr = array(':userId' => $userId, ':questionId' => $questionId,  ':ctId' => $ctId);
+        $query = \CT\CT_DAO::getQuery('answer','getByUserExercise');
+        $arr = array(':userId' => $userId, ':exerciseId' => $exerciseId,  ':ctId' => $ctId);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         \CT\CT_DAO::setObjectPropertiesFromArray($answer, $context);
         return $answer;
@@ -79,17 +79,17 @@ class CT_Answer
     /**
      * @return mixed
      */
-    public function getQuestionId()
+    public function getExerciseId()
     {
-        return $this->question_id;
+        return $this->exercise_id;
     }
 
     /**
-     * @param mixed $question_id
+     * @param mixed $exercise_id
      */
-    public function setQuestionId($question_id)
+    public function setExerciseId($exercise_id)
     {
-        $this->question_id = $question_id;
+        $this->exercise_id = $exercise_id;
     }
 
     /**
@@ -193,7 +193,7 @@ class CT_Answer
             ':modified' => $currentTime,
             ':userId' => $this->getUserId(),
             ':ctId' => $this->getCtId(),
-            ':questionId' => $this->getQuestionId(),
+            ':exerciseId' => $this->getExerciseId(),
             ':modified' => $currentTime,
             ':answerTxt' => $this->getAnswerTxt(),
             ':answerSuccess' => $this->getAnswerSuccess(),
@@ -210,22 +210,22 @@ class CT_Answer
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
-    static function deleteAnswers($questions, $user_id) {
-        $questionIds = array();
-        foreach($questions as $question) {
-            array_push($questionIds, $question->getQuestionId());
+    static function deleteAnswers($exercises, $user_id) {
+        $exerciseIds = array();
+        foreach($exercises as $exercise) {
+            array_push($exerciseIds, $exercise->getExerciseId());
         }
-        $query = \CT\CT_DAO::getQuery('answer','deleteFromQuestions');
-        $query['sentence'] = str_replace("/questionsId/", implode(',', array_map('intval', $questionIds)), $query['sentence']);
+        $query = \CT\CT_DAO::getQuery('answer','deleteFromExercises');
+        $query['sentence'] = str_replace("/exercisesId/", implode(',', array_map('intval', $exerciseIds)), $query['sentence']);
         $arr = array(':userId' => $user_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
-    static function deleteInstructorAnswers($questions, $ct_id)
+    static function deleteInstructorAnswers($exercises, $ct_id)
     {
         $instructors = \CT\CT_User::findInstructors($ct_id);
         foreach($instructors as $instructor) {
-            self::deleteAnswers($questions, $instructor->getUserId());
+            self::deleteAnswers($exercises, $instructor->getUserId());
         }
     }
 

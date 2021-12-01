@@ -7,7 +7,7 @@ use \Tsugi\Core\Result;
 class CT_Usage implements \JsonSerializable
 {
     private $id;
-    private $idQuestion;
+    private $idExercise;
     private $ctId;
     private $date;
     private $user;
@@ -19,9 +19,9 @@ public function __construct(){
  
 }
 
-public static function constructValues($idQuestion, $user, $understandabilityScore, $difficultyScore, $timeScore){
+public static function constructValues($idExercise, $user, $understandabilityScore, $difficultyScore, $timeScore){
     $instance = new Self();
-    $instance->idQuestion = $idQuestion;
+    $instance->idExercise = $idExercise;
     $instance->user = $user;
     $instance->understandabilityScore = $understandabilityScore;
     $instance->difficultyScore = $difficultyScore;
@@ -39,8 +39,8 @@ public function save() {
         //url to update the Test score
         $urlUpdateTest = $CFG->repositoryUrl . "/api/usage/updateTest";
         
-        //url to update the questions score
-        $urlUpdateQuestion = $CFG->repositoryUrl . "/api/usage/updateQuestion";
+        //url to update the exercises score
+        $urlUpdateExercise = $CFG->repositoryUrl . "/api/usage/updateExercise";
         
         //save Usage
         $curl = curl_init();
@@ -60,14 +60,14 @@ public function save() {
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT' );
         
-        //takes the url for a test or question
-        if($test->questions){
+        //takes the url for a test or exercise
+        if($test->exercises){
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($test));
         curl_setopt($curl, CURLOPT_URL, $urlUpdateTest);
         
         }else{
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this));
-            curl_setopt($curl, CURLOPT_URL, $urlUpdateQuestion);
+            curl_setopt($curl, CURLOPT_URL, $urlUpdateExercise);
         }
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $result = curl_exec($curl);
@@ -78,12 +78,12 @@ public function save() {
         
     }
     
-    //Updates the score of the test or question
+    //Updates the score of the test or exercise
 public function saveAverageGrade() {
         global $CFG;
         
         //call to recover the object from the repo
-        $url = $CFG->repositoryUrl . "/api/tests/getTestQuestionId1/".$this->getIdQuestion();
+        $url = $CFG->repositoryUrl . "/api/tests/getTestExerciseId1/".$this->getIdExercise();
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET' );
@@ -97,29 +97,29 @@ public function saveAverageGrade() {
         
         $response = json_decode($result);
         
-        //if obejct->questions is a Test object
-        if ($response->questions) {
-            foreach ($response->questions as $key => $question) {
-                if ($response->questions[$key]->id == $this->getIdQuestion()) {
+        //if obejct->exercises is a Test object
+        if ($response->exercises) {
+            foreach ($response->exercises as $key => $exercise) {
+                if ($response->exercises[$key]->id == $this->getIdExercise()) {
                     //takes the current number of votes and scores
-                    $nVotes = $response->questions[$key]->numberVotes;
-                    $understability = $response->questions[$key]->averageGradeUnderstability;
-                    $difficulty = $response->questions[$key]->averageGradeDifficulty;
-                    $time = $response->questions[$key]->averageGradeTime;
+                    $nVotes = $response->exercises[$key]->numberVotes;
+                    $understability = $response->exercises[$key]->averageGradeUnderstability;
+                    $difficulty = $response->exercises[$key]->averageGradeDifficulty;
+                    $time = $response->exercises[$key]->averageGradeTime;
 
                     //update the scores
-                    $response->questions[$key]->averageGradeUnderstability = (($nVotes * $understability) + $this->getUnderstandabilityScore()) / ($nVotes + 1);
+                    $response->exercises[$key]->averageGradeUnderstability = (($nVotes * $understability) + $this->getUnderstandabilityScore()) / ($nVotes + 1);
 
-                    $response->questions[$key]->averageGradeDifficulty = (($nVotes * $difficulty) + $this->getDifficultyScore()) / ($nVotes + 1);
+                    $response->exercises[$key]->averageGradeDifficulty = (($nVotes * $difficulty) + $this->getDifficultyScore()) / ($nVotes + 1);
 
-                    $response->questions[$key]->averageGradeTime = (($nVotes * $time) + $this->getTimeScore()) / ($nVotes + 1);
+                    $response->exercises[$key]->averageGradeTime = (($nVotes * $time) + $this->getTimeScore()) / ($nVotes + 1);
 
-                    $response->questions[$key]->numberVotes = $nVotes + 1;
+                    $response->exercises[$key]->numberVotes = $nVotes + 1;
 
-                    $response->questions[$key]->averageGrade = ($response->questions[$key]->averageGradeUnderstability + $response->questions[$key]->averageGradeDifficulty + $response->questions[$key]->averageGradeTime) / 3;
+                    $response->exercises[$key]->averageGrade = ($response->exercises[$key]->averageGradeUnderstability + $response->exercises[$key]->averageGradeDifficulty + $response->exercises[$key]->averageGradeTime) / 3;
                 }
             }
-            //else is a Question object
+            //else is a Exercise object
         } else {
             //takes the current number of votes and scores
             $nVotes = $response->numberVotes;
@@ -149,7 +149,7 @@ public function saveAverageGrade() {
                
                 $CTUsage = new CT_Usage();
                 $CTUsage->setId($usage->id);
-                $CTUsage->setIdQuestion($usage->idQuestion);
+                $CTUsage->setIdExercise($usage->idExercise);
                 $CTUsage->setCtId($usage->ctId);
                 $CTUsage->setDate($usage->date);
                 $user = new CT_User();
@@ -169,7 +169,7 @@ public function saveAverageGrade() {
 
     public function jsonSerialize(){
         return [
-            'idQuestion' =>  $this->getIdQuestion(),
+            'idExercise' =>  $this->getIdExercise(),
             'ctId' => $this->getCtId(),
             'user' => $this->getUser(),
             'understandabilityScore' => $this->getUnderstandabilityScore(),
@@ -179,12 +179,12 @@ public function saveAverageGrade() {
     }
     
     
-    static function getUsages($questions, $students) {
+    static function getUsages($exercises, $students) {
         global $CFG;
 
-        $questions1 = array_map(function ($a) {
-            return $a->getQuestionId();
-        }, $questions);
+        $exercises1 = array_map(function ($a) {
+            return $a->getExerciseId();
+        }, $exercises);
 
         $students1 = array_map(function ($a) {
             return $a->getUserId();
@@ -193,8 +193,8 @@ public function saveAverageGrade() {
         $ctId=[$_SESSION['ct_id']];
         $url = $CFG->repositoryUrl . "/api/usage/getUsageByIds";
           
-        $array = [$questions1, $students1, $ctId];
-//        array_push($array, $questions, $students, $_SESSION['ct_id']);
+        $array = [$exercises1, $students1, $ctId];
+//        array_push($array, $exercises, $students, $_SESSION['ct_id']);
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
@@ -214,8 +214,8 @@ public function saveAverageGrade() {
     return $this->id;
 }
 
-public function getIdQuestion() {
-    return $this->idQuestion;
+public function getIdExercise() {
+    return $this->idExercise;
 }
 
 public function getDate() {
@@ -242,8 +242,8 @@ public function setId($id): void {
     $this->id = $id;
 }
 
-public function setIdQuestion($idQuestion): void {
-    $this->idQuestion = $idQuestion;
+public function setIdExercise($idExercise): void {
+    $this->idExercise = $idExercise;
 }
 
 public function setDate($date): void {

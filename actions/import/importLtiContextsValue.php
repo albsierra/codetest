@@ -19,25 +19,25 @@ if ($USER->instructor) {
             $testForImport = $array['tests'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContexts.php.twig', array(
+            echo $twig->render('exercise/import/importLtiContexts.php.twig', array(
                 'testForImport' => $testForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => $page
             ));
-        } else if ($_GET['object'] == "question") {
+        } else if ($_GET['object'] == "exercise") {
             if (isset($_GET['page'])) {
                 $page = $_GET['page'];
-                $array = \CT\CT_Question::findQuestionForImportByValue($_GET['value'], $page);
+                $array = \CT\CT_Exercise::findExerciseForImportByValue($_GET['value'], $page);
             } else {
-                $array = \CT\CT_Question::findQuestionForImportByValue($_GET['value']);
+                $array = \CT\CT_Exercise::findExerciseForImportByValue($_GET['value']);
                 $page = 0;
             }
-            $questionsForImport = $array['questions'];
+            $exercisesForImport = $array['exercises'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContextsQuestion.php.twig', array(
-                'questionsForImport' => $questionsForImport,
+            echo $twig->render('exercise/import/importLtiContextsExercise.php.twig', array(
+                'exercisesForImport' => $exercisesForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => $page
@@ -49,20 +49,20 @@ if ($USER->instructor) {
             $testForImport = $array['tests'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContexts.php.twig', array(
+            echo $twig->render('exercise/import/importLtiContexts.php.twig', array(
                 'testForImport' => $testForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => 0
             ));
-        } else if ($_GET['object'] == "question") {
-            $array = CT\CT_Question::findQuestionsForImportByDeleteValue($_GET['value']);
-            $questionsForImport = $array['questions'];
+        } else if ($_GET['object'] == "exercise") {
+            $array = CT\CT_Exercise::findExercisesForImportByDeleteValue($_GET['value']);
+            $exercisesForImport = $array['exercises'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContextsQuestion.php.twig', array(
+            echo $twig->render('exercise/import/importLtiContextsExercise.php.twig', array(
                 //'coursesForImport' => $coursesForImport
-                'questionsForImport' => $questionsForImport,
+                'exercisesForImport' => $exercisesForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => 0
@@ -75,21 +75,21 @@ if ($USER->instructor) {
             $testForImport = $array['tests'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContexts.php.twig', array(
+            echo $twig->render('exercise/import/importLtiContexts.php.twig', array(
                 'testForImport' => $testForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => $page
             ));
-        } else if ($_GET['object'] == "question") {
+        } else if ($_GET['object'] == "exercise") {
             $page = $_GET['page'];
-            $array = \CT\CT_Question::findQuestionForImportByValue(null, $page);
+            $array = \CT\CT_Exercise::findExerciseForImportByValue(null, $page);
 
-            $questionsForImport = $array['questions'];
+            $exercisesForImport = $array['exercises'];
             $totalPages = $array['totalPages'];
             $tags = $_SESSION['tags'];
-            echo $twig->render('question/import/importLtiContextsQuestion.php.twig', array(
-                'questionsForImport' => $questionsForImport,
+            echo $twig->render('exercise/import/importLtiContextsExercise.php.twig', array(
+                'exercisesForImport' => $exercisesForImport,
                 'tags' => $tags,
                 'totalPages' => $totalPages,
                 'page' => $page

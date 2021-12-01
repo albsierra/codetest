@@ -1,17 +1,17 @@
-{% if question %}
+{% if exercise %}
     <div class="checkbox">
-        {% if question.getTestId() %}
-            <input type="checkbox" id="question{{question.getQuestionId()}}" name="question[]" value="{{question.getQuestionId()}}/{{question.getTestId()}}">
+        {% if exercise.getTestId() %}
+            <input type="checkbox" id="exercise{{exercise.getExerciseId()}}" name="exercise[]" value="{{exercise.getExerciseId()}}/{{exercise.getTestId()}}">
         {%else%}
-            <input type="checkbox" id="question{{question.getQuestionId()}}" name="question[]" value="{{question.getQuestionId()}}">
+            <input type="checkbox" id="exercise{{exercise.getExerciseId()}}" name="exercise[]" value="{{exercise.getExerciseId()}}">
         {%endif%}
-        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.statement{%endtrans%}:</b> {{question.getTitle()}}</label>
-        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.type{%endtrans%}:</b> {{question.getType()}}</label>
-        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.difficulty{%endtrans%}:</b> {{question.getDifficulty()}}</label>
-        <label for="question{{question.getQuestionId()}}"><b>{%trans%}import-question.averagegrade{%endtrans%}:</b> {{question.getAverageGrade() |round(2)}}</label>
+        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.statement{%endtrans%}:</b> {{exercise.getTitle()}}</label>
+        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.type{%endtrans%}:</b> {{exercise.getType()}}</label>
+        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.difficulty{%endtrans%}:</b> {{exercise.getDifficulty()}}</label>
+        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.averagegrade{%endtrans%}:</b> {{exercise.getAverageGrade() |round(2)}}</label>
     </div>
 {% else %}
     <div class="checkbox">
-        {%trans%}No questions in test.{%endtrans%} 
+        {%trans%}No exercises in test.{%endtrans%} 
     </div>
 {% endif %}

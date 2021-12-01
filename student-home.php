@@ -9,10 +9,10 @@ $main = new \CT\CT_Main($_SESSION["ct_id"]);
 
 $toolTitle = $main->getTitle() ? $main->getTitle() : "Code Test";
 
-$questions = $main->getQuestions();
-$totalQuestions = count($questions);
+$exercises = $main->getExercises();
+$totalExercises = count($exercises);
 
-$currentQuestionNumber = isset($_GET['questionNumber']) ? $_GET['questionNumber'] : 0;
+$currentExerciseNumber = isset($_GET['exerciseNumber']) ? $_GET['exerciseNumber'] : 0;
 
 $user = new \CT\CT_User($USER->id);
 
@@ -21,9 +21,9 @@ echo $twig->render('student-home.php.twig', array(
     'help' => $help(),
     'menu' => $menu,
     'user' => $user,
-    'questions' => $questions,
-    'totalQuestions' => $totalQuestions,
-    'currentQuestionNumber' => $currentQuestionNumber,
+    'exercises' => $exercises,
+    'totalExercises' => $totalExercises,
+    'currentExerciseNumber' => $currentExerciseNumber,
     'main' => $main,
     'CFG' => $CFG,
 ));

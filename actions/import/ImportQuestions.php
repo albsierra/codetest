@@ -3,13 +3,13 @@
 require_once "../../initTsugi.php";
 
 if ($USER->instructor) {
-    $main = new \CT\CT_Main($_GET['questionId']);
-    $questionId = $_GET['questionId'];
+    $main = new \CT\CT_Main($_GET['exerciseId']);
+    $exerciseId = $_GET['exerciseId'];
     $testId = $_GET['testId'];
-    $question = \CT\CT_Test::findTestForImportQuestionId($questionId, $testId);
+    $exercise = \CT\CT_Test::findTestForImportExerciseId($exerciseId, $testId);
 
-    echo $twig->render('question/import/importQuestions.php.twig', array(
-        'question' => $question,
+    echo $twig->render('exercise/import/importExercises.php.twig', array(
+        'exercise' => $exercise,
     ));
 } else {
     header('Location: ' . addSession('../../student-home.php'));

@@ -1,14 +1,14 @@
 {% extends "mainTemplate.php.twig" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle('pages-title.usage.by.question'|trans, true, false) }}
+{{ OUTPUT.pageTitle('pages-title.usage.by.exercise'|trans, true, false) }}
 {% endblock %}
 {% block content %}
-<section id="questionResponses">
+<section id="exerciseResponses">
     <div class="panel panel-info">
         <div class="panel-heading response-panel-header">
             <div class="row">
                 <div class="col-xs-6">
-                    <h4 class="results-table-hdr">{%trans%}usage-table.question{%endtrans%}</h4>
+                    <h4 class="results-table-hdr">{%trans%}usage-table.exercise{%endtrans%}</h4>
                 </div>
                 <div class="col-xs-3 text-center">
                 </div>
@@ -18,28 +18,28 @@
             </div>
         </div>
         <div class="list-group">
-            {% for question in questions %}
-            {% set questionId = question.getQuestionId() %}
+            {% for exercise in exercises %}
+            {% set exerciseId = exercise.getExerciseId() %}
             <div class="list-group-item response-list-group-item">
                 <div class="row">
                     <div class="col-sm-3 header-col">
-                        <a class="h4 response-collapse-link" data-toggle="collapse" data-target="#responses{{ questionId }}" >
-                            {%trans%}usage-table.question{%endtrans%} {{ question.getQuestionNum() }}
+                        <a class="h4 response-collapse-link" data-toggle="collapse" data-target="#responses{{ exerciseId }}" >
+                            {%trans%}usage-table.exercise{%endtrans%} {{ exercise.getExerciseNum() }}
                             <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                         </a>
                     </div>
                     <div class="col-sm-offset-1 col-sm-8 header-col">
                         <div class="flx-cntnr flx-row flx-nowrap flx-start">
                             {% autoescape false %}
-                            <span class="flx-grow-all">{{ question.getTitle() }}</span>
+                            <span class="flx-grow-all">{{ exercise.getTitle() }}</span>
                             {% endautoescape %}
                         </div>
                     </div>
                     {% set value = false %}
-                    <div id="responses{{ questionId }}" class="col-xs-12 results-collapse collapse"> 
+                    <div id="responses{{ exerciseId }}" class="col-xs-12 results-collapse collapse"> 
                         {% for student in students %}
                         {%for usage in usages %}
-                        {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdQuestion() == question.getQuestionId()%}
+                        {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdExercise() == exercise.getExerciseId()%}
 
                         {% set value = true %}
                         <div class="row response-row">

@@ -18,7 +18,7 @@
 .toolTitleAction {
     font-size: 24px;
 }
-.question-text {
+.exercise-text {
     padding: 0 14px;
     font-size: initial !important;
     font-weight: initial !important;
@@ -27,21 +27,21 @@
     font-size: 16px;
     padding: 0 14px;
 }
-.question-solution {
+.exercise-solution {
     padding: 0 14px;
     font-size: initial !important;
     font-weight: initial !important;
     width: auto;
     overflow: scroll;
 }
-.question-row > a, .toolTitleAction {
+.exercise-row > a, .toolTitleAction {
     padding: 0 8px 0 0;
     font-weight: normal;
     color: #919191;
 }
-.question-row > a:hover,
-.question-row > a:focus,
-.question-row > a:active,
+.exercise-row > a:hover,
+.exercise-row > a:focus,
+.exercise-row > a:active,
 .toolTitleAction:hover,
 .toolTitleAction:focus,
 .toolTitleAction:active {
@@ -51,27 +51,27 @@
 .bg-highlight {
     background-color: #BEDCFE;
 }
-#addQuestions {
+#addExercises {
     margin-top: 20px;
 }
 
-#navQuestions p{
+#navExercises p{
     display: inline;
     float: left;
 }
 
-#navQuestions ol {
+#navExercises ol {
     list-style-type: none;
     text-align: center;
 }
 
-#navQuestions li{
+#navExercises li{
     float: left;
     text-align: center;
     margin: 0 10px 0 0;
 }
 
-#navQuestions .navQuestion{
+#navExercises .navExercise{
     background-color: var(--secondary-menu);
     margin: 0 10px;
     padding: 0 10px;
@@ -164,8 +164,8 @@ p.response-text {
         float: none !important; /* import to override pull-right class */
     }
 }
-.h3.inline .question-text-span,
-.h3.inline .question-number{
+.h3.inline .exercise-text-span,
+.h3.inline .exercise-number{
     line-height: 2.28rem;
 }
 
@@ -309,29 +309,29 @@ form .btn button:hover{
   background: #1b1b1b;
 }
 
-#navQuestions p{
+#navExercises p{
     display: inline;
     float: left;
 }
 
-#navQuestions ol {
+#navExercises ol {
     list-style-type: none;
     text-align: center;
 }
 
-#navQuestions li{
+#navExercises li{
     float: left;
     text-align: center;
     margin: 4px 10px 0 0;
 }
 
-#navQuestions .navQuestion{
+#navExercises .navExercise{
     background-color: var(--secondary-menu);
     margin: 0 10px;
     padding: 0 10px;
 }
 
-#importQuestions{
+#importExercises{
     margin-top: 15px;
 }
 
@@ -425,7 +425,7 @@ form .btn button:hover{
     margin-bottom: 15px;
 }
 
-.response-question-row {
+.response-exercise-row {
     background-color: #FEF3E1;
 }
 
@@ -443,7 +443,7 @@ form .btn button:hover{
     cursor: pointer;
 }
 
-.question-row{
+.exercise-row{
     border: none;
     background-color: transparent;
 }
@@ -476,7 +476,7 @@ form .btn button:hover{
     margin-right: 2px;
 }
 
-.questionTitle{
+.exerciseTitle{
     font-size: 16px;
 }
 

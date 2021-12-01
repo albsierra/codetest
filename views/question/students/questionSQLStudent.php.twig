@@ -1,17 +1,17 @@
 <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
     <div class="flx-grow-all">
-        <strong>{%trans%}student-sql-question.database{%endtrans%}: </strong>
-        <span>{{ question.getQuestionDatabase() }}</span>
+        <strong>{%trans%}student-sql-exercise.database{%endtrans%}: </strong>
+        <span>{{ exercise.getExerciseDatabase() }}</span>
     </div>
     <div class="flx-grow-all">
-        <strong>{%trans%}student-sql-question.type{%endtrans%}: </strong>
-        <span>{{ question.getQuestionSQLType() }}</span>
+        <strong>{%trans%}student-sql-exercise.type{%endtrans%}: </strong>
+        <span>{{ exercise.getExerciseSQLType() }}</span>
     </div>
 </div>
-{% set queryTable = question.getQueryTable() %}
+{% set queryTable = exercise.getQueryTable() %}
 {% if queryTable %}
     <div class="flx-grow-all">
-        <strong>{%trans%}student-sql-question.output{%endtrans%}: </strong>
+        <strong>{%trans%}student-sql-exercise.output{%endtrans%}: </strong>
         {% autoescape false %}
         <p>{{ queryTable }}</p>
         {% endautoescape %}

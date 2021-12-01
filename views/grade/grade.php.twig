@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{ student.user.getDisplayname() }}</td>
                         <td>{{ student.mostRecentDate|date("m/d/Y H:i:s", "Europe/Paris") }}</td>
-                        <td>{{ student.numberAnswered }}  / {{ totalQuestions }}</td>
+                        <td>{{ student.numberAnswered }}  / {{ totalExercises }}</td>
                         <td>
                             <form class="form-inline" action="actions/GradeStudent.php" method="post">
                                 <input type="hidden" name="student_id" value="{{ student.user.getUserId() }}">

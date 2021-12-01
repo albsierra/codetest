@@ -8,13 +8,13 @@ class CT_Test implements \JsonSerializable
    private $test_id;
    private $description;
    private $name;
-   private $questions;
+   private $exercises;
 
-    public function __construct($question_id = null) {
+    public function __construct($exercise_id = null) {
         $context = array();
-        if (isset($question_id)) {
-            $query = \CT\CT_DAO::getQuery('question', 'getById');
-            $arr = array(':question_id' => $question_id);
+        if (isset($exercise_id)) {
+            $query = \CT\CT_DAO::getQuery('exercise', 'getById');
+            $arr = array(':exercise_id' => $exercise_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
@@ -25,7 +25,7 @@ class CT_Test implements \JsonSerializable
             'test_id' => $this->getTest_id(),
             'description' => $this->getDescription(),
             'name' => $this->getName(),
-            'questions' => $this->getQuestions(),
+            'exercises' => $this->getExercises(),
             
         ];
     }
@@ -49,83 +49,83 @@ class CT_Test implements \JsonSerializable
         if ($response) {
             $tests = array();
             foreach ($response as $test) {
-                $questions = array();
+                $exercises = array();
                 $CTTest = new CT_Test();
                 $CTTest->setTest_id($test->id);
                 $CTTest->setName($test->name);
                 $CTTest->setDescription($test->description);
-                $questions1 = ($test->questions);
-                foreach ($questions1 as $question) {
-                    if ($question->type == 'MYSQL') {
-                        $CTQuestion = self::mapObjectToSQLQuestion($question, $test->id);
+                $exercises1 = ($test->exercises);
+                foreach ($exercises1 as $exercise) {
+                    if ($exercise->type == 'MYSQL') {
+                        $CTExercise = self::mapObjectToSQLExercise($exercise, $test->id);
                     } else {
-                        $CTQuestion = self::mapObjectToCodeQuestion($question, $test->id);
+                        $CTExercise = self::mapObjectToCodeExercise($exercise, $test->id);
                     }
 
-                    array_push($questions, $CTQuestion);
+                    array_push($exercises, $CTExercise);
                 }
-                $CTTest->setQuestions($questions);
+                $CTTest->setExercises($exercises);
                 array_push($tests, $CTTest);
             }
             return $tests;
         }
     }
 
-    static function mapObjectToQuestion($question, $testId = null) {
-        $CTQuestion = new CT_Question();
-        $CTQuestion->setQuestionId($question->id);
-        $CTQuestion->setTitle($question->title);
-        $CTQuestion->setDifficulty($question->difficulty);
-        $CTQuestion->setType($question->type);
-        $CTQuestion->setTestId($testId);
-        isset($question->averageGrade) ? $CTQuestion->setAverageGrade($question->averageGrade) : false;
-        isset($question->keywords) ? $CTQuestion->setKeywords($question->keywords) : false;
+    static function mapObjectToExercise($exercise, $testId = null) {
+        $CTExercise = new CT_Exercise();
+        $CTExercise->setExerciseId($exercise->id);
+        $CTExercise->setTitle($exercise->title);
+        $CTExercise->setDifficulty($exercise->difficulty);
+        $CTExercise->setType($exercise->type);
+        $CTExercise->setTestId($testId);
+        isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
+        isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
 
-        return $CTQuestion;
+        return $CTExercise;
     }
 
-    static function mapObjectToSQLQuestion($question, $testId = null) {
-        $CTQuestion = new CT_QuestionSQL();
-        $CTQuestion->setQuestionId($question->id);
-        $CTQuestion->setCtId($_SESSION['ct_id']);
-        $CTQuestion->setTitle($question->title);
-        $CTQuestion->setDifficulty($question->difficulty);
-        $CTQuestion->setType($question->type);
-        $CTQuestion->setTestId($testId);
-        isset($question->averageGrade) ? $CTQuestion->setAverageGrade($question->averageGrade) : false;
-        isset($question->keywords) ? $CTQuestion->setKeywords($question->keywords) : false;
-        (isset($question->question_dbms) ? $CTQuestion->setQuestionDbms($question->question_dbms) : null );
-        (isset($question->question_sql_type) ? $CTQuestion->setQuestionSQLType($question->question_sql_type) : null );
-        (isset($question->question_database) ? $CTQuestion->setQuestionDatabase($question->question_database) : null );
-        (isset($question->question_solution) ? $CTQuestion->setQuestionSolution($question->question_solution) : null );
-        (isset($question->question_probe) ? $CTQuestion->setQuestionProbe($question->question_probe) : null );
-        (isset($question->question_onfly) ? $CTQuestion->setQuestionOnfly($question->question_onfly) : null );
-        (isset($question->question_must) ? $CTQuestion->setQuestionMust($question->question_must) : null );
-        (isset($question->question_musnt) ? $CTQuestion->setQuestionMusnt($question->question_musnt) : null );
+    static function mapObjectToSQLExercise($exercise, $testId = null) {
+        $CTExercise = new CT_ExerciseSQL();
+        $CTExercise->setExerciseId($exercise->id);
+        $CTExercise->setCtId($_SESSION['ct_id']);
+        $CTExercise->setTitle($exercise->title);
+        $CTExercise->setDifficulty($exercise->difficulty);
+        $CTExercise->setType($exercise->type);
+        $CTExercise->setTestId($testId);
+        isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
+        isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
+        (isset($exercise->exercise_dbms) ? $CTExercise->setExerciseDbms($exercise->exercise_dbms) : null );
+        (isset($exercise->exercise_sql_type) ? $CTExercise->setExerciseSQLType($exercise->exercise_sql_type) : null );
+        (isset($exercise->exercise_database) ? $CTExercise->setExerciseDatabase($exercise->exercise_database) : null );
+        (isset($exercise->exercise_solution) ? $CTExercise->setExerciseSolution($exercise->exercise_solution) : null );
+        (isset($exercise->exercise_probe) ? $CTExercise->setExerciseProbe($exercise->exercise_probe) : null );
+        (isset($exercise->exercise_onfly) ? $CTExercise->setExerciseOnfly($exercise->exercise_onfly) : null );
+        (isset($exercise->exercise_must) ? $CTExercise->setExerciseMust($exercise->exercise_must) : null );
+        (isset($exercise->exercise_musnt) ? $CTExercise->setExerciseMusnt($exercise->exercise_musnt) : null );
 
-        return $CTQuestion;
+        return $CTExercise;
     }
 
-    static function mapObjectToCodeQuestion($question, $testId = null) {
-        $CTQuestion = new CT_QuestionCode();
-        $CTQuestion->setQuestionId($question->id);
-        $CTQuestion->setCtId($_SESSION['ct_id']);
-        $CTQuestion->setTitle($question->title);
-        $CTQuestion->setDifficulty($question->difficulty);
-        $CTQuestion->setType($question->type);
-        $CTQuestion->setTestId($testId);
-        isset($question->averageGrade) ? $CTQuestion->setAverageGrade($question->averageGrade) : false;
-        isset($question->keywords) ? $CTQuestion->setKeywords($question->keywords) : false;
-        $CTQuestion->setQuestionLanguage($question->question_language);
-        (isset($question->question_input_test) ? $CTQuestion->setQuestionInputTest($question->question_input_test) : null );
-        (isset($question->question_input_grade) ? $CTQuestion->setQuestionInputGrade($question->question_input_grade) : null );
-        (isset($question->question_output_test) ? $CTQuestion->setQuestionOutputTest($question->question_output_test) : null );
-        (isset($question->question_output_grade) ? $CTQuestion->setQuestionInputGrade($question->question_output_grade) : null );
-        (isset($question->question_solution) ? $CTQuestion->setQuestionSolution($question->question_solution) : null );
-        (isset($question->question_must) ? $CTQuestion->setQuestionMust($question->question_must) : null );
-        (isset($question->question_musnt) ? $CTQuestion->setQuestionMusnt($question->question_musnt) : null );
+    static function mapObjectToCodeExercise($exercise, $testId = null) {
+        $CTExercise = new CT_ExerciseCode();
+        $CTExercise->setExerciseId($exercise->id);
+        $CTExercise->setCtId($_SESSION['ct_id']);
+        $CTExercise->setTitle($exercise->title);
+        $CTExercise->setDifficulty($exercise->difficulty);
+        $CTExercise->setType($exercise->type);
+        $CTExercise->setTestId($testId);
+        isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
+        isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
+        $CTExercise->setExerciseLanguage($exercise->exercise_language);
+        (isset($exercise->exercise_input_test) ? $CTExercise->setExerciseInputTest($exercise->exercise_input_test) : null );
+        (isset($exercise->exercise_input_grade) ? $CTExercise->setExerciseInputGrade($exercise->exercise_input_grade) : null );
+        (isset($exercise->exercise_output_test) ? $CTExercise->setExerciseOutputTest($exercise->exercise_output_test) : null );
+        (isset($exercise->exercise_output_grade) ? $CTExercise->setExerciseInputGrade($exercise->exercise_output_grade) : null );
+        (isset($exercise->exercise_solution) ? $CTExercise->setExerciseSolution($exercise->exercise_solution) : null );
+        (isset($exercise->exercise_must) ? $CTExercise->setExerciseMust($exercise->exercise_must) : null );
+        (isset($exercise->exercise_musnt) ? $CTExercise->setExerciseMusnt($exercise->exercise_musnt) : null );
 
-        return $CTQuestion;
+        return $CTExercise;
     }
 
     static function MapJsonToTest($json) {
@@ -134,17 +134,17 @@ class CT_Test implements \JsonSerializable
         $CTTest->setTest_id($response->id);
         $CTTest->setName($response->name);
         $CTTest->setDescription($response->description);
-        $questions1 = ($response->questions);
-        $questions = array();
-        foreach ($questions1 as $question) {
-            if ($question->type == 'MYSQL') {
-                $CTQuestion = self::mapObjectToSQLQuestion($question, $response->id);
+        $exercises1 = ($response->exercises);
+        $exercises = array();
+        foreach ($exercises1 as $exercise) {
+            if ($exercise->type == 'MYSQL') {
+                $CTExercise = self::mapObjectToSQLExercise($exercise, $response->id);
             } else {
-                $CTQuestion = self::mapObjectToCodeQuestion($question, $response->id);
+                $CTExercise = self::mapObjectToCodeExercise($exercise, $response->id);
             }
-            array_push($questions, $CTQuestion);
+            array_push($exercises, $CTExercise);
         }
-        $CTTest->setQuestions($questions);
+        $CTTest->setExercises($exercises);
         return $CTTest;
     }
 
@@ -210,16 +210,16 @@ class CT_Test implements \JsonSerializable
             $array["postData"] = [[$arrayTags[0]], $_SESSION['tags'][$arrayTags[0]], [$arrayTags[1]],
                 $_SESSION['tags'][$arrayTags[1]], [$arrayTags[2]], $_SESSION['tags'][$arrayTags[2]],
                 [$arrayTags[3]], $_SESSION['tags'][$arrayTags[3]]];
-            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestQuestionBy4Values";
+            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestExerciseBy4Values";
         } else if (count($arrayTags) == 3) {
 
             $array["postData"] = [[$arrayTags[0]], $_SESSION['tags'][$arrayTags[0]], [$arrayTags[1]],
                 $_SESSION['tags'][$arrayTags[1]], [$arrayTags[2]], $_SESSION['tags'][$arrayTags[2]]];
-            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestQuestionBy3Values";
+            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestExerciseBy3Values";
         } else if (count($arrayTags) == 2) {
 
             $array["postData"] = [[$arrayTags[0]], $_SESSION['tags'][$arrayTags[0]], [$arrayTags[1]], $_SESSION['tags'][$arrayTags[1]]];
-            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestQuestionByValues";
+            $array["url"] = $CFG->repositoryUrl . "/api/".$object."/getTestExerciseByValues";
         } else if (count($arrayTags) == 1) {
 
             $array["postData"] = [$_SESSION['tags'][$arrayTags[0]], [$arrayTags[0]]];
@@ -254,7 +254,7 @@ class CT_Test implements \JsonSerializable
         return $array;
     }
 
-    //check the test questions to leave the ones that match the tags
+    //check the test exercises to leave the ones that match the tags
     static function checkerTests($tests) {
         $tests1 = Array();
         if($tests){
@@ -270,28 +270,28 @@ class CT_Test implements \JsonSerializable
         return !empty(array_intersect($needles, $haystack));
     }
 
-    //check the test questions to leave the ones that match the tags
+    //check the test exercises to leave the ones that match the tags
     static function checkerTest($test) {
-        foreach ($test->getQuestions() as $question2 => $question) {
-            if (!in_array($question->getType(), $_SESSION['tags']['type']) && !empty($_SESSION['tags']['type'])) {
-                unset($test->questions[$question2]);
+        foreach ($test->getExercises() as $exercise2 => $exercise) {
+            if (!in_array($exercise->getType(), $_SESSION['tags']['type']) && !empty($_SESSION['tags']['type'])) {
+                unset($test->exercises[$exercise2]);
             }
-            if (!in_array($question->getDifficulty(), $_SESSION['tags']['difficulty']) && !empty($_SESSION['tags']['difficulty'])) {
-                unset($test->questions[$question2]);
+            if (!in_array($exercise->getDifficulty(), $_SESSION['tags']['difficulty']) && !empty($_SESSION['tags']['difficulty'])) {
+                unset($test->exercises[$exercise2]);
             }
-            if ( (empty($question->getAverageGrade()) && !empty($_SESSION['tags']['averageGrade'])) || (!empty($question->getAverageGrade()) && !empty($_SESSION['tags']['averageGrade']) && $question->getAverageGrade() < $_SESSION['tags']['averageGrade'][0] )) {
-                unset($test->questions[$question2]);
+            if ( (empty($exercise->getAverageGrade()) && !empty($_SESSION['tags']['averageGrade'])) || (!empty($exercise->getAverageGrade()) && !empty($_SESSION['tags']['averageGrade']) && $exercise->getAverageGrade() < $_SESSION['tags']['averageGrade'][0] )) {
+                unset($test->exercises[$exercise2]);
             }
-            if ((empty($question->getKeywords()) && !empty($_SESSION['tags']['keywords'])) ||
-                    (!empty($question->getKeywords()) && !empty($_SESSION['tags']['keywords']) && !self::in_array_any($question->getKeywords(), $_SESSION['tags']['keywords']))) {
-                unset($test->questions[$question2]);
+            if ((empty($exercise->getKeywords()) && !empty($_SESSION['tags']['keywords'])) ||
+                    (!empty($exercise->getKeywords()) && !empty($_SESSION['tags']['keywords']) && !self::in_array_any($exercise->getKeywords(), $_SESSION['tags']['keywords']))) {
+                unset($test->exercises[$exercise2]);
             }
         }
         return $test;
     }
 
     
-    //Find the Test questions on the repo by the tags
+    //Find the Test exercises on the repo by the tags
     static function findTestForImportByValue($value = null, $page = 0) {
         
   //if values is passed check if is already on the array
@@ -318,7 +318,7 @@ class CT_Test implements \JsonSerializable
             $totalPages = $decode[1];
             $tests = json_encode($decode[0]);
 
-            //decode the questions from json and maps to Test objects deleting the question that do not meet the tags
+            //decode the exercises from json and maps to Test objects deleting the exercise that do not meet the tags
             $tests = self::MapJsonToTestsArray($tests);
             $tests1 = self::checkerTests($tests);
             $array = ['tests' => $tests1, 'totalPages' => $totalPages[0]];
@@ -380,8 +380,8 @@ class CT_Test implements \JsonSerializable
         return $test;
     }
 
-    //Find a question by Test_id and question_id
-    static function findTestForImportQuestionId($question_id, $test_id) {
+    //Find a exercise by Test_id and exercise_id
+    static function findTestForImportExerciseId($exercise_id, $test_id) {
         global $CFG;
         $url = $CFG->repositoryUrl."/api/tests/getTestId/" . $test_id;
         $curl = curl_init();
@@ -392,25 +392,25 @@ class CT_Test implements \JsonSerializable
         $result = curl_exec($curl);
         curl_close($curl);
         $response = json_decode($result);
-        $questions = ($response->questions);
-        foreach ($questions as $question) {
-            //after import the test search for the question with the id passed
-            if ($question->id == $question_id) {
-                if( in_array($question->type, $CFG->programmingLanguajes)){
-               $CTQuestion = \CT\CT_Test::mapObjectToCodeQuestion($question, $test_id);
+        $exercises = ($response->exercises);
+        foreach ($exercises as $exercise) {
+            //after import the test search for the exercise with the id passed
+            if ($exercise->id == $exercise_id) {
+                if( in_array($exercise->type, $CFG->programmingLanguajes)){
+               $CTExercise = \CT\CT_Test::mapObjectToCodeExercise($exercise, $test_id);
            }else{
-                $CTQuestion = \CT\CT_Test::mapObjectToSQLQuestion($question, $test_id);
+                $CTExercise = \CT\CT_Test::mapObjectToSQLExercise($exercise, $test_id);
            }
             }
         }
-        return $CTQuestion;
+        return $CTExercise;
     }
 
     function createAnswer($user_id, $answer_txt) {
         //Look for answer in the db
-        $answer = \CT\CT_Answer::getByUserAndQuestion($user_id, $this->getQuestionId(), $this->getCtId());
+        $answer = \CT\CT_Answer::getByUserAndExercise($user_id, $this->getExerciseId(), $this->getCtId());
         $answer->setUserId($user_id);
-        $answer->setQuestionId($this->getQuestionId());
+        $answer->setExerciseId($this->getExerciseId());
         $answer->setAnswerTxt($answer_txt);
         
         //checks if is correct
@@ -433,17 +433,17 @@ class CT_Test implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getQuestionId()
+    public function getExerciseId()
     {
-        return $this->question_id;
+        return $this->exercise_id;
     }
 
     /**
-     * @param mixed $question_id
+     * @param mixed $exercise_id
      */
-    public function setQuestionId($question_id)
+    public function setExerciseId($exercise_id)
     {
-        $this->question_id = $question_id;
+        $this->exercise_id = $exercise_id;
     }
 
     /**
@@ -485,22 +485,22 @@ class CT_Test implements \JsonSerializable
    
 
     /**
-     * @return CT_Question
+     * @return CT_Exercise
      */
-    public function getQuestionParent()
+    public function getExerciseParent()
     {
-        return new CT_Question($this->getQuestionId());
+        return new CT_Exercise($this->getExerciseId());
     }
 
-    public function setQuestionParentProperties()
+    public function setExerciseParentProperties()
     {
-        \CT\CT_DAO::setObjectPropertiesFromArray($this, \CT\CT_DAO::setObjectPropertiesToArray($this->getQuestionParent()));
+        \CT\CT_DAO::setObjectPropertiesFromArray($this, \CT\CT_DAO::setObjectPropertiesToArray($this->getExerciseParent()));
     }
 
     public function isNew()
     {
-        $question_id = $this->getQuestionId();
-        return !(isset($question_id) && $question_id > 0);
+        $exercise_id = $this->getExerciseId();
+        return !(isset($exercise_id) && $exercise_id > 0);
     }
     
     public function getTest_id() {
@@ -511,8 +511,8 @@ class CT_Test implements \JsonSerializable
         return $this->statement;
     }
 
-    public function getQuestions() {
-        return $this->questions;
+    public function getExercises() {
+        return $this->exercises;
     }
 
     public function setTest_id($test_id): void {
@@ -523,8 +523,8 @@ class CT_Test implements \JsonSerializable
         $this->statement = $statement;
     }
 
-    public function setQuestions($questions): void {
-        $this->questions = $questions;
+    public function setExercises($exercises): void {
+        $this->exercises = $exercises;
     }
     
     public function getDescription() {

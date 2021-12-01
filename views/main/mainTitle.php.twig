@@ -1,6 +1,6 @@
 <div id="toolTitle" class="h1">
     <button id="helpButton" type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#helpModal">
-        <span class="fas fa-question-circle" aria-hidden="true"></span>{%trans%}main-title.help{%endtrans%}</button>
+        <span class="fas fa-exercise-circle" aria-hidden="true"></span>{%trans%}main-title.help{%endtrans%}</button>
     <span class="flx-cntnr flx-row flx-nowrap flx-start items-center">
         <span class="title-text-span" onclick="editTitleText();" tabindex="0">{{ main.getTitle() }}</span>
         <span class="mainType-text-span mr-3" id="mainType" onclick="editTitleText();">
@@ -26,7 +26,7 @@
         </a>
     </div>
     <div class="h3 flx-cntnr flx-row flx-nowrap flx-start">
-        {% if newQuestionNumber > 1 %}
+        {% if newExerciseNumber > 1 %}
             <input type="hidden" id="mainTypeHidden" name="mainType" value="{{ main.getType() }}">
             <span class="title-edit-input flx-grow-all" id="mainType">{{ main.getTypeProperty('name') }}</span>
         {% else %}

@@ -4,53 +4,53 @@
 namespace CT;
 
 
-class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
+class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
 {
-    private $question_dbms;
-    private $question_sql_type;
-    private $question_database;
-    private $question_solution;
-    private $question_probe;
-    private $question_onfly;
+    private $exercise_dbms;
+    private $exercise_sql_type;
+    private $exercise_database;
+    private $exercise_solution;
+    private $exercise_probe;
+    private $exercise_onfly;
 
     const DBMS_MYSQL = 0;
     const DBMS_ORACLE = 1;
     const DBMS_SQLITE = 2;
     const MUSNT = array('commit');
 
-    public function __construct($question_id = null)
+    public function __construct($exercise_id = null)
     {
         $context = array();
-        if (isset($question_id)) {
-            $query = \CT\CT_DAO::getQuery('questionSQL', 'getById');
-            $arr = array(':question_id' => $question_id);
+        if (isset($exercise_id)) {
+            $query = \CT\CT_DAO::getQuery('exerciseSQL', 'getById');
+            $arr = array(':exercise_id' => $exercise_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
-        $this->setQuestionParentProperties();
+        $this->setExerciseParentProperties();
     }
     
-    static function withId($question_id = null)
+    static function withId($exercise_id = null)
     {
-        $question =new CT_QuestionSQL();
+        $exercise =new CT_ExerciseSQL();
         $context = array();
-        if (isset($question_id)) {
-            $query = \CT\CT_DAO::getQuery('questionSQL', 'getById');
-            $arr = array(':question_id' => $question_id);
+        if (isset($exercise_id)) {
+            $query = \CT\CT_DAO::getQuery('exerciseSQL', 'getById');
+            $arr = array(':exercise_id' => $exercise_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
-        \CT\CT_DAO::setObjectPropertiesFromArray($question, $context);
-        $question->setQuestionParentProperties();
-          return $question;
+        \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $context);
+        $exercise->setExerciseParentProperties();
+          return $exercise;
      
     }
     
-    //necessary to use json_encode with questionSQL objects
+    //necessary to use json_encode with exerciseSQL objects
       public function jsonSerialize() {
         return [
-            'question_id' => $this->getQuestionId(),
+            'exercise_id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
-            'question_num' => $this->getQuestionNum(),
+            'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
             'type' => $this->getType(),
             'difficulty' => $this->getDifficulty(),
@@ -60,27 +60,27 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
             'averageGrade' => $this->getAverageGrade(),
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
-            'question_must' => $this->getQuestionMust(),
-            'question_musnt' => $this->getQuestionMusnt(),
-            'question_dbms' => $this->getQuestionDbms(),
-            'question_sql_type' => $this->getQuestionSQLType(),
-            'question_database' => $this->getQuestionDatabase(),
-            'question_solution' => $this->getQuestionSolution(),
-            'question_probe' => $this->getQuestionProbe(),
-            'question_onfly' => $this->getQuestionOnfly()
+            'exercise_must' => $this->getExerciseMust(),
+            'exercise_musnt' => $this->getExerciseMusnt(),
+            'exercise_dbms' => $this->getExerciseDbms(),
+            'exercise_sql_type' => $this->getExerciseSQLType(),
+            'exercise_database' => $this->getExerciseDatabase(),
+            'exercise_solution' => $this->getExerciseSolution(),
+            'exercise_probe' => $this->getExerciseProbe(),
+            'exercise_onfly' => $this->getExerciseOnfly()
         ];
     }
 
     public function getConnection($dbUser = null, $dbPassword = null, $dbName = null) {
-        $dbms = $this->getQuestionDbms();
+        $dbms = $this->getExerciseDbms();
         $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', 'MYSQL')[$dbms];
         $dbUser = $dbUser ? $dbUser : $connectionConfig['dbUser'];
         $dbPassword = $dbPassword ? $dbPassword : $connectionConfig['dbPassword'];
-        $dbName = $dbName ? $dbName : $this->getQuestionDatabase();
+        $dbName = $dbName ? $dbName : $this->getExerciseDatabase();
 
         $dbUser = $dbUser ? $dbUser : $connectionConfig['dbUser'];
         $dbPassword = $dbPassword ? $dbPassword : $connectionConfig['dbPassword'];
-        $dbName = $dbName ? $dbName : $this->getQuestionDatabase();
+        $dbName = $dbName ? $dbName : $this->getExerciseDatabase();
 
         switch ($dbms)
         {
@@ -132,15 +132,15 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
 
     public function getQueryResult($answer = null) {
         $connection = $this->initTransaction();
-        $queries = (isset($answer) ? $answer : $this->getQuestionSolution());
+        $queries = (isset($answer) ? $answer : $this->getExerciseSolution());
 		foreach(explode(";", $queries) as $query) { // ; not accepted in Oracle driver.
 			if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
 				$resultQuery->execute();
 			}
 		}
 	
-		if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
-			$query = explode(";", $this->getQuestionProbe())[0];
+		if ($this->getExerciseType() == 'DML' || $this->getExerciseType() == 'DDL') {
+			$query = explode(";", $this->getExerciseProbe())[0];
 			if($resultQuery = $connection->prepare($query)) {
 				$resultQuery->execute();
 			}
@@ -157,13 +157,13 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
 
     private function createOnflySchema(&$connection) {
         global $USER;
-        $dbms = $this->getQuestionDbms();
+        $dbms = $this->getExerciseDbms();
         $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', "MYSQL")[$dbms];
         if( array_key_exists('onFly', $connectionConfig)
             && is_array($onFly = $connectionConfig['onFly'])
             && array_key_exists('allowed', $onFly)
             && $onFly['allowed']
-            && strlen(trim($this->getQuestionOnfly())) > 0)
+            && strlen(trim($this->getExerciseOnfly())) > 0)
         {
             $nameAndPassword = $onFly['userPrefix'] . $this->getNameAndPasswordSuffix();
             switch ($dbms) {
@@ -184,7 +184,7 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
                         }
                         $connection = $this->getConnection($nameAndPassword, $nameAndPassword);
                     }
-                    $splitSQL = preg_split('~\([^)]*\)(*SKIP)(*F)|;~', $this->sanitize($this->getQuestionOnfly()));
+                    $splitSQL = preg_split('~\([^)]*\)(*SKIP)(*F)|;~', $this->sanitize($this->getExerciseOnfly()));
                     $queryString = "";
                     foreach ($splitSQL as $sqlSentence) {
                         if (strlen(trim($sqlSentence)) > 0) {
@@ -219,22 +219,22 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
                         $connection = $this->getConnection($nameAndPassword, $nameAndPassword, $databaseName);
                     }
 
-                    $connection->exec($this->getQuestionOnfly());
+                    $connection->exec($this->getExerciseOnfly());
                     break;
                 case self::DBMS_SQLITE:
-                    $connection->exec($this->getQuestionOnfly());
+                    $connection->exec($this->getExerciseOnfly());
             }
         }
     }
 
     private function dropOnflySchema(&$connection) {
-        $dbms = $this->getQuestionDbms();
+        $dbms = $this->getExerciseDbms();
         $connectionConfig = $this->getMain()->getTypeProperty('dbConnections', 'MYSQL')[$dbms];
         if( array_key_exists('onFly', $connectionConfig)
             && is_array($onFly = $connectionConfig['onFly'])
             && array_key_exists('allowed', $onFly)
             && $onFly['allowed']
-            && strlen(trim($this->getQuestionOnfly())) > 0
+            && strlen(trim($this->getExerciseOnfly())) > 0
             && array_key_exists('dropIsolateUserProcedure', $onFly)
             && strlen(trim($onFly['dropIsolateUserProcedure'])) > 0
         )
@@ -269,7 +269,7 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
         $connection = $this->getConnection();
         $this->createOnflySchema($connection);
         $connection->beginTransaction();
-/*        if ($this->getQuestionType() == 'DDL') {
+/*        if ($this->getExerciseType() == 'DDL') {
             $this->loadDDL($connection);
         }*/ // Previously, we did it in SQLite
         return $connection;
@@ -281,8 +281,8 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
         $connection = null;
         $connection = $this->getConnection();
         $this->dropOnflySchema($connection);
-/*        if ($this->getQuestionType() == 'DDL') {
-            $dbms = $this->getQuestionDbms();
+/*        if ($this->getExerciseType() == 'DDL') {
+            $dbms = $this->getExerciseDbms();
             $connectionConfig = $this->getMain()->getTypeProperty('dbConnections')[$dbms];
             if(file_exists($connectionConfig['dbFile'])) unlink($connectionConfig['dbFile']);
         }*/ //, Previously we did it in SQLite
@@ -301,10 +301,10 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
     public function getQueryTable(): string
     {
         $resultQueryString = '';
-        if ($this->getQuestionSQLType() == 'SELECT') {
+        if ($this->getExerciseSQLType() == 'SELECT') {
             $connection = $this->initTransaction();
             $resultQueryString = "<div class='table-results'><table>";
-            $query = $this->getQuestionSolution();
+            $query = $this->getExerciseSolution();
             if($resultQuery = $connection->prepare($query)) {
                 $resultQuery->execute();
                 $resultQueryString .= $this->getQueryTableContent($resultQuery);
@@ -350,112 +350,112 @@ class CT_QuestionSQL extends CT_Question  implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getQuestionDbms()
+    public function getExerciseDbms()
     {
-        return $this->question_dbms;
+        return $this->exercise_dbms;
     }
 
     /**
-     * @param mixed $question_dbms
+     * @param mixed $exercise_dbms
      */
-    public function setQuestionDbms($question_dbms)
+    public function setExerciseDbms($exercise_dbms)
     {
-        $this->question_dbms = $question_dbms;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuestionSQLType()
-    {
-        return $this->question_sql_type;
-    }
-
-    /**
-     * @param mixed $question_type
-     */
-    public function setQuestionSQLType($question_sql_type)
-    {
-        $this->question_sql_type = $question_sql_type;
+        $this->exercise_dbms = $exercise_dbms;
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionDatabase()
+    public function getExerciseSQLType()
     {
-        return $this->question_database;
+        return $this->exercise_sql_type;
     }
 
     /**
-     * @param mixed $question_database
+     * @param mixed $exercise_type
      */
-    public function setQuestionDatabase($question_database)
+    public function setExerciseSQLType($exercise_sql_type)
     {
-        $this->question_database = $question_database;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuestionSolution()
-    {
-        return $this->question_solution;
-    }
-
-    /**
-     * @param mixed $question_solution
-     */
-    public function setQuestionSolution($question_solution)
-    {
-        $this->question_solution = $question_solution;
+        $this->exercise_sql_type = $exercise_sql_type;
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionProbe()
+    public function getExerciseDatabase()
     {
-        return $this->question_probe;
+        return $this->exercise_database;
     }
 
     /**
-     * @param mixed $question_probe
+     * @param mixed $exercise_database
      */
-    public function setQuestionProbe($question_probe)
+    public function setExerciseDatabase($exercise_database)
     {
-        $this->question_probe = $question_probe;
+        $this->exercise_database = $exercise_database;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseSolution()
+    {
+        return $this->exercise_solution;
+    }
+
+    /**
+     * @param mixed $exercise_solution
+     */
+    public function setExerciseSolution($exercise_solution)
+    {
+        $this->exercise_solution = $exercise_solution;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseProbe()
+    {
+        return $this->exercise_probe;
+    }
+
+    /**
+     * @param mixed $exercise_probe
+     */
+    public function setExerciseProbe($exercise_probe)
+    {
+        $this->exercise_probe = $exercise_probe;
     }
 
     /**
      * @return String
      */
-    public function getQuestionOnfly()
+    public function getExerciseOnfly()
     {
-        return $this->question_onfly;
+        return $this->exercise_onfly;
     }
 
     /**
-     * @param String $question_onfly
+     * @param String $exercise_onfly
      */
-    public function setQuestionOnfly($question_onfly)
+    public function setExerciseOnfly($exercise_onfly)
     {
-        $this->question_onfly = $question_onfly;
+        $this->exercise_onfly = $exercise_onfly;
     }
 
     public function save() {
         $isNew = $this->isNew();
         parent::save();
-        $query = \CT\CT_DAO::getQuery('questionSQL', $isNew ? 'insert' : 'update');
+        $query = \CT\CT_DAO::getQuery('exerciseSQL', $isNew ? 'insert' : 'update');
         $arr = array(
-            ':question_id' => $this->getQuestionId(),
+            ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId(),
-            ':question_dbms' => $this->getQuestionDbms(),
-            ':question_sql_type' => $this->getQuestionSQLType(),
-            ':question_database' => $this->getQuestionDatabase(),
-            ':question_solution' => $this->getQuestionSolution(),
-            ':question_probe' => $this->getQuestionProbe(),
-            ':question_onfly' => $this->getQuestionOnfly(),
+            ':exercise_dbms' => $this->getExerciseDbms(),
+            ':exercise_sql_type' => $this->getExerciseSQLType(),
+            ':exercise_database' => $this->getExerciseDatabase(),
+            ':exercise_solution' => $this->getExerciseSolution(),
+            ':exercise_probe' => $this->getExerciseProbe(),
+            ':exercise_onfly' => $this->getExerciseOnfly(),
              
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);

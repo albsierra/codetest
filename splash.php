@@ -11,7 +11,7 @@ $OUTPUT->topNav();
 if ($USER->instructor) {
     $OUTPUT->splashPage(
         "Code Test",
-        __("Add questions to quickly collect<br />usage from your students."),
+        __("Add exercises to quickly collect<br />usage from your students."),
         "actions/MarkSeenGoToHome.php"
     );
 } else {

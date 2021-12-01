@@ -8,7 +8,7 @@ $(() => {
     }
     
     Sortable.create(lista, {
-        dataIdAtrr: "question-id",
+        dataIdAtrr: "exercise-id",
         animation: 150,
         handle: '.drag-handle',
         onStart: function (e) {
@@ -17,8 +17,8 @@ $(() => {
         onUpdate: function (e) {
             var newIndex = e.newIndex;
             var oldIndex = $(this).attr('data-previndex');
-            var questionId = e.item.getAttribute('question-id');
-            updateList(questionId, oldIndex, newIndex);
+            var exerciseId = e.item.getAttribute('exercise-id');
+            updateList(exerciseId, oldIndex, newIndex);
         } 
     });
 })

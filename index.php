@@ -21,9 +21,9 @@ if ( $USER->instructor ) {
         header('Location: '.addSession('splash.php'));
     } else {
         $_SESSION["ct_id"] = $main->getCtId();
-        $questions = $main->getQuestions();
+        $exercises = $main->getExercises();
 
-        if (!$questions || count($questions) == 0) {
+        if (!$exercises || count($exercises) == 0) {
             header('Location: '.addSession('splash.php'));
         } else {
             header( 'Location: '.addSession('student-home.php')) ;

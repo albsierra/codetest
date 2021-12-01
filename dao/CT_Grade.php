@@ -17,7 +17,7 @@ class CT_Grade
         $context = array();
         if (isset($grade_id)) {
             $query = \CT\CT_DAO::getQuery('grade', 'getByGradeId');
-            $arr = array(':question_id' => $grade_id);
+            $arr = array(':exercise_id' => $grade_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);

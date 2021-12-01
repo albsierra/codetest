@@ -60,12 +60,12 @@ class CT_User implements \JsonSerializable
     }
 
     /**
-     * @param $question_id int
+     * @param $exercise_id int
      * @return \CT\CT_Answer
      */
-    function getAnswerForQuestion($question_id, $ct_id) {
-        $query = \CT\CT_DAO::getQuery('user','getAnswerForQuestion');
-        $arr = array(':questionId' => $question_id, ':userId' => $this->getUserId(), ':ctId' => $ct_id);
+    function getAnswerForExercise($exercise_id, $ct_id) {
+        $query = \CT\CT_DAO::getQuery('user','getAnswerForExercise');
+        $arr = array(':exerciseId' => $exercise_id, ':userId' => $this->getUserId(), ':ctId' => $ct_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         
         if($context){
@@ -86,8 +86,8 @@ class CT_User implements \JsonSerializable
         return $context['modified'];
     }
 
-    function getNumberQuestionsAnswered($ct_id) {
-        $query = \CT\CT_DAO::getQuery('user','getNumberQuestionsAnswered');
+    function getNumberExercisesAnswered($ct_id) {
+        $query = \CT\CT_DAO::getQuery('user','getNumberExercisesAnswered');
         $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);
         $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         return $context['num_answered'];

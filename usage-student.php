@@ -3,7 +3,7 @@ require_once('initTsugi.php');
 
 include('views/dao/menu.php');
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
-$questions = $main->getQuestions();
+$exercises = $main->getExercises();
 $students = \CT\CT_User::getUsersWithAnswers($_SESSION["ct_id"]);
 
 $studentAndDate = array();
@@ -13,14 +13,14 @@ foreach($students as $student) {
 // Sort students by mostRecentDate desc
 arsort($studentAndDate);
 
-$totalQuestions = count($questions);
-$usages = CT\CT_Usage::getUsages($questions, $students);
+$totalExercises = count($exercises);
+$usages = CT\CT_Usage::getUsages($exercises, $students);
 echo $twig->render('usage/usage-student.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
-    'questions' => $questions,
-    'totalQuestions' => $totalQuestions,
+    'exercises' => $exercises,
+    'totalExercises' => $totalExercises,
     'students' => $main->getStudentsOrderedByDate(),
     'usages' => $usages,
 ));

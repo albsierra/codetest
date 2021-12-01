@@ -17,11 +17,11 @@ $REGISTER_LTI2 = array(
     "source_url" => "https://github.com/albsierra/codetest",
     "screen_shots" => array(
         "images/CT-Splash.png",
-        "images/CT-InstructorQuestions.png",
+        "images/CT-InstructorExercises.png",
         "images/CT-Instructor-ToolMenu.png",
         "images/CT-Help.png",
         "images/CT-Instructor-StudentResults.png",
-        "images/CT-Instructor-QuestionResults.png",
+        "images/CT-Instructor-ExerciseResults.png",
         "images/CT-StudentView.png",
         "images/CT-StudentView-Answered.png",
     )

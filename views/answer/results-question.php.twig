@@ -1,30 +1,30 @@
 {% extends "mainTemplate.php.twig" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle('pages-title.result.by.question'|trans, true, false) }}
+{{ OUTPUT.pageTitle('pages-title.result.by.exercise'|trans, true, false) }}
 {% endblock %}
 {% block content %}
-        <section id="questionResponses">
+        <section id="exerciseResponses">
             <div class="list-group">
-                {% for question in questions %}
-                    {% set questionId = question.getQuestionId() %}
-                    {% set numberResponses = question.getNumberAnswers() %}
+                {% for exercise in exercises %}
+                    {% set exerciseId = exercise.getExerciseId() %}
+                    {% set numberResponses = exercise.getNumberAnswers() %}
                     <div class="list-group-item response-list-group-item">
                         <div class="row">
                             <div class="col-sm-3 header-col">
-                                <a class="h4 response-collapse-link" data-toggle="collapse" data-target="#responses{{ questionId }}" onclick="getAnswersFromQuestion('{{ questionId }}')">
-                                    {%trans%}general.question{%endtrans%} {{ question.getQuestionNum() }}
+                                <a class="h4 response-collapse-link" data-toggle="collapse" data-target="#responses{{ exerciseId }}" onclick="getAnswersFromExercise('{{ exerciseId }}')">
+                                    {%trans%}general.exercise{%endtrans%} {{ exercise.getExerciseNum() }}
                                     <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                                 </a>
                             </div>
                             <div class="col-sm-offset-1 col-sm-8 header-col">
                                 <div class="flx-cntnr flx-row flx-nowrap flx-start">
                                     {% autoescape false %}
-                                    <span class="flx-grow-all">{{ question.getTitle() }}</span>
+                                    <span class="flx-grow-all">{{ exercise.getTitle() }}</span>
                                     {% endautoescape %}
                                     <span class="badge response-badge">{{ numberResponses }}</span>
                                 </div>
                             </div>
-                            <div id="responses{{ questionId }}" class="col-xs-12 results-collapse collapse">
+                            <div id="responses{{ exerciseId }}" class="col-xs-12 results-collapse collapse">
                             </div>
                         </div>
                     </div>

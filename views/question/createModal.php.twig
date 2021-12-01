@@ -2,14 +2,14 @@
     <div class="modal-dialog modal-lg" style="width: 97%; ">
         <div class="modal-content ">
             <div class="modal-header modalHeader" >
-                <button type="button" class="close" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{%trans%}create-question-modal.close{%endtrans%}</span></button>
-                <h4 class="modal-title">{%trans%}create-question-modal.create-question{%endtrans%}</h4>
+                <button type="button" class="close" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{%trans%}create-exercise-modal.close{%endtrans%}</span></button>
+                <h4 class="modal-title">{%trans%}create-exercise-modal.create-exercise{%endtrans%}</h4>
             </div>
             <div id="divLanguage" class="container modalContainer"> 
                 <div class="col-sm-3"></div>
                 <div class="row" style="margin-left: 0px">
                     <div class="col-sm-1">
-                        <label class="labelForm">{%trans%}create-question-modal.language{%endtrans%}</label>
+                        <label class="labelForm">{%trans%}create-exercise-modal.language{%endtrans%}</label>
                     </div>
                     <div class="col-sm-2">
                         <select id="typeSelect" class="form-control labelForm select" onchange="typeChange()">
@@ -20,13 +20,13 @@
                         </select>
                     </div>
                     <div class="col-sm-1">
-                        <label class="labelForm"> {%trans%}create-question-modal.difficulty{%endtrans%} </label>
+                        <label class="labelForm"> {%trans%}create-exercise-modal.difficulty{%endtrans%} </label>
                     </div>
                     <div class="col-sm-5 ">
-                        <select id="difficultySelect" name="question[difficulty]" class="form-control labelForm select">
-                            <option value="Easy">{%trans%}create-question-modal.easy{%endtrans%}</option>
-                            <option value="Medium">{%trans%}create-question-modal.medium{%endtrans%}</option>
-                            <option value="Hard">{%trans%}create-question-modal.hard{%endtrans%}</option>
+                        <select id="difficultySelect" name="exercise[difficulty]" class="form-control labelForm select">
+                            <option value="Easy">{%trans%}create-exercise-modal.easy{%endtrans%}</option>
+                            <option value="Medium">{%trans%}create-exercise-modal.medium{%endtrans%}</option>
+                            <option value="Hard">{%trans%}create-exercise-modal.hard{%endtrans%}</option>
                         </select></br>
                     </div>
                 </div>
@@ -36,10 +36,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="showNewQuestionRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
-                    {%trans%}create-question-modal.save-question{%endtrans%}</button>
+                <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
+                    {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
-                    {%trans%}create-question-modal.cancel-question{%endtrans%}</button>
+                    {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}</button>
             </div>
         </div>
     </div>

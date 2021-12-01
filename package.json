@@ -1,7 +1,7 @@
 {
   "name": "codetest",
   "version": "1.0.0",
-  "description": "A Tsugi tool to authomatic assess programming and database questions.",
+  "description": "A Tsugi tool to authomatic assess programming and database exercises.",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env TAILWIND_MODE=watch encore dev --watch",

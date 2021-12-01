@@ -1,24 +1,24 @@
-<label for="questionType" class="labelForm">{%trans%}question-sql-form.questiontype{%endtrans%}</label>
-<select name="question[question_sql_type]" class="form-control select" id="questionType">
+<label for="exerciseType" class="labelForm">{%trans%}exercise-sql-form.exercisetype{%endtrans%}</label>
+<select name="exercise[exercise_sql_type]" class="form-control select" id="exerciseType">
     {% for sqlType in main.getTypeProperty('sqlTypes', type) %}
-    <option value="{{ sqlType }}" {{ question.getQuestionType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
+    <option value="{{ sqlType }}" {{ exercise.getExerciseType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
     {% endfor %}
 </select>
-<label for="questionDBMS" class="labelForm">{%trans%}question-sql-form.questionDBMS{%endtrans%}</label>
+<label for="exerciseDBMS" class="labelForm">{%trans%}exercise-sql-form.exerciseDBMS{%endtrans%}</label>
 
-<select name="question[question_dbms]" class="form-control select" id="questionDBMS">
+<select name="exercise[exercise_dbms]" class="form-control select" id="exerciseDBMS">
     {% for index, dbms in main.getTypeProperty('dbConnections', type) %}
-    <option value="{{ index }}" {{ question.getQuestionDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
+    <option value="{{ index }}" {{ exercise.getExerciseDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
     {% endfor %}
 </select>
 <div style="display: inline-block">
-    <label for="questionDatabase" class="labelForm">{%trans%}question-sql-form.questiondatabase{%endtrans%}</label>
-    <input class="inputStyle" type="text" name="question[question_database]" value="{{ question.getQuestionDatabase() }}">
+    <label for="exerciseDatabase" class="labelForm">{%trans%}exercise-sql-form.exercisedatabase{%endtrans%}</label>
+    <input class="inputStyle" type="text" name="exercise[exercise_database]" value="{{ exercise.getExerciseDatabase() }}">
 </div>
 </br>
-<label for="questionSolution" class="labelForm">{%trans%}question-sql-form.questionsolution{%endtrans%}</label>
-<textarea class="form-control" id="questionSolution" name="question[question_solution]" rows="4" placeholder="Select * from test;" required>{{ question.getQuestionSolution() }}</textarea>
-<label for="questionProbe" class="labelForm">{%trans%}question-sql-form.questionprobe{%endtrans%}</label>
-<textarea class="form-control" name="question[question_probe]" rows="4">{{ question.getQuestionProbe() }}</textarea>
-<label for="questionOnfly" class="labelForm">{%trans%}question-sql-form.databaseonfly{%endtrans%}</label>
-<textarea class="form-control" name="question[question_onfly]" rows="4">{{ question.getQuestionOnfly() }}</textarea>
+<label for="exerciseSolution" class="labelForm">{%trans%}exercise-sql-form.exercisesolution{%endtrans%}</label>
+<textarea class="form-control" id="exerciseSolution" name="exercise[exercise_solution]" rows="4" placeholder="Select * from test;" required>{{ exercise.getExerciseSolution() }}</textarea>
+<label for="exerciseProbe" class="labelForm">{%trans%}exercise-sql-form.exerciseprobe{%endtrans%}</label>
+<textarea class="form-control" name="exercise[exercise_probe]" rows="4">{{ exercise.getExerciseProbe() }}</textarea>
+<label for="exerciseOnfly" class="labelForm">{%trans%}exercise-sql-form.databaseonfly{%endtrans%}</label>
+<textarea class="form-control" name="exercise[exercise_onfly]" rows="4">{{ exercise.getExerciseOnfly() }}</textarea>

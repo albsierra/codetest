@@ -7,7 +7,7 @@ if ($USER->instructor) {
     $language = $_GET['language'];
 
     $main = new \CT\CT_Main($_SESSION["ct_id"]);
-    echo $twig->render('question/newQuestionForm.php.twig', array(
+    echo $twig->render('exercise/newExerciseForm.php.twig', array(
         'main' => $main,
         'type' => $language,
         'CFG' => $CFG,

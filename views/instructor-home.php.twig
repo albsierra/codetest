@@ -8,10 +8,10 @@
         <p class="lead">{%trans%}main-title.lead2{%endtrans%}</p>
     </div>
     <section class="cards">
-        <!-- Questions -->
-        {% embed "components/dashboard-card.php.twig" with { amount: questions|length } %}
+        <!-- Exercises -->
+        {% embed "components/dashboard-card.php.twig" with { amount: exercises|length } %}
             {% block title %}
-                Questions
+                Exercises
             {% endblock %}
 
             {% block icon %}
@@ -19,9 +19,9 @@
             {% endblock %}
             {% block body %}
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="create-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="create-exercise.php">
                         <span>
-                            Create a question
+                            Create a exercise
                         </span>
                         <span>
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -29,9 +29,9 @@
                     </a>
                 </div>
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="questions-list.php">
+                    <a class="hover-underline-animation link-with-icon" href="exercises-list.php">
                         <span>
-                            Questions list
+                            Exercises list
                         </span>
                         <span>
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -39,7 +39,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="questions-management.php">
+                    <a class="hover-underline-animation link-with-icon" href="exercises-management.php">
                         <span>
                             Import from Authorkit
                         </span>
@@ -71,9 +71,9 @@
             {% endblock %}
             {% block body %}
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="usage-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-exercise.php">
                         <span>
-                            By question
+                            By exercise
                         </span>
                         <span>
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -113,9 +113,9 @@
                     </a>
                 </div>
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="results-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="results-exercise.php">
                         <span>
-                            By question
+                            By exercise
                         </span>
                         <span>
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -236,7 +236,7 @@
             {% endblock %}
             {% block body %}
                 <div style="color: #0059b3;">
-                    Try out and preview your questions before sending them to the students
+                    Try out and preview your exercises before sending them to the students
                 </div>
             {% endblock %}
         {% endembed %}
@@ -254,9 +254,9 @@
             </div>
             <div class="dashboard-card__body">
                 <div>
-                    <a class="hover-underline-animation link-with-icon" href="usage-question.php">
+                    <a class="hover-underline-animation link-with-icon" href="usage-exercise.php">
                         <span>
-                            By question
+                            By exercise
                         </span>
                         <span>
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
@@ -278,6 +278,6 @@
     </section>
 </div>
 
-{{ include('question/createModal.php.twig') }}
-{{ include('question/import/importModal.php.twig') }}
+{{ include('exercise/createModal.php.twig') }}
+{{ include('exercise/import/importModal.php.twig') }}
 {% endblock %}

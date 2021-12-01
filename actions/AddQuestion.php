@@ -7,33 +7,33 @@ if ($USER->instructor) {
     $result = array();
     $type = $_POST["type"];
     $difficulty = $_POST["difficulty"];
-    $questionPost = $_POST["question"];
+    $exercisePost = $_POST["exercise"];
 
-    if (isset($questionPost['title']) && trim($questionPost['title']) != '') {
+    if (isset($exercisePost['title']) && trim($exercisePost['title']) != '') {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $question = $main->createQuestion($questionPost, $type, $difficulty);
-        $questions = Array();
-        array_push($questions, $question);
+        $exercise = $main->createExercise($exercisePost, $type, $difficulty);
+        $exercises = Array();
+        array_push($exercises, $exercise);
 
-        //save the question on the repository
-        $result = $main->saveQuestions($questions);
+        //save the exercise on the repository
+        $result = $main->saveExercises($exercises);
 
-        //map the returned question
+        //map the returned exercise
         $object = json_decode($result);
         if ($main->getType() == '1') {
-            $question1 = \CT\CT_Test::mapObjectToCodeQuestion($object);
+            $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
         } else {
-            $question1 = \CT\CT_Test::mapObjectToSQLQuestion($object);
+            $exercise1 = \CT\CT_Test::mapObjectToSQLExercise($object);
         }
-        $question1->setCtId($_SESSION["ct_id"]);
+        $exercise1->setCtId($_SESSION["ct_id"]);
 
-        //Save the returned question on the db
-        $question1->save();
+        //Save the returned exercise on the db
+        $exercise1->save();
 
-        $_SESSION['success'] = $translator->trans('backend-messages.add.question.success');
+        $_SESSION['success'] = $translator->trans('backend-messages.add.exercise.success');
     } else {
 
-        $_SESSION['error'] = $translator->trans('backend-messages.add.question.failed');
+        $_SESSION['error'] = $translator->trans('backend-messages.add.exercise.failed');
     }
     $OUTPUT->buffer = true;
     header('Content-Type: application/json');

@@ -6,31 +6,31 @@ return [
         "grade" => "Grade",
         "results" => "Results",
         "results.by.student" => "By Student",
-        "results.by.question" => "By Question",
+        "results.by.exercise" => "By Exercise",
         "results.download" => "Download Results",
         "feedbacks" => "Feedbacks",
         "feedback.by.student" => "By Student",
-        "feedback.by.question" => "By Question",
+        "feedback.by.exercise" => "By Exercise",
         "build" => "Build",
         "home" => "Home",
-        "questions.create" => "Create question",
-        "questions.list" => "Questions list",
-        "questions.authorkit" => "Import from Authorkit",
-        "questions.codetest" => "Import from Codetest",
+        "exercises.create" => "Create exercise",
+        "exercises.list" => "Exercises list",
+        "exercises.authorkit" => "Import from Authorkit",
+        "exercises.codetest" => "Import from Codetest",
         "exit.student.view" => "Exit Student View",
     ],
     "pages-title" => [
         "grade" => "Grade",
         "download.results" => "Download Results",
-        "result.by.question" => "Result <small>by Question</small>",
+        "result.by.exercise" => "Result <small>by Exercise</small>",
         "result.by.student" => "Results <small>by Student</small>",
-        "feedback.by.question" => "Feedback <small>by Question</small>",
+        "feedback.by.exercise" => "Feedback <small>by Exercise</small>",
         "feedback.by.student" => "Feedback <small>by Student</small>",
-        "questions.management" => "Questions management",
+        "exercises.management" => "Exercises management",
         "export-context" => "Export context"
     ],
     "main-title" => [
-        "lead" => "Add questions to quickly collect feedback from your student",
+        "lead" => "Add exercises to quickly collect feedback from your student",
         "lead2" => "Virtual judge that supports programming and database training",
         "help" => "Help",
         "edit.title.text" => "Edit Title Text",
@@ -39,8 +39,8 @@ return [
         "cancel.title.text" => "Cancel Title Text",
     ],
     "instructor" => [
-        "add.question" => "Add question",
-        "delete.question" => "Delete Question"
+        "add.exercise" => "Add exercise",
+        "delete.exercise" => "Delete Exercise"
     ],
     "student-home" => [
         "lead" => "Your instructor has not yet configured this learning app.",
@@ -48,13 +48,13 @@ return [
         "seeing.student.view" => "You are seeing what a student will see when they access this tool. However, your answers will be cleared once you leave student view.",
         "will.show.in.results" => "Your answers will not show up in any of the results.",
         "what.do.i.do" => "What do I do?",
-        "answer.each.below" => "Answer each question below. You must submit every question individually. Once you submit an answer to a question you can NOT edit your answer. ",
-        "answer.only.once" => "Once you submit an answer to a question you can NOT edit your answer.",
-        "questions.list" => "List of questions:"
+        "answer.each.below" => "Answer each exercise below. You must submit every exercise individually. Once you submit an answer to a exercise you can NOT edit your answer. ",
+        "answer.only.once" => "Once you submit an answer to a exercise you can NOT edit your answer.",
+        "exercises.list" => "List of exercises:"
     ],
     "general" => [
         "no-feedback-found" => "No feedbacks found",
-        "question" => "Question"
+        "exercise" => "Exercise"
     ],
     "download-student-results" => "Click on the link below to download the student results.",
     "results-table" => [
@@ -63,7 +63,7 @@ return [
         "completed" => "Completed",
     ],
     "feedback-table" => [
-        "question" => "Question",
+        "exercise" => "Exercise",
         "completed" => "Completed",
         "student-name" => "Student Name",
         "no.feedback" => "No feedbacks found",
@@ -86,12 +86,12 @@ return [
         ],
         "update" => "Update"
     ],
-    "feedback-question" => [
+    "feedback-exercise" => [
         "view-feedbacks" => "Viewing Feedbacks",
-        "you.are.viewing.feedbacks" => "You are viewing the feedbacks by question. Click on a question below to see how students scored that question.",
+        "you.are.viewing.feedbacks" => "You are viewing the feedbacks by exercise. Click on a exercise below to see how students scored that exercise.",
         "student" => [
             "view-feedbacks" => "Viewing Feedbacks",
-            "you.are.viewing.feedbacks" => "You are viewing the feedbacks by question. Click on a question below to see how students scored that question.",
+            "you.are.viewing.feedbacks" => "You are viewing the feedbacks by exercise. Click on a exercise below to see how students scored that exercise.",
         ]
     ],
     "help" => [
@@ -104,79 +104,79 @@ return [
     ],
     "instructor-home" => [
         "general-help" => "General Help",
-        "use.this.page.add" => "Use this page to add questions for your students to answer. Once you add a question it is immediately available to students.",
-        "import-questions" => "Import Questions",
-        "click.import-questions" => 'Click "Import Questions"',
-        "select.to.add" => "Select the questions to add",
+        "use.this.page.add" => "Use this page to add exercises for your students to answer. Once you add a exercise it is immediately available to students.",
+        "import-exercises" => "Import Exercises",
+        "click.import-exercises" => 'Click "Import Exercises"',
+        "select.to.add" => "Select the exercises to add",
         "click.import.or.enter" => 'Click the Import button or press "Enter" on your keyboard',
         "editing.file" => "Editing the Title",
         "edit.title.clicking" => "You can edit the title of this Code Test by clicking the edit icon next to the title at the top of this page.",
-        "if.no.question.edit" => "If there are no question in this Code Test, you can also edit its type.",
+        "if.no.exercise.edit" => "If there are no exercise in this Code Test, you can also edit its type.",
     ],
     "results" => [
         "download" => "Downloading Results",
         "download.description" => "Click on the link to download an Excel file with all of the results for this Code Test.",
-        "question" => [
+        "exercise" => [
             "view.results" => "Viewing Results",
-            "you.are.viewing.question.results" => "You are viewing the results by question. Click on a question below to see what students answered for that question.",
-            "for.each.sorted.recent" => "For each question, students are sorted with the most recently modified at the top."
+            "you.are.viewing.exercise.results" => "You are viewing the results by exercise. Click on a exercise below to see what students answered for that exercise.",
+            "for.each.sorted.recent" => "For each exercise, students are sorted with the most recently modified at the top."
         ],
         "student" => [
             "view.results" => "Viewing Results",
-            "you.are.viewing.question.results" => "You are viewing the results by student. Click on a student below to see how that student answered each question.",
+            "you.are.viewing.exercise.results" => "You are viewing the results by student. Click on a student below to see how that student answered each exercise.",
             "sorted.recent" => "Students are sorted with the most recently submitted at the top of the list."
         ],
     ],
-    "create-question-modal" => [
-        "create-question" => "Create Question",
+    "create-exercise-modal" => [
+        "create-exercise" => "Create Exercise",
         "language" => "Language",
         "difficulty" => "Difficulty",
         "easy" => "Easy",
         "medium" => "Medium",
         "hard" => "Hard",
-        "save-question" => "Save Question",
-        "cancel-question" => "Cancel Question",
+        "save-exercise" => "Save Exercise",
+        "cancel-exercise" => "Cancel Exercise",
         "close" => "Close"
     ],
-    "delete-question-modal" => [
-        "confirmation" => "Are you sure you want to delete this question? This action cannot be undone.",
+    "delete-exercise-modal" => [
+        "confirmation" => "Are you sure you want to delete this exercise? This action cannot be undone.",
         "delete" => "Delete",
         "cancel" => "Cancel",
     ],
-    "question-modal-feedback" => [
-        "score.question" => "Score the question",
+    "exercise-modal-feedback" => [
+        "score.exercise" => "Score the exercise",
         "understand" => "Understandability",
         "difficulty" => "Difficulty",
         "time" => "Time",
         "send.feedback" => "Send Feedback",
     ],
-    "student-code-question" => [
+    "student-code-exercise" => [
         "language" => "Language",
         "input" => "Input",
         "output" => "Output"
     ],
-    "student-sql-question" => [
+    "student-sql-exercise" => [
         "output" => "Output",
         "type" => "Type",
         "database" => "Database"
     ],
-    "import-question" => [
+    "import-exercise" => [
         "statement" => "Statement",
         "type" => "Type",
         "difficulty" => "Difficulty",
         "averagegrade" => "Average Grade",
-        "importquestions" => "Import Questions"
+        "importexercises" => "Import Exercises"
     ],
     "import-modal" => [
         "close" => "Close",
-        "reusequestions" => "Reuse Questions",
+        "reuseexercises" => "Reuse Exercises",
         "difficulty" => "Difficulty",
         "language" => "Language",
         "keyword" => "Keyword",
         "send" => "Send",
         "add" => "Add",
-        "questions" => "Questions",
-        "importquestions" => "Import Questions",
+        "exercises" => "Exercises",
+        "importexercises" => "Import Exercises",
         "cancel" => "Cancel",
         "score" => "Score",
         "easy" => "Easy",
@@ -184,32 +184,32 @@ return [
         "test" => "Test",
         "medium" => "Medium"
     ],
-    "import-lti-context-questions" => [
-        "addquestionsremository" => "Add questions from the repository",
+    "import-lti-context-exercises" => [
+        "addexercisesremository" => "Add exercises from the repository",
         "first" => "First",
         "last" => "Last"
     ],
     "import-lti-context" => [
-        "addquestionsremository" => "Add questions from the repository",
+        "addexercisesremository" => "Add exercises from the repository",
         "first" => "First",
         "last" => "Last",
-        "cantconnectrepository" => " Can't connect with the repository or there are no questions "
+        "cantconnectrepository" => " Can't connect with the repository or there are no exercises "
     ],
-    "question-sql-form" => [
-        "questiontype" => "Question Type",
-        "questionDBMS" => "Question DBMS",
-        "questiondatabase" => "Question Database",
-        "questionsolution" => "Question Solution",
-        "questionprobe" => "Question Probe",
+    "exercise-sql-form" => [
+        "exercisetype" => "Exercise Type",
+        "exerciseDBMS" => "Exercise DBMS",
+        "exercisedatabase" => "Exercise Database",
+        "exercisesolution" => "Exercise Solution",
+        "exerciseprobe" => "Exercise Probe",
         "databaseonfly" => "Database Onfly"
     ],
-    "question-code-form" => [
+    "exercise-code-form" => [
         "inputforstudent" => "Input for student",
         "inputforgrade" => "Input for grade",
         "codesolution" => "Code Solution"
     ],
-    "student-question" => [
-        "question" => "Question",
+    "student-exercise" => [
+        "exercise" => "Exercise",
         "solutionmustcontain" => "Your solution must contain",
         "solutionshouldntcontain" => "Your solution shouldn't contain",
         "yoursolutionis" => "Your solution is",
@@ -218,8 +218,8 @@ return [
         "next" => "Next",
         "previous" => "Previous",
     ],
-    "new-question-form" => [
-        "questiontitle" => "Question Title",
+    "new-exercise-form" => [
+        "exercisetitle" => "Exercise Title",
         "keywordsseparatedlines" => "Keywords (separated by lines)",
         "mustcontainseparatedlines" => "Must contain (separated by lines)",
         "shouldntcontain" => "Shouldn't contain"
@@ -227,22 +227,22 @@ return [
     "backend-messages" => [
         "title.saved.success" => "Title saved",
         "title.saved.failed" => "Title failed to save. Please try again.",
-        "add.question.success" => "Question Saved.",
-        "add.question.failed" => "Unable to save blank question.",
-        "answer.question.failed" => "Your answer cannot be blank.",
-        "answer.question.saved" => "Answer saved.",
-        "question.deleted.success" => "Question Deleted.",
+        "add.exercise.success" => "Exercise Saved.",
+        "add.exercise.failed" => "Unable to save blank exercise.",
+        "answer.exercise.failed" => "Your answer cannot be blank.",
+        "answer.exercise.saved" => "Answer saved.",
+        "exercise.deleted.success" => "Exercise Deleted.",
         "grade.invalid" => "Invalid Grade.",
-        "import.question.noselect" => "No questions selected",
-        "import.question.failed" => "Question(s) failed to save. Please try again.",
-        "import.question.success" => "Question(s) Imported. %questions%",
-        "import.question.imported" => "Question(s) Imported.",
+        "import.exercise.noselect" => "No exercises selected",
+        "import.exercise.failed" => "Exercise(s) failed to save. Please try again.",
+        "import.exercise.success" => "Exercise(s) Imported. %exercises%",
+        "import.exercise.imported" => "Exercise(s) Imported.",
         "feedback.send.success" => "Feedback send.",
         "feedback.send.error" => "Error sending feedback.",
         "points.posible.updated" => "Points Possible updated.",
         "points.posible.failed" => "Points Possible failed to save or you provided an invalid number. Please try again.",
         "grade.saved.success" => "Grade saved.",
         "connection.failed" => "Can't connect with the repository",
-        "question.code.percent" => "The output of your code matches a %percent%%% of the correct answer",
+        "exercise.code.percent" => "The output of your code matches a %percent%%% of the correct answer",
     ]
 ];

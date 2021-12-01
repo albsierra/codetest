@@ -99,9 +99,9 @@ This is the guide to follow to get a development environment configured:
 
 <br>
 
-- After that you will need to get the `questions-storage` up and running
+- After that you will need to get the `exercises-storage` up and running
 
-- Clone the [questions-storage](https://github.com/KA226-COVID/questions-storage) repository
+- Clone the [exercises-storage](https://github.com/KA226-COVID/exercises-storage) repository
 
 - Configure your MongoDB credentials at `application.properties`
 
@@ -125,7 +125,7 @@ It's composed by:
   - Inside has tsugi and codetest installed
 
 - A node with Java [ 8 ]
-  - Inside has the code for the questions-storage
+  - Inside has the code for the exercises-storage
 
 - A node with MongoDB [ 4.4.9 ]
   - To be used by SpringBoot

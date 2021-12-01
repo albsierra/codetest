@@ -11,7 +11,7 @@ if ($USER->instructor) {
     $testForImport = $array['tests'];
     $totalPages = $array['totalPages'];
 
-    echo $twig->render('question/import/importLtiContexts.php.twig', array(
+    echo $twig->render('exercise/import/importLtiContexts.php.twig', array(
         'testForImport' => $testForImport,
         'totalPages' => $totalPages,
         'page' => $page,

@@ -1,17 +1,17 @@
-<li  class="list-group-item h3 inline flx-cntnr flx-row flx-nowrap flx-start question-row grab" draggable="true" id="questionRow{{ question.getQuestionId() }}" question-id="{{question.getQuestionId()}}" >
+<li  class="list-group-item h3 inline flx-cntnr flx-row flx-nowrap flx-start exercise-row grab" draggable="true" id="exerciseRow{{ exercise.getExerciseId() }}" exercise-id="{{exercise.getExerciseId()}}" >
     <div class="drag-handle">
         <i class="drag-icon" aria-hidden="true"></i>
     </div>
-    <div class="question-number">{{ question.getQuestionNum() }} - </div>
-    <div class="flx-grow-all question-text">
+    <div class="exercise-number">{{ exercise.getExerciseNum() }} - </div>
+    <div class="flx-grow-all exercise-text">
         {% autoescape false %}
-        <span class="question-text-span"  id="questionText{{ question.getQuestionId() }}" tabindex="0">{{ question.getTitle() }}</span>
+        <span class="exercise-text-span"  id="exerciseText{{ exercise.getExerciseId() }}" tabindex="0">{{ exercise.getTitle() }}</span>
         {% endautoescape %}
     </div>
     <div class="iconos">
-    <a id="questionDeleteAction{{ question.getQuestionId() }}" href="javascript:void(0);" onclick="deleteQuestion('{{ question.getQuestionId() }}')">
+    <a id="exerciseDeleteAction{{ exercise.getExerciseId() }}" href="javascript:void(0);" onclick="deleteExercise('{{ exercise.getExerciseId() }}')">
         <span aria-hidden="true" class="fa fa-fw fa-trash"></span>
-        <span class="sr-only">{%trans%}instructor.delete.question{%endtrans%}</span>
+        <span class="sr-only">{%trans%}instructor.delete.exercise{%endtrans%}</span>
     </a>
     </div>
 </li>

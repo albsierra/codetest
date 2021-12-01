@@ -2,15 +2,15 @@
 require_once "../../initTsugi.php";
 
 if ($USER->instructor) {
-    $question = \CT\CT_Question::withId($_GET['questionId']);
-    $answers = $question->getAnswers();
+    $exercise = \CT\CT_Exercise::withId($_GET['exerciseId']);
+    $answers = $exercise->getAnswers();
     $numberResponses = count($answers);
     // Sort by modified date with most recent at the top
     usort($answers, 'response_date_compare');
     $responses = getResponsesArray($answers);
     
     if ($responses) {
-        echo $twig->render('answer/getAnswersFromQuestion.php.twig', array(
+        echo $twig->render('answer/getAnswersFromExercise.php.twig', array(
             'responses' => $responses,
         ));
     } else {

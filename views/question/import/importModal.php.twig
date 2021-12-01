@@ -3,7 +3,7 @@
         <div class="modal-content ">
             <div class="modal-header modalHeader">
                 <button type="button" class="close" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{%trans%}import-modal.close{%endtrans%}</span></button>
-                <h4 class="modal-title">{%trans%}import-modal.reusequestions{%endtrans%}</h4>
+                <h4 class="modal-title">{%trans%}import-modal.reuseexercises{%endtrans%}</h4>
             </div>
                 <div class="container modalContainer">
                     <div class="row">
@@ -40,15 +40,15 @@
                         <div class="container col-sm-10 modal-body">
                             <ul class="nav nav-pills">
                                 <li id="li-test" class="active"><a data-toggle="tab" href="#tab-test" onclick="importLtiContexts(0, 'test')">{%trans%}import-modal.test{%endtrans%}</a></li>
-                                <li id="li-questions"><a data-toggle="tab" href="#tab-question"  onclick="importLtiContexts(0, 'question')">{%trans%}import-modal.questions{%endtrans%}</a></li>
+                                <li id="li-exercises"><a data-toggle="tab" href="#tab-exercise"  onclick="importLtiContexts(0, 'exercise')">{%trans%}import-modal.exercises{%endtrans%}</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-test" class="tab-pane fade in active">
                                     <div class=" import-body">
                                     </div>
                                     </div>
-                                <div id="tab-question" class="tab-pane fade">
-                                    <div class=" import-body-questions">
+                                <div id="tab-exercise" class="tab-pane fade">
+                                    <div class=" import-body-exercises">
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             <div class="modal-footer">
-                <button id="buttonImport" type="button" class="btn btn-success" onclick="document.getElementById('importForm').submit();">{%trans%}import-modal.importquestions{%endtrans%}</button>
+                <button id="buttonImport" type="button" class="btn btn-success" onclick="document.getElementById('importForm').submit();">{%trans%}import-modal.importexercises{%endtrans%}</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">{%trans%}import-modal.cancel{%endtrans%}</button>
             </div>
         </div>

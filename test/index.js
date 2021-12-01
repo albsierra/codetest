@@ -108,34 +108,34 @@ const { expect } = require('@playwright/test');
   */
 
 
-  await ltiIframe.click('text=Create a question');
+  await ltiIframe.click('text=Create a exercise');
 
-  await ltiIframe.waitForURL(/create-question.php/, {
+  await ltiIframe.waitForURL(/create-exercise.php/, {
     waitUntil: 'networkidle'
   })
 
   // await page.pause();
 
-  await ltiIframe.click('[placeholder="Question title"]');
-  await ltiIframe.type('[placeholder="Question title"]', `Pregunta de prueba - ${new Date().toISOString()}`);
-  await ltiIframe.press('[placeholder="Question title"]', 'Tab');
+  await ltiIframe.click('[placeholder="Exercise title"]');
+  await ltiIframe.type('[placeholder="Exercise title"]', `Pregunta de prueba - ${new Date().toISOString()}`);
+  await ltiIframe.press('[placeholder="Exercise title"]', 'Tab');
   await ltiIframe.type('[placeholder="Keywords"]', 'keyword');
   await ltiIframe.press('[placeholder="Keywords"]', 'Tab');
-  await ltiIframe.selectOption('select[name="question[difficulty]"]', { label: 'Medium'});
-  await ltiIframe.type('textarea[name="question[question_input_test]"]', 'Input para el estudiante');
-  await ltiIframe.press('textarea[name="question[question_input_test]"]', 'Tab');
-  await ltiIframe.type('textarea[name="question[question_input_grade]"]', 'Input para el grade');
-  await ltiIframe.press('textarea[name="question[question_input_grade]"]', 'Tab');
-  await ltiIframe.selectOption('select[name="question[question_language]"]', { label: 'Java'});
-  await ltiIframe.press('select[name="question[question_language]"]', 'Tab');
-  await ltiIframe.type('textarea[name="question[question_solution]"]', 'La solución');
-  await ltiIframe.press('textarea[name="question[question_solution]"]', 'Tab');
-  await ltiIframe.type('textarea[name="question[question_must]"]', 'Debe contener');
-  await ltiIframe.press('textarea[name="question[question_must]"]', 'Tab');
-  await ltiIframe.type('textarea[name="question[question_musnt]"]', 'No debe contener');
-  await ltiIframe.click('text=Save Question');
+  await ltiIframe.selectOption('select[name="exercise[difficulty]"]', { label: 'Medium'});
+  await ltiIframe.type('textarea[name="exercise[exercise_input_test]"]', 'Input para el estudiante');
+  await ltiIframe.press('textarea[name="exercise[exercise_input_test]"]', 'Tab');
+  await ltiIframe.type('textarea[name="exercise[exercise_input_grade]"]', 'Input para el grade');
+  await ltiIframe.press('textarea[name="exercise[exercise_input_grade]"]', 'Tab');
+  await ltiIframe.selectOption('select[name="exercise[exercise_language]"]', { label: 'Java'});
+  await ltiIframe.press('select[name="exercise[exercise_language]"]', 'Tab');
+  await ltiIframe.type('textarea[name="exercise[exercise_solution]"]', 'La solución');
+  await ltiIframe.press('textarea[name="exercise[exercise_solution]"]', 'Tab');
+  await ltiIframe.type('textarea[name="exercise[exercise_must]"]', 'Debe contener');
+  await ltiIframe.press('textarea[name="exercise[exercise_must]"]', 'Tab');
+  await ltiIframe.type('textarea[name="exercise[exercise_musnt]"]', 'No debe contener');
+  await ltiIframe.click('text=Save Exercise');
 
-  await expect(ltiIframe.locator('#flashmessages >> text=Question Saved')).toHaveCount(1)
+  await expect(ltiIframe.locator('#flashmessages >> text=Exercise Saved')).toHaveCount(1)
   
   await browser.close();
 })();

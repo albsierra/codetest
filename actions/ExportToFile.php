@@ -7,11 +7,11 @@ if ( $USER->instructor ) {
     $ct_id = $_SESSION["ct_id"];
 
     $main = new \CT\CT_Main($ct_id);
-    $questions = $main->getQuestions();
+    $exercises = $main->getExercises();
 
     $rowCounter = 1;
 
-    $questionTotal = count($questions);
+    $exerciseTotal = count($exercises);
 
     $exportFile = new PHPExcel();
 
@@ -28,9 +28,9 @@ if ( $USER->instructor ) {
     $exportFile->getActiveSheet()->getColumnDimension('C')->setWidth(25);
 
     $letters = range('C','Z');
-    for($x = 1; $x<=$questionTotal; $x++){
+    for($x = 1; $x<=$exerciseTotal; $x++){
         $col1 = $x+2;
-        $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col1, $rowCounter, "Question ".$x);
+        $exportFile->getActiveSheet()->setCellValueByColumnAndRow($col1, $rowCounter, "Exercise ".$x);
 
         $cell_name = $letters[$x]."1";
         $exportFile->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
@@ -63,11 +63,11 @@ if ( $USER->instructor ) {
             $exportFile->getActiveSheet()->setCellValue('C'.$rowCounter, $Modified->format('m/d/y - h:i A '));
 
             $col = 3;
-            foreach ($questions as $question ) {
-                $QID = $question->getQuestionId();
+            foreach ($exercises as $exercise ) {
+                $QID = $exercise->getExerciseId();
                 $A="";
 
-                $answer = $student->getAnswerForQuestion($QID, $ct_id);
+                $answer = $student->getAnswerForExercise($QID, $ct_id);
                 if (is_object($answer) && (!is_null($answer->getAnswerId()))) {
                     $A = $answer->getAnswerTxt();
                     $A = str_replace("&#39;", "'", $A);

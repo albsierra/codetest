@@ -2,35 +2,35 @@
 
 namespace CT;
 
-class CT_QuestionCode extends CT_Question
+class CT_ExerciseCode extends CT_Exercise
 {
-    private $question_language;
-    private $question_input_test;
-    private $question_input_grade;
-    private $question_output_test;
-    private $question_output_grade;
-    private $question_solution;
+    private $exercise_language;
+    private $exercise_input_test;
+    private $exercise_input_grade;
+    private $exercise_output_test;
+    private $exercise_output_grade;
+    private $exercise_solution;
     private $recalculateOutputs = false;
 
-    public function __construct($question_id = null)
+    public function __construct($exercise_id = null)
     {
         $context = array();
-        if (isset($question_id)) {
-            $query = \CT\CT_DAO::getQuery('questionCode', 'getById');
-            $arr = array(':question_id' => $question_id);
+        if (isset($exercise_id)) {
+            $query = \CT\CT_DAO::getQuery('exerciseCode', 'getById');
+            $arr = array(':exercise_id' => $exercise_id);
             $context = $query['PDOX']->rowDie($query['sentence'], $arr);
         }
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
-        $this->setQuestionParentProperties();
+        $this->setExerciseParentProperties();
     }
     
     
-    //necessary to use json_encode with questionCode objects
+    //necessary to use json_encode with exerciseCode objects
     public function jsonSerialize() {
         return [
-            'question_id' => $this->getQuestionId(),
+            'exercise_id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
-            'question_num' => $this->getQuestionNum(),
+            'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
             'type' => $this->getType(),
             'difficulty' => $this->getDifficulty(),
@@ -40,128 +40,128 @@ class CT_QuestionCode extends CT_Question
             'averageGrade' => $this->getAverageGrade(),
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
-            'question_must' => $this->getQuestionMust(),
-            'question_musnt' => $this->getQuestionMusnt(),
-            'question_language' => $this->getQuestionLanguage(),
-            'question_input_test' => $this->getQuestionInputTest(),
-            'question_input_grade' => $this->getQuestionInputGrade(),
-            'question_output_test' => $this->getQuestionOutputTest(),
-            'question_output_grade' => $this->getQuestionOutputGrade(),
-            'question_solution' => $this->getQuestionSolution()
+            'exercise_must' => $this->getExerciseMust(),
+            'exercise_musnt' => $this->getExerciseMusnt(),
+            'exercise_language' => $this->getExerciseLanguage(),
+            'exercise_input_test' => $this->getExerciseInputTest(),
+            'exercise_input_grade' => $this->getExerciseInputGrade(),
+            'exercise_output_test' => $this->getExerciseOutputTest(),
+            'exercise_output_grade' => $this->getExerciseOutputGrade(),
+            'exercise_solution' => $this->getExerciseSolution()
         ];
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionLanguage()
+    public function getExerciseLanguage()
     {
-        return $this->question_language;
+        return $this->exercise_language;
     }
 
     /**
-     * @param mixed $question_language
+     * @param mixed $exercise_language
      */
-    public function setQuestionLanguage($question_language)
+    public function setExerciseLanguage($exercise_language)
     {
-        $this->question_language = $question_language;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuestionInputTest()
-    {
-        return $this->question_input_test;
-    }
-
-    /**
-     * @param mixed $question_input_test
-     */
-    public function setQuestionInputTest($question_input_test)
-    {
-        if($this->question_input_test != $question_input_test) $this->recalculateOutputs = true;
-        $this->question_input_test = $question_input_test;
+        $this->exercise_language = $exercise_language;
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionInputGrade()
+    public function getExerciseInputTest()
     {
-        return $this->question_input_grade;
+        return $this->exercise_input_test;
     }
 
     /**
-     * @param mixed $question_input_grade
+     * @param mixed $exercise_input_test
      */
-    public function setQuestionInputGrade($question_input_grade)
+    public function setExerciseInputTest($exercise_input_test)
     {
-        if($this->question_input_grade != $question_input_grade) $this->recalculateOutputs = true;
-        $this->question_input_grade = $question_input_grade;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuestionOutputTest()
-    {
-        return $this->question_output_test;
-    }
-
-    /**
-     * @param mixed $question_output_test
-     */
-    public function setQuestionOutputTest($question_output_test)
-    {
-        $this->question_output_test = $question_output_test;
+        if($this->exercise_input_test != $exercise_input_test) $this->recalculateOutputs = true;
+        $this->exercise_input_test = $exercise_input_test;
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionOutputGrade()
+    public function getExerciseInputGrade()
     {
-        return $this->question_output_grade;
+        return $this->exercise_input_grade;
     }
 
     /**
-     * @param mixed $question_output_grade
+     * @param mixed $exercise_input_grade
      */
-    public function setQuestionOutputGrade($question_output_grade)
+    public function setExerciseInputGrade($exercise_input_grade)
     {
-        $this->question_output_grade = $question_output_grade;
+        if($this->exercise_input_grade != $exercise_input_grade) $this->recalculateOutputs = true;
+        $this->exercise_input_grade = $exercise_input_grade;
     }
 
     /**
      * @return mixed
      */
-    public function getQuestionSolution()
+    public function getExerciseOutputTest()
     {
-        return $this->question_solution;
+        return $this->exercise_output_test;
     }
 
     /**
-     * @param mixed $question_solution
+     * @param mixed $exercise_output_test
      */
-    public function setQuestionSolution($question_solution)
+    public function setExerciseOutputTest($exercise_output_test)
     {
-        if($this->question_solution != $question_solution) $this->recalculateOutputs = true;
-        $this->question_solution = $question_solution;
+        $this->exercise_output_test = $exercise_output_test;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseOutputGrade()
+    {
+        return $this->exercise_output_grade;
+    }
+
+    /**
+     * @param mixed $exercise_output_grade
+     */
+    public function setExerciseOutputGrade($exercise_output_grade)
+    {
+        $this->exercise_output_grade = $exercise_output_grade;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseSolution()
+    {
+        return $this->exercise_solution;
+    }
+
+    /**
+     * @param mixed $exercise_solution
+     */
+    public function setExerciseSolution($exercise_solution)
+    {
+        if($this->exercise_solution != $exercise_solution) $this->recalculateOutputs = true;
+        $this->exercise_solution = $exercise_solution;
     }
 
     public function setOutputs()
     {
-        $this->setQuestionOutputTest($this->getOutputFromCode(
-            $this->getQuestionSolution(),
-            $this->getQuestionLanguage(),
-            $this->getQuestionInputTest()
+        $this->setExerciseOutputTest($this->getOutputFromCode(
+            $this->getExerciseSolution(),
+            $this->getExerciseLanguage(),
+            $this->getExerciseInputTest()
         ));
 
-        $this->setQuestionOutputGrade($this->getOutputFromCode(
-            $this->getQuestionSolution(),
-            $this->getQuestionLanguage(),
-            $this->getQuestionInputGrade()
+        $this->setExerciseOutputGrade($this->getOutputFromCode(
+            $this->getExerciseSolution(),
+            $this->getExerciseLanguage(),
+            $this->getExerciseInputGrade()
         ));
     }
 
@@ -170,11 +170,11 @@ class CT_QuestionCode extends CT_Question
      */
     function grade($answer) {
         global $translator;
-        $outputSolution = $this->getQuestionOutputGrade();
+        $outputSolution = $this->getExerciseOutputGrade();
 //        var_dump($outputSolution);
 //        var_dump("SA");
         $outputAnswer =  $this->getOutputFromCode(
-            $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputGrade()
+            $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getExerciseInputGrade()
         );
         CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
@@ -182,9 +182,9 @@ class CT_QuestionCode extends CT_Question
         // TODO mejorar el usage
         if(!$grade) {
 			$outputAnswer =  $this->getOutputFromCode(
-				$answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getQuestionInputTest()
+				$answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getExerciseInputTest()
 			);
-			$diff = CT_Answer::getDiffWithSolution($outputAnswer, $this->getQuestionOutputTest());
+			$diff = CT_Answer::getDiffWithSolution($outputAnswer, $this->getExerciseOutputTest());
             $_SESSION['error'] = "Below, it shows the differences between output expected and output obtained\n<pre>" . htmlentities($diff) . "</pre>";
         }
         $answer->setAnswerSuccess($grade);
@@ -313,16 +313,16 @@ class CT_QuestionCode extends CT_Question
         parent::save();
         
         if ($this->recalculateOutputs) $this->setOutputs();
-        $query = \CT\CT_DAO::getQuery('questionCode', $isNew ? 'insert' : 'update');
+        $query = \CT\CT_DAO::getQuery('exerciseCode', $isNew ? 'insert' : 'update');
         $arr = array(
-            ':question_id' => $this->getQuestionId(),
+            ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId(),
-            ':question_language' => $this->getQuestionLanguage(),
-            ':question_input_test' => $this->getQuestionInputTest(),
-            ':question_input_grade' => $this->getQuestionInputGrade(),
-            ':question_output_test' => $this->getQuestionOutputTest(),
-            ':question_output_grade' => $this->getQuestionOutputGrade(),
-            ':question_solution' => $this->getQuestionSolution(),
+            ':exercise_language' => $this->getExerciseLanguage(),
+            ':exercise_input_test' => $this->getExerciseInputTest(),
+            ':exercise_input_grade' => $this->getExerciseInputGrade(),
+            ':exercise_output_test' => $this->getExerciseOutputTest(),
+            ':exercise_output_grade' => $this->getExerciseOutputGrade(),
+            ':exercise_solution' => $this->getExerciseSolution(),
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }

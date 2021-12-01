@@ -2,35 +2,35 @@
 
 require_once "../initTsugi.php";
 
-$questionId = isset($_POST["questionId"]) ? $_POST["questionId"] : false;
+$exerciseId = isset($_POST["exerciseId"]) ? $_POST["exerciseId"] : false;
 $oldIndex = isset($_POST["oldIndex"]) ? $_POST["oldIndex"] + 1 : false;
 $newIndex = isset($_POST["newIndex"]) ? $_POST["newIndex"] + 1 : false;
 
 if ($USER->instructor) {
     $main = new \CT\CT_Main($_SESSION["ct_id"]);
-    $questions = $main->getQuestions();
-    $prevQuestion = false;
+    $exercises = $main->getExercises();
+    $prevExercise = false;
     $find = false;
 
-    foreach ($questions as $question) {
-        $questionNum = $question->getQuestionNum();
+    foreach ($exercises as $exercise) {
+        $exerciseNum = $exercise->getExerciseNum();
         
-        //Set the new position to the moved question
-        if ($question->getQuestionId() == $questionId) {
-            $question->setQuestionNum($newIndex);
+        //Set the new position to the moved exercise
+        if ($exercise->getExerciseId() == $exerciseId) {
+            $exercise->setExerciseNum($newIndex);
             
-            // -1 position to the question with a lower index than the new
-        } else if (($oldIndex < $newIndex ) && ($questionNum <= $newIndex) && ($questionNum > $oldIndex)) {
-            $question->setQuestionNum($questionNum - 1);
+            // -1 position to the exercise with a lower index than the new
+        } else if (($oldIndex < $newIndex ) && ($exerciseNum <= $newIndex) && ($exerciseNum > $oldIndex)) {
+            $exercise->setExerciseNum($exerciseNum - 1);
 
-            // +1 position to the question with a higher index than the new
-        } else if (($oldIndex > $newIndex ) && ($questionNum >= $newIndex) && ($questionNum < $oldIndex)) {
+            // +1 position to the exercise with a higher index than the new
+        } else if (($oldIndex > $newIndex ) && ($exerciseNum >= $newIndex) && ($exerciseNum < $oldIndex)) {
 
-            $question->setQuestionNum($questionNum + 1);
+            $exercise->setExerciseNum($exerciseNum + 1);
         }
-        $question->update();
+        $exercise->update();
     }
-    $_SESSION["success"] = "Question Order Saved.";
+    $_SESSION["success"] = "Exercise Order Saved.";
 
     $result = array();
 

@@ -33,18 +33,18 @@
                                 <span class="h5 inline">{{ student.formattedMostRecentDate }}</span>
                             </div>
                             <div class="col-xs-3 text-center header-col">
-                                <span class="h5 inline">{{ student.numberAnswered }} / {{ totalQuestions }}</span>
+                                <span class="h5 inline">{{ student.numberAnswered }} / {{ totalExercises }}</span>
                             </div>
                             <div id="responses{{ student.user.getUserId() }}" class="col-xs-12 results-collapse collapse">
-                                {% for question in questions %}
-                                    {% set answer = student.user.getAnswerForQuestion(question.getQuestionId(), question.getCtId()) %}
+                                {% for exercise in exercises %}
+                                    {% set answer = student.user.getAnswerForExercise(exercise.getExerciseId(), exercise.getCtId()) %}
                                     <div class="row response-row">
                                         <div class="col-sm-5">
                                             <h4 class="small-hdr hdr-notop-mrgn">
-                                                <small>{%trans%}general.question{%endtrans%} {{ question.getQuestionNum() }}</small>
+                                                <small>{%trans%}general.exercise{%endtrans%} {{ exercise.getExerciseNum() }}</small>
                                             </h4>
                                             {% autoescape false %}
-                                            <div>{{ question.getTitle() }}</div>
+                                            <div>{{ exercise.getTitle() }}</div>
                                             {% endautoescape %}
                                         </div>
                                         <div class="col-sm-offset-1 col-sm-5" style="height:300px;overflow: scroll;">

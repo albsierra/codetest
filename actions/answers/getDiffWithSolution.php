@@ -6,23 +6,23 @@
 <?php
 require_once "../../initTsugi.php";
 
-$question = new \CT\CT_Question($_GET['questionId']);
+$exercise = new \CT\CT_Exercise($_GET['exerciseId']);
 $answer = new \CT\CT_Answer($_GET['answerId']);
-$question = $question->getQuestionByType();
-$class =  get_class($question);
-if($class == "CT\CT_QuestionCode") {
-	$solution = $question->getOutputFromCode(
-		$answer->getAnswerTxt(), $question->getQuestionLanguage(), $question->getQuestionInputGrade()
+$exercise = $exercise->getExerciseByType();
+$class =  get_class($exercise);
+if($class == "CT\CT_ExerciseCode") {
+	$solution = $exercise->getOutputFromCode(
+		$answer->getAnswerTxt(), $exercise->getExerciseLanguage(), $exercise->getExerciseInputGrade()
 	);
 	if ($USER->instructor) {
-		$answertxt = $question->getQuestionOutputGrade();
+		$answertxt = $exercise->getExerciseOutputGrade();
 	} else {
-		$answertxt = $question->getQuestionOutputTest();
+		$answertxt = $exercise->getExerciseOutputTest();
 	}
 	echo \CT\CT_Answer::getDiffWithSolution($solution, $answertxt);
-} elseif($class == "CT\CT_QuestionSQL") {
-	$solution = $question->getQueryResult();
-	$answertxt = $question->getQueryResult($answer->getAnswerTxt());
+} elseif($class == "CT\CT_ExerciseSQL") {
+	$solution = $exercise->getQueryResult();
+	$answertxt = $exercise->getQueryResult($answer->getAnswerTxt());
 	if(is_array($solution) && is_array($answertxt)) {
 		echo \CT\CT_Answer::getDiffWithSolution(var_dump($solution), var_dump($answertxt));
 	}

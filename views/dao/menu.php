@@ -27,22 +27,22 @@ if ($USER->instructor) {
 
         $resultsSubmenu = [
             renderMenuEntry("navbarmenu.results.by.student", "results-student.php"),
-            renderMenuEntry("navbarmenu.results.by.question", "results-question.php"),
+            renderMenuEntry("navbarmenu.results.by.exercise", "results-exercise.php"),
             renderMenuEntry("navbarmenu.results.download", "results-download.php")
         ];
         addMenuItem($menu, 'fa-poll-h', 'navbarmenu.results', $resultsSubmenu);
 
         $usagesSubmenu = [
             renderMenuEntry("navbarmenu.usage.by.student", "usage-student.php"),
-            renderMenuEntry("navbarmenu.usage.by.question", "usage-question.php"),
+            renderMenuEntry("navbarmenu.usage.by.exercise", "usage-exercise.php"),
         ];
         addMenuItem($menu, 'fa-comments', 'navbarmenu.usages', $usagesSubmenu);
         
         $buildSubmenu = [
-            renderMenuEntry("navbarmenu.questions.create", 'create-question.php'),
-            renderMenuEntry("navbarmenu.questions.list", 'questions-list.php'),
-            renderMenuEntry("navbarmenu.questions.authorkit", 'questions-management.php'),
-            renderMenuEntry("navbarmenu.questions.codetest", 'questions-management.php'),
+            renderMenuEntry("navbarmenu.exercises.create", 'create-exercise.php'),
+            renderMenuEntry("navbarmenu.exercises.list", 'exercises-list.php'),
+            renderMenuEntry("navbarmenu.exercises.authorkit", 'exercises-management.php'),
+            renderMenuEntry("navbarmenu.exercises.codetest", 'exercises-management.php'),
         ];
         addMenuItem($menu, 'fa-edit', 'navbarmenu.build', $buildSubmenu);
     } else {

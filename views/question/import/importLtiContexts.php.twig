@@ -1,17 +1,17 @@
-<p class="lead" xmlns="http://www.w3.org/1999/html">{%trans%}import-lti-context.addquestionsremository{%endtrans%}</p>
+<p class="lead" xmlns="http://www.w3.org/1999/html">{%trans%}import-lti-context.addexercisesremository{%endtrans%}</p>
 {% for key, array in tags %}
     {% for  tag in array %}      
             <label class="tagsLabel">{{tag}} <a onclick="deleteTag('{{tag}}')"> x</a></label>
     {% endfor %}
 {% endfor %}
-<form id="importForm" class="form" action="actions/ImportQuestions.php" method="post">
+<form id="importForm" class="form" action="actions/ImportExercises.php" method="post">
     <div class="list-group">
         {% if not testForImport %}
            {%trans%}import-lti-context.cantconnectrepository{%endtrans%}
         {% endif %}
-        <!-- Question Map -->
+        <!-- Exercise Map -->
         {% for test in testForImport %}
-         {% set questions = test.getQuestions() %}
+         {% set exercises = test.getExercises() %}
         <div class="list-group-item response-list-group-item test-list">
             <div class="row">
                 <div class="col-sm-12 header-col" >
@@ -19,7 +19,7 @@
                         {{ test.name }}  || <label class="descriptions pointer">{{test.description}}</label>
                         <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                         <div id="divTest{{test.test_id}}" hidden>
-                            {{ include('question/import/importTest.php.twig') }}
+                            {{ include('exercise/import/importTest.php.twig') }}
                         </div>
                     </a>
                 </div>
