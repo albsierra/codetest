@@ -798,10 +798,13 @@ body{
     }
     span{
         @apply text-green-700;
+        i{
+            margin-top: -1px;
+        }
     }
     > span:first-of-type {
         display: flex;
-        > span:last-of-type{
+        > span:nth-of-type(2){
             font-size: 12px;
             filter: brightness(0.5);
         }
@@ -814,6 +817,7 @@ body{
 
 a,label{
     &.link-with-icon{
+        width: fit-content;
         > *:first-of-type{
             min-width: 170px;
             display: inline-block;

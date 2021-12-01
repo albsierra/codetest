@@ -43,8 +43,8 @@ $(() => {
             document.querySelector('#form-confirm-import').submit()
         }
     })
-    $('#import-confirmation .file-cancel').on('click', () => {
-        console.log('Cancel');
+    $('#import-confirmation .file-cancel').on('click', (ev) => {
+        ev.stopPropagation();
         document.querySelector('#form-confirm-import').reset()
         $('#import-confirmation').addClass('hidden')
         $('#import-file-label').removeClass('hidden')
