@@ -8,9 +8,9 @@ return [
         "results.by.student" => "By Student",
         "results.by.exercise" => "By Exercise",
         "results.download" => "Download Results",
-        "feedbacks" => "Feedbacks",
-        "feedback.by.student" => "By Student",
-        "feedback.by.exercise" => "By Exercise",
+        "usages" => "Usages",
+        "usage.by.student" => "By Student",
+        "usage.by.exercise" => "By Exercise",
         "build" => "Build",
         "home" => "Home",
         "exercises.create" => "Create exercise",
@@ -24,13 +24,13 @@ return [
         "download.results" => "Download Results",
         "result.by.exercise" => "Result <small>by Exercise</small>",
         "result.by.student" => "Results <small>by Student</small>",
-        "feedback.by.exercise" => "Feedback <small>by Exercise</small>",
-        "feedback.by.student" => "Feedback <small>by Student</small>",
+        "usage.by.exercise" => "Usage <small>by Exercise</small>",
+        "usage.by.student" => "Usage <small>by Student</small>",
         "exercises.management" => "Exercises management",
         "export-context" => "Export context"
     ],
     "main-title" => [
-        "lead" => "Add exercises to quickly collect feedback from your student",
+        "lead" => "Add exercises to quickly collect usage from your student",
         "lead2" => "Virtual judge that supports programming and database training",
         "help" => "Help",
         "edit.title.text" => "Edit Title Text",
@@ -53,7 +53,7 @@ return [
         "exercises.list" => "List of exercises:"
     ],
     "general" => [
-        "no-feedback-found" => "No feedbacks found",
+        "no-usage-found" => "No usages found",
         "exercise" => "Exercise"
     ],
     "download-student-results" => "Click on the link below to download the student results.",
@@ -62,11 +62,11 @@ return [
         "last-updated" => "Last Updated",
         "completed" => "Completed",
     ],
-    "feedback-table" => [
+    "usage-table" => [
         "exercise" => "Exercise",
         "completed" => "Completed",
         "student-name" => "Student Name",
-        "no.feedback" => "No feedbacks found",
+        "no.usage" => "No usages found",
         "understand" => "Understandability:",
         "time" => "Time:",
         "difficulty" => "Difficulty:",
@@ -86,12 +86,12 @@ return [
         ],
         "update" => "Update"
     ],
-    "feedback-exercise" => [
-        "view-feedbacks" => "Viewing Feedbacks",
-        "you.are.viewing.feedbacks" => "You are viewing the feedbacks by exercise. Click on a exercise below to see how students scored that exercise.",
+    "usage-exercise" => [
+        "view-usages" => "Viewing Usages",
+        "you.are.viewing.usages" => "You are viewing the usages by exercise. Click on a exercise below to see how students scored that exercise.",
         "student" => [
-            "view-feedbacks" => "Viewing Feedbacks",
-            "you.are.viewing.feedbacks" => "You are viewing the feedbacks by exercise. Click on a exercise below to see how students scored that exercise.",
+            "view-usages" => "Viewing Usages",
+            "you.are.viewing.usages" => "You are viewing the usages by exercise. Click on a exercise below to see how students scored that exercise.",
         ]
     ],
     "help" => [
@@ -143,12 +143,12 @@ return [
         "delete" => "Delete",
         "cancel" => "Cancel",
     ],
-    "exercise-modal-feedback" => [
+    "exercise-modal-usage" => [
         "score.exercise" => "Score the exercise",
         "understand" => "Understandability",
         "difficulty" => "Difficulty",
         "time" => "Time",
-        "send.feedback" => "Send Feedback",
+        "send.usage" => "Send Usage",
     ],
     "student-code-exercise" => [
         "language" => "Language",
@@ -237,8 +237,8 @@ return [
         "import.exercise.failed" => "Exercise(s) failed to save. Please try again.",
         "import.exercise.success" => "Exercise(s) Imported. %exercises%",
         "import.exercise.imported" => "Exercise(s) Imported.",
-        "feedback.send.success" => "Feedback send.",
-        "feedback.send.error" => "Error sending feedback.",
+        "usage.send.success" => "Usage send.",
+        "usage.send.error" => "Error sending usage.",
         "points.posible.updated" => "Points Possible updated.",
         "points.posible.failed" => "Points Possible failed to save or you provided an invalid number. Please try again.",
         "grade.saved.success" => "Grade saved.",
