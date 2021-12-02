@@ -67,6 +67,15 @@ $(() => {
         })
     }
 
+    if(document.getElementById('exercise[exercise_solution]')){
+        const codeTextArea = document.getElementById('exercise[exercise_solution]');
+        var codeEditor = CodeMirror.fromTextArea(codeTextArea, {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "javascript"
+        });
+    }
+
 });
 
 function bytesToHuman(bytes) {

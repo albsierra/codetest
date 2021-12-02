@@ -113,6 +113,10 @@
         @apply backdrop-blur-xl bg-opacity-80;
         @apply ring-2;
     }
+    .CodeMirror.cm-s-default{
+        padding: 0;
+        background-color: white;
+    }
     &:focus-within, &.ct-focused{
         > div{
             @apply text-sky-700;

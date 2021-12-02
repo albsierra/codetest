@@ -69,6 +69,12 @@ Encore
         // to path is relative to the build directory
         to: 'images/[path][name].[ext]'
     })
+    .copyFiles({
+        from: './assets/scripts/codemirror',
+        pattern: /.*/,
+        // to path is relative to the build directory
+        to: 'codemirror/[path][name].[ext]'
+    })
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

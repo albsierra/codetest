@@ -70,6 +70,8 @@
                             label: "exercise-code-form.codesolution"|trans,
                             name: 'exercise[exercise_solution]',
                             rows: "10",
+                            id: 'exercise[exercise_solution]',
+                            labelFor: 'exercise[exercise_solution]',
                             languages: languages,
                             exerciseLanguage: exerciseLanguage
                         } only
@@ -208,4 +210,9 @@
             </div>
         </form>
     </div>
+{% endblock %}
+{% block footer %}
+<script src="public/build/codemirror/codemirror.js"></script>
+<link rel="stylesheet" href="public/build/codemirror/codemirror.css">
+<script src="public/build/codemirror/javascript/javascript.js"></script>
 {% endblock %}
