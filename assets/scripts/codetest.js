@@ -43,6 +43,7 @@ $(() => {
             document.querySelector('#form-confirm-import').submit()
         }
     })
+
     $('#import-confirmation .file-cancel').on('click', (ev) => {
         ev.stopPropagation();
         document.querySelector('#form-confirm-import').reset()
@@ -53,6 +54,19 @@ $(() => {
         $('#import-confirmation .file-info').prop('title', null)
         $('#import-confirmation .file-size').text("")
     })
+
+    if(document.getElementById('exercise[exercise_input_test]')){
+        const ckExerciseInput = getCKEditor('exercise[exercise_input_test]');
+        ckExerciseInput.on('focus', (e) => {
+            const wrapperEl = e.editor.element.$.parentElement
+            wrapperEl.classList.add('ct-focused')
+        })
+        ckExerciseInput.on('blur', (e) => {
+            const wrapperEl = e.editor.element.$.parentElement
+            wrapperEl.classList.remove('ct-focused')
+        })
+    }
+
 });
 
 function bytesToHuman(bytes) {

@@ -51,7 +51,7 @@
             {% if main.getType() == '1' %}
                 <div class="w-full mt-3">
                     {% embed "components/ct-textarea.php.twig"
-                    with { label: "exercise-code-form.inputforstudent"|trans, name: 'exercise[exercise_input_test]' } only
+                        with { label: "exercise-code-form.inputforstudent"|trans, name: 'exercise[exercise_input_test]', inputClass: 'ckeditor' } only
                     %}
                     {% endembed %}
                 </div>

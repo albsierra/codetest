@@ -105,7 +105,15 @@
             @apply overflow-hidden m-0;
         }
     }
-    &:focus-within{
+    .cke{
+        padding: 0;
+        border: 0;
+    }
+    &.ct-focused{
+        @apply backdrop-blur-xl bg-opacity-80;
+        @apply ring-2;
+    }
+    &:focus-within, &.ct-focused{
         > div{
             @apply text-sky-700;
             @apply bg-opacity-100;

@@ -424,11 +424,6 @@ html{
     margin: 10px 0 10px 0;
 }
 
-// .draggable {
-//     cursor: move;
-//     user-select: none;
-// }
-
 .iconos{
     margin-top: 5px;
     color: grey;
@@ -505,12 +500,7 @@ html{
     font-size: 16px;
 }
 
-// .sortable-ghost, .sortable-chosen {
-//     cursor: grabbing;
-// }
-
 .projects-list {
-    // padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -611,7 +601,6 @@ html{
 }
 
 .exercises-list {
-    // padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 12px;
