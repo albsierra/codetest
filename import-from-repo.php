@@ -2,29 +2,26 @@
 require_once('initTsugi.php');
 include('views/dao/menu.php'); // for -> $menu
 
-global $REST_CLIENT_AUTHOR;
 
-$projectId = $_GET['projectId'];
+$user = new \CT\CT_User($USER->id);
+$_SESSION['tags'] = ["difficulty" => [], "type" => [], "keywords" => [], "averageGrade" => []];
+$page = $_GET['page'];
 
-$projectResponse = $REST_CLIENT_AUTHOR->getClient()->request('GET', "projects/$projectId");
-$project = $projectResponse->toArray();
+if ($USER->instructor) {
 
+    $array = \CT\CT_Test::findTestForImportByPage($page);
+    $testForImport = $array['tests'];
+    $totalPages = $array['totalPages'];
 
-$exercisesResponse = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'exercises', [
-    'headers' => [
-        'project' => $projectId
-    ]
-]);
-
-$exercises = $exercisesResponse->toArray();
-
-
-echo $twig->render('pages/exercises-management.php.twig', array(
-    "project" => $project,
-    "exercises" => $exercises,
-    'OUTPUT' => $OUTPUT,
-    'CFG' => $CFG,
-    'menu' => $menu,
-    'help' => $help(),
-));
-
+    echo $twig->render('pages/exercise-import.php.twig', array(
+        'page' => $page,
+        'OUTPUT' => $OUTPUT,
+        'CFG' => $CFG,
+        'menu' => $menu,
+        'help' => $help(),
+        'testForImport' => $testForImport,
+        'totalPages' => $totalPages,
+    ));
+} else {
+    header('Location: ' . addSession('../../student-home.php'));
+}

@@ -74,6 +74,38 @@ $(() => {
             matchBrackets: true,
             mode: "javascript"
         });
+        window.codeEditor = codeEditor;
+    }
+
+    if(document.querySelector('.exercise-import.page')){
+        let i = 0;
+        let object = 'test';
+
+        if (object == 'test') {
+            $.ajax({
+                type: "GET",
+                url: "actions/import/ImportLtiContexts.php?page=" + i + "&" + _TSUGI.ajax_session,
+                success: function (data) {
+                    $('.import-body').html(data);
+                    $('#buttonImport').attr('onclick', "document.getElementById('importForm').submit();");
+                },
+                error: function (data) {
+                    console.error(data.responseText);
+                }
+            });
+        } else if (object = "exercise") {
+            $.ajax({
+                type: "GET",
+                url: "actions/import/ImportLtiContextsExercises.php?page=" + i + "&" + _TSUGI.ajax_session,
+                success: function (data) {
+                    $('.import-body-exercises').html(data);
+                    $('#buttonImport').attr('onclick', "document.getElementById('importExercisesForm').submit();");
+                },
+                error: function (data) {
+                    console.error(data.responseText);
+                }
+            });
+        }
     }
 
 });
@@ -755,14 +787,14 @@ global.showNewExerciseRow = function() {
     var language = $("#typeSelect").val();
     var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
+    window.codeEditor.save();
     title = $("#exerciseTitleText").val();
 
     if (title == "") {
         $("#exerciseTitleText").attr("placeholder", "Field Required");
         $("#exerciseTitleText").addClass("required");
-    }  else {
+    } else {
         
-        // $('#newExerciseRow').html("");
         $.ajax({
             type: "POST",
             dataType: "json",

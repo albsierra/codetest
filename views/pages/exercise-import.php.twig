@@ -1,0 +1,59 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle("Exercises list from JuezLTI", true, false) }}
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container exercise-import page">
+        <div class="row">
+            <div class="col-sm-3">
+                    <label>{%trans%}import-modal.difficulty{%endtrans%}:</label>
+                <div class="row">
+                    <div class="col-sm-6 colButtons">
+                        <button class="buttonTag" onclick="importLtiContextsButtons('Easy')">{%trans%}import-modal.easy{%endtrans%}</button></br>
+                        <button class="buttonTag" onclick="importLtiContextsButtons('Hard')">{%trans%}import-modal.hard{%endtrans%}</button></br>
+                    </div>
+                    <div class="col-sm-6 colButtons">
+                        <button class="buttonTag" onclick="importLtiContextsButtons('Medium')">{%trans%}import-modal.medium{%endtrans%}</button></br>
+                    </div>
+                </div>
+                <label class="labelButtons">{%trans%}import-modal.language{%endtrans%}:</label>
+                <div class="row">
+                    <div class="col-sm-6 colButtons">
+                        <button class="buttonTag" onclick="importLtiContextsButtons('PHP')">PHP</button></br>
+                        <button class="buttonTag" onclick="importLtiContextsButtons('Java')">Java</button></br>
+                    </div>
+                    <div class="col-sm-6 colButtons">
+                        <button class="buttonTag" onclick="importLtiContextsButtons('MYSQL')">MYSQL</button></br>
+                        <button class="buttonTag" onclick="importLtiContextsButtons('Python')">Python</button></br>
+                    </div>
+                </div>
+                    <label for="customRange1" class="form-label">{%trans%}import-modal.keyword{%endtrans%}:</label>
+                        <div class="buttonIn">
+                    <input type="text" class="border" id="keywordText" ><button id="buttonKeyword" onclick="keyword()">{%trans%}import-modal.send{%endtrans%}</button>
+                        </div>
+                    <div class="divScore"><label for="customRange1" class="form-label">{%trans%}import-modal.score{%endtrans%}:</label>
+                        <<label id="rangeValLabel" >2.5</label> <button id="buttonScore" onclick="score()">{%trans%}import-modal.add{%endtrans%}</button></div>
+                    <input type="range" min="0" max="5" step="0.1" value="2.5" oninput="document.getElementById('rangeValLabel').innerHTML = this.value;" class="form-range" id="customRange1">
+            </div>
+            <div class="col-sm-9">
+                <ul class="nav nav-pills">
+                    <li id="li-test" class="active"><a data-toggle="tab" href="#tab-test" onclick="importLtiContexts(0, 'test')">{%trans%}import-modal.test{%endtrans%}</a></li>
+                    <li id="li-exercises"><a data-toggle="tab" href="#tab-exercise"  onclick="importLtiContexts(0, 'exercise')">{%trans%}import-modal.exercises{%endtrans%}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-test" class="tab-pane fade in active">
+                        <div class=" import-body">
+                        </div>
+                        </div>
+                    <div id="tab-exercise" class="tab-pane fade">
+                        <div class=" import-body-exercises">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
