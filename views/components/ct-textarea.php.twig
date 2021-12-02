@@ -1,16 +1,24 @@
-<label class="ct-input-code">
+<label class="ct-input-code" {% if labelFor is defined %}for="{{labelFor}}"{% endif %}>
     {% block text %}
         <div>{{label}}</div>
     {% endblock %}
     {% block input %}
-        <textarea 
+        <textarea
             wrap="off"
-            title="{{label}}"
-            id="{{id}}"
-            class="{{inputClass}}"
             rows="{{rows|default('2')}}"
             placeholder="{{placeholder|default(label)}}"
-            name="{{name}}"
+            {% if label is defined %}
+                title="{{label}}"
+            {% endif %}
+            {% if id is defined %}
+                id="{{id}}"
+            {% endif %}
+            {% if inputClass is defined %}
+                class="{{inputClass}}"
+            {% endif %}
+            {% if name is defined %}
+                name="{{name}}"
+            {% endif %}
         >{{value}}</textarea>
     {% endblock %}
 </label>

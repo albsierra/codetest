@@ -7,11 +7,19 @@
     {% block input %}
         <input
             placeholder="{{placeholder|default(label)}}"
-            id="{{id}}"
-            title="{{label}}"
-            name="{{name}}"
+            {% if id is defined %}
+                id="{{id}}"
+            {% endif %}
+            {% if label is defined %}
+                title="{{label}}"
+            {% endif %}
+            {% if name is defined %}
+                name="{{name}}"
+            {% endif %}
+            {% if value is defined %}
+                value="{{value}}"
+            {% endif %}
             type="{{type|default('text')}}"
-            value="{{value}}"
         >
     {% endblock %}
 </label>
