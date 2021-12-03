@@ -1,18 +1,25 @@
-<li  class="list-group-item h3 inline flx-cntnr flx-row flx-nowrap flx-start exercise-row grab" draggable="true" id="exerciseRow{{ exercise.getExerciseId() }}" exercise-id="{{exercise.getExerciseId()}}" >
-    <div class="drag-handle">
-        <i class="drag-icon" aria-hidden="true"></i>
+<li class="exercise-row grab flex items-center flex-wrap rounded-none py-4 border-b border-gray-400 bg-transparent" draggable="true" id="exerciseRow{{ exercise.getExerciseId() }}" exercise-id="{{exercise.getExerciseId()}}" >
+    <div class="w-full flex items-center">
+        <div class="drag-handle">
+            <i class="drag-icon" aria-hidden="true"></i>
+        </div>
+        <div class="exercise-number">{{ exercise.getExerciseNum() }} - </div>
+        <div class="flx-grow-all exercise-text">
+            {% autoescape false %}
+                <span class="exercise-text-span" id="exerciseText{{ exercise.getExerciseId() }}" tabindex="0">{{ exercise.getTitle() }}</span>
+            {% endautoescape %}
+        </div>
+        <div>
+            <a id="exerciseDeleteAction{{ exercise.getExerciseId() }}" href="javascript:void(0);" onclick="deleteExercise('{{ exercise.getExerciseId() }}')">
+                <span aria-hidden="true" class="fa fa-fw fa-trash text-red-600"></span>
+                <span class="sr-only">{%trans%}instructor.delete.exercise{%endtrans%}</span>
+            </a>
+        </div>
     </div>
-    <div class="exercise-number">{{ exercise.getExerciseNum() }} - </div>
-    <div class="flx-grow-all exercise-text">
-        {% autoescape false %}
-        <span class="exercise-text-span"  id="exerciseText{{ exercise.getExerciseId() }}" tabindex="0">{{ exercise.getTitle() }}</span>
-        {% endautoescape %}
-    </div>
-    <div class="iconos">
-    <a id="exerciseDeleteAction{{ exercise.getExerciseId() }}" href="javascript:void(0);" onclick="deleteExercise('{{ exercise.getExerciseId() }}')">
-        <span aria-hidden="true" class="fa fa-fw fa-trash"></span>
-        <span class="sr-only">{%trans%}instructor.delete.exercise{%endtrans%}</span>
-    </a>
-    </div>
+    {% if mainType == '1' %}
+        <div class="ml-[48px] w-full pt-4">
+            <pre class="bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors h-40">{{exercise.getExerciseInputTest()|raw}}</pre>
+        </div>
+    {% endif %}
 </li>
 

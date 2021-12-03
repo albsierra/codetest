@@ -8,7 +8,7 @@
         List of exercises for students, drag an drop them to change the order
     </div>
     <section id="theExercises">
-        <ul id="listaPrueba" class="list-group">
+        <ul id="listaPrueba" class="list-group border-t border-gray-400">
             {% for exercise in exercises %}
                 {{ include('exercise/instructorExercise.php.twig') }}
             {% endfor %}
