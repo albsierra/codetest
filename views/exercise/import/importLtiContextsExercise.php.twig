@@ -4,7 +4,7 @@
 <label class="tagsLabel">{{tag}} <a onclick="deleteTag('{{tag}}')"> x</a></label>
     {% endfor %}
 {% endfor %}
-<form id="importExercisesForm" class="form" action="actions/ImportExercisesExercise.php" method="post">
+<form id="importExercisesForm" class="form" action="actions/ImportExercisesQuestion.php" method="post">
     <div class="list-group">
         {% if not exercisesForImport %}
             Can't connect with the repository
@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-sm-12 header-col" >
                     <a data-toggle="collapse" class="h4 response-collapse-link pointer" data-target="#site{{ exercise.exercise_id }}" onclick="showExercises('{{ exercise.getExerciseId() }}')">
-                        {{ exercise.title }}   <label class="descriptions pointer"></label>
+                        {{ exercise.title }} <label class="descriptions pointer"></label>
                     </a>
                     <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
                     <div class="row response-exercise-row">

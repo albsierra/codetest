@@ -3,7 +3,7 @@
 {{ OUTPUT.pageTitle("Exercises list from JuezLTI", true, false) }}
 {% endblock %}
 {% block content %}
-<div>
+<div class="mt-4">
     <div class="container exercise-import page">
         <div class="row">
             <div class="col-sm-3">
@@ -52,7 +52,13 @@
                     </div>
                 </div>
             </div>
-            
+        </div>
+        <div class="row">
+            <div class="col-12 flex mt-3">
+                <button type="button" class="btn btn-success ml-auto" onclick="document.getElementById('importExercisesForm').submit();">
+                    Import Questions
+                </button>
+            </div>
         </div>
     </div>
 </div>
