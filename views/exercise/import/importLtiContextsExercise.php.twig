@@ -13,17 +13,21 @@
         {% for exercise in exercisesForImport %}
         <div class="list-group-item response-list-group-item test-list">
             <div class="row">
-                <div class="col-sm-12 header-col" >
-                    <a data-toggle="collapse" class="h4 response-collapse-link pointer" data-target="#site{{ exercise.exercise_id }}" onclick="showExercises('{{ exercise.getExerciseId() }}')">
-                        {{ exercise.title }} <label class="descriptions pointer"></label>
-                    </a>
-                    <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                <div class="col-sm-12 header-col pt-0" >
+                    <div class="pb-2 flex items-center">
+                        <a data-toggle="collapse" class="h4 response-collapse-link pointer flex-grow" data-target="#site{{ exercise.exercise_id }}" onclick="showExercises('{{ exercise.getExerciseId() }}')">
+                            <span>
+                                {{ exercise.title }}
+                            </span>
+                            <label class="descriptions pointer"></label>
+                        </a>
+                        <span class="fa fa-chevron-down rotate" aria-hidden="true"></span>
+                    </div>
                     <div class="row response-exercise-row">
-                        <div id="main{{exercise.getExerciseId()}}" class="col-xs-offset-1 col-sm-11" hidden>
+                        <div id="main{{exercise.getExerciseId()}}" class="ml-10" hidden>
                             {{ include('exercise/import/importExercises.php.twig') }}
                         </div>
                     </div>
-
                 </div>
                 <div id="site{{ exercise.exercise_id }}" class="col-xs-12 results-collapse collapse">
                 </div>

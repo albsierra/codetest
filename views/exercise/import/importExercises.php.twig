@@ -1,15 +1,35 @@
 {% if exercise %}
-    <div class="checkbox">
-        {% if exercise.getTestId() %}
-            <input type="checkbox" id="exercise{{exercise.getExerciseId()}}" name="exercise[]" value="{{exercise.getExerciseId()}}/{{exercise.getTestId()}}">
-        {%else%}
-            <input type="checkbox" id="exercise{{exercise.getExerciseId()}}" name="exercise[]" value="{{exercise.getExerciseId()}}">
-        {%endif%}
-        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.statement{%endtrans%}:</b> {{exercise.getTitle()}}</label>
-        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.type{%endtrans%}:</b> {{exercise.getType()}}</label>
-        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.difficulty{%endtrans%}:</b> {{exercise.getDifficulty()}}</label>
-        <label for="exercise{{exercise.getExerciseId()}}"><b>{%trans%}import-exercise.averagegrade{%endtrans%}:</b> {{exercise.getAverageGrade() |round(2)}}</label>
-    </div>
+    <label class="flex items-center m-0 gap-3 py-3 font-normal">
+            <input
+                type="checkbox"
+                style="margin: 0;"
+                id="exercise{{exercise.getExerciseId()}}"
+                name="exercise[]"
+                {% if exercise.getTestId() %}
+                    value="{{exercise.getExerciseId()}}/{{exercise.getTestId()}}"
+                {%else%}
+                    value="{{exercise.getExerciseId()}}"
+                {%endif%}
+            >
+        <div class="flex flex-wrap flex-grow pr-3">
+            <div class="w-full flex justify-between mb-2">
+                <div>
+                    <span class="pr-3">
+                        <b>{%trans%}import-exercise.difficulty{%endtrans%}:</b>
+                    </span>
+                    <span>
+                        {{exercise.difficulty}}
+                    </span>
+                </div>
+                <div class="italic">
+                    {{exercise.keywords|join(', ')}}
+                </div>
+            </div>
+            <div class="w-full">
+                <pre class="bg-white px-3 min-h-[100px]">{{exercise.getExerciseInputTest()|raw}}</pre>
+            </div>
+        </div>
+    </label>
 {% else %}
     <div class="checkbox">
         {%trans%}No exercises in test.{%endtrans%} 
