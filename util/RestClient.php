@@ -6,7 +6,7 @@ const AUTHOR_LOGIN_URL = 'auth/login';
 const AUTHOR_REFRESH_URL = 'auth/refresh';
 const AUTHOR_ME_URL = "users/me";
 
-const REPO_LOGIN_URL = 'api/auth/signin';
+const REPO_LOGIN_URL = 'api/auth/login';
 const REPO_ME_URL = "api/auth/me";
 
 class RestClient
@@ -56,8 +56,11 @@ class RestClient
             }
         }else{
             $expireTime = $jsonData['spring-repo']['token']['expireDate'];
-            if(time() > $expireTime){
-                $this->loginRepo();
+            if(time() > $expireTime) {
+                $this->loginRepo(
+                    $CFG->apiConfigs['spring-repo']['user'],
+                    $CFG->apiConfigs['spring-repo']['pass']
+                );
             }
         }
         return $this->client;
@@ -134,7 +137,7 @@ class RestClient
         global $CFG;
         $currentTime = time();
         $returnData = [];
-        $tokenJwt = json_decode(base64_decode(str_replace('_', '/', str_replace('-','+',explode('.', $responseData)[1]))), JSON_PRETTY_PRINT);
+        $tokenJwt = $this->parseJwt($responseData);
         $tokenStr = $responseData;
 
         $returnData['expireDate'] = $tokenJwt['exp'];
@@ -151,6 +154,7 @@ class RestClient
         $returnData['expireDateHuman'] = $dateExpiresInStr;
         $returnData['recievedAt'] = $dateNowStr;
         $returnData['accessToken'] = $tokenStr;
+        $returnData['expiresIn'] = $returnData['expireDate'] - $currentTime;
         $this->token = $tokenStr;
 
         JSONManager::setKeyValue('[spring-repo][token]', $returnData, $CFG->codetestBasePath. '/rest-data.json');
@@ -165,14 +169,18 @@ class RestClient
         $this->client = $client;
     }
 
-    public function loginRepo()
+    public function loginRepo($user, $pass)
     {
-        global $CFG;
         $this->log("Logging to spring-repo...");
-        $response = $this->client->request('POST', REPO_LOGIN_URL);
+        $response = $this->client->request('POST', REPO_LOGIN_URL, [
+            'json' => [
+                'username' => $user,
+                'password' => $pass,
+            ]
+        ]);
         $responseData = $response->getContent();
-        $this->setRepoData($responseData);
 
+        $this->setRepoData($responseData);
     }
 
     public function setToken($token)
@@ -212,6 +220,10 @@ class RestClient
                 $_SESSION["error"] = $errorMessage;
             }
         }
+    }
+
+    public function parseJwt($jwt){
+        return json_decode(base64_decode(str_replace('_', '/', str_replace('-','+',explode('.', $jwt)[1]))), JSON_PRETTY_PRINT);
     }
 
     public function setOnline($val)

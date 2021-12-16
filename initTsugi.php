@@ -52,7 +52,10 @@ if(!empty($jsonData['spring-repo']['token'])){
     $restClientRepo = new RestClient($CFG->apiConfigs['spring-repo']['baseUrl'], $jsonData['spring-repo']['token']['accessToken']);
 }else{
     $restClientRepo = new RestClient($CFG->apiConfigs['spring-repo']['baseUrl'], null);
-    $restClientRepo->loginRepo();
+    $restClientRepo->loginRepo(
+        $CFG->apiConfigs['spring-repo']['user'],
+        $CFG->apiConfigs['spring-repo']['pass']
+    );
 }
 $restClientRepo->checkRepoIsOnline();
 $GLOBALS['REST_CLIENT_REPO'] = $restClientRepo;
