@@ -1,0 +1,27 @@
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle('pages-title.exercises.management'|trans, true, false) }}
+{% endblock %}
+{% block content %}
+    <div>
+        <div class="authorkit__projects-title">
+            <div class="d-flex align-center">
+                <div class="h4" style="font-weight: 500;">
+                    Authorkit Projects
+                </div>
+                <div class="ml-auto">
+                    <a href="index.php" style="text-decoration: underline;">
+                        Back to home
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="projects-list">
+            {% for project in projects %}
+                <a href="ak-projects-list.php?projectId={{project.id}}">
+                    {% include 'components/project-item.php.twig' %}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -41,7 +41,7 @@ if ($USER->instructor) {
         $buildSubmenu = [
             renderMenuEntry("navbarmenu.exercises.create", 'create-exercise.php'),
             renderMenuEntry("navbarmenu.exercises.list", 'exercises-list.php'),
-            renderMenuEntry("navbarmenu.exercises.authorkit", 'exercises-management.php'),
+            renderMenuEntry("navbarmenu.exercises.authorkit", 'ak-projects-list.php'),
             renderMenuEntry("navbarmenu.exercises.codetest", 'exercises-management.php'),
         ];
         addMenuItem($menu, 'fa-edit', 'navbarmenu.build', $buildSubmenu);

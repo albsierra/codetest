@@ -10,7 +10,7 @@
                     Showing exercises from project :
                 </span>
                 <div class="ml-auto">
-                    <a href="exercises-management.php" style="text-decoration: underline;">
+                    <a href="ak-projects-list.php" style="text-decoration: underline;">
                         Back to projects list
                     </a>
                 </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="exercises-list">
             {% for exercise in exercises %}
-                <a href="download-exercise.php?exerciseId={{exercise.id}}">
+                <a href="download-ak-exercise.php?exerciseId={{exercise.id}}">
                     {% include 'components/exercise-item.php.twig' %}
                 </a>
             {% endfor %}

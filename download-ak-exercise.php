@@ -48,7 +48,7 @@ $response = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'projects');
 $projects = $response->toArray();
 
 
-echo $twig->render('pages/exercises-management.php.twig', array(
+echo $twig->render('pages/ak-projects-list.php.twig', array(
     'projects' => $projects,
     'OUTPUT' => $OUTPUT,
     'CFG' => $CFG,

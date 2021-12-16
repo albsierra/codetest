@@ -19,7 +19,7 @@ $exercisesResponse = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'exercises
 $exercises = $exercisesResponse->toArray();
 
 
-echo $twig->render('pages/exercises-management.php.twig', array(
+echo $twig->render('pages/ak-exercises-list.php.twig', array(
     "project" => $project,
     "exercises" => $exercises,
     'OUTPUT' => $OUTPUT,
