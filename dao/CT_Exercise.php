@@ -75,22 +75,6 @@ class CT_Exercise implements \JsonSerializable {
         ];
     }
 
-    //gets a token to use the api
-    static function getToken() {
-
-        global $CFG;
-        $url = $CFG->repositoryUrl."/api/auth/signin";
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        curl_close($curl);
-
-        return "Authorization: Bearer " . $result;
-    }
-
-
     //returns the test of the exercises
     static function findExercises($exercises) {
         global $translator, $REST_CLIENT_REPO;

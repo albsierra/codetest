@@ -109,7 +109,25 @@ This is the guide to follow to get a development environment configured:
 
       ./mvnw spring-boot:run
 
-> After that you will be able to access tsugi at `http://localhost:8080/`
+> At this point you should be able to access the exercises-storage API at `http://localhost:8080/`
+
+- After the spring server is online, you need to create an user, using the endpoint
+
+      http://localhost:8080/api/auth/register
+
+- To create an account you need to make a POST petition with this data as json
+
+      {
+          "username": "codetest",
+          "password": "c0d3te5t",
+          "email": "codetest@email.com"
+      }
+
+- And with the header "auth-secret" set to the value set inside the file `application.properties` at the property `auth.register.secret`
+
+<br>
+
+- > ⚠ The user created in this step must be configured inside the codetest file `config.php`, inside the object `$CFG->apiConfigs`
 
 <br>
 
