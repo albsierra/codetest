@@ -99,9 +99,9 @@ This is the guide to follow to get a development environment configured:
 
 <br>
 
-- After that you will need to get the `exercises-storage` up and running
+- After that you will need to get the `questions-storage` up and running
 
-- Clone the [exercises-storage](https://github.com/KA226-COVID/exercises-storage) repository
+- Clone the [questions-storage](https://github.com/KA226-COVID/questions-storage) repository
 
 - Configure your MongoDB credentials at `application.properties`
 
@@ -109,7 +109,7 @@ This is the guide to follow to get a development environment configured:
 
       ./mvnw spring-boot:run
 
-> At this point you should be able to access the exercises-storage API at `http://localhost:8080/`
+> At this point you should be able to access the questions-storage API at `http://localhost:8080/`
 
 - After the spring server is online, you need to create an user, using the endpoint
 
@@ -143,7 +143,7 @@ It's composed by:
   - Inside has tsugi and codetest installed
 
 - A node with Java [ 8 ]
-  - Inside has the code for the exercises-storage
+  - Inside has the code for the questions-storage
 
 - A node with MongoDB [ 4.4.9 ]
   - To be used by SpringBoot
