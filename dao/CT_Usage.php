@@ -32,70 +32,49 @@ public static function constructValues($idExercise, $user, $understandabilitySco
 
 
 public function save() {
-        global $CFG;
-      
+        global $CFG, $REST_CLIENT_REPO;
+
         //url to save the usage
         $url = $CFG->repositoryUrl . "/api/usage/tickets";
         //url to update the Test score
         $urlUpdateTest = $CFG->repositoryUrl . "/api/usage/updateTest";
-        
+
         //url to update the exercises score
-        $urlUpdateExercise = $CFG->repositoryUrl . "/api/usage/updateExercise";
-        
+        $urlUpdateExercise = "api/usage/updateExercise";
+
         //save Usage
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST' );
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_exec($curl);
-        curl_close($curl);
+        $REST_CLIENT_REPO->getClient()->request('POST', $url, [
+            'json' => $this
+        ]);
         
         //Method to update the score
         $test = $this->saveAverageGrade();
-        
-        //update score on the repo
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT' );
-        
-        //takes the url for a test or exercise
-        if($test->exercises){
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($test));
-        curl_setopt($curl, CURLOPT_URL, $urlUpdateTest);
-        
-        }else{
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this));
-            curl_setopt($curl, CURLOPT_URL, $urlUpdateExercise);
-        }
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        $code =curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-        
-        return $code;
+
+        $urlUpdate = $test->exercises ? $urlUpdateTest : $urlUpdateExercise;
+
+        $requestResponse = $REST_CLIENT_REPO->getClient()->request('POST', $urlUpdate, [
+            'json' => $test->exercises ? $test : $this
+        ]);
+
+        $result = $requestResponse->getContent();
+        $statusCode = $requestResponse->getStatusCode();
+
+        return $statusCode;
         
     }
     
     //Updates the score of the test or exercise
-public function saveAverageGrade() {
-        global $CFG;
+    public function saveAverageGrade() {
+        global $REST_CLIENT_REPO;
         
         //call to recover the object from the repo
-        $url = $CFG->repositoryUrl . "/api/tests/getTestExerciseId1/".$this->getIdExercise();
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET' );
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($this));
- 
-        curl_setopt($curl, CURLOPT_URL, $url);
-       
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        curl_close($curl);
+        $url = "api/tests/getTestExerciseId1/{$this->getIdExercise()}";
+
+        $requestResponse = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+            'json' => $this
+        ]);
         
-        $response = json_decode($result);
+        $response = $requestResponse->toArray();
         
         //if obejct->exercises is a Test object
         if ($response->exercises) {
@@ -180,7 +159,7 @@ public function saveAverageGrade() {
     
     
     static function getUsages($exercises, $students) {
-        global $CFG;
+        global $REST_CLIENT_REPO;
 
         $exercises1 = array_map(function ($a) {
             return $a->getExerciseId();
@@ -190,24 +169,17 @@ public function saveAverageGrade() {
             return $a->getUserId();
         }, $students);
 
-        $ctId=[$_SESSION['ct_id']];
-        $url = $CFG->repositoryUrl . "/api/usage/getUsageByIds";
-          
+        $ctId = [$_SESSION['ct_id']];
+        $url = "api/usage/getUsageByIds";
+
         $array = [$exercises1, $students1, $ctId];
-//        array_push($array, $exercises, $students, $_SESSION['ct_id']);
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($array));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $usagesResponse = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+            'json' => $array
+        ]);
+        $responseContent = $usagesResponse->getContent();
 
-        $result = curl_exec($curl);
-
-        curl_close($curl);
-        
-        return self::MapJsonToUsagesArray($result);
+        return self::MapJsonToUsagesArray($responseContent);
     }
 
     public function getId() {

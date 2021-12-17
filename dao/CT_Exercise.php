@@ -90,31 +90,16 @@ class CT_Exercise implements \JsonSerializable {
         return "Authorization: Bearer " . $result;
     }
 
-    
-    static function apiCall($urlAdd, $value = "") {
-        global $CFG;
-        
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        $url = $CFG->repositoryUrl."/api/tests/" . $urlAdd . $value;
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        $result = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($result);
-
-        return $response;
-    }
 
     //returns the test of the exercises
     static function findExercises($exercises) {
-        global $translator;
+        global $translator, $REST_CLIENT_REPO;
         $response = array();
-        $url = "getTestId/";
 
         foreach ($exercises as $exercise) {
-            $result = Self::apiCall($url, $exercise['test_id']);
+            $url = "api/tests/getTestId/{$exercise['test_id']}";
+            $reqResponse = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+            $result = $reqResponse->toArray();
             if (isset($result)) {
                 foreach ($result->exercises as $exercise1) {
                     if ($exercise1->id == $exercise['exercise_id']) {
@@ -169,16 +154,11 @@ class CT_Exercise implements \JsonSerializable {
 
     
     static function findExerciseForImportByPage($page) {
-        global $CFG;
-        $url = $CFG->repositoryUrl . "/api/exercises/getAllExercises/" . $page;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        curl_close($curl);
-        
-        $decode = json_decode($result);
+        global $REST_CLIENT_REPO;
+        $url = "api/exercises/getAllExercises/$page";
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+
+        $decode = $response->toArray();
         $totalPages = $decode[1];
         $exercises = json_encode($decode[0]);
         $exercises = self::MapJsonToExercisesArray($exercises);
@@ -189,6 +169,7 @@ class CT_Exercise implements \JsonSerializable {
 
     //Find the exercises on the repo by the tags
     static function findExerciseForImportByValue($value = null, $page = 0) {
+        global $REST_CLIENT_REPO;
 
         //if values is passed check if is already on the array
         if ($value) {
@@ -201,23 +182,17 @@ class CT_Exercise implements \JsonSerializable {
         
         //if are tags
         if (isset($postData)) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+                'json' => $postData
+            ]);
 
-            $result = curl_exec($curl);
-            curl_close($curl);
-            $decode = json_decode($result);
+            $decode = $response->toArray();
             $totalPages = $decode[1];
-            
+
             //decode the exercises from json and maps to Exercise objects
             $exercises = json_encode($decode[0]);
             $exercises = self::MapJsonToExercisesArray($exercises);
-            
-            
+
             $array = ['exercises' => $exercises, 'totalPages' => $totalPages[0]];
         } else {
             //if not tags
@@ -228,8 +203,7 @@ class CT_Exercise implements \JsonSerializable {
     }
 
     static function findExercisesForImportByDeleteValue($value) {
-        
-        global $CFG;
+        global $REST_CLIENT_REPO;
         //Deletes the value passed
         CT_Test::checkerDelete($value);
         
@@ -240,16 +214,11 @@ class CT_Exercise implements \JsonSerializable {
 
         //if there is any value left
         if (isset($postData)) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+                'json' => $postData
+            ]);
 
-            $result = curl_exec($curl);
-            curl_close($curl);
-            $decode = json_decode($result);
+            $decode = $response->toArray();
             $totalPages = $decode[1];
             $exercises = json_encode($decode[0]);
             $exercises = self::MapJsonToExercisesArray($exercises);
@@ -264,17 +233,11 @@ class CT_Exercise implements \JsonSerializable {
 
     //Find exercise by id
     static function findExerciseForImportId($id) {
-        global $CFG;
-        $url = $CFG->repositoryUrl . "/api/tests/getExercise/" . $id;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        global $REST_CLIENT_REPO;
+        $url = "api/tests/getExercise/$id";
 
-        $result = curl_exec($curl);
-        curl_close($curl);
-
-        $exercise = json_decode($result);
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+        $exercise = $response->toArray();
         
         //check what type of exercise is to choose constructor
         if ($exercise->type == 'MYSQL') {

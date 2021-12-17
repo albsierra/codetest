@@ -30,19 +30,6 @@ class CT_Test implements \JsonSerializable
         ];
     }
 
-    static function getToken() {
-        global $CFG;
-        $url = $CFG->repositoryUrl . "/api/auth/signin";
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        $result = curl_exec($curl);
-        curl_close($curl);
-
-        return "Authorization: Bearer " . $result;
-    }
-
     static function MapJsonToTestsArray($json) {
         $response = json_decode($json);
 
@@ -234,22 +221,17 @@ class CT_Test implements \JsonSerializable
 
     
     static function findTestForImportByPage($page) {
-        global $CFG;
-        $url = $CFG->repositoryUrl . "/api/tests/getAllTest/".$page;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        global $REST_CLIENT_REPO;
+        $url = "api/tests/getAllTest/$page";
 
-        $result = curl_exec($curl);
-        $decode= json_decode($result);
-        $totalPages=$decode[1];
-        $tests = json_encode($decode[0]);
-        curl_close($curl);
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+        $responseArr = $response->toArray();
+
+        $totalPages = $responseArr[1];
+        $tests = json_encode($responseArr[0]);
 
         $tests = self::MapJsonToTestsArray($tests);
         $array = ['tests' =>$tests, 'totalPages'=> $totalPages[0]];
-       
 
         return $array;
     }
@@ -293,8 +275,9 @@ class CT_Test implements \JsonSerializable
     
     //Find the Test exercises on the repo by the tags
     static function findTestForImportByValue($value = null, $page = 0) {
+        global $REST_CLIENT_REPO;
         
-  //if values is passed check if is already on the array
+        //if values is passed check if is already on the array
         if ($value) {
             self::checkerAdd($value);
         }
@@ -305,34 +288,28 @@ class CT_Test implements \JsonSerializable
         
         //if are tags
         if (isset($postData)) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+                'json' => $postData
+            ]);
+            $responseArr = $response->toArray();
 
-            $result = curl_exec($curl);
-            curl_close($curl);
-            $decode = json_decode($result);
-            $totalPages = $decode[1];
-            $tests = json_encode($decode[0]);
+            $totalPages = $responseArr[1];
+            $tests = json_encode($responseArr[0]);
 
             //decode the exercises from json and maps to Test objects deleting the exercise that do not meet the tags
             $tests = self::MapJsonToTestsArray($tests);
             $tests1 = self::checkerTests($tests);
             $array = ['tests' => $tests1, 'totalPages' => $totalPages[0]];
         } else {
-               //if not tags
-            
+            //if not tags
             $array = \CT\CT_Test::findTestForImportByPage($page);
         }
         return $array;
     }
 
     static function findTestForImportByDeleteValue($value) {
-        global $CFG;
-//Deletes the value passed
+        global $REST_CLIENT_REPO;
+        //Deletes the value passed
         self::checkerDelete($value);
         
          //Check if there is any value left
@@ -342,18 +319,13 @@ class CT_Test implements \JsonSerializable
 
         //if there is any value left
         if (isset($postData)) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData));
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+                'json' => $postData
+            ]);
+            $result = $response->toArray();
 
-            $result = curl_exec($curl);
-            curl_close($curl);
-            $decode = json_decode($result);
-            $totalPages = $decode[1];
-            $tests = json_encode($decode[0]);
+            $totalPages = $result[1];
+            $tests = json_encode($result[0]);
             $tests = self::MapJsonToTestsArray($tests);
             $array = ['tests' => $tests, 'totalPages' => $totalPages[0]];
         } else {
@@ -365,15 +337,12 @@ class CT_Test implements \JsonSerializable
     }
 
     static function findTestForImportId($id) {
-        global $CFG;
-        $url = $CFG->repositoryUrl."/api/tests/getTestId/" . $id;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        global $REST_CLIENT_REPO;
+        $url = "api/tests/getTestId/$id";
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
 
-        $result = curl_exec($curl);
-        curl_close($curl);
+        $result = $response->getContent();
+        
         $CTTest= self::MapJsonToTest($result);
         $test = self::checkerTest($CTTest);
       
@@ -382,16 +351,11 @@ class CT_Test implements \JsonSerializable
 
     //Find a exercise by Test_id and exercise_id
     static function findTestForImportExerciseId($exercise_id, $test_id) {
-        global $CFG;
-        $url = $CFG->repositoryUrl."/api/tests/getTestId/" . $test_id;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', self::getToken()));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        global $CFG, $REST_CLIENT_REPO;
+        $url = "api/tests/getTestId/$test_id";
+        $responseObj = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+        $response = $responseObj->toArray();
 
-        $result = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($result);
         $exercises = ($response->exercises);
         foreach ($exercises as $exercise) {
             //after import the test search for the exercise with the id passed

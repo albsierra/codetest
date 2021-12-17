@@ -60,20 +60,15 @@ class CT_Main implements \JsonSerializable
     
     //Save test on the repo
     function saveTest($tests) {
-        global $CFG;
-        $url = $CFG->repositoryUrl."/api/tests/createTest/";
+        global $REST_CLIENT_REPO;
+        $url = "api/tests/createTest/";
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', CT_Test::getToken()));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST' );
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($tests));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
+            'json' => $tests
+        ]);
 
-        $result = curl_exec($curl);
-        curl_close($curl);
-        return $result;
-       
+        $responseContent = $response->getContent();
+        return $responseContent;
     }
     
     //Save exercise on the repo
