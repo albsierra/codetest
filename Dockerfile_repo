@@ -6,9 +6,9 @@ RUN apt-get install -y git
 
 WORKDIR /app
 
-RUN git clone --branch master https://github.com/KA226-COVID/exercises-storage.git
+RUN git clone --branch master https://github.com/KA226-COVID/questions-storage.git
 
-WORKDIR /app/exercises-storage
+WORKDIR /app/questions-storage
 
 RUN chmod +x mvnw
 
