@@ -69,12 +69,25 @@ $(() => {
 
     if(document.getElementById('exercise[exercise_solution]')){
         const codeTextArea = document.getElementById('exercise[exercise_solution]');
+        const selectElement = document.getElementById('typeSelect');
+
+        const selectedText = getCodeOptionText(selectElement);
+
         var codeEditor = CodeMirror.fromTextArea(codeTextArea, {
             lineNumbers: true,
             matchBrackets: true,
-            mode: "javascript"
+            mode: selectedText
         });
+
         window.codeEditor = codeEditor;
+        if(document.getElementById('typeSelect')){
+            $('#typeSelect').on('change', (ev) => {
+                // debugger;
+                const selectedEl = ev.target
+                const selectedText = getCodeOptionText(selectedEl)
+                codeEditor.setOption("mode", selectedText);
+            })
+        }
     }
 
     if(document.querySelector('.exercise-import.page')){
@@ -109,6 +122,16 @@ $(() => {
     }
 
 });
+
+function getCodeOptionText(el){
+    const selectedIndex = el.options.selectedIndex
+    const selectedOption = el.options[selectedIndex]
+    const selectedText = (selectedOption.text || '').toLowerCase()
+    if(selectedText === 'java'){
+        return 'text/x-java'
+    }
+    return selectedText
+}
 
 function bytesToHuman(bytes) {
     var i = Math.floor(Math.log(bytes) / Math.log(1024)),
