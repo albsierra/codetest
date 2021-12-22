@@ -244,5 +244,19 @@ return [
         "grade.saved.success" => "Grade saved.",
         "connection.failed" => "Can't connect with the repository",
         "exercise.code.percent" => "The output of your code matches a %percent%%% of the correct answer",
+    ],
+    "help-pages" => [
+        "ak-projects-list" => [
+            "message" => "Here is a list of projects inside Authorkit"
+        ],
+        "ak-exercises-list" => [
+            "message" => "Here is a list of exercises inside the <b>%project.name%</b> project from Authorkit"
+        ],
+        "create-exercise" => [
+            "message" => "Here you can create the questions that will be used for the student tests"
+        ],
+        "exercises-list" => [
+            "message" => "Here is the list of exercises inside this Codetest activity"
+        ],
     ]
 ];
