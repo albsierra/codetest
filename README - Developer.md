@@ -24,7 +24,7 @@ This is a guide for JuezLTI developers
 
 - [Tsugi](https://www.tsugi.org/) - Customized
   - Forked from commit: ["Revert JSON changes introduced in 6cd66ce27"](https://github.com/tsugiproject/tsugi/commit/bf25e87870e2673a0efbb0e995b905bd0188a233)
-  - Customizations committed on top of master
+  - Customizations committed on top of the branch `codetest-customizations`
 
 - [Docker](https://www.docker.com/)
   - Used to have an easy to setup environment
@@ -115,13 +115,24 @@ This is the guide to follow to get a development environment configured:
 
       http://localhost:8080/api/auth/register
 
-- To create an account you need to make a POST petition with this data as json
+- To create an account you need to make a POST request with this data as json
 
       {
           "username": "codetest",
           "password": "c0d3te5t",
           "email": "codetest@email.com"
       }
+
+- Example of CURL command
+  
+      curl --location --request POST 'http://localhost:8080/api/auth/register' \
+      --header 'auth-secret: shh' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+          "username": "codetest",
+          "password": "c0d3te5t",
+          "email": "codetest@email.com"
+      }'
 
 - And with the header "auth-secret" set to the value set inside the file `application.properties` at the property `auth.register.secret`
 

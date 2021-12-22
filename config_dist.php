@@ -10,6 +10,7 @@ require 'vendor/autoload.php';
 $CFG->codetestRootDir = dirname(__FILE__);
 $CFG->codetestBasePath = __DIR__;
 
+
 $CFG->twig = array(
     'viewsPath' => __DIR__ . "/views",
     'debug' => true,
@@ -28,6 +29,21 @@ $CFG->type = [
     "MYSQL" => "MYSQL",
     "Python" => "Python",
     "Java" => "Java"
+];
+
+$CFG->apiConfigs = [
+    "spring-repo" => [
+        // MUST HAVE A TRAILING SLASH
+        "baseUrl" => "http://{$CFG->repositoryUrl}/",
+        "user" => "codetest",
+        "pass" => "c0d3te5t",
+    ],
+    "authorkit" => [
+        // MUST HAVE A TRAILING SLASH
+        "baseUrl" => 'https://python.usz.edu.pl/authorkit/api/',
+        "user" => "info@juezlti.eu",
+        "pass" => "Ju3zLT1.",
+    ]
 ];
 
 $CFG->programmingLanguajes = array(
@@ -110,6 +126,7 @@ $CFG->difficulty = array(
     "medium" => "Medium",
     "Hard" => "Hard"
 );
+
 
 /**********************************************************
  ******************* ORACLE *******************************

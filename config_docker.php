@@ -34,7 +34,9 @@ $CFG->type = [
 $CFG->apiConfigs = [
     "spring-repo" => [
         // MUST HAVE A TRAILING SLASH
-        "baseUrl" => "http://{$CFG->repositoryUrl}/"
+        "baseUrl" => "http://{$CFG->repositoryUrl}/",
+        "user" => "codetest",
+        "pass" => "c0d3te5t",
     ],
     "authorkit" => [
         // MUST HAVE A TRAILING SLASH
