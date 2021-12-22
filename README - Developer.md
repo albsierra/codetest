@@ -39,7 +39,6 @@ This is a guide for JuezLTI developers
 
 ## Development environment
 
----
 
 This is the guide to follow to get a development environment configured:
 
@@ -144,7 +143,6 @@ This is the guide to follow to get a development environment configured:
 
 ## Docker
 
----
 
 The project has a docker-compose with everything needed to run a full instance of JuezLTI
 
@@ -177,6 +175,7 @@ To get the docker environment running just run the command:
 <br>
 
 ## Configure inside Moodle
+
 
 After getting codetest up and running, you will need to configure the LTI tool inside Moodle
 
@@ -219,7 +218,6 @@ After getting codetest up and running, you will need to configure the LTI tool i
 
 ## Translations
 
----
 
 > ⚠ To follow this steps you must have installed the [Crowdin CLI](https://support.crowdin.com/cli-tool/), there's multiple ways to install it.
 
