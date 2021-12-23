@@ -52,6 +52,7 @@ services:
       - 27018:27017
     volumes:
       - 'mongodb_data_container:/data/db'
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 volumes:
   mongodb_data_container:
   mysql_data_container:
