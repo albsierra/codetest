@@ -42,6 +42,8 @@ $DATABASE_INSTALL = array(
     exercise_num  INTEGER NULL,
     title         VARCHAR (50) NOT NULL,
     type          VARCHAR (50) NOT NULL,
+    statement     TEXT NULL,
+    hint          VARCHAR (50) NULL,
     exercise_must VARCHAR (50) ,
     exercise_musnt VARCHAR (50) ,
     
