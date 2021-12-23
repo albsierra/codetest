@@ -825,7 +825,7 @@ global.showNewExerciseRow = function() {
             data: theForm.serialize() + '&type=' + language + '&difficulty=' +difficulty+'&' + _TSUGI.ajax_session,
             success: function (data) {
                 resetForm(theForm);
-                location.reload();
+                location = location.href.replace("create-exercise.php?", "exercises-list.php?")
             },
             error: function (data) {
                 console.error('FAIL');
