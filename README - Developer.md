@@ -64,6 +64,14 @@ This is the guide to follow to get a development environment configured:
 
 - Inside the file `initTsugi.php` change the value of `Twig\Environment[debug]` to `true` so you can see the changes made to .twig files inmediatly (without caching)
 
+- Install [Composer](https://getcomposer.org/)
+
+- Then run this command inside the `codetest` folder
+
+      composer update
+
+- This will download the dependencies for PHP
+
 > ⚠ PHP needs writing permissions to `www/tsugi/mod/codetest`
 
 - Run the command:
