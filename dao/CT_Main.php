@@ -458,21 +458,21 @@ class CT_Main implements \JsonSerializable
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
 
-        //necessary to use json_encode with exercise objects
-        public function jsonSerialize() {
-            return [
-                'user_id' => $this->getUserId(),
-                'context_id' => $this->getContextId(),
-                'link_id' => $this->getLinkId(),
-                'title' => $this->getTitle(),
-                'type' => $this->getType(),
-                'seen_splash' => $this->getSeenSplash(),
-                'shuffle' => $this->getShuffle(),
-                'points' => $this->getPoints(),
-                'modified' => $this->getModified(),
-                'ctId' => $this->getCtId()
-            ];
-        }
+    //necessary to use json_encode with exercise objects
+    public function jsonSerialize() {
+        return [
+            'user_id' => $this->getUserId(),
+            'context_id' => $this->getContextId(),
+            'link_id' => $this->getLinkId(),
+            'title' => $this->getTitle(),
+            'type' => $this->getType(),
+            'seen_splash' => $this->getSeenSplash(),
+            'shuffle' => $this->getShuffle(),
+            'points' => $this->getPoints(),
+            'modified' => $this->getModified(),
+            'ctId' => $this->getCtId()
+        ];
+    }
 
     function delete($user_id) {
         $query = \CT\CT_DAO::getQuery('main','delete');

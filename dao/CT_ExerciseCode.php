@@ -33,6 +33,8 @@ class CT_ExerciseCode extends CT_Exercise
             'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
             'type' => $this->getType(),
+            'statement' => $this->getStatement(),
+            'hint' => $this->getHint(),
             'difficulty' => $this->getDifficulty(),
             'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
             'averageGradeDifficulty' => $this->getAverageGradeDifficulty(),

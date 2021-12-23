@@ -153,6 +153,15 @@
 
 }
 
+.tests-textarea{
+    @apply w-full;
+    @apply px-3 py-2;
+    @apply border border-blueGray-400 rounded-sm;
+    @apply bg-transparent outline-none focus:bg-white;
+    @apply text-blueGray-900 font-normal;
+    @apply ring-0 ring-offset-1 focus:ring-1 ring-secondary;
+}
+
 #helpModal{
     h4 {
         @apply font-semibold mb-3 text-lg;

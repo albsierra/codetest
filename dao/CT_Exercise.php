@@ -11,6 +11,8 @@ class CT_Exercise implements \JsonSerializable {
     private $title;
     private $type;
     private $difficulty;
+    private $statement;
+    private $hint;
     private $answers;
     private $averageGradeUnderstability;
     private $averageGradeDifficulty;
@@ -42,6 +44,8 @@ class CT_Exercise implements \JsonSerializable {
             $this->exercise_id = $exercise_id;
             $this->ct_id = $_SESSION["ct_id"];
             $this->title = $exercise->getTitle();
+            $this->statement = $exercise->getStatement();
+            $this->hint = $exercise->getHint();
             $this->type = $exercise->getType();
             $this->difficulty = $exercise->getDifficulty();
             $this->averageGradeUnderstability = $exercise->getAverageGradeUnderstability();
@@ -62,6 +66,8 @@ class CT_Exercise implements \JsonSerializable {
             'ct_id' => $this->getCtId(),
             'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
+            'statement' => $this->getStatement(),
+            'hint' => $this->getHint(),
             'type' => $this->getType(),
             'difficulty' => $this->getDifficulty(),
             'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
@@ -334,6 +340,8 @@ class CT_Exercise implements \JsonSerializable {
                 ':exercise_num' => $this->getExerciseNum(),
                 ':type' => $this->getType(),
                 ':title' => $this->getTitle(),
+                ':statement' => $this->getStatement(),
+                ':hint' => $this->getHint(),
                 ':exercise_must' => $this->getExerciseMust(),
                 ':exercise_musnt' => $this->getExerciseMusnt()
             );
@@ -437,6 +445,20 @@ class CT_Exercise implements \JsonSerializable {
 
     public function getType() {
         return $this->type;
+    }
+
+    public function getHint() {
+        return $this->hint;
+    }
+    public function setHint($hint): void {
+        $this->hint = $hint;
+    }
+
+    public function getStatement() {
+        return $this->statement;
+    }
+    public function setStatement($statement): void {
+        $this->statement = $statement;
     }
 
     public function getDifficulty() {

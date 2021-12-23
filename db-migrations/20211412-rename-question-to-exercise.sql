@@ -52,3 +52,8 @@ alter table ct_sql_question change question_probe exercise_probe text null;
 alter table ct_sql_question change question_onfly exercise_onfly longtext null;
 
 rename table ct_sql_question to ct_sql_exercise;
+
+
+alter table ct_exercise add statement text null;
+
+alter table ct_exercise add hint varchar(250) null;

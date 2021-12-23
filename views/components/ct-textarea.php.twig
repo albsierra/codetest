@@ -1,4 +1,7 @@
-<label class="ct-input-code" {% if labelFor is defined %}for="{{labelFor}}"{% endif %}>
+<label
+    {% if labelClass is defined %}class="ct-input-code {{labelClass}}"{% else %}class="ct-input-code"{% endif %}
+    {% if labelFor is defined %}for="{{labelFor}}"{% endif %}
+>
     {% block text %}
         <div>{{label}}</div>
     {% endblock %}

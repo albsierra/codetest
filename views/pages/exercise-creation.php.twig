@@ -51,13 +51,13 @@
             {% if main.getType() == '1' %}
                 <div class="w-full mt-3">
                     {% embed "components/ct-textarea.php.twig"
-                        with { label: "exercise-code-form.inputforstudent"|trans, name: 'exercise[exercise_input_test]', inputClass: 'ckeditor' } only
+                        with { label: "new-exercise-form.labels.statement"|trans, name: 'exercise[statement]', inputClass: 'ckeditor' } only
                     %}
                     {% endembed %}
                 </div>
                 <div class="w-full mt-4">
                     {% embed "components/ct-textarea.php.twig"
-                        with { label: "exercise-code-form.inputforgrade"|trans, name: 'exercise[exercise_input_grade]' } only
+                        with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1" } only
                         %}
                     {% endembed %}
                 </div>
@@ -99,6 +99,36 @@
                                             </select>
                                         {% endblock %}
                                     {% endembed %}
+                                </div>
+                            </div>
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+                <div class="w-full mt-4">
+                    {% embed "components/ct-textarea.php.twig"
+                        with { 
+                            label: "new-exercise-form.labels.tests"|trans,
+                            name: ''
+                        } only
+                        %}
+                        {% block input %}
+                            <div class="p-0 flex gap-3 items-stretch">
+                                <div class="w-full">
+                                    <div class="text-center">
+                                        With this inputs
+                                    </div>
+                                    <textarea class="tests-textarea" name="exercise[exercise_input_test]" id="" cols="30" rows="5"></textarea>
+                                </div>
+                                <div class="flex items-center">
+                                    <span>
+                                        →
+                                    </span>
+                                </div>
+                                <div class="w-full">
+                                    <div class="text-center">
+                                        Expect this outputs
+                                    </div>
+                                    <textarea class="tests-textarea" name="exercise[exercise_output_test]" id="" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
                         {% endblock %}

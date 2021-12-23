@@ -222,7 +222,14 @@ return [
         "exercisetitle" => "Exercise Title",
         "keywordsseparatedlines" => "Keywords (separated by lines)",
         "mustcontainseparatedlines" => "Must contain (separated by lines)",
-        "shouldntcontain" => "Shouldn't contain"
+        "shouldntcontain" => "Shouldn't contain",
+        "labels" => [
+            "statement" => "Exercise statement",
+            "hint" => "Hint",
+            "tests" => "Tests",
+            "inputs" => "With this inputs",
+            "outputs" => "Expect this outputs",
+        ]
     ],
     "backend-messages" => [
         "title.saved.success" => "Title saved",

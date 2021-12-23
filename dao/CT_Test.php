@@ -98,6 +98,8 @@ class CT_Test implements \JsonSerializable
         $CTExercise->setExerciseId($exercise->id);
         $CTExercise->setCtId($_SESSION['ct_id']);
         $CTExercise->setTitle($exercise->title);
+        $CTExercise->setStatement($exercise->statement);
+        $CTExercise->setHint($exercise->hint);
         $CTExercise->setDifficulty($exercise->difficulty);
         $CTExercise->setType($exercise->type);
         $CTExercise->setTestId($testId);
@@ -360,11 +362,11 @@ class CT_Test implements \JsonSerializable
         foreach ($exercises as $exercise) {
             //after import the test search for the exercise with the id passed
             if ($exercise->id == $exercise_id) {
-                if( in_array($exercise->type, $CFG->programmingLanguajes)){
-               $CTExercise = \CT\CT_Test::mapObjectToCodeExercise($exercise, $test_id);
-           }else{
-                $CTExercise = \CT\CT_Test::mapObjectToSQLExercise($exercise, $test_id);
-           }
+                if( in_array($exercise->type, $CFG->programmingLanguajes)) {
+                    $CTExercise = \CT\CT_Test::mapObjectToCodeExercise($exercise, $test_id);
+                } else {
+                    $CTExercise = \CT\CT_Test::mapObjectToSQLExercise($exercise, $test_id);
+                }
             }
         }
         return $CTExercise;

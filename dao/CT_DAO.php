@@ -97,9 +97,9 @@ class CT_DAO {
             'sqlExercisesExport' => "SELECT * FROM {$connection['p']}ct_sql_exercise WHERE `exercise_id` IN ( :exercises_in )",
         );
         $ExerciseQueries = array(
-            'insert' => "INSERT INTO {$connection['p']}ct_exercise  "
-                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt` ) "
-                . "VALUES (  :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt)",
+            'insert' => "INSERT INTO {$connection['p']}ct_exercise "
+                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt`, `statement`, `hint` ) "
+                . "VALUES ( :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt, :statement, :hint)",
             'update' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
                 . "`exercise_num` = :exercise_num, "
