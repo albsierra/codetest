@@ -6,10 +6,13 @@ global $REST_CLIENT_REPO;
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $exercises = $main->getExercises();
 
+$mainIsSQL = $main->getType() == '0';
+$mainIsCode = $main->getType() == '1';
+
 // var_dump();die;
 
-
 // Get exercise subtypes - > > >
+
 $exercise_ids = array_map(function($el){
     return "{$el->getExerciseId()}";
 }, $exercises);
@@ -32,36 +35,44 @@ $exercisesMetaMap = array_reduce($exercisesMeta,function($acc, $el){
 $in = str_repeat('?,', count($exercise_ids) - 1) . '?';
 
 // --- Code exercises --- //
-$iteration = 1;
-
-$queryCodeQ = \CT\CT_DAO::getQuery('main', 'codeExercisesExport');
-$queryCodeQ = str_replace(":exercises_in", $in, $queryCodeQ);
-$statementCodeQ = $queryCodeQ['PDOX']->prepare($queryCodeQ['sentence']);
-foreach($exercise_ids as $exerciseId){
-    $statementCodeQ->bindValue($iteration, $exerciseId);
-    $iteration++;
+$codeExercises = null;
+if($mainIsCode){
+    $iteration = 1;
+    
+    $queryCodeQ = \CT\CT_DAO::getQuery('main', 'codeExercisesExport');
+    $queryCodeQ = str_replace(":exercises_in", $in, $queryCodeQ);
+    $statementCodeQ = $queryCodeQ['PDOX']->prepare($queryCodeQ['sentence']);
+    foreach($exercise_ids as $exerciseId){
+        $statementCodeQ->bindValue($iteration, $exerciseId);
+        $iteration++;
+    }
+    $statementCodeQ->execute();
+    
+    $statementResultCodeQ = $statementCodeQ->fetchAll(PDO::FETCH_ASSOC);
+    
+    $codeExercises = \CT\CT_DAO::createObjectFromArray(\CT\CT_ExerciseCode::class, $statementResultCodeQ);
 }
-$statementCodeQ->execute();
 
-$statementResultCodeQ = $statementCodeQ->fetchAll(PDO::FETCH_ASSOC);
-
-$codeExercises = \CT\CT_DAO::createObjectFromArray(\CT\CT_ExerciseCode::class, $statementResultCodeQ);
 
 // --- SQL exercises --- //
-$iteration = 1;
-
-$querySqlQ = \CT\CT_DAO::getQuery('main', 'sqlExercisesExport');
-$querySqlQ = str_replace(":exercises_in", $in, $querySqlQ);
-$statementSqlQ = $querySqlQ['PDOX']->prepare($querySqlQ['sentence']);
-foreach($exercise_ids as $exerciseId){
-    $statementSqlQ->bindValue($iteration, $exerciseId);
-    $iteration++;
+$sqlExercises = null;
+if($mainIsSQL){
+    $iteration = 1;
+    
+    $querySqlQ = \CT\CT_DAO::getQuery('main', 'sqlExercisesExport');
+    $querySqlQ = str_replace(":exercises_in", $in, $querySqlQ);
+    $statementSqlQ = $querySqlQ['PDOX']->prepare($querySqlQ['sentence']);
+    foreach($exercise_ids as $exerciseId){
+        $statementSqlQ->bindValue($iteration, $exerciseId);
+        $iteration++;
+    }
+    $statementSqlQ->execute();
+    
+    $statementResultSqlQ = $statementSqlQ->fetchAll(PDO::FETCH_ASSOC);
+    
+    $sqlExercises = \CT\CT_DAO::createObjectFromArray(\CT\CT_ExerciseSQL::class, $statementResultSqlQ);
 }
-$statementSqlQ->execute();
 
-$statementResultSqlQ = $statementSqlQ->fetchAll(PDO::FETCH_ASSOC);
-
-$sqlExercises = \CT\CT_DAO::createObjectFromArray(\CT\CT_ExerciseSQL::class, $statementResultSqlQ);
 // Get exercise subtypes - < < <
 
 $clone_main = clone $main;
@@ -85,25 +96,30 @@ $toArrayWithMeta = function ($data) use ($exercisesMetaMap){
 };
 
 
+// Clone exercises
 $clone_exercises = array_map(function($el){
     $el->setCtId(null);
     return $el;
 } ,$exercises);
 $clone_exercises = json_decode(json_encode($clone_exercises), true);
 
+// Clone coding exercises
+if($mainIsCode){
+    $clone_ex_code = array_map(function($el){
+        $el->setCtId(null);
+        return $el;
+    } ,$codeExercises);
+    $clone_ex_code = json_decode(json_encode($clone_ex_code), true);
+}
 
-$clone_qs_code = array_map(function($el){
-    $el->setCtId(null);
-    return $el;
-} ,$codeExercises);
-$clone_qs_code = json_decode(json_encode($clone_qs_code), true);
-
-
-$clone_qs_sql = array_map(function($el){
-    $el->setCtId(null);
-    return $el;
-} ,$sqlExercises);
-$clone_qs_sql = json_decode(json_encode($clone_exercises), true);
+// Clone sql exercises
+if($mainIsSQL){
+    $clone_ex_sql = array_map(function($el){
+        $el->setCtId(null);
+        return $el;
+    } ,$sqlExercises);
+    $clone_ex_sql = json_decode(json_encode($clone_exercises), true);
+}
 
 $exercisesMappedWithMeta = $toArrayWithMeta($clone_exercises);
 
@@ -117,13 +133,17 @@ $exercisesFilename = "exercises.json";
 $fileHandler = fopen($exercisesFilename, 'w');
 fwrite($fileHandler, json_encode($exercisesMappedWithMeta, JSON_PRETTY_PRINT));
 
-$codeFilename = "code_exercises.json";
-$fileHandler = fopen($codeFilename, 'w');
-fwrite($fileHandler, json_encode($clone_qs_code, JSON_PRETTY_PRINT));
+if($mainIsCode){
+    $codeFilename = "code_exercises.json";
+    $fileHandler = fopen($codeFilename, 'w');
+    fwrite($fileHandler, json_encode($clone_ex_code, JSON_PRETTY_PRINT));
+}
 
-$sqlFilename = "sql_exercises.json";
-$fileHandler = fopen($sqlFilename, 'w');
-fwrite($fileHandler, json_encode($clone_qs_sql, JSON_PRETTY_PRINT));
+if($mainIsSQL){
+    $sqlFilename = "sql_exercises.json";
+    $fileHandler = fopen($sqlFilename, 'w');
+    fwrite($fileHandler, json_encode($clone_ex_sql, JSON_PRETTY_PRINT));
+}
 
 /// -------------------------------------
 
@@ -138,20 +158,29 @@ if(!$openZipFile) {
 }
 $zip->addFile($mainFilename,"main.json");
 $zip->addFile($exercisesFilename, "exercises/".$exercisesFilename);
-$zip->addFile($codeFilename, "exercises/".$codeFilename);
-$zip->addFile($sqlFilename, "exercises/".$sqlFilename);
+if($mainIsCode){
+    $zip->addFile($codeFilename, "exercises/".$codeFilename);
+}
+if($mainIsSQL){
+    $zip->addFile($sqlFilename, "exercises/".$sqlFilename);
+}
 
 $zip->close();
 
 unlink($mainFilename);
 unlink($exercisesFilename);
-unlink($codeFilename);
-unlink($sqlFilename);
+if($mainIsCode){
+    unlink($codeFilename);
+}
+if($mainIsSQL){
+    unlink($sqlFilename);
+}
 
 
 $zipFilename_basename = basename($zipFinalFilename);
 $zipFilename_filesize = filesize($zipFinalFilename);
 
+// var_dump("THE END");die;
 
 header('Content-Type: application/zip');
 header('Content-Disposition: attachment; filename="'.$zipFinalFilename.'"');
