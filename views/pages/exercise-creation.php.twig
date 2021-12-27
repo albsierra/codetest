@@ -220,14 +220,31 @@
             {% endif %}
             <div class="w-full mt-4">
                 {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-exercise-form.mustcontainseparatedlines"|trans, name: 'exercise[exercise_must]', rows: "1" } only
+                    with { 
+                        label: "new-exercise-form.labels.restrictions"|trans,
+                        name: ''
+                    } only
                     %}
-                {% endembed %}
-            </div>
-            <div class="w-full mt-4">
-                {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-exercise-form.shouldntcontain"|trans, name: 'exercise[exercise_musnt]', rows: "1" } only
-                    %}
+                    {% block input %}
+                        <div class="p-0 flex gap-10 items-stretch">
+                            <div class="flex-grow">
+                                <div class="text-center">
+                                    {%trans%}
+                                        new-exercise-form.mustcontainseparatedlines
+                                    {%endtrans%}
+                                </div>
+                                <textarea class="tests-textarea" name="exercise[exercise_must]" rows="5"></textarea>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="text-center">
+                                    {%trans%}
+                                        new-exercise-form.shouldntcontain
+                                    {%endtrans%}
+                                </div>
+                                <textarea class="tests-textarea" name="exercise[exercise_musnt]" rows="5"></textarea>
+                            </div>
+                        </div>
+                    {% endblock %}
                 {% endembed %}
             </div>
             <div class="w-full">

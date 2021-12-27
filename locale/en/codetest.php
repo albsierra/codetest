@@ -221,14 +221,15 @@ return [
     "new-exercise-form" => [
         "exercisetitle" => "Exercise Title",
         "keywordsseparatedlines" => "Keywords (separated by lines)",
-        "mustcontainseparatedlines" => "Must contain (separated by lines)",
+        "mustcontainseparatedlines" => "Must contain",
         "shouldntcontain" => "Shouldn't contain",
         "labels" => [
             "statement" => "Exercise statement",
             "hint" => "Hint",
-            "tests" => "Tests",
+            "tests" => "Tests (separated by lines)",
             "inputs" => "With this inputs",
             "outputs" => "Expect this outputs",
+            "restrictions" => "Restrictions (separated by lines)",
         ]
     ],
     "backend-messages" => [
