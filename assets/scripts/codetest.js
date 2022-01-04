@@ -90,6 +90,29 @@ $(() => {
         }
     }
 
+    if(document.querySelector('[id*=answerText]')){
+        const codeTextArea = document.querySelector('[id*=answerText]');
+        const selectElement = document.getElementById('typeSelect');
+
+        const selectedText = getCodeOptionText(selectElement);
+
+        var codeEditor = CodeMirror.fromTextArea(codeTextArea, {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: selectedText
+        });
+
+        window.codeEditor = codeEditor;
+        if(document.getElementById('typeSelect')){
+            $('#typeSelect').on('change', (ev) => {
+                // debugger;
+                const selectedEl = ev.target
+                const selectedText = getCodeOptionText(selectedEl)
+                codeEditor.setOption("mode", selectedText);
+            })
+        }
+    }
+
     if(document.querySelector('.exercise-import.page')){
         let i = 0;
         let object = 'test';
@@ -528,27 +551,29 @@ global.moveExerciseUp = function(exerciseId, testId) {
 
 global.answerExercise = function(exerciseId, exerciseNum) {
     var answerForm = $("#answerForm" + exerciseId);
+    window.codeEditor.save()
     $.ajax({
         type: "POST",
         url: answerForm.prop("action"),
         data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
-            
+
             //If the answer is not empty and it is the first time it has been answered, the usage modal opens
-            if (data.answer_content) {
-                if (!data.exists) {
-                    $('#usageModal' + exerciseId).modal('show');
-                }
+            if (data.answer_content && !data.exists) {
+                $('#usageModal' + exerciseId).modal('show');
+            }else{
+                location.reload()
+                return;
             }
             
-            //If the answer is correct, change the hand down to the hand up
+            /* //If the answer is correct, change the hand down to the hand up
             if(data.success){
                 $("#answerForm"+exerciseId).hide();
                 $("#answerIcon"+exerciseId).removeClass('fa-thumbs-down');
                 $("#answerIcon"+exerciseId).addClass('fa-thumbs-up');
                 $("#listIcon"+exerciseId).removeClass('fa-thumbs-down');
                 $("#listIcon"+exerciseId).addClass('fa-thumbs-up');
-            }
+            } */
             var date =new Date();
             $("#answerSavedText").text(data.answerText);
             $("#modified").text(formatDate(date));
@@ -568,6 +593,7 @@ global.formatDate = function(dateVal) {
     var sYear = newDate.getFullYear();
     var sHour = newDate.getHours();
     var sMinute = padValue(newDate.getMinutes());
+    var sSecond = padValue(newDate.getSeconds());
     var sAMPM = "AM";
     var iHourCheck = parseInt(sHour);
 
@@ -580,7 +606,9 @@ global.formatDate = function(dateVal) {
     }
     sHour = padValue(sHour);
 
-    return sMonth + "/" + sDay + "/" + sYear + " | " + sHour + ":" + sMinute + " " + sAMPM;
+    return `${sDay}/${sMonth}/${sYear} - ${sHour}:${sMinute}:${sSecond} ${sAMPM}`
+
+    // return sMonth + "/" + sDay + "/" + sYear + " - " + sHour + ":" + sMinute + " " + sAMPM;
 }
 
 global.padValue = function(value) {
@@ -639,9 +667,9 @@ global.sendUsage = function(exerciseId) {
         data: usageForm.serialize() + '&exerciseId='+exerciseId+'&' + _TSUGI.ajax_session,
         success: function(data) {
             $('#usageModal'+exerciseId).modal('hide');
-            $('#usageForm'+exerciseId).trigger("reset");
-            $("#flashmessages").html(data.flashmessage);
-            setupAlertHide();
+            setTimeout(() => {
+                location.reload();
+            },350)
         },
         error: function(data){
             alert('ERROR');

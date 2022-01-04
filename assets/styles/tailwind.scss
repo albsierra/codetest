@@ -117,6 +117,10 @@
         padding: 0;
         background-color: white;
     }
+    .CodeMirror pre.CodeMirror-line,
+    .CodeMirror pre.CodeMirror-line-like{
+        padding-left: 10px;
+    }
     &:focus-within, &.ct-focused{
         > div{
             @apply text-sky-700;
@@ -124,9 +128,11 @@
         }
     }
     > div{
+        &:first-of-type{
+            @apply border-b;
+        }
         @apply bg-[#f1f5f8] bg-opacity-30;
         @apply px-3 py-2;
-        @apply border-b;
         @apply text-greyish;
         @apply font-medium;
         @apply text-left;
@@ -160,6 +166,25 @@
     @apply bg-transparent outline-none focus:bg-white;
     @apply text-blueGray-900 font-normal;
     @apply ring-0 ring-offset-1 focus:ring-1 ring-secondary;
+}
+
+.answer-info-box{
+    @apply w-5;
+    @apply h-5;
+    @apply min-h-[20px];
+    @apply min-w-[20px];
+    @apply rounded;
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+    @apply border border-white;
+}
+.student-footer{
+    .answer-info-box{
+        > * {
+            @apply mt-px;
+        }
+    }
 }
 
 #helpModal{
@@ -198,11 +223,24 @@
     @apply px-3 py-2;
 }
 
+.exerciseTitle{
+    @apply text-lg font-normal;
+    @apply mb-3 mt-2;
+    @apply text-blueGray-800;
+    @apply px-3 py-3 bg-white rounded border border-blueGray-400 border-opacity-70;
+    @apply hover:border-secondary hover:border-opacity-70;
+    @apply truncate;
+}
+
+.bg-cristal{
+    @apply bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors;
+}
+
 .ex-statement{
     p{
-        margin-bottom: 8px !important;
+        margin-bottom: 16px !important;
     }
-    h4 {
+    h1, h2, h3, h4 {
         @apply font-semibold mb-3 text-lg;
     }
     h5 {
@@ -213,5 +251,9 @@
             @apply mb-2;
             letter-spacing: 0.5px;
         }
+    }
+    code{
+        @apply bg-secondary bg-opacity-10 block;
+        @apply my-3;
     }
 }

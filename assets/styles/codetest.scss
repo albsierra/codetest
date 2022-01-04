@@ -498,10 +498,6 @@ html{
     margin-right: 2px;
 }
 
-.exerciseTitle{
-    font-size: 16px;
-}
-
 .projects-list {
     display: flex;
     flex-direction: column;
@@ -860,7 +856,26 @@ a,label{
     }
 }
 
+a[disabled].btn{
+    &.buttonNextPrev{
+        pointer-events: none;
+    }
+}
+.exercises-nav-header{
+    a {
+        transition: all 0.25s ease-out;
+    }
+}
 
+.student-footer-buttons{
+    .btn{
+        transition: all 0.25s ease-out;
+    }
+    .btn.buttonNextPrev:hover{
+        color: #ffffff !important;
+        background-color: #00325c;
+    }
+}
 
 //-------------------------------------------------------------------
 

@@ -1,0 +1,58 @@
+
+{% extends "mainTemplate.php.twig" %}
+{% block pageTitle %}
+{{ OUTPUT.pageTitle(main.getTitle(), true, false) }}
+{% endblock %}
+{% block content %}
+<div>
+    {% if exerciseNum == null %}
+        {% set exerciseNum = 0 %}
+    {% endif %}
+    {% if exercises|length > 0 %}
+        <div>
+            <ul class="exercises-nav-header pagination pagination-lg m-0">
+                {% for i in 0..exercises|length -1 %}
+                    <li class="li-item {{ exerciseNum == (i + 1) ? 'active' : '' }}">
+                        <a href="student-home.php?exerciseNum={{ i+1 }}" class="flex items-center gap-3">
+                            {% set answer = user.getAnswerForExercise(exercises[i].getExerciseId(), exercises[i].getCtId()) %}
+                            <span>
+                                Exercise {{ i+1 }}
+                            </span>
+                            {% embed "components/answer-info-box.php.twig" with { answer: answer } only %}
+                            {% endembed %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div style="clear: both"></div>
+
+        {% set exercise = exercises[exerciseNum-1].getExerciseByType() %}
+        {% set exerciseId = exercise.getExerciseId() %}
+        {% set answer = user.getAnswerForExercise(exerciseId, exercise.getCtId()) %}
+
+        {{ include('exercise/studentExercise.php.twig') }}
+
+        {% if not answer %}
+            {{ include('exercise/usageModal.php.twig') }}
+        {% endif %}
+
+    {% else %}
+        <p class="lead">{%trans%}student-home.lead{%endtrans%}</p>
+    {% endif %}
+</div>
+{% endblock %}
+{% block footer %}
+
+<script src="public/build/codemirror/codemirror.js"></script>
+<link rel="stylesheet" href="public/build/codemirror/codemirror.css">
+
+<script src="public/build/codemirror/javascript/javascript.js"></script>
+<script src="public/build/codemirror/php/php.js"></script>
+<script src="public/build/codemirror/python/python.js"></script>
+<script src="public/build/codemirror/xml/xml.js"></script>
+<script src="public/build/codemirror/htmlmixed/htmlmixed.js"></script>
+<script src="public/build/codemirror/css/css.js"></script>
+<script src="public/build/codemirror/clike/clike.js"></script>
+
+{% endblock %}

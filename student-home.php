@@ -12,11 +12,11 @@ $toolTitle = $main->getTitle() ? $main->getTitle() : "Code Test";
 $exercises = $main->getExercises();
 $totalExercises = count($exercises);
 
-$currentExerciseNumber = isset($_GET['exerciseNumber']) ? $_GET['exerciseNumber'] : 0;
+$currentExerciseNumber = isset($_GET['exerciseNum']) ? $_GET['exerciseNum'] : 1;
 
 $user = new \CT\CT_User($USER->id);
 
-echo $twig->render('student-home.php.twig', array(
+echo $twig->render('pages/student-view.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
@@ -24,6 +24,7 @@ echo $twig->render('student-home.php.twig', array(
     'exercises' => $exercises,
     'totalExercises' => $totalExercises,
     'currentExerciseNumber' => $currentExerciseNumber,
+    'exerciseNum' => $currentExerciseNumber,
     'main' => $main,
     'CFG' => $CFG,
 ));

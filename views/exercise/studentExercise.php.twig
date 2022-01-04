@@ -2,67 +2,163 @@
 {% if exercise.getExerciseNum() %}
     {% set exerciseNum = exercise.getExerciseNum() %}
 {% endif %}
-<div id="exerciseAnswer{{ exerciseId }}">
-    <h2 class="small-hdr {{ exerciseNum == 1 ? 'hdr-notop-mrgn' : '' }}">
-        <small>{%trans%}student-exercise.exercise{%endtrans%} {{ exerciseNum }}</small>
-    </h2>
-    {% autoescape false %}
-    
-    <span class="exerciseTitle"> {{ exercise.getTitle() }}</span>
-    {% endautoescape %}
-    {#    {% if not answer or (not answer.getAnswerId() > 0) or (not answer.getAnswerSuccess()) %} #}
-    <form id="answerForm{{ exerciseId }}" action="actions/AnswerExercise.php"
-          method="post">
-
-   {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType())) }}
-     <div>
-        {% if exercise.getExerciseMust() %}
-            <h4>{%trans%}student-exercise.solutionmustcontain{%endtrans%}</h4>
-            <pre>{{ exercise.getExerciseMust()|nl2br }}</pre>
-        {% endif %}
-        {% if exercise.getExerciseMusnt() %}
-            <h4>{%trans%}student-exercise.solutionshouldntcontain{%endtrans%}</h4>
-            <pre>{{ exercise.getExerciseMusnt()|nl2br }}</pre>
-        {% endif %}
-    </div>
-
-            <input type="hidden" name="exerciseId" value="{{ exerciseId }}">
-            <div class="form-group">
-                <label for="answerText{{ exerciseId }}">{%trans%}student-exercise.yoursolutionis{%endtrans%}:</label>
-                <textarea class="form-control" id="answerText{{ exerciseId }}"
-                          name="answerText" rows="5"></textarea>
+<div class="student-view-exercise" id="exerciseAnswer-{{ exerciseId }}">
+    <form id="answerForm{{ exerciseId }}" action="actions/AnswerExercise.php" method="post">
+        <input type="hidden" name="exerciseId" value="{{ exerciseId }}">
+        <div class="student-header">
+            <div class="exerciseTitle bg-cristal" title="{{exercise.getTitle()}}">
+                {{ exercise.getTitle() }}
             </div>
-            <button type="button" class="btn btn-success"
-                    onclick="answerExercise('{{ exerciseId }}','{{exerciseNum}}')">{%trans%}student-exercise.submit{%endtrans%}
-            </button>
-        </form>
-    {# {% endif %} #}
-        <div class="h4 inline flx-cntnr flx-row flx-nowrap flx-start exercise-row">
-            <div class="flx-grow-all exercise-solution">
-                <h4>{%trans%}student-exercise.answer{%endtrans%}:</h4>
-                <pre id="answerSavedText">{{ answer.getAnswerTxt() }}</pre>
-            </div>
-            <div class="flx-grow-all exercise-text">
-                 <p id="modified"></p>
-                <span id="answerIcon{{ exerciseId }}" aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
+            <div class="ex-statement">
+                <pre class="bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors h-[500px] whitespace-normal">{{exercise.getStatement()|raw}}</pre>
             </div>
         </div>
+
+        <div class="w-full mt-4">
+            {% embed "components/ct-textarea.php.twig"
+                with {
+                    label: "new-exercise-form.labels.restrictions"|trans,
+                    name: '',
+                    exercise: exercise
+                } only
+                %}
+                {% block input %}
+                    <div class="p-0 flex gap-10 items-stretch">
+                        <div class="flex-grow">
+                            <div class="text-center">
+                                {%trans%}
+                                    student-exercise.solutionmustcontain
+                                {%endtrans%}
+                            </div>
+                            <pre class="min-h-[150px]">{{ exercise.getExerciseMust() }}</pre>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="text-center">
+                                {%trans%}
+                                    student-exercise.solutionshouldntcontain
+                                {%endtrans%}
+                            </div>
+                            <pre class="min-h-[150px]">{{ exercise.getExerciseMusnt() }}</pre>
+                        </div>
+                    </div>
+                {% endblock %}
+            {% endembed %}
+        </div>
+
+        {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType())) }}
+
+        <div class="w-full mt-4 mb-3">
+            {% set languages = main.getTypeProperty('codeLanguages') %}
+            {% set exerciseLanguage = exercise.getExerciseLanguage() %}
+            {% embed "components/ct-textarea.php.twig"
+                with {
+                    label: "exercise-code-form.codesolution"|trans,
+                    name: 'answerText',
+                    rows: "10",
+                    id: "answerText" ~ exerciseId,
+                    value: answer.getAnswerTxt(),
+                    labelFor: "answerText" ~ exerciseId,
+                    languages: languages,
+                    answerLanguage: answer.getAnswerLanguage(),
+                    exerciseLanguage: exercise.getExerciseLanguage()
+                } only
+            %}
+                {% block text %}
+                    <div class="flex items-center">
+                        <span>
+                            {%trans%}exercise-code-form.codesolution{%endtrans%}
+                        </span>
+                        <div class="ml-auto">
+                            {% embed "components/ct-input.php.twig"
+                                with {
+                                    label: "Language",
+                                    name: 'answer_language',
+                                    id: 'answerLanguage',
+                                    hideLabel: true,
+                                    languages: languages,
+                                    exerciseLanguage: exerciseLanguage,
+                                    answerLanguage: answerLanguage,
+                                } only
+                            %}
+                                {% block input %}
+                                    <select id="typeSelect" name="answer_language" style="background: #fff;" id="answerLanguage">
+                                        {% for index, language in languages %}
+                                            <option
+                                                value="{{ index }}"
+                                                {{ answerLanguage is defined ? (answerLanguage == index ? "selected" : "") : (exerciseLanguage == index ? "selected" : "") }}
+                                            >{{ language.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endblock %}
+                            {% endembed %}
+                        </div>
+                    </div>
+                {% endblock %}
+            {% endembed %}
+        </div>
+        <div class="student-footer">
+            <div class="flex-grow">
+                <div class="h4 flex flx-cntnr flx-row flx-nowrap flx-start exercise-row mt-0 mb-5">
+                    <div class="flex-grow exercise-solution overflow-auto p-0">
+                        <h4>{%trans%}student-exercise.answer{%endtrans%}:</h4>
+                        <pre id="answerSavedText" class="min-h-[80px] !whitespace-pre">{{ answer.getAnswerTxt() }}</pre>
+                    </div>
+                    <div class="flex flex-col gap-1 flex-shrink exercise-text pt-[30px]">
+                        <i id="modified"></i>
+                        <div class="border-t border-blueGray-300">
+                        </div>
+                        <div class="flex items-center justify-between gap-2">
+                            <span>
+                                {{ (answer.getAnswerTxt()|length > 0 ? (answer.getAnswerSuccess() ? 'student-exercise.correct' : 'student-exercise.incorrect') : 'student-exercise.blank')|trans }}
+                            </span>
+                            {% embed "components/answer-info-box.php.twig" with { answer: answer } only %}
+                            {% endembed %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mb-3">
+        <div class="flex gap-4 items-center student-footer-buttons">
+            <div class="mr-auto flex items-center">
+                <a
+                    href="student-home.php?exerciseNum={{exerciseNum-1}}"
+                    {% if exercises|first.getExerciseNum() == exerciseNum %}disabled{% endif %}
+                    class="btn buttonNextPrev m-0 mr-5 flex items-center gap-3 min-w-[125px] justify-around"
+                >
+                    <i class="fa fa-caret-square-o-left mt-px text-[21px]" aria-hidden="true"></i>
+                    <span class="mr-2">
+                        {{ 'student-exercise.previous'|trans|upper }}
+                    </span>
+                </a>
+                <a
+                    href="student-home.php?exerciseNum={{exerciseNum+1}}"
+                    {% if exercises|length == exerciseNum %}disabled{% endif %}
+                    class="btn buttonNextPrev m-0 mr-5 flex items-center gap-3 min-w-[125px] justify-around"
+                >
+
+                    <span class="ml-2">
+                        {{ 'student-exercise.next'|trans|upper }}
+                    </span>
+                    <i class="fa fa-caret-square-o-right mt-px text-[21px]" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div>
+                <button type="button" class="btn btn-success flex items-center justify-center gap-3 min-w-[125px]" onclick="answerExercise('{{ exerciseId }}','{{exerciseNum}}')">
+                    <span class="ml-1 mr-1">
+                        {%trans%}student-exercise.submit{%endtrans%}
+                    </span>
+                    <i class="fa fa-paper-plane text-[16px] mb-[2px]" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+
+    </form>
     <script>
       function updateDate() {
         updateDate( '{{ answer.getModified() |date("D M d Y H:i:s O") }}');
       }
       window.onload = updateDate;
     </script>
-
-    {% if exercises|first.getExerciseNum() != exerciseNum %}
-        <a href="student-home.php?exerciseNum={{exerciseNum-1}}" class="btn buttonNextPrev">
-            {{ 'student-exercise.previous'|trans|upper }}
-        </a>
-    {% endif %}
-    {% if exercises|length != exerciseNum   %}
-        <a href="student-home.php?exerciseNum={{exerciseNum+1}}" class="btn buttonNextPrev">
-            {{ 'student-exercise.next'|trans|upper }}
-        </a>
-    {% endif %}
 </div>
-

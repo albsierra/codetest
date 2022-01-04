@@ -1,19 +1,31 @@
-<p class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
-    <span><strong>{%trans%}student-code-exercise.input{%endtrans%}: </strong></span><pre>{{ exercise.getExerciseInputTest() }}</pre>
-</p>
-<p class="h4 inline flx-cntnr flx-row flx-nowrap flx-start">
-    <span><strong>{%trans%}student-code-exercise.output{%endtrans%}: </strong></span><pre>{{ exercise.getExerciseOutputTest() }}</pre>
-</p>
-<select name="answer_language" id="answerLanguage">
-    {% for index, language in main.getTypeProperty('codeLanguages') %}
-        {% if
-            (answer and answer.getAnswerLanguage() == index)
-            or ((not answer or not answer.getAnswerLanguage()) and exercise.getExerciseLanguage() == index)
+<div class="w-full mt-4">
+    {% embed "components/ct-textarea.php.twig"
+        with { 
+            label: "new-exercise-form.labels.tests"|trans,
+            name: '',
+            exercise: exercise
+        } only
         %}
-            {% set selected = "selected" %}
-        {% else %}
-            {% set selected = "" %}
-        {% endif %}
-        <option value="{{ index }}" {{ selected }} . >{{ language.name }}</option>
-    {% endfor %}
-</select>
+        {% block input %}
+            <div class="p-0 flex gap-3 items-stretch">
+                <div class="w-full">
+                    <div class="text-center">
+                        With this inputs
+                    </div>
+                    <pre class="min-h-[150px]">{{ exercise.getExerciseInputTest() }}</pre>
+                </div>
+                <div class="flex items-center pt-6">
+                    <span>
+                        →
+                    </span>
+                </div>
+                <div class="w-full">
+                    <div class="text-center">
+                        This are the output for you solution
+                    </div>
+                    <pre class="min-h-[150px] bg-white border-primary">{{ exercise.getExerciseOutputTest() }}</pre>
+                </div>
+            </div>
+        {% endblock %}
+    {% endembed %}
+</div>

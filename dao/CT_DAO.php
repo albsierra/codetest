@@ -175,7 +175,7 @@ class CT_DAO {
                 . "`ct_id` = :ctId,"
                 . "`answer_txt` = :answerTxt, "
                 . "`answer_success` = :answerSuccess, "
-                . "`modified` = :modified "
+                . "`modified` = :modified, "
                 . "`answer_language` = :answerLanguage "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",
