@@ -1,9 +1,14 @@
 <?php
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+
 require_once('initTsugi.php');
 include('views/dao/menu.php'); // for -> $menu
 include('util/Functions.php');
 
-global $REST_CLIENT_AUTHOR;
+
+
+global $REST_CLIENT_AUTHOR, $REST_CLIENT_REPO;
 
 $exerciseId = $_GET['exerciseId'];
 
@@ -42,7 +47,29 @@ foreach ($REST_CLIENT_AUTHOR->getClient()->stream($exerciseFileResponse) as $chu
 // readfile($filepath);
 
 
-$_SESSION['success'] = "File: $filename - Downloaded successfully";
+$formFields = [
+    'exercise' => DataPart::fromPath($filename),
+];
+$formData = new FormDataPart($formFields);
+
+
+$uploadResponse = $REST_CLIENT_REPO->getClient()->request('POST', 'api/exercises/import-file', [
+    'headers' => $formData->getPreparedHeaders()->toArray(),
+    'body' => $formData->bodyToIterable(),
+]);
+
+
+$uploadResponseCode = $uploadResponse->getStatusCode();
+unlink($filename);
+
+
+if($uploadResponseCode == 200){
+    $_SESSION['success'] = "File: $filename - Imported to repo successfully";
+}else{
+    $_SESSION['error'] = "Failed to import";
+}
+
+// Load project list again
 
 $response = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'projects');
 $projects = $response->toArray();
