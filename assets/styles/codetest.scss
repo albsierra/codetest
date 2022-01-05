@@ -546,7 +546,7 @@ html{
             }
         }
         .circle-state{
-            &--open,&--draft{
+            &--open,&--draft,&--announced{
                 border-radius: 4px;
                 width: 14px;
                 height: 14px;
@@ -557,6 +557,9 @@ html{
             }
             &--open{
                 --color: #377e38;
+            }
+            &--announced{
+                --color: #166ddf;
             }
             &--draft{
                 --color: #fac563;
