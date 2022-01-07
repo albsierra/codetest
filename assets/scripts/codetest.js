@@ -55,8 +55,8 @@ $(() => {
         $('#import-confirmation .file-size').text("")
     })
 
-    if(document.getElementById('exercise[exercise_input_test]')){
-        const ckExerciseInput = getCKEditor('exercise[exercise_input_test]');
+    if(document.getElementById('exercise[statement]')){
+        const ckExerciseInput = getCKEditor('exercise[statement]');
         ckExerciseInput.on('focus', (e) => {
             const wrapperEl = e.editor.element.$.parentElement
             wrapperEl.classList.add('ct-focused')
@@ -552,17 +552,33 @@ global.moveExerciseUp = function(exerciseId, testId) {
 global.answerExercise = function(exerciseId, exerciseNum) {
     var answerForm = $("#answerForm" + exerciseId);
     window.codeEditor.save()
+    const solutionCode = codeEditor.getValue();
     $.ajax({
         type: "POST",
         url: answerForm.prop("action"),
         data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
+            
+
+            console.log({data});
+
+            $('.answer-output pre').html(data);
+            $('#answerSavedText').html(solutionCode);
+            
+            //$('.answer-output pre').html(data);
 
             //If the answer is not empty and it is the first time it has been answered, the usage modal opens
             if (data.answer_content && !data.exists) {
-                $('#usageModal' + exerciseId).modal('show');
+                console.log('dsdsdsd');
+                $('#usageModal').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                    show: true,
+
+                })
+                // $('#usageModal' + exerciseId).modal('show');
             }else{
-                location.reload()
+                // location.reload()
                 return;
             }
             

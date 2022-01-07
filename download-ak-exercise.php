@@ -17,7 +17,7 @@ $exerciseFileResponse = $REST_CLIENT_AUTHOR->getClient()->request('GET', "exerci
 ]);
 
 if (200 !== $exerciseFileResponse->getStatusCode()) {
-    throw new \Exception('Failed to create a request');
+    throw new \Exception('Request to AK failed');
 }
 $headers = $exerciseFileResponse->getHeaders();
 $filename = getFilenameFromDisposition($headers['content-disposition'][0]);

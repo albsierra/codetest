@@ -314,7 +314,11 @@ class CT_ExerciseCode extends CT_Exercise
         $isNew = $this->isNew();
         parent::save();
         
-        if ($this->recalculateOutputs) $this->setOutputs();
+        /*
+            This was changing the value for the field "getExerciseOutputTest",
+            right now it's used to save the expected output for the student
+        */
+        //if ($this->recalculateOutputs) $this->setOutputs();
         $query = \CT\CT_DAO::getQuery('exerciseCode', $isNew ? 'insert' : 'update');
         $arr = array(
             ':exercise_id' => $this->getExerciseId(),

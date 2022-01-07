@@ -1,7 +1,7 @@
 <?php
-
 require_once "../initTsugi.php";
-global $translator;
+global $translator, $REST_CLIENT_AUTHOR;
+use Symfony\Component\HttpClient\HttpClient;
 
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $exerciseId = $_POST["exerciseId"];
@@ -27,7 +27,26 @@ if (!isset($answerText) || trim($answerText) == "") {
         $exercise1 = \CT\CT_ExerciseSQL::withId($exercise->getExerciseId());
     }
 
-    $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage);
+    $answerOutput = null;
+    
+    if($answerLanguage == 4) {
+        $client = HttpClient::create();
+/*         $clientOptions["headers"] = [
+            'Authorization' => "Bearer {$REST_CLIENT_AUTHOR->getToken()}"
+        ];
+        $client = $client->withOptions($clientOptions); */
+    
+        $response = $client->request("POST", "http://localhost:3000/eval", [
+            'json' => [
+                'date' => date("c"),
+                'program' => $answerText,
+                'learningObject' => 'fd286cb3-5c95-4b0e-b843-56bc058a7713' //$exerciseId
+            ]
+        ]);
+        $answerOutput = $response->getContent();
+    }
+
+    $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput);
     $answer = $array['answer'];
 
     $result["answer_content"] = true;
@@ -48,6 +67,10 @@ if (!isset($answerText) || trim($answerText) == "") {
     $headers = "From: LEARN < @gmail.com >\n";
 
     $_SESSION['success'] = $translator->trans('backend-messages.answer.exercise.saved');
+
+    // var_dump($answerOutput);die;
+    // echo json_encode(json_decode($answerOutput), JSON_PRETTY_PRINT);die;
+    echo $answerOutput;die;
 }
 
 $OUTPUT->buffer = true;

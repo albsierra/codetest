@@ -109,7 +109,7 @@ class CT_Exercise implements \JsonSerializable {
     }
 
     
-    function createAnswer($user_id, $answer_txt, $answer_language = null) {
+    function createAnswer($user_id, $answer_txt, $answer_language = null, $answer_output = null) {
         $answer = \CT\CT_Answer::getByUserAndExercise($user_id, $this->getExerciseId(), $this->getCtId());
         if ($answer->getAnswerId() !== null) {
             $exists = true;
@@ -123,6 +123,9 @@ class CT_Exercise implements \JsonSerializable {
         $answer->setExerciseId($this->getExerciseId());
         $answer->setAnswerTxt($answer_txt);
         $answer->setAnswerLanguage($answer_language);
+        if(isset($answer_output)){
+            $answer->setAnswerOutput($answer_output);
+        }
         $answer->setCtId($this->getCtId());
         
         //returns if the exercise has been passed

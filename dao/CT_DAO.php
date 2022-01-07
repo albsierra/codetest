@@ -167,8 +167,8 @@ class CT_DAO {
             'getByUserExercise' => "SELECT * FROM {$connection['p']}ct_answer "
                 . "WHERE user_id = :userId AND exercise_id = :exerciseId AND ct_id = :ctId",
             'insert' => "INSERT INTO {$connection['p']}ct_answer "
-                . "(`user_id`, `exercise_id`, `ct_id`, `answer_txt`, `answer_success`, `modified`, `answer_language`) "
-                . "VALUES (:userId, :exerciseId, :ctId, :answerTxt, :answerSuccess, :modified, :answerLanguage)",
+                . "(`user_id`, `exercise_id`, `ct_id`, `answer_txt`, `answer_success`, `modified`, `answer_output`, `answer_language`) "
+                . "VALUES (:userId, :exerciseId, :ctId, :answerTxt, :answerSuccess, :modified, :answerOutput, :answerLanguage)",
             'update' => "UPDATE {$connection['p']}ct_answer set "
                 . "`user_id` = :userId, "
                 . "`exercise_id` = :exerciseId, "
@@ -176,6 +176,7 @@ class CT_DAO {
                 . "`answer_txt` = :answerTxt, "
                 . "`answer_success` = :answerSuccess, "
                 . "`modified` = :modified, "
+                . "`answer_output` = :answerOutput, "
                 . "`answer_language` = :answerLanguage "
                 . "WHERE answer_id = :answer_id",
             'deleteOne' => "DELETE FROM {$connection['p']}ct_answer WHERE answer_id = :answerId;",

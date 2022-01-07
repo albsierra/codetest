@@ -216,6 +216,7 @@ return [
         "correct" => 'Correct answer',
         "incorrect" => 'Incorrect answer',
         "blank" => 'Not answered',
+        "answer-output" => 'Your solution output',
         "submit" => "Submit",
         "answer" => "Answer",
         "next" => "Next",

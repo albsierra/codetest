@@ -7,8 +7,8 @@
         } only
         %}
         {% block input %}
-            <div class="p-0 flex gap-3 items-stretch">
-                <div class="w-full">
+            <div class="p-0 flex gap-3 items-stretch justify-between">
+                <div class="w-[48%]" style="flex-basis:48%">
                     <div class="text-center">
                         With this inputs
                     </div>
@@ -19,11 +19,11 @@
                         →
                     </span>
                 </div>
-                <div class="w-full">
+                <div class="w-[48%] flex flex-col" style="flex-basis:48%">
                     <div class="text-center">
-                        This are the output for you solution
+                        This are the exptected outputs
                     </div>
-                    <pre class="min-h-[150px] bg-white border-primary">{{ exercise.getExerciseOutputTest() }}</pre>
+                    <pre class="h-full min-h-[150px] border">{{ exercise.getExerciseOutputTest() }}</pre>
                 </div>
             </div>
         {% endblock %}

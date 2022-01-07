@@ -188,6 +188,11 @@ class RestClient
         $this->token = $token;
     }
 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
     public function checkAuthorkitIsOnline(){
         if($this->isAuthorKit){
             try {

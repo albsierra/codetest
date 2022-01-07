@@ -73,7 +73,7 @@ if(array_key_exists('avg',$gradesMap)){
 
 // var_dump($gradesMap);die;
 
-echo $twig->render('instructor-home.php.twig', array(
+echo $twig->render('pages/instructor-home.php.twig', array(
     'main' => $main,
     'type' => $typeName,
     'exercises' => $exercises,
