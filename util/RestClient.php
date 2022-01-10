@@ -32,9 +32,7 @@ class RestClient
         $client = $client->withOptions($clientOptions);
         $this->client = $client;
         $this->baseUrl = $baseUrl;
-        if(str_contains($baseUrl, 'authorkit')){
-            $this->isAuthorKit = true;
-        }
+        $this->isAuthorKit = str_contains($baseUrl, 'fgpe.dcc.fc.up.pt');
     }
 
     public function getClient()
