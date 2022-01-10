@@ -576,7 +576,6 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                     show: true,
 
                 })
-                // $('#usageModal' + exerciseId).modal('show');
             }else{
                 // location.reload()
                 return;

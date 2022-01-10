@@ -61,7 +61,7 @@ public function save() {
 
         return $statusCode;
         
-    }
+}
     
     //Updates the score of the test or exercise
     public function saveAverageGrade() {
@@ -182,7 +182,7 @@ public function save() {
         return self::MapJsonToUsagesArray($responseContent);
     }
 
-    public function getId() {
+public function getId() {
     return $this->id;
 }
 
