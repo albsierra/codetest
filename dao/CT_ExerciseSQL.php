@@ -124,7 +124,7 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
     public function grade($answer) {
         $outputSolution = $this->getQueryResult();
         $outputAnswer =  $this->getQueryResult($answer->getAnswerTxt());
-        CT_DAO::debug(CT_Answer::getDiffWithSolution(print_r($outputSolution, true), print_r($outputAnswer, true)));
+        //CT_DAO::debug(CT_Answer::getDiffWithSolution(print_r($outputSolution, true), print_r($outputAnswer, true)));
 
         $grade = $outputSolution === $outputAnswer ? 1 : 0;
         $answer->setAnswerSuccess($grade);

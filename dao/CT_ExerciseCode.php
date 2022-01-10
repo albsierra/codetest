@@ -178,7 +178,7 @@ class CT_ExerciseCode extends CT_Exercise
         $outputAnswer =  $this->getOutputFromCode(
             $answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getExerciseInputGrade()
         );
-        CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
+        //CT_DAO::debug(CT_Answer::getDiffWithSolution($outputAnswer, $outputSolution));
 
         $grade = ($outputSolution == $outputAnswer);
         // TODO mejorar el usage
@@ -186,8 +186,8 @@ class CT_ExerciseCode extends CT_Exercise
 			$outputAnswer =  $this->getOutputFromCode(
 				$answer->getAnswerTxt(), $answer->getAnswerLanguage(), $this->getExerciseInputTest()
 			);
-			$diff = CT_Answer::getDiffWithSolution($outputAnswer, $this->getExerciseOutputTest());
-            $_SESSION['error'] = "Below, it shows the differences between output expected and output obtained\n<pre>" . htmlentities($diff) . "</pre>";
+			/* $diff = CT_Answer::getDiffWithSolution($outputAnswer, $this->getExerciseOutputTest());
+            $_SESSION['error'] = "Below, it shows the differences between output expected and output obtained\n<pre>" . htmlentities($diff) . "</pre>"; */
         }
         $answer->setAnswerSuccess($grade);
     }
