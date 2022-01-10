@@ -25,30 +25,4 @@
             <span class="sr-only">{%trans%}main-title.cancel.title.text{%endtrans%}</span>
         </a>
     </div>
-    <div class="h3 flx-cntnr flx-row flx-nowrap flx-start">
-        {% if newExerciseNumber > 1 %}
-            <input type="hidden" id="mainTypeHidden" name="mainType" value="{{ main.getType() }}">
-            <span class="title-edit-input flx-grow-all" id="mainType">{{ main.getTypeProperty('name') }}</span>
-        {% else %}
-            {% embed "components/ct-input.php.twig"
-                with {
-                    label: "Type:",
-                    name: 'mainType',
-                    types: CFG.CT_Types.types,
-                    mainType: main.getType(),
-                    inline: true
-                } only
-            %}
-                {% block input %}
-                    <select class="title-edit-input" id="mainTypeSelect" name="mainType">
-                        {% for key, type in types %}
-                            <option value="{{ loop.index0 }}" {% if mainType == loop.index0 %}selected{% endif %}>
-                                {{ type.name|upper }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                {% endblock %}
-            {% endembed %}
-        {% endif %}
-    </div>
 </form>
