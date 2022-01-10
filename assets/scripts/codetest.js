@@ -570,7 +570,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
             //If the answer is not empty and it is the first time it has been answered, the usage modal opens
             if (data.answer_content && !data.exists) {
                 console.log('dsdsdsd');
-                $('#usageModal').modal({
+                $('.usage-modal').modal({
                     backdrop: 'static',
                     keyboard: false,
                     show: true,
