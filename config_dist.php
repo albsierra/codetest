@@ -40,7 +40,7 @@ $CFG->apiConfigs = [
     ],
     "authorkit" => [
         // MUST HAVE A TRAILING SLASH
-        "baseUrl" => 'https://python.usz.edu.pl/authorkit/api/',
+        "baseUrl" => 'https://fgpe.dcc.fc.up.pt/api/',
         "user" => "info@juezlti.eu",
         "pass" => "Ju3zLT1.",
     ]
