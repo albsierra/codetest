@@ -565,11 +565,8 @@ global.answerExercise = function(exerciseId, exerciseNum) {
             $('.answer-output pre').html(data);
             $('#answerSavedText').html(solutionCode);
             
-            //$('.answer-output pre').html(data);
-
             //If the answer is not empty and it is the first time it has been answered, the usage modal opens
             if (data.answer_content && !data.exists) {
-                console.log('dsdsdsd');
                 $('.usage-modal').modal({
                     backdrop: 'static',
                     keyboard: false,
