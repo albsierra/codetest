@@ -23,12 +23,23 @@ services:
     depends_on:
       - spring-mongo-db
     environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.data.mongodb.host": "spring-mongo-db",
-        "spring.data.mongodb.authentication-database": "admin"
-      }'
+      SPRING_APPLICATION_JSON:
+        '{
+          "spring.data.mongodb.host": "spring-mongo-db",
+          "spring.data.mongodb.authentication-database": "admin"
+        }'
     ports:
       - 8079:8080
+  xml-validator:
+    container_name: xml-validator_container
+    image: xml-validator_img
+    build:
+      context: ./
+      dockerfile: Dockerfile_validator
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    ports:
+      - 3001:3000
   tsugi-mysql-db:
     container_name: tsugi_mysql_db_container
     image: 'mysql:5.7'
