@@ -24,7 +24,7 @@ RUN cp -R tsugi/ /var/www/html/
 # WORKDIR /var/www/html/tsugi
 # RUN cp config_docker.php config.php
 
-RUN git clone --branch edf-merge https://github.com/KA226-COVID/codetest.git
+RUN git clone --branch feat/external-validators https://github.com/KA226-COVID/codetest.git
 RUN mkdir -p /var/www/html/tsugi/mod/
 RUN cp -R codetest/ /var/www/html/tsugi/mod/
 
