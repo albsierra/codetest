@@ -122,7 +122,7 @@ This is the guide to follow to get a development environment configured:
 
       http://localhost:8080/api/auth/register
 
-- To create an account you need to make a POST request with this data as json
+- To create an account you need to make a POST request with this data as json.<br> With the header "auth-secret" set to the value set inside the file `application.properties` at the property `auth.register.secret`
 
       {
           "username": "codetest",
@@ -140,8 +140,6 @@ This is the guide to follow to get a development environment configured:
           "password": "c0d3te5t",
           "email": "codetest@email.com"
       }'
-
-- And with the header "auth-secret" set to the value set inside the file `application.properties` at the property `auth.register.secret`
 
 <br>
 
@@ -168,11 +166,14 @@ It's composed by:
 - A node with MySQL [ 5.7 ]
   - To be used by Tsugi and Codetest
 
+- A node with Node.js [ 14.18 ]
+  - To be used by the validators
+
 <br>
 
 If you have Docker and docker-compose installed
 
-To get the docker environment running just run the command:
+To get the docker environment running just run the command inside the `docker` folder, inside `codetest`:
 
     docker-compose up
 
