@@ -233,7 +233,9 @@ class CT_Exercise implements \JsonSerializable {
         $mainIsSQL = $main->getType() == '0';
 
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
-        $exercise = $response->toArray();
+        $exerciseArray = $response->toArray();
+
+        $exercise = json_decode(json_encode($exerciseArray));
         
         //check what type of exercise is to choose constructor
         if ($mainIsSQL) {
