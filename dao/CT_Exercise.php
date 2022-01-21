@@ -228,12 +228,14 @@ class CT_Exercise implements \JsonSerializable {
     static function findExerciseForImportId($id) {
         global $REST_CLIENT_REPO;
         $url = "api/tests/getExercise/$id";
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $mainIsSQL = $main->getType() == '0';
 
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $exercise = $response->toArray();
         
         //check what type of exercise is to choose constructor
-        if ($exercise->type == 'MYSQL') {
+        if ($mainIsSQL) {
             $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
         } else {
             $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
@@ -245,12 +247,15 @@ class CT_Exercise implements \JsonSerializable {
     static function MapJsonToExercisesArray($json) {
         $response = json_decode($json);
         $exercises = array();
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $mainIsSQL = $main->getType() == '0';
+        
         if ($response) {
             foreach ($response as $exercise) {
 
                 
                 //check what type of exercise is to choose constructor
-                if ($exercise->type == 'MYSQL') {
+                if ($mainIsSQL) {
                     $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
                 } else {
                     $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);

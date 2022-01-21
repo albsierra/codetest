@@ -32,6 +32,8 @@ class CT_Test implements \JsonSerializable
 
     static function MapJsonToTestsArray($json) {
         $response = json_decode($json);
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $mainIsSQL = $main->getType() == '0';
 
         if ($response) {
             $tests = array();
@@ -43,7 +45,7 @@ class CT_Test implements \JsonSerializable
                 $CTTest->setDescription($test->description);
                 $exercises1 = ($test->exercises);
                 foreach ($exercises1 as $exercise) {
-                    if ($exercise->type == 'MYSQL') {
+                    if ($mainIsSQL) {
                         $CTExercise = self::mapObjectToSQLExercise($exercise, $test->id);
                     } else {
                         $CTExercise = self::mapObjectToCodeExercise($exercise, $test->id);
@@ -119,6 +121,8 @@ class CT_Test implements \JsonSerializable
 
     static function MapJsonToTest($json) {
         $response = json_decode($json);
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $mainIsSQL = $main->getType() == '0';
         $CTTest = new CT_Test();
         $CTTest->setTest_id($response->id);
         $CTTest->setName($response->name);
@@ -126,7 +130,7 @@ class CT_Test implements \JsonSerializable
         $exercises1 = ($response->exercises);
         $exercises = array();
         foreach ($exercises1 as $exercise) {
-            if ($exercise->type == 'MYSQL') {
+            if ($mainIsSQL) {
                 $CTExercise = self::mapObjectToSQLExercise($exercise, $response->id);
             } else {
                 $CTExercise = self::mapObjectToCodeExercise($exercise, $response->id);
