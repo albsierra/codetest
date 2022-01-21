@@ -6,6 +6,7 @@ class CT_Exercise implements \JsonSerializable {
 
     private $exercise_id;
     private $ct_id;
+    private $akId;
     private $exercise_num;
     private $testId;
     private $title;
@@ -435,6 +436,14 @@ class CT_Exercise implements \JsonSerializable {
      */
     public function setCtId($ct_id) {
         $this->ct_id = $ct_id;
+    }
+
+    public function setAkId($akId) {
+        $this->akId = $akId;
+    }
+
+    public function getAkId() {
+        return $this->akId;
     }
 
     /**
