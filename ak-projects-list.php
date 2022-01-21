@@ -2,12 +2,19 @@
 require_once('initTsugi.php');
 include('views/dao/menu.php'); // for -> $menu
 
-global $REST_CLIENT_AUTHOR;
+global $REST_CLIENT_AUTHOR, $CFG;
 
 
-$response = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'projects');
-
-$projects = $response->toArray();
+try{
+    $response = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'projects');
+    $projects = $response->toArray();
+} catch (\Throwable $th) {
+    $REST_CLIENT_AUTHOR->loginAuthor(
+        $CFG->apiConfigs['authorkit']['user'],
+        $CFG->apiConfigs['authorkit']['pass']
+    );
+    header('Location: ' . addSession('./ak-projects-list.php'));
+}
 
 // var_dump($response);
 // var_dump($projects);die;
