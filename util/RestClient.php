@@ -32,7 +32,7 @@ class RestClient
         $client = $client->withOptions($clientOptions);
         $this->client = $client;
         $this->baseUrl = $baseUrl;
-        $this->isAuthorKit = str_contains($baseUrl, 'fgpe.dcc.fc.up.pt');
+        $this->isAuthorKit = !str_contains($baseUrl, 'http://');
     }
 
     public function getClient()
@@ -199,7 +199,7 @@ class RestClient
         if($this->isAuthorKit){
             try {
                 $response = $this->getClient()->request('GET', AUTHOR_ME_URL, [
-                    "timeout" => 1
+                    "timeout" => 10
                 ]);
                 $responseData = $response->toArray();
                 $this->setOnline(true);
