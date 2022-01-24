@@ -98,8 +98,8 @@ class CT_DAO {
         );
         $ExerciseQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_exercise "
-                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt`, `statement`, `hint` ) "
-                . "VALUES ( :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt, :statement, :hint)",
+                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt`, `statement`, `hint`, `ak_id` ) "
+                . "VALUES ( :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt, :statement, :hint, :akId)",
             'update' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
                 . "`exercise_num` = :exercise_num, "

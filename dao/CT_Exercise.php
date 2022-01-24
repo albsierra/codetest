@@ -45,6 +45,7 @@ class CT_Exercise implements \JsonSerializable {
             $this->exercise_id = $exercise_id;
             $this->ct_id = $_SESSION["ct_id"];
             $this->title = $exercise->getTitle();
+            $this->akId = $exercise->getAkId();
             $this->statement = $exercise->getStatement();
             $this->hint = $exercise->getHint();
             $this->type = $exercise->getType();
@@ -70,6 +71,7 @@ class CT_Exercise implements \JsonSerializable {
             'statement' => $this->getStatement(),
             'hint' => $this->getHint(),
             'type' => $this->getType(),
+            'akId' => $this->getAkId(),
             'difficulty' => $this->getDifficulty(),
             'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
             'averageGradeDifficulty' => $this->getAverageGradeDifficulty(),
@@ -350,6 +352,7 @@ class CT_Exercise implements \JsonSerializable {
                 ':ct_id' => $this->getCtId(),
                 ':exercise_num' => $this->getExerciseNum(),
                 ':type' => $this->getType(),
+                ':akId' => $this->getAkId(),
                 ':title' => $this->getTitle(),
                 ':statement' => $this->getStatement(),
                 ':hint' => $this->getHint(),
