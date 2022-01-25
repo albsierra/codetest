@@ -48,6 +48,7 @@ foreach ($REST_CLIENT_AUTHOR->getClient()->stream($exerciseFileResponse) as $chu
 
 
 $formFields = [
+    'PHPSESSID' => session_id(),
     'exercise' => DataPart::fromPath($filename),
 ];
 $formData = new FormDataPart($formFields);
