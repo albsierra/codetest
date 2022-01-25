@@ -196,7 +196,7 @@ After getting codetest up and running, you will need to configure the LTI tool i
 
 - Select `LTI 1.0/1.1`
 
-- Use `123456` as Consumer key
+- Use `12345` as Consumer key
 
 - Use `secret` as Consumer secret
 
