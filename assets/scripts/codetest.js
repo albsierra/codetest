@@ -1,4 +1,6 @@
 /*Main Javascript File*/
+
+// Init listeners >>
 $(() => {
     $('.results-collapse.collapse').on('show.bs.collapse', function(){
         var rowDiv = $(this).parent();
@@ -144,7 +146,41 @@ $(() => {
         }
     }
 
+    if(document.querySelector('.ak-exercises-list')){
+        $('.ak-exercises-list .exercises-list > a').on('click', async (ev) => {
+
+            ev.preventDefault()
+
+            const { exerciseId } = $(ev.currentTarget).data();
+
+            // console.log(exerciseId);
+
+            const downloadAkExerciseResponse = await $.ajax({
+                type: "GET",
+                url: `download-ak-exercise.php?exerciseId=${exerciseId}&${_TSUGI.ajax_session}`,
+            });
+
+            // console.log({downloadAkExerciseResponse});
+
+            const importExerciseResponse = await $.ajax({
+                type: "POST",
+                url: `actions/ImportExercisesQuestionAk.php?exercise[]=${exerciseId}&${_TSUGI.ajax_session}`,
+                data: {
+                    'exercise': downloadAkExerciseResponse,
+                    'PHPSESSID': _TSUGI.react_token,
+                },
+            });
+
+            // console.log({importExerciseResponse});
+
+            window.location.replace("instructor-home.php");
+
+        })
+    }
+
 });
+
+// Init listeners <<
 
 function getCodeOptionText(el){
     const selectedIndex = el.options.selectedIndex

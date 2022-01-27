@@ -28,24 +28,6 @@ foreach ($REST_CLIENT_AUTHOR->getClient()->stream($exerciseFileResponse) as $chu
     fwrite($fileHandler, $chunk->getContent());
 }
 
-// header("Cache-Control: public");
-// header("Content-Description: File Transfer");
-// header("Content-Disposition: attachment; filename=$filename");
-// header("Content-Type: application/zip");
-// header("Content-Transfer-Encoding: binary");
-// read the file from disk
-// readfile($file);
-
-// header('Content-Description: File Transfer');
-// header('Content-Type: application/octet-stream');
-// header('Content-Disposition: attachment; filename="'.basename($filename).'"');
-// header('Expires: 0');
-// header('Cache-Control: must-revalidate');
-// header('Pragma: public');
-// header('Content-Length: ' . filesize($filename));
-// flush(); // Flush system output buffer
-// readfile($filepath);
-
 
 $formFields = [
     'PHPSESSID' => session_id(),
@@ -61,25 +43,8 @@ $uploadResponse = $REST_CLIENT_REPO->getClient()->request('POST', 'api/exercises
 
 
 $uploadResponseCode = $uploadResponse->getStatusCode();
+$uploadResponseBody = $uploadResponse->getContent();
+
 unlink($filename);
 
-
-if($uploadResponseCode == 200){
-    $_SESSION['success'] = "File: $filename - Imported to repo successfully";
-}else{
-    $_SESSION['error'] = "Failed to import";
-}
-
-// Load project list again
-
-$response = $REST_CLIENT_AUTHOR->getClient()->request('GET', 'projects');
-$projects = $response->toArray();
-
-
-echo $twig->render('pages/ak-projects-list.php.twig', array(
-    'projects' => $projects,
-    'OUTPUT' => $OUTPUT,
-    'CFG' => $CFG,
-    'menu' => $menu,
-    'help' => $help(),
-));
+echo $uploadResponseBody;

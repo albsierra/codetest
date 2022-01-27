@@ -3,7 +3,7 @@
 {{ OUTPUT.pageTitle('pages-title.exercises.management'|trans, true, false) }}
 {% endblock %}
 {% block content %}
-    <div>
+    <div class="ak-exercises-list">
         <div class="authorkit__exercises-title">
             <div class="d-flex align-center">
                 <span class="h4">
@@ -21,7 +21,7 @@
         </div>
         <div class="exercises-list">
             {% for exercise in exercises %}
-                <a href="download-ak-exercise.php?exerciseId={{exercise.id}}">
+                <a href="javascript:false;" data-exercise-id="{{exercise.id}}">
                     {% include 'components/exercise-item.php.twig' %}
                 </a>
             {% endfor %}
