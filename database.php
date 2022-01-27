@@ -61,7 +61,7 @@ $DATABASE_INSTALL = array(
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
     exercise_id  VARCHAR(50) NOT NULL,
-    answer_output  VARCHAR(250) NOT NULL,
+    answer_output  VARCHAR(250) NULL,
     ct_id        INTEGER NOT NULL,
     answer_txt   TEXT NULL,
     answer_success BOOL NOT NULL DEFAULT 0,
