@@ -173,7 +173,7 @@ $(() => {
 
             // console.log({importExerciseResponse});
 
-            window.location.replace("instructor-home.php");
+            window.location.replace(`instructor-home.php?${_TSUGI.ajax_session}`);
 
         })
     }
