@@ -29,18 +29,14 @@ if (!isset($answerText) || trim($answerText) == "") {
 
     $answerOutput = null;
     
-    if($answerLanguage == 4) {
+    if($answerLanguage == 0) {
         $client = HttpClient::create();
-/*         $clientOptions["headers"] = [
-            'Authorization' => "Bearer {$REST_CLIENT_AUTHOR->getToken()}"
-        ];
-        $client = $client->withOptions($clientOptions); */
     
-        $response = $client->request("POST", "http://localhost:3000/eval", [
+        $response = $client->request("POST", "{$CFG->apiConfigs['xml-validator']['baseUrl']}/eval", [
             'json' => [
                 'date' => date("c"),
                 'program' => $answerText,
-                'learningObject' => 'fd286cb3-5c95-4b0e-b843-56bc058a7713' //$exerciseId
+                'learningObject' => $exercise1->getAkId() //$exerciseId
             ]
         ]);
         $answerOutput = $response->getContent();
