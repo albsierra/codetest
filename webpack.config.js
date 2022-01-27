@@ -56,6 +56,9 @@ Encore
         config.useBuiltIns = 'entry';
         config.corejs = 3;
     })
+    .configureBabel((config) => {
+        config.plugins.push('@babel/plugin-transform-runtime');
+    })
 
     // enables Sass/SCSS support
     .enableSassLoader()
