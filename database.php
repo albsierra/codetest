@@ -39,7 +39,7 @@ $DATABASE_INSTALL = array(
         "create table {$CFG->dbprefix}ct_exercise (
     exercise_id   VARCHAR(50) NOT NULL,
     ct_id         INTEGER NOT NULL,
-    ak_id         VARCHAR(50) NOT NULL,
+    ak_id         VARCHAR(50) NULL,
     exercise_num  INTEGER NULL,
     title         VARCHAR (50) NOT NULL,
     type          VARCHAR (50) NOT NULL,
