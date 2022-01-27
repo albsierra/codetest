@@ -100,7 +100,9 @@ class CT_Test implements \JsonSerializable
         $CTExercise->setExerciseId($exercise->id);
         $CTExercise->setCtId($_SESSION['ct_id']);
         $CTExercise->setTitle($exercise->title);
-        $CTExercise->setAkId($exercise->akId);
+        if(isset($exercise->akId)){
+            $CTExercise->setAkId($exercise->akId);
+        }
         $CTExercise->setStatement($exercise->statement);
         $CTExercise->setHint($exercise->hint);
         $CTExercise->setDifficulty($exercise->difficulty);
