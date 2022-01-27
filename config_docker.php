@@ -43,7 +43,11 @@ $CFG->apiConfigs = [
         "baseUrl" => 'https://fgpe.dcc.fc.up.pt/api/',
         "user" => "info@juezlti.eu",
         "pass" => "Ju3zLT1.",
-    ]
+    ],
+    "xml-validator" => [
+        // MUST HAVE A TRAILING SLASH
+        "baseUrl" => 'http://xml-validator:3000/',
+    ],
 ];
 
 $CFG->programmingLanguajes = array(
