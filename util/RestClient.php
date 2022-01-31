@@ -176,13 +176,13 @@ class RestClient
                 'password' => $pass,
             ]
         ]);
-        $responseData = $response->getContent();
+        $responseData = $response->toArray();
         $responseCode = $response->getStatusCode();
         if($responseCode == 401){
             throw new Exception(' ->> Login to central-repository failed, are you sure your user is created and your credentials are correct? <<- ');
         }
 
-        $this->setRepoData($responseData);
+        $this->setRepoData($responseData['accessToken']);
     }
 
     public function setToken($token)
