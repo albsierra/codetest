@@ -14,6 +14,9 @@ services:
     command: bash -c "/var/www/html/tsugi/mod/codetest/init-tsugi.sh"
     stdin_open: true
     tty: true
+    volumes:
+      - "./config_tsugi_docker.php:/var/www/html/tsugi/config.php:rw"
+      - "./config_codetest_docker.php:/var/www/html/tsugi/mod/codetest/config.php:rw"
   spring-codetest:
     container_name: spring_codetest_container
     image: spring_codetest_img
