@@ -22,5 +22,5 @@ if ($USER->instructor) {
             }
         }
     }
-    echo "HA IDO";
+    echo "Success";
 }
