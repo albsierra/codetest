@@ -3,7 +3,9 @@
         with { 
             label: "new-exercise-form.labels.tests"|trans,
             name: '',
-            exercise: exercise
+            exercise: exercise,
+            inputValue: inputValue,
+            outputValue: outputValue
         } only
         %}
         {% block input %}
@@ -12,7 +14,7 @@
                     <div class="text-center">
                         With this inputs
                     </div>
-                    <pre class="min-h-[150px]">{{ exercise.getExerciseInputTest() }}</pre>
+                    <pre class="min-h-[150px]">{{ inputValue }}</pre>
                 </div>
                 <div class="flex items-center pt-6">
                     <span>
@@ -23,7 +25,7 @@
                     <div class="text-center">
                         This are the exptected outputs
                     </div>
-                    <pre class="h-full min-h-[150px] border">{{ exercise.getExerciseOutputTest() }}</pre>
+                    <pre class="h-full min-h-[150px] border">{{ outputValue }}</pre>
                 </div>
             </div>
         {% endblock %}

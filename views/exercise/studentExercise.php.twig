@@ -45,7 +45,10 @@
             {% endembed %}
         </div>
 
-        {{ include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType())) }}
+        {%
+            include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType()))
+            with { inputValue: testsObj.inputValue, outputValue: testsObj.outputValue }
+        %}
 
         <div class="w-full mt-4 mb-3">
             {% set languages = main.getTypeProperty('codeLanguages') %}
