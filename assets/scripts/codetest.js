@@ -784,7 +784,7 @@ global.score = function() {
 
 global.deleteExercise = function(exerciseId, skipconfirm = false) {
     $('#confirm').modal('show')
-            .on('click', '#delete', function (e) {
+            $('#confirm').on('click', '#delete', function (e) {
                 $.ajax({
                     type: "POST",
                     url: "actions/DeleteExercise.php?" + _TSUGI.ajax_session,

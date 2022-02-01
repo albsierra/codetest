@@ -899,3 +899,7 @@ a[disabled].btn{
 body {
     line-height: 1.93rem !important;
 }
+
+a:hover{
+    opacity: unset !important;
+}
