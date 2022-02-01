@@ -116,10 +116,7 @@ $CFG->CT_Types = array(
             'studentView' => 'exerciseCodeStudent.php.twig',
             'timeout' => 5,
             'codeLanguages' => array(
-                array('name' => 'PHP', 'ext' => 'php', 'command' => 'php -f', 'stdin' => false),
-                array('name' => 'Java', 'ext' => 'java', 'command' => 'java -Duser.language=es -Duser.region=ES', 'stdin' => true),
-                array('name' => 'Javascript', 'ext' => 'js', 'command' => 'node', 'stdin' => true),
-                array('name' => 'Python', 'ext' => 'py', 'command' => 'python', 'stdin' => true),
+                array('name' => 'XPath', 'ext' => 'xml', 'command' => null, 'stdin' => false),
             ),
         ),
     ),
