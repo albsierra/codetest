@@ -42,7 +42,17 @@ services:
       args:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
     ports:
-      - 3001:3000
+      - 3001:300
+  feedback-manager:
+    container_name: feedback-manager_container
+    image: feedback-manager_img
+    build:
+      context: ./
+      dockerfile: Dockerfile_feedback_manager
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    ports:
+      - 3004:3003
   tsugi-mysql-db:
     container_name: tsugi_mysql_db_container
     image: 'mysql:5.7'
