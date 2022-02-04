@@ -55,6 +55,8 @@ class CT_DAO {
             'getByCtId' => "SELECT * FROM {$connection['p']}ct_main WHERE ct_id = :ct_id",
             'getMain' => "SELECT ct_id FROM {$connection['p']}ct_main "
                 . "WHERE context_id = :context_id AND link_id = :link_id",
+            'getMainFromLinkId' => "SELECT ct_id FROM {$connection['p']}ct_main "
+                . "WHERE link_id = :link_id",
             'getQuestions' => "SELECT * FROM {$connection['p']}ct_question "
                 . "WHERE ct_id = :ctId "
                 . "order by question_num",
@@ -204,6 +206,11 @@ class CT_DAO {
                 . "set user_id = :userId, ct_id = :ctId, grade = :grade, modified = :modified "
                 . "WHERE grade_id = :gradeId",
         );
+        $LinkQueries = array(
+            'getByLinkId' => "SELECT * FROM {$connection['p']}lti_link WHERE link_id = :link_id",
+            'getByLinkKey' => "SELECT * FROM {$connection['p']}lti_link "
+            . "WHERE link_key = :link_key",
+        );
         $queries = array(
             'main' => $MainQueries,
             'question' => $QuestionQueries,
@@ -212,6 +219,8 @@ class CT_DAO {
             'answer' => $AnswerQueries,
             'user' => $UserQueries,
             'grade' => $GradeQueries,
+            'link' => $LinkQueries,
+
         );
         return array(
             'PDOX' => $connection['PDOX'],

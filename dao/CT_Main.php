@@ -51,6 +51,13 @@ class CT_Main
         return new self($context['ct_id']);
     }
 
+    public static function getMainFromLinkId($link_id) {
+        $query = \CT\CT_DAO::getQuery('main','getMainFromLinkId');
+        $arr = array(':link_id' => $link_id);
+        $context = $query['PDOX']->rowDie($query['sentence'], $arr);
+        return new self($context['ct_id']);
+    }
+
     public static function createMain($user_id, $context_id, $link_id, $current_time) {
         $query = \CT\CT_DAO::getQuery('main','insert');
         $arr = array(':userId' => $user_id, ':contextId' => $context_id, ':linkId' => $link_id, ':currentTime' => $current_time);
@@ -72,6 +79,18 @@ class CT_Main
             $this->questions = \CT\CT_DAO::createObjectFromArray(\CT\CT_Question::class, $questions);
         }
         return $this->questions;
+    }
+
+    public function importQuestions($questions) {
+        foreach($questions as $origQuestion) {
+            $class = $this->getTypeProperty('class');
+            $origQuestion = new $class($origQuestion);
+            if($origQuestion->getQuestionId()) {
+                $origQuestion->setQuestionId(null);
+                // $question = $main->createQuestion(\CT\CT_DAO::setObjectPropertiesToArray($origQuestion));
+                $question = $this->createQuestion($origQuestion);
+            }
+        }
     }
 
     /**

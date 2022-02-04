@@ -9,16 +9,7 @@ if ($USER->instructor) {
         $_SESSION["error"] = "Question(s) failed to save. Please try again.";
     } else {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        foreach($questions as $question) {
-            $class = $main->getTypeProperty('class');
-            $origQuestion = new $class($question);
-
-            if($origQuestion->getQuestionId()) {
-                $origQuestion->setQuestionId(null);
-                // $question = $main->createQuestion(\CT\CT_DAO::setObjectPropertiesToArray($origQuestion));
-                $question = $main->createQuestion($origQuestion);
-            }
-        }
+        $main->importQuestions($questions);
 
         $_SESSION['success'] = 'Question(s) Saved.';
     }
