@@ -7,7 +7,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli zip
 RUN a2enmod rewrite
 
 
-ENV NODE_VERSION=14.15.1
+ENV NODE_VERSION=16.13.2
 ENV NVM_DIR=/root/.nvm
 RUN apt install -y curl
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash

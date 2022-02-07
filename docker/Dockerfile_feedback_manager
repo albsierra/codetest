@@ -1,4 +1,4 @@
-FROM node:14.18
+FROM node:16.13.2
 ARG GITHUB_TOKEN=${GITHUB_TOKEN}
 
 RUN apt-get update
@@ -11,9 +11,9 @@ WORKDIR /app
 
 RUN git clone --branch main https://github.com/KA226-COVID/feedback-manager.git
 
-WORKDIR /app/feedback-manager/feedback-manager
+WORKDIR /app/feedback-manager/minimal feedback
 
-RUN npm ci
+RUN npm i
 
 EXPOSE 3003
 
