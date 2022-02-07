@@ -3,6 +3,7 @@ services:
   tsugi-codetest:
     container_name: tsugi_codetest_container
     image: tsugi_codetest_img
+    restart: unless-stopped
     depends_on:
       - tsugi-mysql-db
       - spring-codetest
@@ -20,6 +21,7 @@ services:
   spring-codetest:
     container_name: spring_codetest_container
     image: spring_codetest_img
+    restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile_repo
@@ -36,6 +38,7 @@ services:
   xml-validator:
     container_name: xml-validator_container
     image: xml-validator_img
+    restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile_validator
@@ -46,6 +49,7 @@ services:
   feedback-manager:
     container_name: feedback-manager_container
     image: feedback-manager_img
+    restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile_feedback_manager
@@ -56,6 +60,7 @@ services:
   tsugi-mysql-db:
     container_name: tsugi_mysql_db_container
     image: 'mysql:5.7'
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: tsugi_root_pw
       MYSQL_DATABASE: tsugi
@@ -68,6 +73,7 @@ services:
   spring-mongo-db:
     container_name: spring_mongo_db_container
     image: 'mongo:4.4.9'
+    restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root_pass
