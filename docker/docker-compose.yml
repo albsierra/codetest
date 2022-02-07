@@ -12,6 +12,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile_tsugi-ct
+      args:
+        TSUGI_BRANCH: ${TSUGI_BRANCH}
+        CODETEST_BRANCH: ${CODETEST_BRANCH}
     ports:
       - 80:80
     command: bash -c "/var/www/html/tsugi/mod/codetest/init-tsugi.sh"
@@ -27,6 +30,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile_repo
+      args:
+          REPO_BRANCH: ${REPO_BRANCH}
     depends_on:
       - spring-mongo-db
     environment:
@@ -46,6 +51,7 @@ services:
       dockerfile: Dockerfile_validator
       args:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
+        VALIDATOR_BRANCH: ${VALIDATOR_BRANCH}
     environment:
       FEEDBACK_MANAGER_URL: ${FEEDBACK_MANAGER_URL}
       BASE_URL: ${XML_EVALUATOR_REQUESTS_BASE_URL}
@@ -64,6 +70,7 @@ services:
       args:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
         PORT: ${FEEDBACK_MANAGER_PORT}
+        FEEDBACK_MANAGER_BRANCH: ${FEEDBACK_MANAGER_BRANCH}
     ports:
       - 3004:3003
   tsugi-mysql-db:
