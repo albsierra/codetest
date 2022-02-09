@@ -86,7 +86,7 @@ return [
         "student-name" => "Nombre del estudiante",
         "last-updated" => "Última actualización",
         "completed" => "Completado",
-        "show-code" => "Mostrar código",
+        "show-code" => "Show code",
     ],
     "usage-table" => [
         "exercise" => "Pregunta",
@@ -280,41 +280,41 @@ return [
     ],
     "ak-exercises-list" => [
         "title" => "Mostrando ejercicios del proyecto :",
-        "home" => "Back to projects list",
+        "home" => "Volver a la lista de proyectos",
         "labels" => [
-            "title" => "Title:",
-            "module" => "Module:",
-            "difficulty" => "Difficulty:",
-            "status" => "Status:",
-            "keywords" => "Keywords:",
-            "type" => "Type:",
-            "platform" => "Platform:",
-            "programmingLanguages" => "Programming languages:"
+            "title" => "Título:",
+            "module" => "Módulo:",
+            "difficulty" => "Dificultad:",
+            "status" => "Estado:",
+            "keywords" => "Palabras clave:",
+            "type" => "Tipo:",
+            "platform" => "Plataforma:",
+            "programmingLanguages" => "Lenguajes de programación:"
         ],
         "labels-values" => [
             "difficulty" => [
-                "beginner" => "Beginner",
-                "easy" => "Easy",
-                "average" => "Average",
-                "hard" => "Hard",
-                "master" => "Master"
+                "beginner" => "Principiante",
+                "easy" => "Fácil",
+                "average" => "Media",
+                "hard" => "Difícil",
+                "master" => "Maestro"
             ],
             "status" => [
-                "draft" => "Draft",
-                "unpublished" => "Unpublished",
-                "published" => "Published",
-                "trash" => "Trash"
+                "draft" => "Borrador",
+                "unpublished" => "Inédito",
+                "published" => "Publicado",
+                "trash" => "Basura"
             ],
             "type" => [
-                "blank_sheet" => "Blank sheet",
-                "extension" => "Extension",
-                "improvement" => "Improvement",
-                "bug_fix" => "Bug fix",
-                "fill_in_gaps" => "Fill in gaps",
-                "sort_blocks" => "Sort blocks",
-                "spot_bug" => "Spot bug"
+                "blank_sheet" => "Hoja en Blanco",
+                "extension" => "Extensión",
+                "improvement" => "Mejora",
+                "bug_fix" => "Corrección de errores",
+                "fill_in_gaps" => "Rellenar huecos",
+                "sort_blocks" => "Ordenar bloques",
+                "spot_bug" => "Encontrar errores"
             ],
-            "not-specified" => "--  Not specified --"
+            "not-specified" => "-- No especificado --"
         ]
     ],
     "backend-messages" => [
