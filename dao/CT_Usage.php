@@ -134,7 +134,9 @@ public function save() {
                 $user = new CT_User();
                 $user->setUserId($usage->user->id);
                 $user->setDisplayname($usage->user->displayname);
-                $user->setEmail($usage->user->email);
+                if(isset($usage->user->email)){
+                    $user->setEmail($usage->user->email);
+                }
                 $user->setProfileId($usage->user->profile_id);
                 $CTUsage->setUser($user);
                 $CTUsage->setUnderstandabilityScore($usage->understandabilityScore);
