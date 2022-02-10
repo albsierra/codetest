@@ -756,9 +756,10 @@ global.sendUsage = function(exerciseId) {
         data: usageForm.serialize() + '&exerciseId='+exerciseId+'&' + _TSUGI.ajax_session,
         success: function(data) {
             $('#usageModal'+exerciseId).modal('hide');
-            // setTimeout(() => {
-            //     location.reload();
-            // },350)
+            setTimeout(() => {
+                $('#usageModal'+exerciseId).remove()
+                // location.reload();
+            },350)
         },
         error: function(data){
             alert('ERROR');
