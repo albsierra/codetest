@@ -608,20 +608,71 @@ global.answerExercise = function(exerciseId, exerciseNum) {
 
                 })
             }
-            // else{
-            //     // location.reload()
-            //     return;
-            // }
-            var date =new Date();
+            document.querySelector('.exercises-nav-header .active .answer-info-box')
+
+            updateExerciseBadge(data);
+
             $("#answerSavedText").text(data.answerText);
-            $("#modified").text(formatDate(date));
-            $("#answerText" + exerciseId).val("");
-            $("#flashmessages").html(data.flashmessage);
+            $("#modified").text(formatDate(new Date()));
         },
         error: function (data) {
             alert('ERROR');
         }
     });
+}
+
+const updateExerciseBadge = (value) => {
+    if(!value){
+        return;
+    }
+    const val = `${value}`.toLowerCase();
+
+    const activeItem = '.exercises-nav-header .active .answer-info-box';
+    const activeItemIcon = '.exercises-nav-header .active .answer-info-box .fa';
+
+    const studentFooterItem = '.student-footer .answer-info-box';
+    const studentFooterItemLabel = '.student-footer .result-text';
+    const studentFooterItemIcon = '.student-footer .answer-info-box .fa';
+
+    const elements = document.querySelectorAll(`${activeItem}, ${studentFooterItem}`);
+    const elementIcons = document.querySelectorAll(`${activeItemIcon}, ${studentFooterItemIcon}`);
+
+    //console.log({elements});
+
+    elements.forEach(el => {
+        el.classList.remove('bg-green-600')
+        el.classList.remove('bg-red-600')
+        el.classList.remove('bg-yellow-500')
+    })
+    elementIcons.forEach(el => {
+        el.classList.remove('fa-check')
+        el.classList.remove('fa-times')
+        el.classList.remove('fa-file')
+    })
+    document.querySelector(studentFooterItemLabel).textContent = value
+
+    if(val.startsWith('correct')) {
+        elements.forEach(el => {
+            el.classList.add('bg-green-600')
+        })
+        elementIcons.forEach(el => {
+            el.classList.add('fa-check')
+        })
+    } else if (val.includes('incorrect')) {
+        elements.forEach(el => {
+            el.classList.add('bg-red-600')
+        })
+        elementIcons.forEach(el => {
+            el.classList.add('fa-times')
+        })
+    } else {
+        elements.forEach(el => {
+            el.classList.add('bg-yellow-500')
+        })
+        elementIcons.forEach(el => {
+            el.classList.add('fa-file')
+        })
+    }
 }
 
 global.formatDate = function(dateVal) {
@@ -705,9 +756,9 @@ global.sendUsage = function(exerciseId) {
         data: usageForm.serialize() + '&exerciseId='+exerciseId+'&' + _TSUGI.ajax_session,
         success: function(data) {
             $('#usageModal'+exerciseId).modal('hide');
-            setTimeout(() => {
-                location.reload();
-            },350)
+            // setTimeout(() => {
+            //     location.reload();
+            // },350)
         },
         error: function(data){
             alert('ERROR');

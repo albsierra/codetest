@@ -1,14 +1,5 @@
 <div class="
         answer-info-box
-        w-5
-        h-5
-        min-h-[20px]
-        min-w-[20px]
-        rounded
-        flex
-        items-center
-        justify-center
-        border border-white
         {{ answer.getAnswerTxt()|length > 0 ? ( answer.getAnswerSuccess() ? 'bg-green-600' : 'bg-red-600') : 'bg-yellow-500' }}
     "
     title="{{ (answer.getAnswerTxt()|length > 0 ? (answer.getAnswerSuccess() ? 'student-exercise.correct' : 'student-exercise.incorrect') : 'student-exercise.blank')|trans }}"

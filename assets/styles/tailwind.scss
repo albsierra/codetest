@@ -244,8 +244,7 @@
     
     @apply backdrop-filter backdrop-blur-lg bg-[#06a1e62b];
     > span{
-        @apply text-5xl text-secondary font-bold tracking-widest underline;
-        @apply text-5xl text-secondary font-bold tracking-widest underline;
+        @apply text-5xl text-secondary font-bold tracking-widest underline select-none;
         text-decoration-color: indigo;
     }
     &.appearing{

@@ -129,7 +129,7 @@
                         <div class="border-t border-blueGray-300">
                         </div>
                         <div class="flex items-center justify-between gap-2">
-                            <span>
+                            <span class="result-text">
                                 {{ (answer.getAnswerTxt()|length > 0 ? (answer.getAnswerSuccess() ? 'student-exercise.correct' : 'student-exercise.incorrect') : 'student-exercise.blank')|trans }}
                             </span>
                             {% embed "components/answer-info-box.php.twig" with { answer: answer } only %}
