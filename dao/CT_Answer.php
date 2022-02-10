@@ -146,7 +146,7 @@ class CT_Answer
      */
     public function getAnswerSuccess()
     {
-        return $this->answer_success ? $this->answer_success : 0;
+        return $this->answer_success ?: 0;
     }
 
     /**

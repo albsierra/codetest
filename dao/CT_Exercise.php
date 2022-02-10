@@ -129,12 +129,8 @@ class CT_Exercise implements \JsonSerializable {
         if(isset($answer_output)){
             $answer->setAnswerOutput($answer_output);
         }
+        $answer->setAnswerSuccess(str_starts_with(strtolower($answer_output), strtolower('Correct')));
         $answer->setCtId($this->getCtId());
-        
-        //returns if the exercise has been passed
-        if($this->preGrade($answer)) {
-            $this->grade($answer);
-        }
         
         //save the answer
         $answer->save();
