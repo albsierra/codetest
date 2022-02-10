@@ -20,4 +20,10 @@
 {{ OUTPUT.footerStart() }}
 {% block footer %} {% endblock %}
 {{ include('dao/tool-footer.php.twig') }}
+
+<div class="loading-overlay hidden">
+    <span>
+        {%trans%}general.loading{%endtrans%}
+    </span>
+</div>
 {{ OUTPUT.footerEnd() }}

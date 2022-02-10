@@ -236,6 +236,31 @@
     @apply bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors;
 }
 
+.loading-overlay{
+    @apply fixed w-screen h-screen;
+    @apply top-0 left-0;
+    @apply flex items-center justify-center;
+    @apply z-[9999];
+    
+    @apply backdrop-filter backdrop-blur-lg bg-[#06a1e62b];
+    > span{
+        @apply text-5xl text-secondary font-bold tracking-widest underline;
+        @apply text-5xl text-secondary font-bold tracking-widest underline;
+        text-decoration-color: indigo;
+    }
+    &.appearing{
+        animation: appear 0.5s forwards;
+    }
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .ex-statement{
     p{
         margin-bottom: 16px !important;

@@ -150,6 +150,8 @@ $(() => {
         $('.ak-exercises-list .exercises-list > a').on('click', async (ev) => {
 
             ev.preventDefault()
+            document.querySelector('.loading-overlay').classList.remove('hidden')
+            document.querySelector('.loading-overlay').classList.add('appearing')
 
             const { exerciseId } = $(ev.currentTarget).data();
 
@@ -172,7 +174,6 @@ $(() => {
             });
 
             // console.log({importExerciseResponse});
-
             window.location.replace(`instructor-home.php?${_TSUGI.ajax_session}`);
 
         })
@@ -594,9 +595,6 @@ global.answerExercise = function(exerciseId, exerciseNum) {
         url: answerForm.prop("action"),
         data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
-            
-
-            console.log({data});
 
             $('.answer-output pre').html(data);
             $('#answerSavedText').html(solutionCode);
@@ -609,19 +607,11 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                     show: true,
 
                 })
-            }else{
-                // location.reload()
-                return;
             }
-            
-            /* //If the answer is correct, change the hand down to the hand up
-            if(data.success){
-                $("#answerForm"+exerciseId).hide();
-                $("#answerIcon"+exerciseId).removeClass('fa-thumbs-down');
-                $("#answerIcon"+exerciseId).addClass('fa-thumbs-up');
-                $("#listIcon"+exerciseId).removeClass('fa-thumbs-down');
-                $("#listIcon"+exerciseId).addClass('fa-thumbs-up');
-            } */
+            // else{
+            //     // location.reload()
+            //     return;
+            // }
             var date =new Date();
             $("#answerSavedText").text(data.answerText);
             $("#modified").text(formatDate(date));

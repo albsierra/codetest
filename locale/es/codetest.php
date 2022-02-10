@@ -79,7 +79,8 @@ return [
     ],
     "general" => [
         "no-usage-found" => "No se encontraron opiniones",
-        "exercise" => "Pregunta"
+        "exercise" => "Pregunta",
+        "loading" => "Cargando"
     ],
     "download-student-results" => "Haga clic en el enlace de abajo para descargar los resultados del estudiante.",
     "results-table" => [

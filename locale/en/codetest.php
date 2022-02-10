@@ -79,7 +79,8 @@ return [
     ],
     "general" => [
         "no-usage-found" => "No usages found",
-        "exercise" => "Exercise"
+        "exercise" => "Exercise",
+        "loading" => "Loading"
     ],
     "download-student-results" => "Click on the link below to download the student results.",
     "results-table" => [
