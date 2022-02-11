@@ -82,6 +82,8 @@ class CT_Link implements \JsonSerializable {
             $exercisesOriginal = $ctMainOriginal->getQuestions();
             $exercisesOriginalIds = array_map(function($exerciseOriginal) { return $exerciseOriginal->getQuestionId();}, $exercisesOriginal);
             $ctMainCopy->importQuestions($exercisesOriginalIds);
+            $ctMainCopy->setSeenSplash(true);
+            $ctMainCopy->save();
         }
 
     }
