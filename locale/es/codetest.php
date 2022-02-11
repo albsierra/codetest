@@ -84,6 +84,8 @@ return [
     ],
     "download-student-results" => "Haga clic en el enlace de abajo para descargar los resultados del estudiante.",
     "results-table" => [
+        "exercise-number" => "Número del ejercicio",
+        "exercise-statement" => "Enunciado del ejercicio",
         "student-name" => "Nombre del estudiante",
         "last-updated" => "Última actualización",
         "completed" => "Completado",

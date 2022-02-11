@@ -281,3 +281,18 @@
         @apply my-3;
     }
 }
+.results-exercise-page{
+    .panel{
+        @apply bg-white bg-opacity-20 transition-all;
+        @apply backdrop-filter backdrop-blur-sm;
+        @apply hover:backdrop-blur-md hover:bg-opacity-30;
+    }
+    .list-group-item{
+        background-color: unset ;
+    }
+    .list-group{
+        margin-bottom:0px;
+    }
+}
+
+

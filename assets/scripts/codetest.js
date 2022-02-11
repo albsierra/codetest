@@ -382,21 +382,6 @@ global.importExercises = function(exerciseId, testId) {
         }
     });
 }
-
-global.getAnswersFromExercise = function(exerciseId) {
-    $.ajax({
-        type: "GET",
-        url: "actions/answers/getAnswersFromExercise.php?exerciseId=" + exerciseId + "&" + _TSUGI.ajax_session,
-        success: function (data) {
-            $('#responses' + exerciseId).html(data);
-            $('#responses' + exerciseId + '.collapse').collapse();
-        },
-        error: function (data) {
-            console.error(data.responseText);
-        }
-    });
-}
-
 global.editExerciseText = function(exerciseId) {
     var exerciseText = $("#exerciseText" + exerciseId);
     exerciseText.hide();
