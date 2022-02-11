@@ -9,7 +9,7 @@ This is a guide for JuezLTI developers
 
 - [PHP - 7.3.21](https://www.php.net/downloads.php)
 - [Apache - 2.4.46](https://httpd.apache.org/download.cgi)
-- [Node - 14.15.1](https://nodejs.org/en/blog/release/v14.15.1/)
+- [Node - 16.13.2](https://nodejs.org/en/blog/release/v16.13.2/)
 - [Java - 8](https://www.oracle.com/es/java/technologies/javase/javase8-archive-downloads.html)
 - [MySQL - 5.7](https://dev.mysql.com/downloads/mysql/5.7.html)
 - [Spring-boot - 2.5.4](https://spring.io/)
@@ -23,11 +23,11 @@ This is a guide for JuezLTI developers
 ---
 
 - [Tsugi](https://www.tsugi.org/) - Customized
-  - Forked from commit: ["Revert JSON changes introduced in 6cd66ce27"](https://github.com/tsugiproject/tsugi/commit/bf25e87870e2673a0efbb0e995b905bd0188a233)
+  - Forked from commit: ["Improve wording / typos"](https://github.com/tsugiproject/tsugi/commit/fc4c2cede0107aff35d2c2cd8545372c4381b3a3) in fc4c2ce
   - Customizations committed on top of the branch `codetest-customizations`
 
 - [Docker](https://www.docker.com/)
-  - Used to have an easy to setup environment
+  - The project is dockerized at [this repository](https://github.com/KA226-COVID/deploy_docker)
 
 - [Webpack Encore](https://symfony.com/doc/current/frontend.html)
   - Used to managed assets like images, css, js, among other utilities
@@ -56,7 +56,7 @@ This is the guide to follow to get a development environment configured:
 
 > ENVIRONMENT SETUP
 
-- Install Apache [ 2.4.46 ], PHP [ 7.3.21 ], Node [ 14.15.1 ] and Java [ 8 ]
+- Install Apache [ 2.4.46 ], PHP [ 7.3.21 ], Node [ 16.13.2 ] and Java [ 8 ]
 
 - Configure a MySQL [ 5.7 ] and a MongoDB [ 4.4.9 ]
 
@@ -163,7 +163,17 @@ s
 
 > SETUP XML-VALIDATOR
 
-- Clone the [xml-validator repository](https://github.com/KA226-COVID/xml-evaluator) 
+- Clone the branch `deployment` of [xml-validator repository](https://github.com/KA226-COVID/xml-evaluator)
+
+- For the next step you must set some environment variables, depending if you are using windows or linux this process will be different
+
+- This is the list of environment variables you need to set:
+
+  - FEEDBACK_MANAGER_URL
+  - BASE_URL
+  - PORT
+  - EMAIL
+  - PASSWORD
 
 - Inside the folder `xml-evaluator/server` execute the command `npm run prod`
 
@@ -171,47 +181,17 @@ s
 
 > SETUP FEEDBACK-MANAGER
 
-- Clone the [feedback-manager repository](https://github.com/KA226-COVID/feedback-manager)
+- Clone the branch `main` of [feedback-manager repository](https://github.com/KA226-COVID/feedback-manager)
 
-- Inside de folder `feedback-manager` execute the command `npm run prod`
+- For the next step you must set some environment variables, depending if you are using windows or linux this process will be different
+
+- This is the list of environment variables you need to set:
+
+  - PORT
+
+- Inside de folder `feedback-manager/minimal feedback` execute the command `npm run prod`
 
 - After this the feedback manager will be available at the address `http://localhost:3003/`
-
-<br>
-
-## Docker
-
-
-The project has a docker-compose with everything needed to run a full instance of JuezLTI
-
-It's composed by:
-
-- A node with Apache [ 2.4.46 ] and PHP [ 7.3.21 ]
-  - Inside has tsugi and codetest installed
-
-- A node with Java [ 8 ]
-  - Inside has the code for the questions-storage
-
-- A node with MongoDB [ 4.4.9 ]
-  - To be used by SpringBoot
-
-- A node with MySQL [ 5.7 ]
-  - To be used by Tsugi and Codetest
-
-- A node with Node.js [ 14.18 ]
-  - To be used by the validators
-
-<br>
-
-If you have Docker and docker-compose installed
-
-To get the docker environment running just run the command inside the `docker` folder, inside `codetest`:
-
-    docker-compose up
-
-<br>
-
-> After the docker-initialization is done you will be able to access tsugi at `http://localhost/tsugi`
 
 <br>
 
