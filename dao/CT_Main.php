@@ -14,6 +14,7 @@ class CT_Main implements \JsonSerializable
     private $title;
     private $type;
     private $seen_splash;
+    private $preloaded;
     private $shuffle;
     private $points;
     private $modified;
@@ -396,6 +397,22 @@ class CT_Main implements \JsonSerializable
     /**
      * @return mixed
      */
+    public function getPreloaded()
+    {
+        return $this->preloaded;
+    }
+
+    /**
+     * @param mixed $preloaded
+     */
+    public function setPreloaded($preloaded)
+    {
+        $this->preloaded = $preloaded;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getShuffle()
     {
         return $this->shuffle;
@@ -450,6 +467,7 @@ class CT_Main implements \JsonSerializable
             ':title' => $this->getTitle(),
             ':type' => $this->getType(),
             ':seen_splash' => $this->getSeenSplash(),
+            ':preloaded' => $this->getPreloaded(),
             ':shuffle' => $this->getShuffle(),
             ':points' => $this->getPoints(),
             ':modified' => $this->getModified(),
@@ -467,6 +485,7 @@ class CT_Main implements \JsonSerializable
             'title' => $this->getTitle(),
             'type' => $this->getType(),
             'seen_splash' => $this->getSeenSplash(),
+            'preloaded' => $this->getPreloaded(),
             'shuffle' => $this->getShuffle(),
             'points' => $this->getPoints(),
             'modified' => $this->getModified(),

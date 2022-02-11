@@ -88,6 +88,7 @@ class CT_DAO {
                 . "`title` = :title, "
                 . "`type` = :type, "
                 . "`seen_splash` = :seen_splash, "
+                . "`preloaded` = :preloaded, "
                 . "`shuffle` = :shuffle, "
                 . "`points` = :points, "
                 . "`modified` = :modified "

@@ -27,6 +27,7 @@ $DATABASE_INSTALL = array(
 	title       VARCHAR(255) NULL,
 	type     INTEGER NOT NULL DEFAULT 0,
 	seen_splash BOOL NOT NULL DEFAULT 0,
+	preloaded BOOL NOT NULL DEFAULT 0,
 	shuffle BOOL NOT NULL DEFAULT 0,
 	points      FLOAT NOT NULL DEFAULT 100,
     modified    datetime NULL,
