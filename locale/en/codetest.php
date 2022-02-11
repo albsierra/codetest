@@ -96,9 +96,9 @@ return [
         "completed" => "Completed",
         "student-name" => "Student Name",
         "no.usage" => "No usages found",
-        "understand" => "Understandability:",
-        "time" => "Time:",
-        "difficulty" => "Difficulty:",
+        "understand" => "Understandability",
+        "time" => "Time",
+        "difficulty" => "Difficulty",
 
     ],
     "grading" => [
@@ -354,5 +354,8 @@ return [
         "exercises-list" => [
             "message" => "Here is the list of exercises inside this Codetest activity"
         ],
+    ],
+    "warning" => [
+        "obligatory" =>"Fields marked with an asterisk ' * ' are obligatory"
     ]
 ];

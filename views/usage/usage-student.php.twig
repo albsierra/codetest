@@ -3,6 +3,7 @@
 {{ OUTPUT.pageTitle('pages-title.usage.by.student'|trans, true, false) }}
 {% endblock %}
 {% block content %}
+<div class="usage-student-page">
 <section id="studentResponses">
     <div class="panel panel-info">
         <div class="panel-heading response-panel-header">
@@ -35,27 +36,235 @@
                     {% set value = false %}
                     <div id="responses{{ student.user.getUserId() }}" class="col-xs-12 results-collapse collapse">
                         {% for exercise in exercises %}
-                        {%for usage in usages %}
-                        {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdExercise() == exercise.getExerciseId()%}
-                        
-                         {% set value = true %}
+                        {% for usage in usages %}
+                        {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdExercise() == exercise.getExerciseId()%}                    
+                        {% set value = true %}
                         <div class="row response-row">
-                            <div class="col-sm-5">
-                                <h4 class="small-hdr hdr-notop-mrgn">
-                                    <small>{{ exercise.getTitle() }}</small>
-                                </h4>
-                                <div>{%trans%}usage-table.understand{%endtrans%} {{ usage.getUnderstandabilityScore() }}</div>
-                                <div>{%trans%}usage-table.time{%endtrans%} {{ usage.getTimeScore() }}</div>
-                            </div>
-                            <div class="col-sm-offset-1 col-sm-5">
-                                </br> 
-                                <div>{%trans%}usage-table.difficulty{%endtrans%} {{ usage.getDifficultyScore() }}</div>
-                            </div>
-                            <div class="col-sm-1">
-                                </br>
-                                <span aria-hidden="true" class="fas fa-thumbs-{{answer.getAnswerSuccess() ? 'up' : 'down'}} text-success"></span>
-                            </div>
+                        <div class="row col-xs-12 mt-2" style="padding-right: 0px;">
+                            <div class="col-xs-12 d-flex" style="padding-right: 0px;">
+                                  <div class="col-xs-9 d-flex justify-self-start" style="padding-left: 0px;"> 
+                                   <div> {{ exercise.getTitle() }}</div> 
+                                  </div>                                
+                                <div  class="col-xs-3 d-flex justify-end gap-4" style="padding-right: 0px;">
+                                    <p class="italic">{{ usage.getDate() }}</p>
+                                    <span aria-hidden="true" class="{{answer.getAnswerSuccess() ? 'fa fa-check-circle-o' : 'fa fa-times-circle-o'}} text-success self-center"></span>
+                                </div>  
+                            </div>                                                                                        
+                        </div>                        
+                        <div class="row col-xs-12 d-flex justify-center mb-2 mt-2">     
+                                <div class="col-xs-4 d-flex self-center justify-center text-sm italic"><div>{%trans%}usage-table.understand{%endtrans%}</div> </div>
+                                <div class="col-xs-4 d-flex self-center justify-center text-sm italic">{%trans%}usage-table.time{%endtrans%}</div>
+                                <div class="col-xs-4 d-flex self-center justify-center text-sm italic">{%trans%}usage-table.difficulty{%endtrans%}</div>
                         </div>
+                        <div class="row col-xs-12 d-flex mb-2">     
+                                {% set understandabilityValue = usage.getUnderstandabilityScore() %}                                
+                                    {% if understandabilityValue == 1 %}    
+                                         <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                    {% elseif understandabilityValue == 2 %}
+                                         <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                    {% elseif understandabilityValue == 3 %}
+                                         <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                    {% elseif understandabilityValue == 4 %}
+                                         <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                     {% elseif understandabilityValue == 5 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getUnderstandabilityScore()}}/5</div>
+                                        </div>
+                                {% endif %}
+
+                                {% set timeScoreValue = usage.getTimeScore() %}
+                                
+                                    {% if timeScoreValue == 1 %}    
+                                         <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                    {% elseif timeScoreValue == 2 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                    {% elseif timeScoreValue == 3 %}
+                                       <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                    {% elseif timeScoreValue == 4 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                     {% elseif timeScoreValue == 5 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                            </div>
+                                            <div  style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getTimeScore()}}/5</div>
+                                        </div>
+                                {% endif %}                                
+                                {% set difficultyValue = usage.getDifficultyScore() %}                                
+                                    {% if difficultyValue == 1 %}    
+                                       <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                    {% elseif difficultyValue == 2 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                    {% elseif difficultyValue == 3 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                    {% elseif difficultyValue == 4 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                     {% elseif difficultyValue == 5 %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                                <i style="color: #fd4;" class="fas fa-star"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-xs-4 d-flex justify-center">
+                                            <div>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                            <div style="margin-left: 2rem;">{{usage.getDifficultyScore()}}/5</div>
+                                        </div>
+                                {% endif %}                               
+                        </div>
+                        </div>                                
                         {% endif %}
                         {% endfor %}
                         {% endfor %}
@@ -74,5 +283,6 @@
         </div>
     </div>
 </section>
+</div>
 </div>
 {% endblock %}

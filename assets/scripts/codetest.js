@@ -908,33 +908,80 @@ global.typeChange = function(){
 }
 
 global.showNewExerciseRow = function() {
+   
+    const invalidClassName = "invalid-field";
+
+    const statementField = getCKEditor('exercise[statement]').getData();
+    const solutionField =  codeEditor.getValue();
+    const tittleField = document.getElementById("exerciseTitleText");
+    const inputField = document.getElementById("input");
+    const outputField = document.getElementById("output");
+
+    const statementLabel = document.querySelector('label[for="exercise[statement]"]');
+    const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
 
     var theForm = $("#exerciseTextForm-1");
     var language = $("#typeSelect").val();
     var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
     window.codeEditor.save();
-    title = $("#exerciseTitleText").val();
+    
+    let booleanValues = [];
+    //var fieldValues = [statementField,solutionField,tittleField.value,inputField.value,outputField.value];
+    let fieldValues = [
+        {
+            key: 'title',
+            value: tittleField.value,
+            element: tittleField
+        },
+        {
+            key: 'statement',
+            value: statementField,
+            element: statementLabel
+        },
+        {
+            key: 'solution',
+            value: solutionField,
+            element: solutionLabel
+        },
+        {
+            key: 'input',
+            value: inputField.value,
+            element: inputField
+        },
+        {
+            key: 'output',
+            value: outputField.value,
+            element: outputField
+        },
+    ]
 
-    if (title == "") {
-        $("#exerciseTitleText").attr("placeholder", "Field Required");
-        $("#exerciseTitleText").addClass("required");
-    } else {
-        
+    fieldValues.forEach((el , i) => {
+        if(!el.value){
+            el.element.classList.add(invalidClassName)
+        }else{
+            el.element.classList.remove(invalidClassName)
+        }
+        booleanValues[i] = !!el.value
+    })
+
+    if(booleanValues.every(el => el)){
         $.ajax({
             type: "POST",
             dataType: "json",
             url: theForm.prop("action"),
             data: theForm.serialize() + '&type=' + language + '&difficulty=' +difficulty+'&' + _TSUGI.ajax_session,
             success: function (data) {
-                resetForm(theForm);
-                location = location.href.replace("create-exercise.php?", "exercises-list.php?")
+             resetForm(theForm);
+             location = location.href.replace("create-exercise.php?", "exercises-list.php?")
             },
             error: function (data) {
                 console.error('FAIL');
                 console.error(data);
             }
         });
+    }else{
+        $("#requiredAlert").removeClass("hidden");
     }
     $("#exerciseCancelAction-1").off("click").on("click", function (e) {
         $('#newExerciseRow').html("");
