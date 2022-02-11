@@ -96,9 +96,9 @@ return [
         "completed" => "Completado",
         "student-name" => "Nombre del estudiante",
         "no.usage" => "No se encontraron opiniones",
-        "understand" => "Comprensibilidad:",
-        "time" => "Duración:",
-        "difficulty" => "Dificultad:",
+        "understand" => "Comprensibilidad",
+        "time" => "Duración",
+        "difficulty" => "Dificultad",
 
     ],
     "grading" => [
@@ -354,5 +354,8 @@ return [
         "exercises-list" => [
             "message" => "Aquí está la lista de ejercicios dentro de esta actividad Codetest"
         ],
+    ],
+    "warning" => [
+        "obligatory" =>"Los campos marcados con un asterisco ' * ' son obligatorios"
     ]
 ];

@@ -1,7 +1,7 @@
 <label class="ct-input {{ inline is defined ? 'inline' : '' }}">
     {% if hideLabel != true %}
         {% block text %}
-            <span>{{label}}</span>
+            <span>{{label}}<span class="requiredElement">{{ required is defined ? ' *' : '' }}</span></span>
         {% endblock %}
     {% endif %}
     {% block input %}

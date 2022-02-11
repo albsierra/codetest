@@ -3,7 +3,7 @@
     {% if labelFor is defined %}for="{{labelFor}}"{% endif %}
 >
     {% block text %}
-        <div>{{label}}</div>
+        <div class>{{label}}<span class="requiredElement">{{ required is defined ? ' *' : '' }}</span></div>
     {% endblock %}
     {% block input %}
         <textarea

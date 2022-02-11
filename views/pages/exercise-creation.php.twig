@@ -1,6 +1,6 @@
 {% extends "mainTemplate.php.twig" %}
 {% block pageTitle %}
-{{ OUTPUT.pageTitle("Create exercise", true, false) }}
+{{ OUTPUT.pageTitle("create-exercise-modal.create-exercise"|trans, true, false) }}
 {% endblock %}
 {% block content %}
     <div class="exercises-creation">
@@ -13,9 +13,10 @@
             <div class="w-full mb-2">
                 {% embed "components/ct-input.php.twig"
                     with {
-                        label: "Exercise title",
+                        label: "new-exercise-form.exercisetitle"|trans,
                         name: 'exercise[title]',
-                        id: 'exerciseTitleText'
+                        id: 'exerciseTitleText',
+                        required: true
                     } only
                 %}
                 {% endembed %}
@@ -24,9 +25,10 @@
                 <div class="w-8/12">
                     {% embed "components/ct-input.php.twig"
                         with {
-                            label: "Keywords",
+                            label: "new-exercise-form.keywordsseparatedlines"|trans,
                             name: 'exercise[keywords]',
-                            id: 'exerciseKeywords'
+                            id: 'exerciseKeywords',
+                            
                         } only
                     %}
                     {% endembed %}
@@ -34,7 +36,7 @@
                 <div class="w-3/12">
                     {% embed "components/ct-input.php.twig"
                         with {
-                            label: "Difficulty",
+                            label: "create-exercise-modal.difficulty"|trans,
                             name: 'exercise[title]'
                         } only
                     %}
@@ -55,12 +57,15 @@
                             label: "new-exercise-form.labels.statement"|trans,
                             name: 'exercise[statement]',
                             id: 'exercise[statement]',
-                            inputClass: 'ckeditor'
+                            labelFor: 'exercise[statement]',
+                            inputClass: 'ckeditor',
+                            required: true
                         } only
                     %}
                     {% endembed %}
                 </div>
                 <div class="w-full mt-4">
+
                     {% embed "components/ct-textarea.php.twig"
                         with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1" } only
                         %}
@@ -78,13 +83,14 @@
                             id: 'exercise[exercise_solution]',
                             labelFor: 'exercise[exercise_solution]',
                             languages: languages,
-                            exerciseLanguage: exerciseLanguage
+                            exerciseLanguage: exerciseLanguage,
+                            required: true
                         } only
                     %}
                         {% block text %}
                             <div class="flex items-center">
                                 <span>
-                                    {%trans%}exercise-code-form.codesolution{%endtrans%}
+                                    {%trans%}exercise-code-form.codesolution{%endtrans%}<span class="requiredElement"> *</span>
                                 </span>
                                 <div class="ml-auto">
                                     {% embed "components/ct-input.php.twig"
@@ -94,6 +100,7 @@
                                             hideLabel: true,
                                             languages: languages,
                                             exerciseLanguage: exerciseLanguage
+                                            
                                         } only
                                     %}
                                         {% block input %}
@@ -113,27 +120,28 @@
                     {% embed "components/ct-textarea.php.twig"
                         with { 
                             label: "new-exercise-form.labels.tests"|trans,
-                            name: ''
+                            name: '',
+                            required:true
                         } only
                         %}
-                        {% block input %}
+                        {% block input %}                             
                             <div class="p-0 flex gap-3 items-stretch">
-                                <div class="w-full">
+                                <div class="w-full">                                      
                                     <div class="text-center">
-                                        With this inputs
-                                    </div>
-                                    <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5"></textarea>
-                                </div>
+                                       {%trans%}new-exercise-form.labels.inputs{%endtrans%}
+                                    </div>                                   
+                                    <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5" id="input"></textarea>
+                                </div>                                
                                 <div class="flex items-center pt-6">
                                     <span>
                                         →
                                     </span>
-                                </div>
-                                <div class="w-full">
-                                    <div class="text-center">
-                                        Expect this outputs
-                                    </div>
-                                    <textarea class="tests-textarea" name="exercise[exercise_output_test]" cols="30" rows="5"></textarea>
+                                </div>                                
+                                <div class="w-full">                                     
+                                    <div class="text-center">                                    
+                                        {%trans%}new-exercise-form.labels.outputs{%endtrans%}
+                                    </div>                                    
+                                    <textarea class="tests-textarea" name="exercise[exercise_output_test]" cols="30" rows="5" id="output"></textarea>
                                 </div>
                             </div>
                         {% endblock %}
@@ -184,7 +192,7 @@
                         } only
                     %}
                         {% block text %}
-                            <div class="flex items-center">
+                            <div class="flex items-center">                            
                                 <span>
                                     {%trans%}exercise-sql-form.exercisesolution{%endtrans%}
                                 </span>
@@ -251,9 +259,15 @@
                         </div>
                     {% endblock %}
                 {% endembed %}
-            </div>
+            </div>            
             <div class="w-full">
                 <div class="flex items-center justify-end py-3 mt-3 gap-3">
+                    <div id="requiredAlert" class="hidden">
+                        <strong>
+                            <span class="important"> ! </span>
+                            {%trans%}warning.obligatory{%endtrans%}
+                        </strong>
+                    </div>          
                     <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
                         {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
