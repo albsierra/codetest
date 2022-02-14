@@ -96,10 +96,12 @@ class CT_QuestionSQL extends CT_Question
 		}
 	
 		if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
-			$query = explode(";", $this->getQuestionProbe())[0];
-			if($resultQuery = $connection->prepare($query)) {
-				$resultQuery->execute();
-			}
+            foreach(explode(";", $this->getQuestionProbe()) as $query) { // ; not accepted in Oracle driver.
+                if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
+                    $resultQuery->execute();
+                }
+            }
+            // We only watch the result of the last query. The last query will often be a SELECT query
 		}
         $resultQueryArray = $resultQuery ? $resultQuery->fetchAll() : array();
         $resultQuery = null;
