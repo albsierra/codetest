@@ -340,6 +340,10 @@ return [
         "grade.saved.success" => "Grade saved.",
         "connection.failed" => "Can't connect with the repository",
         "exercise.code.percent" => "The output of your code matches a %percent%%% of the correct answer",
+        "error-preload-empty" => "The list of exercises to preload is empty",
+        "preload-success" => "Exercises preloaded successfully",
+        "preload-error-external" => "External error while preloading exercises",
+        "preload-error" => "Error preloading exercises: exercisesList",
     ],
     "help-pages" => [
         "ak-projects-list" => [

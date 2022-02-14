@@ -67,11 +67,12 @@ $gradesMap = array_reduce($grades,function($acc, $el){
     $acc['avg'] = (array_key_exists("avg", $acc) ? $acc['avg'] : 0) + $el->getGrade();
     return $acc;
 },[]);
+
 if(array_key_exists('avg',$gradesMap)){
     $gradesMap['avg'] = $gradesMap['avg'] / $gradesCount;
 }
 
-// var_dump($gradesMap);die;
+require_once($CFG->codetestBasePath."/util/preloadExercises.php");
 
 echo $twig->render('pages/instructor-home.php.twig', array(
     'main' => $main,

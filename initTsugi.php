@@ -5,6 +5,7 @@ require_once $CFG->codetestBasePath. '/util/RestClient.php';
 require_once $CFG->codetestBasePath. '/util/JSONManager.php';
 
 use Tsugi\Core\LTIX;
+use Tsugi\Core\Launch;
 
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\PhpFileLoader;

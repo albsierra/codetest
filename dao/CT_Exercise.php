@@ -244,7 +244,31 @@ class CT_Exercise implements \JsonSerializable {
         return $CTExercise;
     }
 
-    
+    //Find exercise by akId
+    static function findExerciseForImportAkId($id) {
+        global $REST_CLIENT_REPO;
+        $url = "api/tests/getExercise/id/$id";
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $mainIsSQL = $main->getType() == '0';
+
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+        $respBody = $response->getContent();
+        if(strlen($respBody) == 0){
+            return null;
+        }
+        $exerciseArray = $response->toArray();
+
+        $exercise = json_decode(json_encode($exerciseArray));
+        
+        //check what type of exercise is to choose constructor
+        if ($mainIsSQL) {
+            $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
+        } else {
+            $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
+        }
+        return $CTExercise;
+    }
+
     static function MapJsonToExercisesArray($json) {
         $response = json_decode($json);
         $exercises = array();
