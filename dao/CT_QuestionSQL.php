@@ -89,16 +89,37 @@ class CT_QuestionSQL extends CT_Question
     public function getQueryResult($answer = null) {
         $connection = $this->initTransaction();
         $queries = (isset($answer) ? $answer : $this->getQuestionSolution());
-		foreach(explode(";", $queries) as $query) { // ; not accepted in Oracle driver.
-			if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
-				$resultQuery->execute();
-			}
-		}
-	
+
+        if($this->isRoutine($queries)) {
+            $query = substr(rtrim($queries), 0, strlen(rtrim($queries)) - 1);
+            $query = str_replace("'", "''", $query);
+            $plsqlQuery =
+                " BEGIN\n"
+                . " EXECUTE IMMEDIATE '" . $query . "';\n"
+                . " END;\n";
+            if ($resultQuery = $connection->prepare($plsqlQuery)) {
+                $resultQuery->execute();
+            }
+        } else {
+            foreach(explode(";", $queries) as $query) { // ; not accepted in Oracle driver.
+                if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
+                    $resultQuery->execute();
+                }
+            }
+        }
+
 		if ($this->getQuestionType() == 'DML' || $this->getQuestionType() == 'DDL') {
             foreach(explode(";", $this->getQuestionProbe()) as $query) { // ; not accepted in Oracle driver.
                 if($this->isQuery($query) && $resultQuery = $connection->prepare($query)) {
                     $resultQuery->execute();
+                    if($connection->errorInfo()[1] > 0 ) { // Is the query a procedure?
+                        $queryProbe =
+                            " BEGIN " . $query . "; END;";
+                        if ($resultQuery = $connection->prepare($queryProbe)) {
+                            $resultQuery->execute();
+                        }
+
+                    }
                 }
             }
             // We only watch the result of the last query. The last query will often be a SELECT query
@@ -110,8 +131,12 @@ class CT_QuestionSQL extends CT_Question
     }
 
     private function isQuery($query) {
-		return strlen(trim($query)) > 1;
-	}
+        return strlen(trim($query)) > 1;
+    }
+
+    private function isRoutine($query) {
+        return str_ends_with(trim($query), '/') && strlen(trim($query)) > 2;
+    }
 
     private function createOnflySchema(&$connection) {
         global $USER;
@@ -256,7 +281,7 @@ class CT_QuestionSQL extends CT_Question
         return $sanitizedStmt;
     }
 
-    public function getQueryTable(): string
+    public function getQueryTable()
     {
         $resultQueryString = '';
         if ($this->getQuestionType() == 'SELECT') {
