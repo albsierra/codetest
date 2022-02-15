@@ -51,6 +51,7 @@ return [
         "import/export.export" => "Exportar el contexto actual a un archivo ZIP",
         "import/export.import" => "Importar un archivo ZIP al contexto actual",
         "import/export.import.confirm" => "Confirmar la importación",
+        "import/export.export-ids" => "Mostrar Id de los ejercicios actuales",
         "preview" => "Vista de estudiante",
         "preview.view" => "Prueba y previsualiza tus ejercicios antes de enviarlos a los estudiantes",
         "help" => "Ayuda",
@@ -58,6 +59,11 @@ return [
         "title.text" => "Texto título",
         "save.title.text" => "Guardar texto del título",
         "cancel.title.text" => "Cancelar texto de título",
+        "exercise-ids-modal" => [
+            "title" => "Lista de Id de Ejercicio",
+            "close" => "Cerrar",
+            "copy-selected" => "Copiar Id seleccionados al portapapeles",
+        ],
         "title" => [
             "programming" => "PROGRAMACIÓN",
             "sql" => "SQL"
@@ -84,12 +90,12 @@ return [
     ],
     "download-student-results" => "Haga clic en el enlace de abajo para descargar los resultados del estudiante.",
     "results-table" => [
-        "exercise-number" => "Número del ejercicio",
+        "exercise-number" => "Número de ejercicio",
         "exercise-statement" => "Enunciado del ejercicio",
         "student-name" => "Nombre del estudiante",
         "last-updated" => "Última actualización",
         "completed" => "Completado",
-        "show-code" => "Show code",
+        "show-code" => "Mostrar código",
     ],
     "usage-table" => [
         "exercise" => "Pregunta",
@@ -340,6 +346,10 @@ return [
         "grade.saved.success" => "Nota guardada.",
         "connection.failed" => "No se pudo conectar con el repositorio",
         "exercise.code.percent" => "La salida de tu código coincide en un %percent%%% de la respuesta correcta",
+        "error-preload-empty" => "La lista de ejercicios a precargar está vacía",
+        "preload-success" => "Ejercicios precargados correctamente",
+        "preload-error-external" => "Error externo durante la precarga de ejercicios",
+        "preload-error" => "Error al cargar ejercicios: exercisesList",
     ],
     "help-pages" => [
         "ak-projects-list" => [
@@ -356,6 +366,6 @@ return [
         ],
     ],
     "warning" => [
-        "obligatory" =>"Los campos marcados con un asterisco ' * ' son obligatorios"
+        "obligatory" =>"Campos marcados con un asterisco son obligatorios"
     ]
 ];
