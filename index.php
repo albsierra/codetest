@@ -14,7 +14,7 @@ if ( $USER->instructor ) {
     $post = $_SESSION['lti_post'];
     if(array_key_exists('custom_link_id_history',$post) && $linkOriginal = \CT\CT_Link::withLinkKey($post['custom_link_id_history'])) {
         $linkCopy = new \CT\CT_Link($LINK->id);
-        $linkCopy->import($linkOriginal);
+        $linkCopy->import($linkOriginal, $main);
     }
 
     if ($main->getSeenSplash()) {

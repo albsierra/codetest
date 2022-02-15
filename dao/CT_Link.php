@@ -68,9 +68,8 @@ class CT_Link implements \JsonSerializable {
     /**
      * @param CT_Link linkOriginal
      */
-    public function import($linkOriginal) {
+    public function import($linkOriginal, $ctMainCopy) {
         $ctMainOriginal = $linkOriginal->getCtMain();
-        $ctMainCopy = $this->getCtMain();
         $exercisesCopy = $ctMainCopy->getQuestions();
         if(count($exercisesCopy) == 0) {
             $ctMainCopy->setTitle($ctMainOriginal->getTitle());
