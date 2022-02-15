@@ -51,6 +51,7 @@ return [
         "import/export.export" => "Export your current context to a ZIP file",
         "import/export.import" => "Import a ZIP file to your current context",
         "import/export.import.confirm" => "Confirm import",
+        "import/export.export-ids" => "Show current exercise id's",
         "preview" => "Preview as student",
         "preview.view" => "Try out and preview your exercises before sending them to the students",
         "help" => "Help",
@@ -58,6 +59,11 @@ return [
         "title.text" => "Title Text",
         "save.title.text" => "Save Title Text",
         "cancel.title.text" => "Cancel Title Text",
+        "exercise-ids-modal" => [
+            "title" => "Exercise Id's list",
+            "close" => "Close",
+            "copy-selected" => "Copy selected id's to clipboard",
+        ],
         "title" => [
             "programming" => "PROGRAMMING",
             "sql" => "SQL"

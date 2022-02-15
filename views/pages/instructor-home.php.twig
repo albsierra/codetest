@@ -184,7 +184,7 @@
             {% block body %}
                 <div>
                     <a class="hover-underline-animation link-with-icon" href="export-context.php">
-                        <span>
+                        <span class="!min-w-[270px]">
                             {%trans%}main-title.import/export.export{%endtrans%}
                         </span>
                         <span>
@@ -193,8 +193,8 @@
                     </a>
                 </div>
                 <div>
-                    <label id="import-file-label" for="import-file-field" class="hover-underline-animation link-with-icon">
-                        <span>
+                    <label id="import-file-label" for="import-file-field" class="hover-underline-animation link-with-icon mb-0">
+                        <span class="!min-w-[270px]">
                             {%trans%}main-title.import/export.import{%endtrans%}
                         </span>
                         <span>
@@ -222,6 +222,16 @@
                             <input type="file" name="import-file" accept=".zip,.7zip" id="import-file-field">
                         </div>
                     </form>
+                </div>
+                <div>
+                    <a class="hover-underline-animation link-with-icon" href="#" data-toggle="modal" data-target="#exerciseIdsModal">
+                        <span class="!min-w-[270px]">
+                            {%trans%}main-title.import/export.export-ids{%endtrans%}
+                        </span>
+                        <span>
+                            <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                        </span>
+                    </a>
                 </div>
             {% endblock %}
         {% endembed %}
@@ -272,6 +282,35 @@
                             <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                         </span>
                     </a>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exerciseIdsModal" tabindex="-1" role="dialog" aria-labelledby="exerciseIdsModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title h4" id="exerciseIdsModalLabel">{%trans%}main-title.exercise-ids-modal.title{%endtrans%}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% for ex in exercises %}
+                            <div class="flex items-center gap-3">
+                                <span class="min-w-[250px] text-greyish text-sm ex-id">
+                                    {{ ex.akId }}
+                                </span>
+                                <label class="m-0 p-0 font-normal flex items-center gap-2">
+                                    <input type="checkbox" class=" !mt-0 !mb-[2px]" name="ex-id-select" data-exid="{{ ex.akId }}" checked id="{{ ex.akId }}">
+                                    <span class="truncate select-none">
+                                        - {{ ex.title }}
+                                    </span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer flex items-center">
+                        <button type="button" class="btn btn-success copy-ids-to-clip mr-auto">{%trans%}main-title.exercise-ids-modal.copy-selected{%endtrans%}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{%trans%}main-title.exercise-ids-modal.close{%endtrans%}</button>
+                    </div>
                 </div>
             </div>
         </div>

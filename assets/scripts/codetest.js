@@ -146,6 +146,31 @@ $(() => {
         }
     }
 
+    if(document.querySelector('#exerciseIdsModal')){
+        const originalText = $('.copy-ids-to-clip').text()
+
+        $('#exerciseIdsModal').on('show.bs.modal', function (e) {
+            $('.copy-ids-to-clip').text(originalText)
+            $('.copy-ids-to-clip').attr('disabled', false)
+        })
+
+        $('#exerciseIdsModal .copy-ids-to-clip').on('click', async (ev) => {
+            const selectedIds = $('#exerciseIdsModal [name="ex-id-select"]:checked').toArray().map(el => $(el).data('exid'))
+            const textToCopy = selectedIds.join(',');
+            if (!navigator.clipboard) {
+                alert('Clipboard feature not supported in this browser')
+                return
+            }
+            const textWithLabel = `exercises_list=${textToCopy}`
+            await navigator.clipboard.writeText(textWithLabel)
+            $('.copy-ids-to-clip').text('Saved!')
+            $('.copy-ids-to-clip').attr('disabled', true)
+            setTimeout(() => {
+                $('#exerciseIdsModal').modal('hide')
+            }, 600);
+        })
+    }
+
     if(document.querySelector('.ak-exercises-list')){
         $('.ak-exercises-list .exercises-list > a').on('click', async (ev) => {
 
