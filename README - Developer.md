@@ -205,6 +205,8 @@ After getting codetest up and running, you will need to configure the LTI tool i
 - Click at `configure a tool manually`
 
 - As Tool URL: `http://localhost/tsugi/mod/codetest/`
+  
+  > ⚠ Must have a trailing forward slash !!
 
 - Select `LTI 1.0/1.1`
 
