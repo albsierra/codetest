@@ -23,7 +23,7 @@ This is a guide for JuezLTI developers
 ---
 
 - [Tsugi](https://www.tsugi.org/) - Customized
-  - Forked from commit: ["Improve wording / typos"](https://github.com/tsugiproject/tsugi/commit/fc4c2cede0107aff35d2c2cd8545372c4381b3a3) in fc4c2ce
+  - Forked from commit: ["Update the documentation to ean away from Issuer except for Canvas."](https://github.com/tsugiproject/tsugi/commit/cf347c5ea900512b39607c67c408e7079698a305) in cf347c
   - Customizations committed on top of the branch `codetest-customizations`
 
 - [Docker](https://www.docker.com/)
