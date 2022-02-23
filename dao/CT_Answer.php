@@ -231,10 +231,10 @@ class CT_Answer
     static function deleteAnswers($exercises, $user_id) {
         $exerciseIds = array();
         foreach($exercises as $exercise) {
-            array_push($exerciseIds, $exercise->getExerciseId());
+            array_push($exerciseIds, '"'.$exercise->getExerciseId().'"');
         }
         $query = \CT\CT_DAO::getQuery('answer','deleteFromExercises');
-        $query['sentence'] = str_replace("/exercisesId/", implode(',', array_map('intval', $exerciseIds)), $query['sentence']);
+        $query['sentence'] = str_replace("/exercisesId/", implode(',', $exerciseIds), $query['sentence']);
         $arr = array(':userId' => $user_id);
         $query['PDOX']->queryDie($query['sentence'], $arr);
     }
