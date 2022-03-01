@@ -2,6 +2,9 @@
 
 shopt -s nocaseglob
 
+chmod 600 /etc/msmtprc
+chown www-data.www-data /etc/msmtprc
+
 echo "Waiting for DB"
 while ! nc -z tsugi-mysql-db 3306; do   
   sleep 5 # wait 5 seconds before check again
