@@ -104,7 +104,7 @@ class CT_Test implements \JsonSerializable
             $CTExercise->setAkId($exercise->akId);
         }
         $CTExercise->setStatement($exercise->statement);
-        $CTExercise->setHint($exercise->hint);
+        (isset($exercise->hint) ? $CTExercise->setHint($exercise->hint) : null);
         $CTExercise->setDifficulty($exercise->difficulty);
         $CTExercise->setType($exercise->type);
         $CTExercise->setTestId($testId);

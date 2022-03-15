@@ -935,13 +935,11 @@ global.typeChange = function(){
 global.showNewExerciseRow = function() {
    
     const invalidClassName = "invalid-field";
-
     const statementField = getCKEditor('exercise[statement]').getData();
     const solutionField =  codeEditor.getValue();
     const tittleField = document.getElementById("exerciseTitleText");
     const inputField = document.getElementById("input");
     const outputField = document.getElementById("output");
-
     const statementLabel = document.querySelector('label[for="exercise[statement]"]');
     const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
 
@@ -950,9 +948,9 @@ global.showNewExerciseRow = function() {
     var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
     window.codeEditor.save();
-    
+
     let booleanValues = [];
-    //var fieldValues = [statementField,solutionField,tittleField.value,inputField.value,outputField.value];
+
     let fieldValues = [
         {
             key: 'title',
