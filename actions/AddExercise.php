@@ -9,7 +9,8 @@ if ($USER->instructor) {
     $difficulty = $_POST["difficulty"];
     $exercisePost = $_POST["exercise"];
 
-    if (isset($exercisePost['title']) && trim($exercisePost['title']) != '') {
+
+    if (isset($exercisePost['title']) && trim($exercisePost['title']) != '' && isset($exercisePost['exercise_language']) && trim($exercisePost['exercise_language']) != '') {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
         $exercise = $main->createExercise($exercisePost, $type, $difficulty);
         $exercises = Array();
