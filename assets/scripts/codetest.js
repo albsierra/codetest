@@ -1006,13 +1006,14 @@ global.showNewExerciseRow = function() {
     }else{
         $("#requiredAlert").removeClass("hidden");
     }
-    $("#exerciseCancelAction-1").off("click").on("click", function (e) {
-        $('#newExerciseRow').html("");
-        if (editor)
-            editor.destroy();
-        addExercisesSection.show();
-    });
+}
 
+global.exerciseCancelAction = function() {
+    console.log("Dentro del Cancel");
+    CKEDITOR.instances['exercise[statement]'].setData('');
+    codeEditor.setValue("");
+    var theForm = $("#exerciseTextForm-1");
+    resetForm(theForm);
 }
 
 global.showImportExercise = function() {
