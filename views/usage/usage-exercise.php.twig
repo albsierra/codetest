@@ -7,7 +7,7 @@
 <section id="exerciseResponses">
     <div class="panel panel-info">
         <div class="panel-heading response-panel-header">
-            <div class="row">
+            <div class="row d-flex justify-center items-center font-bold text-lg text-blue-900 h-14">
                 <div class="col-xs-6">
                     <h4 class="results-table-hdr">{%trans%}usage-table.exercise{%endtrans%}</h4>
                 </div>
@@ -37,11 +37,12 @@
                         </div>                        
                     </div>
                     {% set value = false %}
-                    <div id="responses{{ exerciseId }}" class="col-xs-12 results-collapse collapse"> 
+                    <div id="responses{{ exerciseId }}" class="col-xs-12 results-collapse collapse" style="background-color: #d6ecff73;"> 
                         {% for student in students %}
                         {% for usage in usages %}
                         {% if usage.user.getUserId() == student.user.getUserId() and usage.getIdExercise() == exercise.getExerciseId()%}
-                        {% set value = true %}                        
+                        {% set value = true %}
+                        {% set answer = usage.user.getAnswerForExercise(exercise.getExerciseId(), exercise.getCtId()) %}                     
                         <div class="row response-row">
                             <div class="row col-xs-12 mt-2" style="padding-right: 0px;">
                                 <div class="col-xs-12 d-flex" style="padding-right: 0px;">
