@@ -50,7 +50,6 @@
                     {% endembed %}
                 </div>
             </div>
-            {% if main.getType() == '1' %}
                 <div class="w-full mt-3">
                     {% embed "components/ct-textarea.php.twig"
                         with {
@@ -73,7 +72,7 @@
                 </div>
                 <div class="w-full mt-4">
                     {% set exercise = newExercise %}
-                    {% set languages = main.getTypeProperty('codeLanguages') %}
+                    {% set languages = main.getLanguages() %}
                     {% set exerciseLanguage = exercise.getExerciseLanguage() %}
                     {% embed "components/ct-textarea.php.twig"
                         with {
@@ -105,8 +104,8 @@
                                     %}
                                         {% block input %}
                                             <select id="typeSelect" name="exercise[exercise_language]" style="background: #fff;" id="exerciseLanguagee">
-                                                {% for index, language in languages %}
-                                                    <option value="{{ index }}" {{ exercise.getExerciseLanguage() == index ? "selected" : "" }} . >{{ language.name }}</option>
+                                                {% for language in languages %}
+                                                    <option value="{{ language.name }}" {{ exercise.getExerciseLanguage() == language.name ? "selected" : "" }}>{{ language.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         {% endblock %}
@@ -146,141 +145,56 @@
                             </div>
                         {% endblock %}
                     {% endembed %}
-                </div>
-            {% endif %}
-            {% if main.getType() == '0' %}
-                <div class="w-full mb-2 flex flex-wrap gap-2 justify-between">
-                    <div class="w-8/12">
-                        {% embed "components/ct-input.php.twig"
-                            with {
-                                label: "exercise-sql-form.exercisedatabase"|trans,
-                                name: 'exercise[exercise_database]',
-                                id: 'exerciseDatabase',
-                            } only
-                        %}
-                        {% endembed %}
-                    </div>
-                    <div class="w-3/12">
-                        {% embed "components/ct-input.php.twig"
-                            with {
-                                label: "exercise-sql-form.exercisetype"|trans,
-                                name: 'exercise[exercise_sql_type]',
-                                id: 'exerciseType',
-                                sqlTypes: main.getTypeProperty('sqlTypes', type),
-                                exercise: exercise,
-                            } only
-                        %}
-                            {% block input %}
-                                <select name="exercise[exercise_sql_type]" id="exerciseType">
-                                    {% for sqlType in sqlTypes %}
-                                        <option value="{{ sqlType }}" {{ exercise.getExerciseType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
-                                    {% endfor %}
-                                </select>
-                            {% endblock %}
-                        {% endembed %}
-                    </div>
-                </div>
+                </div>   
                 <div class="w-full mt-4">
-                    {% set exercise = newExercise %}
                     {% embed "components/ct-textarea.php.twig"
-                        with {
-                            label: "exercise-sql-form.exercisesolution"|trans,
-                            name: 'exercise[exercise_solution]',
-                            rows: "8",
-                            dbConnections: main.getTypeProperty('dbConnections', type),
-                            placeholder: "SELECT * FROM mytable WHERE name = 'myname'"
+                        with { 
+                            label: "new-exercise-form.labels.restrictions"|trans,
+                            name: ''
                         } only
-                    %}
-                        {% block text %}
-                            <div class="flex items-center">                            
-                                <span>
-                                    {%trans%}exercise-sql-form.exercisesolution{%endtrans%}
-                                </span>
-                                <div class="ml-auto">
-                                    {% embed "components/ct-input.php.twig"
-                                        with {
-                                            label: "Exercise DBMS",
-                                            name: 'exercise[exercise_language]',
-                                            hideLabel: true,
-                                            dbConnections: dbConnections,
-                                        } only
-                                    %}
-                                        {% block input %}
-                                            <select name="exercise[exercise_dbms]" style="background: #fff;" id="exerciseDBMS">
-                                                {% for index, dbms in dbConnections %}
-                                                    <option value="{{ index }}" {{ exercise.getExerciseDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        {% endblock %}
-                                    {% endembed %}
+                        %}
+                        {% block input %}
+                            <div class="p-0 flex gap-10 items-stretch">
+                                <div class="flex-grow">
+                                    <div class="text-center">
+                                        {%trans%}
+                                            new-exercise-form.mustcontainseparatedlines
+                                        {%endtrans%}
+                                    </div>
+                                    <textarea class="tests-textarea" name="exercise[exercise_must]" rows="5"></textarea>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="text-center">
+                                        {%trans%}
+                                            new-exercise-form.shouldntcontain
+                                        {%endtrans%}
+                                    </div>
+                                    <textarea class="tests-textarea" name="exercise[exercise_musnt]" rows="5"></textarea>
                                 </div>
                             </div>
                         {% endblock %}
                     {% endembed %}
+                </div>            
+                <div class="w-full">
+                    <div class="flex items-center justify-end py-3 mt-3 gap-3">
+                        <div id="requiredAlert" class="hidden">
+                            <strong>
+                                <span class="important"> ! </span>
+                                {%trans%}warning.obligatory{%endtrans%}
+                            </strong>
+                        </div>          
+                        <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
+                            {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
+                        <button type="button" class="btn btn-default" onclick="exerciseCancelAction()" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
+                            {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}</button>
+                    </div>
                 </div>
-                <div class="w-full mt-4">
-                    {% embed "components/ct-textarea.php.twig"
-                        with { label: "exercise-sql-form.exerciseprobe"|trans, name: 'exercise[exercise_probe]' } only
-                    %}
-                    {% endembed %}
-                </div>
-                <div class="w-full mt-4">
-                    {% embed "components/ct-textarea.php.twig"
-                        with { label: "exercise-sql-form.databaseonfly"|trans, name: 'exercise[exercise_onfly]' } only
-                    %}
-                    {% endembed %}
-                </div>
-            {% endif %}
-            <div class="w-full mt-4">
-                {% embed "components/ct-textarea.php.twig"
-                    with { 
-                        label: "new-exercise-form.labels.restrictions"|trans,
-                        name: ''
-                    } only
-                    %}
-                    {% block input %}
-                        <div class="p-0 flex gap-10 items-stretch">
-                            <div class="flex-grow">
-                                <div class="text-center">
-                                    {%trans%}
-                                        new-exercise-form.mustcontainseparatedlines
-                                    {%endtrans%}
-                                </div>
-                                <textarea class="tests-textarea" name="exercise[exercise_must]" rows="5"></textarea>
-                            </div>
-                            <div class="flex-grow">
-                                <div class="text-center">
-                                    {%trans%}
-                                        new-exercise-form.shouldntcontain
-                                    {%endtrans%}
-                                </div>
-                                <textarea class="tests-textarea" name="exercise[exercise_musnt]" rows="5"></textarea>
-                            </div>
-                        </div>
-                    {% endblock %}
-                {% endembed %}
-            </div>            
-            <div class="w-full">
-                <div class="flex items-center justify-end py-3 mt-3 gap-3">
-                    <div id="requiredAlert" class="hidden">
-                        <strong>
-                            <span class="important"> ! </span>
-                            {%trans%}warning.obligatory{%endtrans%}
-                        </strong>
-                    </div>          
-                    <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
-                        {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
-                    <button type="button" class="btn btn-default" onclick="exerciseCancelAction()" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
-                        {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}</button>
-                </div>
-            </div>
         </form>
     </div>
 {% endblock %}
 {% block footer %}
 <script src="public/build/codemirror/codemirror.js"></script>
 <link rel="stylesheet" href="public/build/codemirror/codemirror.css">
-
 <script src="public/build/codemirror/javascript/javascript.js"></script>
 <script src="public/build/codemirror/php/php.js"></script>
 <script src="public/build/codemirror/python/python.js"></script>
@@ -288,5 +202,4 @@
 <script src="public/build/codemirror/htmlmixed/htmlmixed.js"></script>
 <script src="public/build/codemirror/css/css.js"></script>
 <script src="public/build/codemirror/clike/clike.js"></script>
-
 {% endblock %}

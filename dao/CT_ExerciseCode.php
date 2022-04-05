@@ -31,8 +31,7 @@ class CT_ExerciseCode extends CT_Exercise
             'exercise_id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
             'exercise_num' => $this->getExerciseNum(),
-            'title' => $this->getTitle(),
-            'type' => $this->getType(),
+            'title' => $this->getTitle(),  
             'statement' => $this->getStatement(),
             'hint' => $this->getHint(),
             'difficulty' => $this->getDifficulty(),
@@ -331,5 +330,5 @@ class CT_ExerciseCode extends CT_Exercise
             ':exercise_solution' => $this->getExerciseSolution(),
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
-    }
+    }   
 }

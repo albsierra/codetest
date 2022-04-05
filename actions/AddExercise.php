@@ -5,14 +5,14 @@ global $translator;
 
 if ($USER->instructor) {
     $result = array();
-    $type = $_POST["type"];
+    $language = $_POST["language"];
     $difficulty = $_POST["difficulty"];
     $exercisePost = $_POST["exercise"];
 
-
     if (isset($exercisePost['title']) && trim($exercisePost['title']) != '' && isset($exercisePost['exercise_language']) && trim($exercisePost['exercise_language']) != '') {
+        
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $exercise = $main->createExercise($exercisePost, $type, $difficulty);
+        $exercise = $main->createExercise($exercisePost,$language,$difficulty);
         $exercises = Array();
         array_push($exercises, $exercise);
 
@@ -21,11 +21,7 @@ if ($USER->instructor) {
 
         //map the returned exercise
         $object = json_decode($result);
-        if ($main->getType() == '1') {
-            $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
-        } else {
-            $exercise1 = \CT\CT_Test::mapObjectToSQLExercise($object);
-        }
+        $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object); 
         $exercise1->setCtId($_SESSION["ct_id"]);
 
         //Save the returned exercise on the db

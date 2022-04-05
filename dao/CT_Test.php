@@ -78,8 +78,7 @@ class CT_Test implements \JsonSerializable
         $CTExercise->setExerciseId($exercise->id);
         $CTExercise->setCtId($_SESSION['ct_id']);
         $CTExercise->setTitle($exercise->title);
-        $CTExercise->setDifficulty($exercise->difficulty);
-        $CTExercise->setType($exercise->type);
+        $CTExercise->setDifficulty($exercise->difficulty);      
         $CTExercise->setTestId($testId);
         isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
         isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
@@ -105,8 +104,7 @@ class CT_Test implements \JsonSerializable
         }
         $CTExercise->setStatement($exercise->statement);
         (isset($exercise->hint) ? $CTExercise->setHint($exercise->hint) : null);
-        $CTExercise->setDifficulty($exercise->difficulty);
-        $CTExercise->setType($exercise->type);
+        $CTExercise->setDifficulty($exercise->difficulty);       
         $CTExercise->setTestId($testId);
         isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
         isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
