@@ -1,12 +1,12 @@
                                     <label for="exerciseType">Exercise Type</label>
                                     <select name="exercise[exercise_type]" id="exerciseType">
-                                        {% for sqlType in main.getTypeProperty('sqlTypes') %}
+                                        {% for sqlType in main.getProperty('sqlTypes') %}
                                         <option value="{{ sqlType }}" {{ exercise.getExerciseType() == sqlType ? "selected" : "" }} . >{{ sqlType }}</option>
                                         {% endfor %}
                                     </select>
                                     <label for="exerciseDBMS">Exercise DBMS</label>
                                     <select name="exercise[exercise_dbms]" id="exerciseDBMS">
-                                        {% for index, dbms in main.getTypeProperty('dbConnections') %}
+                                        {% for index, dbms in main.getProperty('dbConnections') %}
                                         <option value="{{ index }}" {{ exercise.getExerciseDbms() == index ? "selected" : "" }} . >{{ dbms.name }}</option>
                                         {% endfor %}
                                     </select>

@@ -46,7 +46,7 @@
         </div>
 
         {%
-            include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView'))
+            include (CFG.CT_Types.studentsPath ~ main.getProperty('studentView'))
             with { inputValue: testsObj.inputValue, outputValue: testsObj.outputValue }
         %}
 

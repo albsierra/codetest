@@ -5,14 +5,14 @@ global $translator;
 
 if ($USER->instructor) {
     $result = array();
-    $language = $_POST["language"];
-    $difficulty = $_POST["difficulty"];
     $exercisePost = $_POST["exercise"];
-
+    
     if (isset($exercisePost['title']) && trim($exercisePost['title']) != '' && isset($exercisePost['exercise_language']) && trim($exercisePost['exercise_language']) != '') {
-        
+        $exercisePost['author'] = $_SESSION["lti"]["user_displayname"];
+        $exercisePost['owner'] = $_SESSION["lti"]["link_title"];
+        $exercisePost['sessionLanguage'] = $_SESSION["lti"]["user_locale"];
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $exercise = $main->createExercise($exercisePost,$language,$difficulty);
+        $exercise = $main->createExercise($exercisePost,strtolower($exercisePost['exercise_language']),$exercisePost["difficulty"]);
         $exercises = Array();
         array_push($exercises, $exercise);
 

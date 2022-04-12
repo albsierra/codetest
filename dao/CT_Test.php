@@ -33,7 +33,6 @@ class CT_Test implements \JsonSerializable
     static function MapJsonToTestsArray($json) {
         $response = json_decode($json);
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $mainIsSQL = $main->getType() == '0';
 
         if ($response) {
             $tests = array();
@@ -45,13 +44,8 @@ class CT_Test implements \JsonSerializable
                 $CTTest->setDescription($test->description);
                 $exercises1 = ($test->exercises);
                 foreach ($exercises1 as $exercise) {
-                    if ($mainIsSQL) {
-                        $CTExercise = self::mapObjectToSQLExercise($exercise, $test->id);
-                    } else {
-                        $CTExercise = self::mapObjectToCodeExercise($exercise, $test->id);
-                    }
-
-                    array_push($exercises, $CTExercise);
+                $CTExercise = self::mapObjectToCodeExercise($exercise, $test->id);
+                array_push($exercises, $CTExercise);
                 }
                 $CTTest->setExercises($exercises);
                 array_push($tests, $CTTest);
@@ -65,31 +59,9 @@ class CT_Test implements \JsonSerializable
         $CTExercise->setExerciseId($exercise->id);
         $CTExercise->setTitle($exercise->title);
         $CTExercise->setDifficulty($exercise->difficulty);
-        $CTExercise->setType($exercise->type);
         $CTExercise->setTestId($testId);
         isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
         isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
-
-        return $CTExercise;
-    }
-
-    static function mapObjectToSQLExercise($exercise, $testId = null) {
-        $CTExercise = new CT_ExerciseSQL();
-        $CTExercise->setExerciseId($exercise->id);
-        $CTExercise->setCtId($_SESSION['ct_id']);
-        $CTExercise->setTitle($exercise->title);
-        $CTExercise->setDifficulty($exercise->difficulty);      
-        $CTExercise->setTestId($testId);
-        isset($exercise->averageGrade) ? $CTExercise->setAverageGrade($exercise->averageGrade) : false;
-        isset($exercise->keywords) ? $CTExercise->setKeywords($exercise->keywords) : false;
-        (isset($exercise->exercise_dbms) ? $CTExercise->setExerciseDbms($exercise->exercise_dbms) : null );
-        (isset($exercise->exercise_sql_type) ? $CTExercise->setExerciseSQLType($exercise->exercise_sql_type) : null );
-        (isset($exercise->exercise_database) ? $CTExercise->setExerciseDatabase($exercise->exercise_database) : null );
-        (isset($exercise->exercise_solution) ? $CTExercise->setExerciseSolution($exercise->exercise_solution) : null );
-        (isset($exercise->exercise_probe) ? $CTExercise->setExerciseProbe($exercise->exercise_probe) : null );
-        (isset($exercise->exercise_onfly) ? $CTExercise->setExerciseOnfly($exercise->exercise_onfly) : null );
-        (isset($exercise->exercise_must) ? $CTExercise->setExerciseMust($exercise->exercise_must) : null );
-        (isset($exercise->exercise_musnt) ? $CTExercise->setExerciseMusnt($exercise->exercise_musnt) : null );
 
         return $CTExercise;
     }
@@ -123,7 +95,6 @@ class CT_Test implements \JsonSerializable
     static function MapJsonToTest($json) {
         $response = json_decode($json);
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $mainIsSQL = $main->getType() == '0';
         $CTTest = new CT_Test();
         $CTTest->setTest_id($response->id);
         $CTTest->setName($response->name);
@@ -131,11 +102,8 @@ class CT_Test implements \JsonSerializable
         $exercises1 = ($response->exercises);
         $exercises = array();
         foreach ($exercises1 as $exercise) {
-            if ($mainIsSQL) {
-                $CTExercise = self::mapObjectToSQLExercise($exercise, $response->id);
-            } else {
-                $CTExercise = self::mapObjectToCodeExercise($exercise, $response->id);
-            }
+            
+            $CTExercise = self::mapObjectToCodeExercise($exercise, $response->id);
             array_push($exercises, $CTExercise);
         }
         $CTTest->setExercises($exercises);
@@ -172,9 +140,9 @@ class CT_Test implements \JsonSerializable
     static function checkerDelete($value) {
         //Search for the value and delete it
         
-        if (($key = array_search($value, $_SESSION['tags']['type'])) !== false) {
-            unset($_SESSION['tags']['type'][$key]);
-            $_SESSION['tags']['type'] = array_values($_SESSION['tags']['type']);
+        if (($key = array_search($value, $_SESSION['tags'])) !== false) {
+            unset($_SESSION['tags'][$key]);
+            $_SESSION['tags']= array_values($_SESSION['tags']);
         } else if (($key = array_search($value, $_SESSION['tags']['difficulty'])) !== false) {
             unset($_SESSION['tags']['difficulty'][$key]);
             $_SESSION['tags']['difficulty'] = array_values($_SESSION['tags']['difficulty']);
@@ -262,7 +230,7 @@ class CT_Test implements \JsonSerializable
     //check the test exercises to leave the ones that match the tags
     static function checkerTest($test) {
         foreach ($test->getExercises() as $exercise2 => $exercise) {
-            if (!in_array($exercise->getType(), $_SESSION['tags']['type']) && !empty($_SESSION['tags']['type'])) {
+            if (!in_array($exercise->getType(), $_SESSION['tags']) && !empty($_SESSION['tags'])) {
                 unset($test->exercises[$exercise2]);
             }
             if (!in_array($exercise->getDifficulty(), $_SESSION['tags']['difficulty']) && !empty($_SESSION['tags']['difficulty'])) {

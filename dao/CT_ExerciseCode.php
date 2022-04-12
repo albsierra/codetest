@@ -25,7 +25,7 @@ class CT_ExerciseCode extends CT_Exercise
     }
     
     
-    //necessary to use json_encode with exerciseCode objects
+   // necessary to use json_encode with exerciseCode objects
     public function jsonSerialize() {
         return [
             'exercise_id' => $this->getExerciseId(),
@@ -49,7 +49,8 @@ class CT_ExerciseCode extends CT_Exercise
             'exercise_output_test' => $this->getExerciseOutputTest(),
             'exercise_output_grade' => $this->getExerciseOutputGrade(),
             'exercise_solution' => $this->getExerciseSolution()
-        ];
+            
+        ] + parent::jsonSerialize();
     }
 
     /**
@@ -206,8 +207,8 @@ class CT_ExerciseCode extends CT_Exercise
     function launchCode($file, $language, $input) {
         global $CFG;
         $main = $this->getMain();
-        $languages = $main->getTypeProperty('codeLanguages');
-        $timeout = $main->getTypeProperty('timeout') + time();
+        $languages = $main->getProperty('codeLanguages');
+        $timeout = $main->getProperty('timeout') + time();
         $languageName = $languages[$language]['name'];
         $fileExtension = $languages[$language]['ext'];
 

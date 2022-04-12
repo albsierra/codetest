@@ -4,7 +4,7 @@
                                     <textarea class="form-control" name="exercise[exercise_input_grade]" id="exerciseInputGrade" rows="4" required>{{ exercise.getExerciseInputGrade }}</textarea>
                                     <br />
                                     <select name="exercise[exercise_language]" id="exerciseLanguage">
-                                        {% for index, language in main.getTypeProperty('codeLanguages') %}
+                                        {% for index, language in main.getProperty('codeLanguages') %}
                                         <option value="{{ index }}" {{ exercise.getExerciseLanguage() == index ? "selected" : "" }} . >{{ language.name }}</option>
                                         {% endfor %}
                                     </select>

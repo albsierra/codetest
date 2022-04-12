@@ -10,6 +10,8 @@
             method="post"
             class="exercise-form flex flex-wrap gap-2 justify-between"
         >
+            <input id="ownerName" type="hidden" value={{owner}} name="owner">
+
             <div class="w-full mb-2">
                 {% embed "components/ct-input.php.twig"
                     with {

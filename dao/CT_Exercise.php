@@ -22,6 +22,9 @@ class CT_Exercise implements \JsonSerializable {
     private $keywords;
     private $exercise_must;
     private $exercise_musnt;
+    private $owner;
+    private $author;
+    private $sessionLanguage;
 
     //get the exercise from de db
     static function withId($exercise_id = null) {
@@ -56,6 +59,9 @@ class CT_Exercise implements \JsonSerializable {
             $this->keywords = $exercise->getKeywords();
             $this->exercise_must = $exercise->getExerciseMust();
             $this->exercise_musnt = $exercise->getExerciseMusnt();
+            $this->owner = $_SESSION["lti"]["link_title"];
+            $this->author = $_SESSION["lti"]["user_displayname"];
+            $this->sessionLanguage = $SESSION["lti"]["user_locale"];
         }
     }
 
@@ -77,7 +83,10 @@ class CT_Exercise implements \JsonSerializable {
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
             'exercise_must' => $this->getExerciseMust(),
-            'exercise_musnt' => $this->getExerciseMusnt()
+            'exercise_musnt' => $this->getExerciseMusnt(),
+            'owner' => $this->getOwner(),
+            'author' => $this->getAuthor(),
+            'sessionLanguage' => $this->getSessionLanguage()
         ];
     }
 
@@ -307,10 +316,10 @@ class CT_Exercise implements \JsonSerializable {
         return count($this->getAnswers());
     }
     
-    public function getExerciseByType()
+    public function getExerciseCode()
     {
         global $CFG;
-        $class = $this->getMain()->getTypeProperty('class', '1');
+        $class = $this->getMain()->getProperty('class');
         
         return new $class($this->getExerciseId());
         
@@ -414,6 +423,28 @@ class CT_Exercise implements \JsonSerializable {
         return new CT_Main($this->getCtId());
     }
 
+    public function getSessionLanguage() {
+        return $this->sessionLanguage;
+    }
+
+    /**
+     * @param mixed $sessionLanguage
+     */
+    public function setSessionLanguage($sessionLanguage) {
+        $this->sessionLanguage = $sessionLanguage;
+    }
+
+    public function getAuthor() {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author) {
+        $this->author = $author;
+    }
+
     /**
      * @return mixed
      */
@@ -440,6 +471,14 @@ class CT_Exercise implements \JsonSerializable {
      */
     public function setCtId($ct_id) {
         $this->ct_id = $ct_id;
+    }
+
+    
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner) {
+        $this->owner = $owner;
     }
 
     public function setAkId($akId) {
@@ -545,6 +584,10 @@ class CT_Exercise implements \JsonSerializable {
 
     public function getKeywords() {
         return $this->keywords;
+    }
+
+    public function getOwner() {
+        return $this->owner;
     }
 
     public function setKeywords($keywords): void {

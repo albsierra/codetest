@@ -1,13 +1,13 @@
 <label for="exerciseType" class="labelForm">{%trans%}exercise-sql-form.exercisetype{%endtrans%}</label>
 <select name="exercise[exercise_sql_type]" class="form-control select" id="exerciseType">
-    {% for sqlType in main.getTypeProperty('sqlTypes', type) %}
+    {% for sqlType in main.getProperty('sqlTypes') %}
     <option value="{{ sqlType }}" {{ exercise.getExerciseType() == sqlType ? "selected" : "" }} .>{{ sqlType }}</option>
     {% endfor %}
 </select>
 <label for="exerciseDBMS" class="labelForm">{%trans%}exercise-sql-form.exerciseDBMS{%endtrans%}</label>
 
 <select name="exercise[exercise_dbms]" class="form-control select" id="exerciseDBMS">
-    {% for index, dbms in main.getTypeProperty('dbConnections', type) %}
+    {% for index, dbms in main.getProperty('dbConnections') %}
     <option value="{{ index }}" {{ exercise.getExerciseDbms() == index ? "selected" : "" }} .>{{ dbms.name }}</option>
     {% endfor %}
 </select>

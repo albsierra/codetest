@@ -74,7 +74,7 @@ class CT_Main implements \JsonSerializable
     //Save exercise on the repo
     function saveExercises($exercises) {
         global $REST_CLIENT_REPO;
-
+    
         $saveExerciseRequest = $REST_CLIENT_REPO->
                                 getClient()->
                                 request('POST','api/exercises/createExercise', [
@@ -104,13 +104,12 @@ class CT_Main implements \JsonSerializable
         return $exercise;
     }
         
-     function importExercise($context, $type) {
+     function importExercise($context) {
         global $CFG;
         if(is_array($context)) {
             $class = $CFG->ExerciseProperty['class'];
             $exercise = new $class();
             \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $context);
-            $exercise->setType($type);
         } 
         $exercise->setCtId($this->getCtId());
         return $exercise;
@@ -127,7 +126,7 @@ class CT_Main implements \JsonSerializable
         return $CFG->ExerciseProperty['codeLanguages'];
     }
 
-    function getTypeProperty($property) {
+    function getProperty($property) {
         global $CFG;
         return $CFG->ExerciseProperty[$property];
     }

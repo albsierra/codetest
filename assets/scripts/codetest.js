@@ -939,8 +939,6 @@ global.showNewExerciseRow = function() {
     const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
 
     var theForm = $("#exerciseTextForm-1");
-    var language = $("#typeSelect").val();
-    var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
     window.codeEditor.save();
 
@@ -988,7 +986,7 @@ global.showNewExerciseRow = function() {
             type: "POST",
             dataType: "json",
             url: theForm.prop("action"),
-            data: theForm.serialize() + '&language=' + language + '&difficulty=' +difficulty+'&' + _TSUGI.ajax_session,
+            data: theForm.serialize() +'&' + _TSUGI.ajax_session,
             success: function (data) {
              resetForm(theForm);
              location = location.href.replace("create-exercise.php?", "exercises-list.php?")
