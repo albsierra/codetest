@@ -21,12 +21,8 @@ if (!isset($answerText) || trim($answerText) == "") {
     //Search for the exercise on the db and map
     $exercise = \CT\CT_Exercise::withId($exerciseId);
     $main = $exercise->getMain();
-    if ($main->getType() == '1') {
-        $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());
-    } else {
-        $exercise1 = \CT\CT_ExerciseSQL::withId($exercise->getExerciseId());
-    }
-
+    
+    $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());   
     $answerOutput = null;
     
     if($answerLanguage == 0) {
@@ -53,7 +49,6 @@ if (!isset($answerText) || trim($answerText) == "") {
     $result["answer_content"] = true;
     $result['exists'] = $array['exists'];
     $result['success'] = $answer->getAnswerSuccess();
-
     $result['answerText'] = $answer->getAnswerTxt();
 
     // Notify elearning that there is a new answer

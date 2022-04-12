@@ -12,7 +12,6 @@ class CT_Main implements \JsonSerializable
     private $context_id;
     private $link_id;
     private $title;
-    private $type;
     private $seen_splash;
     private $preloaded;
     private $shuffle;
@@ -75,7 +74,7 @@ class CT_Main implements \JsonSerializable
     //Save exercise on the repo
     function saveExercises($exercises) {
         global $REST_CLIENT_REPO;
-
+    
         $saveExerciseRequest = $REST_CLIENT_REPO->
                                 getClient()->
                                 request('POST','api/exercises/createExercise', [
@@ -86,37 +85,31 @@ class CT_Main implements \JsonSerializable
     }
     
     //Create exercise object
-    function createExercise($context, $type, $difficulty) {
+    function createExercise($context, $language, $difficulty) {
         global $CFG;
         if(is_array($context)) {
-            $class = $this->getTypeProperty('class', $type);
-         
+            $class = $CFG->ExerciseProperty['class'];
             $exercise = new $class();
             \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $context);
-            if (in_array($type, $CFG->programmingLanguajes)) {
-                $array = self::getTypeProperty('codeLanguages', $type);
-               
+                $array = self::getLanguages();
                 foreach ( $array as $k => $v){
-                 if($v['name'] == $type){
-                      $exercise->setExerciseLanguage($k);
+                 if($v['name'] == $language){
+                  
+                      $exercise->setExerciseLanguage(strtolower($language));
                  }
-                }
-            }
-            $exercise->setType($type);
+                }          
             $exercise->setDifficulty($difficulty);
         } 
         $exercise->setCtId($this->getCtId());
         return $exercise;
     }
-    
-    
-     function importExercise($context, $type) {
+        
+     function importExercise($context) {
         global $CFG;
         if(is_array($context)) {
-            $class = $this->getTypeProperty('class', $type);
+            $class = $CFG->ExerciseProperty['class'];
             $exercise = new $class();
             \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $context);
-            $exercise->setType($type);
         } 
         $exercise->setCtId($this->getCtId());
         return $exercise;
@@ -128,12 +121,14 @@ class CT_Main implements \JsonSerializable
         
     }
     
-    function getTypeProperty($property) {
+    function getLanguages() {
         global $CFG;
-        $typeNames = array_keys($CFG->CT_Types['types']);
-        $type = $typeNames[$this->getType()];
-        // var_dump($typeNames[$this->getType()]);die;
-        return $CFG->CT_Types['types'][$type][$property];
+        return $CFG->ExerciseProperty['codeLanguages'];
+    }
+
+    function getProperty($property) {
+        global $CFG;
+        return $CFG->ExerciseProperty[$property];
     }
 
     /**
@@ -161,8 +156,7 @@ class CT_Main implements \JsonSerializable
         return $this->exercises;
     }
     
-    
-     function getTest() {
+    function getTest() {
         // TODO Crear array de objetos Code o SQL según corresponda
         // a través de JOIN con la tabla correspondiente
         if (!is_array($this->exercises)) {
@@ -365,22 +359,6 @@ class CT_Main implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param mixed $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getSeenSplash()
     {
         return $this->seen_splash;
@@ -464,8 +442,7 @@ class CT_Main implements \JsonSerializable
             ':user_id' => $this->getUserId(),
             ':context_id' => $this->getContextId(),
             ':link_id' => $this->getLinkId(),
-            ':title' => $this->getTitle(),
-            ':type' => $this->getType(),
+            ':title' => $this->getTitle(),       
             ':seen_splash' => $this->getSeenSplash(),
             ':preloaded' => $this->getPreloaded(),
             ':shuffle' => $this->getShuffle(),
@@ -482,8 +459,7 @@ class CT_Main implements \JsonSerializable
             'user_id' => $this->getUserId(),
             'context_id' => $this->getContextId(),
             'link_id' => $this->getLinkId(),
-            'title' => $this->getTitle(),
-            'type' => $this->getType(),
+            'title' => $this->getTitle(),           
             'seen_splash' => $this->getSeenSplash(),
             'preloaded' => $this->getPreloaded(),
             'shuffle' => $this->getShuffle(),

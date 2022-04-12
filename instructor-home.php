@@ -11,10 +11,7 @@ if (!$main->getTitle()) {
 }
 
 $exercises = $main->getExercises();
-
-$typeNames = array_keys($CFG->CT_Types['types']);
-$type = $typeNames[$main->getType()];
-$typeName = $CFG->CT_Types['types'][$type]['name'];
+$tittleName = $CFG->ExerciseProperty['name'];
 
 // Clear any preview responses if there are exercises
 if ($exercises) \CT\CT_Answer::deleteInstructorAnswers($exercises, $CONTEXT->id);
@@ -38,11 +35,7 @@ if($REST_CLIENT_REPO->getIsOnline()){
     }
 }
 
-
-
 $grades = $main->getGradesCtId();
-
-
 $gradesCount = 0;
 try {
     $grades = $main->getGradesCtId();
@@ -53,7 +46,6 @@ try {
     logg($errorMessage);
     $_SESSION["error"] = $errorMessage;
 }
-
 
 $gradesMap = array_reduce($grades,function($acc, $el){
     $acc['min'] = min(
@@ -76,7 +68,7 @@ require_once($CFG->codetestBasePath."/util/preloadExercises.php");
 
 echo $twig->render('pages/instructor-home.php.twig', array(
     'main' => $main,
-    'type' => $typeName,
+    'tittleName' => $tittleName,
     'exercises' => $exercises,
     'usagesCount' => $usageCount,
     'gradesCount' => $gradesCount,

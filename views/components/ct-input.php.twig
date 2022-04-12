@@ -19,6 +19,12 @@
             {% if value is defined %}
                 value="{{value}}"
             {% endif %}
+            {% if languages is defined %}
+                languages="{{languages}}"
+            {% endif %}
+            {% if exerciseLanguage is defined %}
+                exerciseLanguage="{{exerciseLanguage}}"
+            {% endif %}
             type="{{type|default('text')}}"
         >
     {% endblock %}

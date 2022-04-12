@@ -8,7 +8,7 @@ require_once "../../initTsugi.php";
 
 $exercise = new \CT\CT_Exercise($_GET['exerciseId']);
 $answer = new \CT\CT_Answer($_GET['answerId']);
-$exercise = $exercise->getExerciseByType();
+$exercise = new \CT\CT_ExerciseCode;
 $class =  get_class($exercise);
 if($class == "CT\CT_ExerciseCode") {
 	$solution = $exercise->getOutputFromCode(
@@ -19,13 +19,7 @@ if($class == "CT\CT_ExerciseCode") {
 	} else {
 		$answertxt = $exercise->getExerciseOutputTest();
 	}
-	echo \CT\CT_Answer::getDiffWithSolution($solution, $answertxt);
-} elseif($class == "CT\CT_ExerciseSQL") {
-	$solution = $exercise->getQueryResult();
-	$answertxt = $exercise->getQueryResult($answer->getAnswerTxt());
-	if(is_array($solution) && is_array($answertxt)) {
-		echo \CT\CT_Answer::getDiffWithSolution(var_dump($solution), var_dump($answertxt));
-	}
+echo \CT\CT_Answer::getDiffWithSolution($solution, $answertxt);
 }
 ?>
 		</pre>

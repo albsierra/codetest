@@ -10,7 +10,6 @@ class CT_Exercise implements \JsonSerializable {
     private $exercise_num;
     private $testId;
     private $title;
-    private $type;
     private $difficulty;
     private $statement;
     private $hint;
@@ -23,6 +22,9 @@ class CT_Exercise implements \JsonSerializable {
     private $keywords;
     private $exercise_must;
     private $exercise_musnt;
+    private $owner;
+    private $author;
+    private $sessionLanguage;
 
     //get the exercise from de db
     static function withId($exercise_id = null) {
@@ -47,8 +49,7 @@ class CT_Exercise implements \JsonSerializable {
             $this->title = $exercise->getTitle();
             $this->akId = $exercise->getAkId();
             $this->statement = $exercise->getStatement();
-            $this->hint = $exercise->getHint();
-            $this->type = $exercise->getType();
+            $this->hint = $exercise->getHint();       
             $this->difficulty = $exercise->getDifficulty();
             $this->averageGradeUnderstability = $exercise->getAverageGradeUnderstability();
             $this->averageGradeDifficulty = $exercise->getAverageGradeDifficulty();
@@ -58,6 +59,9 @@ class CT_Exercise implements \JsonSerializable {
             $this->keywords = $exercise->getKeywords();
             $this->exercise_must = $exercise->getExerciseMust();
             $this->exercise_musnt = $exercise->getExerciseMusnt();
+            $this->owner = $_SESSION["lti"]["link_title"];
+            $this->author = $_SESSION["lti"]["user_displayname"];
+            $this->sessionLanguage = $SESSION["lti"]["user_locale"];
         }
     }
 
@@ -69,8 +73,7 @@ class CT_Exercise implements \JsonSerializable {
             'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
             'statement' => $this->getStatement(),
-            'hint' => $this->getHint(),
-            'type' => $this->getType(),
+            'hint' => $this->getHint(),  
             'akId' => $this->getAkId(),
             'difficulty' => $this->getDifficulty(),
             'averageGradeUnderstability' => $this->getAverageGradeUnderstability(),
@@ -80,7 +83,10 @@ class CT_Exercise implements \JsonSerializable {
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
             'exercise_must' => $this->getExerciseMust(),
-            'exercise_musnt' => $this->getExerciseMusnt()
+            'exercise_musnt' => $this->getExerciseMusnt(),
+            'owner' => $this->getOwner(),
+            'author' => $this->getAuthor(),
+            'sessionLanguage' => $this->getSessionLanguage()
         ];
     }
 
@@ -138,7 +144,6 @@ class CT_Exercise implements \JsonSerializable {
         array_push($this->answers, $answer);
         $main = $this->getMain();
         $main->gradeUser($answer->getUserId());
-
         $array['answer'] = $answer;
         $array['exists'] = $exists;
         return $array;
@@ -227,20 +232,14 @@ class CT_Exercise implements \JsonSerializable {
     static function findExerciseForImportId($id) {
         global $REST_CLIENT_REPO;
         $url = "api/tests/getExercise/$id";
-        $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $mainIsSQL = $main->getType() == '0';
-
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);       
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $exerciseArray = $response->toArray();
-
         $exercise = json_decode(json_encode($exerciseArray));
         
-        //check what type of exercise is to choose constructor
-        if ($mainIsSQL) {
-            $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
-        } else {
+        //check what type of exercise is to choose constructor  
             $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
-        }
+        
         return $CTExercise;
     }
 
@@ -248,24 +247,18 @@ class CT_Exercise implements \JsonSerializable {
     static function findExerciseForImportAkId($id) {
         global $REST_CLIENT_REPO;
         $url = "api/tests/getExercise/id/$id";
-        $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $mainIsSQL = $main->getType() == '0';
-
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);        
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $respBody = $response->getContent();
         if(strlen($respBody) == 0){
             return null;
         }
-        $exerciseArray = $response->toArray();
 
-        $exercise = json_decode(json_encode($exerciseArray));
+        $exerciseArray = $response->toArray();
+        $exercise = json_decode(json_encode($exerciseArray));        
+        //check what type of exercise is to choose constructor     
+        $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
         
-        //check what type of exercise is to choose constructor
-        if ($mainIsSQL) {
-            $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
-        } else {
-            $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
-        }
         return $CTExercise;
     }
 
@@ -273,18 +266,16 @@ class CT_Exercise implements \JsonSerializable {
         $response = json_decode($json);
         $exercises = array();
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
-        $mainIsSQL = $main->getType() == '0';
+        
         
         if ($response) {
             foreach ($response as $exercise) {
 
                 
                 //check what type of exercise is to choose constructor
-                if ($mainIsSQL) {
-                    $CTExercise = CT_Test::mapObjectToSQLExercise($exercise);
-                } else {
+               
                     $CTExercise = CT_Test::mapObjectToCodeExercise($exercise);
-                }
+                
                 array_push($exercises, $CTExercise);
             }
             return $exercises;
@@ -325,15 +316,13 @@ class CT_Exercise implements \JsonSerializable {
         return count($this->getAnswers());
     }
     
-    public function getExerciseByType()
+    public function getExerciseCode()
     {
         global $CFG;
-        $class = $this->getMain()->getTypeProperty('class', $this->getType());
-        if($class=='CT\CT_ExerciseSQL' ){
-            return CT_ExerciseSQL::withId($this->getExerciseId());
-        }else{
+        $class = $this->getMain()->getProperty('class');
+        
         return new $class($this->getExerciseId());
-        }
+        
         
         }
 
@@ -371,7 +360,6 @@ class CT_Exercise implements \JsonSerializable {
                 ':exercise_id' => $this->getExerciseId(),
                 ':ct_id' => $this->getCtId(),
                 ':exercise_num' => $this->getExerciseNum(),
-                ':type' => $this->getType(),
                 ':akId' => $this->getAkId(),
                 ':title' => $this->getTitle(),
                 ':statement' => $this->getStatement(),
@@ -435,6 +423,28 @@ class CT_Exercise implements \JsonSerializable {
         return new CT_Main($this->getCtId());
     }
 
+    public function getSessionLanguage() {
+        return $this->sessionLanguage;
+    }
+
+    /**
+     * @param mixed $sessionLanguage
+     */
+    public function setSessionLanguage($sessionLanguage) {
+        $this->sessionLanguage = $sessionLanguage;
+    }
+
+    public function getAuthor() {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author) {
+        $this->author = $author;
+    }
+
     /**
      * @return mixed
      */
@@ -463,6 +473,14 @@ class CT_Exercise implements \JsonSerializable {
         $this->ct_id = $ct_id;
     }
 
+    
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner) {
+        $this->owner = $owner;
+    }
+
     public function setAkId($akId) {
         $this->akId = $akId;
     }
@@ -485,13 +503,10 @@ class CT_Exercise implements \JsonSerializable {
         $this->exercise_num = $exercise_num;
     }
 
-    public function getType() {
-        return $this->type;
-    }
-
     public function getHint() {
         return $this->hint;
     }
+
     public function setHint($hint): void {
         $this->hint = $hint;
     }
@@ -505,10 +520,6 @@ class CT_Exercise implements \JsonSerializable {
 
     public function getDifficulty() {
         return $this->difficulty;
-    }
-
-    public function setType($type): void {
-        $this->type = $type;
     }
 
     public function setDifficulty($difficulty): void {
@@ -573,6 +584,10 @@ class CT_Exercise implements \JsonSerializable {
 
     public function getKeywords() {
         return $this->keywords;
+    }
+
+    public function getOwner() {
+        return $this->owner;
     }
 
     public function setKeywords($keywords): void {

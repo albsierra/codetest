@@ -15,11 +15,9 @@
                 <span class="sr-only">{%trans%}instructor.delete.exercise{%endtrans%}</span>
             </a>
         </div>
-    </div>
-    {% if mainType == '1' %}
-        <div class="ml-[48px] pt-4" style="width: calc(100% - 48px);">
-            <pre class="bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors h-96">{{exercise.getStatement()|raw}}</pre>
-        </div>
-    {% endif %}
+    </div>  
+    <div class="ml-[48px] pt-4" style="width: calc(100% - 48px);">
+         <pre class="bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors h-96">{{exercise.getStatement()|raw}}</pre>
+    </div>    
 </li>
 

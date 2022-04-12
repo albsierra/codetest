@@ -85,8 +85,7 @@ class CT_DAO {
                 . "`user_id` = :user_id, "
                 . "`context_id` = :context_id, "
                 . "`link_id` = :link_id, "
-                . "`title` = :title, "
-                . "`type` = :type, "
+                . "`title` = :title, "   
                 . "`seen_splash` = :seen_splash, "
                 . "`preloaded` = :preloaded, "
                 . "`shuffle` = :shuffle, "
@@ -99,8 +98,8 @@ class CT_DAO {
         );
         $ExerciseQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_exercise "
-                . "( `exercise_id`, `ct_id`, `exercise_num` , `type`, `title`, `exercise_must`, `exercise_musnt`, `statement`, `hint`, `ak_id` ) "
-                . "VALUES ( :exercise_id, :ct_id, :exercise_num, :type, :title, :exercise_must, :exercise_musnt, :statement, :hint, :akId)",
+                . "( `exercise_id`, `ct_id`, `exercise_num` , `title`, `exercise_must`, `exercise_musnt`, `statement`, `hint`, `ak_id` ) "
+                . "VALUES ( :exercise_id, :ct_id, :exercise_num, :title, :exercise_must, :exercise_musnt, :statement, :hint, :akId)",
             'update' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
                 . "`exercise_num` = :exercise_num, "
@@ -110,8 +109,7 @@ class CT_DAO {
                 . "`ct_id` = :ct_id, "
                 . "`exercise_num` = :exercise_num, "
                 . "`exercise_id` = :exercise_id, "
-                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
-                    
+                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",            
             'delete' => "DELETE FROM {$connection['p']}ct_exercise WHERE `exercise_id` = :exercise_id AND `ct_id` = :ct_id;",
             'exists' => "SELECT exercise_id as exerciseId FROM {$connection['p']}ct_exercise WHERE "
             . "exercise_id = :exercise_id AND ct_id = :ct_id;",

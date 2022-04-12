@@ -46,12 +46,12 @@
         </div>
 
         {%
-            include (CFG.CT_Types.studentsPath ~ main.getTypeProperty('studentView', exercise.getType()))
+            include (CFG.CT_Types.studentsPath ~ main.getProperty('studentView'))
             with { inputValue: testsObj.inputValue, outputValue: testsObj.outputValue }
         %}
 
         <div class="w-full mt-4 mb-3">
-            {% set languages = main.getTypeProperty('codeLanguages') %}
+            {% set languages = main.getLanguages() %}
             {% set exerciseLanguage = exercise.getExerciseLanguage() %}
             {% embed "components/ct-textarea.php.twig"
                 with {

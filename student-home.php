@@ -1,27 +1,22 @@
 <?php
 require_once('initTsugi.php');
-
 include('views/dao/menu.php');
 
 $SetID = $_SESSION["ct_id"];
-
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
-
 $toolTitle = $main->getTitle() ? $main->getTitle() : "Code Test";
 
 $exercises = $main->getExercises();
 $totalExercises = count($exercises);
-
 $currentExerciseNumber = isset($_GET['exerciseNum']) ? $_GET['exerciseNum'] : 1;
 
-$firstExerciseId = $exercises[$currentExerciseNumber - 1]->getAkId();
-
-$exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/tests");
-$testsResponseObj = $exerciseTestsResponse->toArray();
-
-$testsObj = sizeof($testsResponseObj) > 0 ? $testsResponseObj[0] : null;
-
-// var_dump($testsObj);die;
+if($totalExercises > 0){
+    
+    $firstExerciseId = $exercises[$currentExerciseNumber - 1]->getAkId();
+    $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/tests");
+    $testsResponseObj = $exerciseTestsResponse->toArray();
+    $testsObj = sizeof($testsResponseObj) > 0 ? $testsResponseObj[0] : null;
+}
 
 $user = new \CT\CT_User($USER->id);
 

@@ -32,13 +32,14 @@ foreach ($REST_CLIENT_AUTHOR->getClient()->stream($exerciseFileResponse) as $chu
 $formFields = [
     'PHPSESSID' => session_id(),
     'exercise' => DataPart::fromPath($filename),
+    'sessionLanguage' =>$TSUGI_LOCALE
 ];
 $formData = new FormDataPart($formFields);
-
 
 $uploadResponse = $REST_CLIENT_REPO->getClient()->request('POST', 'api/exercises/import-file', [
     'headers' => $formData->getPreparedHeaders()->toArray(),
     'body' => $formData->bodyToIterable(),
+    
 ]);
 
 

@@ -20,9 +20,6 @@ $exercisesContentArr = json_decode($exercisesContent, true);
 $codeExercisesContent = $zip->getFromName('exercises/code_exercises.json');
 $codeExercisesContentArr = json_decode($codeExercisesContent, true);
 
-$sqlExercisesContent = $zip->getFromName('exercises/sql_exercises.json');
-$sqlExercisesContentArr = json_decode($sqlExercisesContent, true);
-
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
 $main = \CT\CT_Main::getMainFromContext($CONTEXT->id, $LINK->id, $USER->id, $currentTime);
@@ -53,17 +50,9 @@ $setCtIdFromMain = function($el) use ($main) {
 
 foreach($exercisesContentArr as $exercise) {
     $oldId = $exercise['exercise_id'];
-    $exercise['exercise_id'] = null;
-
-
-    $type = $exercise['type'];
+    $exercise['exercise_id'] = null;  
     $difficulty = $exercise['difficulty'];
-    if($main->getType() == '1'){
-        $class = \CT\CT_ExerciseCode::class;
-    }else{
-        $class = \CT\CT_ExerciseSQL::class;
-    }
-
+    $class = \CT\CT_ExerciseCode::class;
 
     $exerciseCls = new $class();
     \CT\CT_DAO::setObjectPropertiesFromArray($exerciseCls, $exercise);
@@ -77,17 +66,11 @@ foreach($exercisesContentArr as $exercise) {
     }
     $exerciseCls->setType($type);
     $exerciseCls->setDifficulty($difficulty);
-
     $result = $main->saveExercises([$exerciseCls]);
 
-    $object = json_decode($result);
-    if ($main->getType() == '1') {
-        $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
-    } else {
-        $exercise1 = \CT\CT_Test::mapObjectToSQLExercise($object);
-    }
+    $object = json_decode($result); 
+    $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);   
     $exercise1->setCtId($_SESSION["ct_id"]);
-
     $exercise1->save();
 }
 

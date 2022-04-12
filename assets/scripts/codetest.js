@@ -180,14 +180,10 @@ $(() => {
 
             const { exerciseId } = $(ev.currentTarget).data();
 
-            // console.log(exerciseId);
-
             const downloadAkExerciseResponse = await $.ajax({
                 type: "GET",
                 url: `download-ak-exercise.php?exerciseId=${exerciseId}&${_TSUGI.ajax_session}`,
             });
-
-            // console.log({downloadAkExerciseResponse});
 
             const importExerciseResponse = await $.ajax({
                 type: "POST",
@@ -198,7 +194,6 @@ $(() => {
                 },
             });
 
-            // console.log({importExerciseResponse});
             window.location.replace(`instructor-home.php?${_TSUGI.ajax_session}`);
 
         })
@@ -944,8 +939,6 @@ global.showNewExerciseRow = function() {
     const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
 
     var theForm = $("#exerciseTextForm-1");
-    var language = $("#typeSelect").val();
-    var difficulty = $("#difficultySelect").val();
     updateCKeditorElements();
     window.codeEditor.save();
 
@@ -993,7 +986,7 @@ global.showNewExerciseRow = function() {
             type: "POST",
             dataType: "json",
             url: theForm.prop("action"),
-            data: theForm.serialize() + '&type=' + language + '&difficulty=' +difficulty+'&' + _TSUGI.ajax_session,
+            data: theForm.serialize() +'&' + _TSUGI.ajax_session,
             success: function (data) {
              resetForm(theForm);
              location = location.href.replace("create-exercise.php?", "exercises-list.php?")
