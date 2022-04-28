@@ -10,7 +10,7 @@ if ($USER->instructor) {
     if (isset($exercisePost['title']) && trim($exercisePost['title']) != '' && isset($exercisePost['exercise_language']) && trim($exercisePost['exercise_language']) != '') {
         $exercisePost['author'] = $_SESSION["lti"]["user_displayname"];
         $exercisePost['owner'] = $_SESSION["lti"]["link_title"];
-        $exercisePost['sessionLanguage'] = $_SESSION["lti"]["user_locale"];
+        $exercisePost['sessionLanguage'] = isset($_SESSION["lti"]["user_locale"]) ? $_SESSION["lti"]["user_locale"] : "en";
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
         $exercise = $main->createExercise($exercisePost,strtolower($exercisePost['exercise_language']),$exercisePost["difficulty"]);
         $exercises = Array();
