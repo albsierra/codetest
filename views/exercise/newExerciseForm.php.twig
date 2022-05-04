@@ -8,7 +8,7 @@
         <textarea class="form-control" name="exercise[keywords]" id="exerciseKeywords" rows="3" placeholder="keyword1&#10;keyword2"></textarea>
 
         {# The tilde characther '~' is used to concatenate strings, turns operands in strings and then concatenates #}
-        {{ include (CFG.CT_Types.formsPath ~ main.getProperty('instructorForm')) }}
+        {{ include (main.getProperty('instructorForm')) }}
         
         <label for="exerciseMust-1" class="labelForm">{%trans%}new-exercise-form.mustcontainseparatedlines{%endtrans%}</label>
         <textarea class="form-control" id="exerciseMust-1" name="exercise[exercise_must]" rows="2"></textarea>
