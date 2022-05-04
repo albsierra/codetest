@@ -16,7 +16,6 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
     const DBMS_MYSQL = 0;
     const DBMS_ORACLE = 1;
     const DBMS_SQLITE = 2;
-    const MUSNT = array('commit');
 
     public function __construct($exercise_id = null)
     {
@@ -29,7 +28,7 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
         \CT\CT_DAO::setObjectPropertiesFromArray($this, $context);
         $this->setExerciseParentProperties();
     }
-    
+
     static function withId($exercise_id = null)
     {
         $exercise =new CT_ExerciseSQL();
@@ -42,9 +41,9 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
         \CT\CT_DAO::setObjectPropertiesFromArray($exercise, $context);
         $exercise->setExerciseParentProperties();
           return $exercise;
-     
+
     }
-    
+
     //necessary to use json_encode with exerciseSQL objects
       public function jsonSerialize() {
         return [
@@ -60,8 +59,6 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
             'averageGrade' => $this->getAverageGrade(),
             'numberVotes' => $this->getNumberVotes(),
             'keywords' => $this->getKeywords(),
-            'exercise_must' => $this->getExerciseMust(),
-            'exercise_musnt' => $this->getExerciseMusnt(),
             'exercise_dbms' => $this->getExerciseDbms(),
             'exercise_sql_type' => $this->getExerciseSQLType(),
             'exercise_database' => $this->getExerciseDatabase(),
@@ -109,18 +106,6 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
         return $connection;
     }
 
-    protected function preGrade(CT_Answer $answer)
-    {
-        $answerTxt = $answer->getAnswerTxt();
-        $preGrade = $this->contains($answerTxt, implode ( PHP_EOL , self::MUSNT ), false);
-        if(!$preGrade) {
-            $answer->setAnswerSuccess(false);
-        } else {
-            $preGrade = parent::preGrade($answer);
-        }
-        return $preGrade;
-    }
-
     public function grade($answer) {
         $outputSolution = $this->getQueryResult();
         $outputAnswer =  $this->getQueryResult($answer->getAnswerTxt());
@@ -138,7 +123,7 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
 				$resultQuery->execute();
 			}
 		}
-	
+
 		if ($this->getExerciseType() == 'DML' || $this->getExerciseType() == 'DDL') {
 			$query = explode(";", $this->getExerciseProbe())[0];
 			if($resultQuery = $connection->prepare($query)) {
@@ -456,10 +441,10 @@ class CT_ExerciseSQL extends CT_Exercise  implements \JsonSerializable
             ':exercise_solution' => $this->getExerciseSolution(),
             ':exercise_probe' => $this->getExerciseProbe(),
             ':exercise_onfly' => $this->getExerciseOnfly(),
-             
+
         );
         $query['PDOX']->queryDie($query['sentence'], $arr);
-          
+
     }
 
 }
