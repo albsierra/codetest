@@ -9,6 +9,8 @@
             action="actions/AddExercise.php"
             method="post"
             class="exercise-form flex flex-wrap gap-2 justify-between"
+            enctype="multipart/form-data"
+
         >
             <input id="ownerName" type="hidden" value={{owner}} name="owner">
 
@@ -52,119 +54,205 @@
                     {% endembed %}
                 </div>
             </div>
-                <div class="w-full mt-3">
-                    {% embed "components/ct-textarea.php.twig"
-                        with {
-                            label: "new-exercise-form.labels.statement"|trans,
-                            name: 'exercise[statement]',
-                            id: 'exercise[statement]',
-                            labelFor: 'exercise[statement]',
-                            inputClass: 'ckeditor',
-                            required: true
-                        } only
-                    %}
-                    {% endembed %}
-                </div>
-                <div class="w-full mt-4">
 
-                    {% embed "components/ct-textarea.php.twig"
-                        with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1" } only
-                        %}
-                    {% endembed %}
-                </div>
-                <div class="w-full mt-4">
-                    {% set exercise = newExercise %}
-                    {% set languages = validatorService.getCodeLanguages() %}
-                    {% set exerciseLanguage = exercise.getExerciseLanguage() %}
-                    {% embed "components/ct-textarea.php.twig"
-                        with {
-                            label: "exercise-code-form.codesolution"|trans,
-                            name: 'exercise[exercise_solution]',
-                            rows: "10",
-                            id: 'exercise[exercise_solution]',
-                            labelFor: 'exercise[exercise_solution]',
-                            languages: languages,
-                            exerciseLanguage: exerciseLanguage,
-                            required: true
-                        } only
-                    %}
-                        {% block text %}
-                            <div class="flex items-center">
-                                <span>
-                                    {%trans%}exercise-code-form.codesolution{%endtrans%}<span class="requiredElement"> *</span>
-                                </span>
-                                <div class="ml-auto">
-                                    {% embed "components/ct-input.php.twig"
-                                        with {
-                                            label: "Language",
-                                            name: 'exercise[exercise_language]',
-                                            hideLabel: true,
-                                            languages: languages,
-                                            exerciseLanguage: exerciseLanguage
+            <div class="w-full mt-3">
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "new-exercise-form.labels.statement"|trans,
+                        name: 'exercise[statement]',
+                        id: 'exercise[statement]',
+                        labelFor: 'exercise[statement]',
+                        inputClass: 'ckeditor',
+                        required: true
+                    } only
+                %}
+                {% endembed %}
+            </div>
 
-                                        } only
-                                    %}
-                                        {% block input %}
-                                            <select id="typeSelect" name="exercise[exercise_language]" style="background: #fff;" id="exerciseLanguagee">
-                                                {% for language in languages %}
-                                                    <option value="{{ language }}" {{ exercise.getExerciseLanguage() == language ? "selected" : "" }}>{{ language}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        {% endblock %}
-                                    {% endembed %}
-                                </div>
-                            </div>
-                        {% endblock %}
-                    {% endembed %}
-                </div>
-                <div class="w-full mt-4">
-                    {% embed "components/ct-textarea.php.twig"
-                        with {
-                            label: "new-exercise-form.labels.tests"|trans,
-                            name: '',
-                            required:true
-                        } only
-                        %}
-                        {% block input %}
-                            <div class="p-0 flex gap-3 items-stretch">
-                                <div class="w-full">
-                                    <div class="text-center">
-                                       {%trans%}new-exercise-form.labels.inputs{%endtrans%}
-                                    </div>
-                                    <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5" id="input"></textarea>
-                                </div>
-                                <div class="flex items-center pt-6">
-                                    <span>
-                                        →
-                                    </span>
-                                </div>
-                                <div class="w-full">
-                                    <div class="text-center">
-                                        {%trans%}new-exercise-form.labels.outputs{%endtrans%}
-                                    </div>
-                                    <textarea class="tests-textarea" name="exercise[exercise_output_test]" cols="30" rows="5" id="output"></textarea>
-                                </div>
-                            </div>
-                        {% endblock %}
-                    {% endembed %}
-                </div>
+            <div class="w-full mt-4">
 
-                <div class="w-full">
-                    <div class="flex items-center justify-end py-3 mt-3 gap-3">
-                        <div id="requiredAlert" class="hidden">
-                            <strong>
-                                <span class="important"> ! </span>
-                                {%trans%}warning.obligatory{%endtrans%}
-                            </strong>
+                {% embed "components/ct-textarea.php.twig"
+                    with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1" } only
+                %}
+                {% endembed %}
+
+            </div>
+
+            <div class="w-full mt-4">
+                {% set exercise = newExercise %}
+                {% set languages = validatorService.getCodeLanguages() %}
+                {% set exerciseLanguage = exercise.getExerciseLanguage() %}
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "exercise-code-form.codesolution"|trans,
+                        name: 'exercise[exercise_solution]',
+                        rows: "10",
+                        id: 'exercise[exercise_solution]',
+                        labelFor: 'exercise[exercise_solution]',
+                        languages: languages,
+                        exerciseLanguage: exerciseLanguage,
+                        required: true
+                    } only
+                %}
+
+                {% block text %}
+                    <div class="flex items-center">
+                        <span>
+                            {%trans%}exercise-code-form.codesolution{%endtrans%}<span class="requiredElement"> *</span>
+                        </span>
+
+                        <div class="ml-auto">
+                            {% embed "components/ct-input.php.twig"
+                                with {
+                                    label: "Language",
+                                    name: 'exercise[exercise_language]',
+                                    hideLabel: true,
+                                    languages: languages,
+                                    exerciseLanguage: exerciseLanguage
+
+                                    } only
+                            %}
+
+                            {% block input %}
+                                <select id="typeSelect" name="exercise[exercise_language]" style="background: #fff;" id="exerciseLanguagee">
+                                {% for language in languages %}
+                                <option value="{{ language }}" {{ exercise.getExerciseLanguage() == language ? "selected" : "" }}>{{ language}}</option>
+                                {% endfor %}
+                                </select>
+                            {% endblock %}
+                            {% endembed %}
                         </div>
-                        <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">  <span aria-hidden="true" class="fa fa-fw fa-save"></span>
-                            {%trans%}create-exercise-modal.save-exercise{%endtrans%}</button>
-                        <button type="button" class="btn btn-default" onclick="exerciseCancelAction()" data-dismiss="modal"><span aria-hidden="true" class="fa fa-fw fa-times"></span>
-                            {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}</button>
+                    </div>
+                {% endblock %}
+                {% endembed %}
+            </div>
+            <div class="w-full mt-4">
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "new-exercise-form.labels.tests"|trans,
+                        name: '',
+                        required:true
+                    } only
+                %}
+                {% block input %}
+                    <div class="p-0 flex gap-3 items-stretch">
+                        <div class="w-full">
+                            <div class="text-center">
+                                {%trans%}new-exercise-form.labels.inputs{%endtrans%}
+                            </div>
+
+                            <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5" id="input"></textarea>
+
+                        </div>
+
+                            <div class="flex items-center pt-6">
+                                <span>
+                                     →
+                                 </span>
+                            </div>
+                            <div class="w-full">
+                                <div class="text-center">
+                                    {%trans%}new-exercise-form.labels.outputs{%endtrans%}
+                                </div>
+
+                                <textarea class="tests-textarea" name="exercise[exercise_output_test]" cols="30" rows="5" id="output"></textarea>
+
+                            </div>
+                    </div>
+                {% endblock %}
+                {% endembed %}
+            </div>
+                {# <div class="w-full mt-4">
+                    {% embed "components/ct-input.php.twig"
+                        with {
+                            label: "new-exercise-form.filesToUploadtitle"|trans,
+                            name: 'filesToUpload[]',
+                            id: 'filesToUpload',
+                            type: 'file',
+                            multiple: '',
+                        } only
+                        %}
+                    {% endembed %}
+                </div> #}
+
+                {# <div class="w-6/12 mt-4">
+                    <a class="buttonCollapse" data-toggle="collapse" href="#fileCollapse" role="button" aria-expanded="false" aria-controls="fileCollapse">
+                    FICHEROS
+                    </a> #}
+            <div class="w-full mt-4 librariesClass">
+              
+                <div  class="librariesTittle" data-toggle="collapse" href="#fileCollapse" role="button" aria-expanded="true" aria-controls="fileCollapse">
+                   <span class="p-2">{%trans%}create-exercise-modal.library-title{%endtrans%}</span>
+                </div>
+                <div class="collapse in" id="fileCollapse">
+                    <div>
+                        <div class="m-2">
+                            <input class="w-1/12 librariInput" type='button' onclick='add()' value=' + '/>
+                            <span class="ml-1">{%trans%}create-exercise-modal.add-library{%endtrans%}</span>
+                        </div>
+
+                        <div class="flex buttons flex-col gap-2 ml-1">
+                                    
+                            <div id='anchor' class="mr-1"></div>
+                                    
+                        </div>
+                        <div id="removeLibrariesBlock" class="m-2" style='display:none'>
+                            <input class="w-1/12 librariInput" type='button' onclick='remove()' value=' - ' />
+                            <span class="ml-1">{%trans%}create-exercise-modal.delete-library{%endtrans%}</span>
+                        </div>
                     </div>
                 </div>
+                    
+            </div>
+
+
+
+            
+
+		
+		
+            <div class="w-full">
+                <div class="flex items-center justify-end py-3 mt-3 gap-3">
+                    <div id="requiredAlert" class="hidden">
+                        <strong>
+                        <span class="important"> ! </span>
+                        {%trans%}warning.obligatory{%endtrans%}
+                        </strong>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="showNewExerciseRow()">
+                        <span aria-hidden="true" class="fa fa-fw fa-save"></span>
+                        {%trans%}create-exercise-modal.save-exercise{%endtrans%}
+                    </button>
+                    <button type="button" class="btn btn-default" onclick="exerciseCancelAction()" data-dismiss="modal">
+                        <span aria-hidden="true" class="fa fa-fw fa-times"></span>
+                        {%trans%}create-exercise-modal.cancel-exercise{%endtrans%}
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
+
+    <div id='template' style='display:none' class='section pb-1 mt-1 border p-4'>
+
+        <div class="block">
+            <input type='radio' id='radio_librarytext_template' value="library_text" class="ml-1" checked/>
+            <label class="pl-1 pr-1">TEXT</label>
+            <input type='radio' id='radio_libraryfile_template' value="library_file" class="ml-1" />
+            <label class="pl-1 pr-1">FILE</label>
+        </div>
+            <div id="input-libraryText">
+
+                <span>Title</span>
+                <input type='text' id='library_texttitle_template' class="ct-input-text mt-1 mb-1" />
+
+                <span>Body</span>
+                <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5" id="library_textbody_template"></textarea>
+
+            </div>
+
+            <input type='file' id='library_file_template' class="mt-1 mb-1" style='display:none' />   
+    </div>
+
 {% endblock %}
 {% block footer %}
 <script src="public/build/codemirror/codemirror.js"></script>
@@ -176,4 +264,84 @@
 <script src="public/build/codemirror/htmlmixed/htmlmixed.js"></script>
 <script src="public/build/codemirror/css/css.js"></script>
 <script src="public/build/codemirror/clike/clike.js"></script>
+<script>
+			var count = 0;
+			
+			function setProperties(obj, elem, name){
+				let base = elem.replace('template', '');
+				let jqElem = obj.find('#'+elem);
+				jqElem.prop('id', base+count);
+				if(name) {
+					jqElem.prop('name', name+count);
+				} else {
+					jqElem.prop('name', base+count);
+				}
+				return jqElem;
+			}
+			
+			function add(){
+				count++;
+
+                if(count > 0){
+                    let deleteItem = $('#removeLibrariesBlock');
+                    deleteItem.show();
+                }
+
+				let newobj = $('#template').clone();
+				
+				console.log('count: '+count);
+				console.log('newobj: ',newobj);
+				
+				newobj.prop('id', 'section_'+count);
+				setProperties(newobj, 'library_texttitle_template');
+                setProperties(newobj, 'library_textbody_template');
+				setProperties(newobj, 'library_file_template');
+				setProperties(newobj, 'radio_librarytext_template', 'radiosel_').change(onChangeRadio);
+				setProperties(newobj, 'radio_libraryfile_template', 'radiosel_').change(onChangeRadio);
+				/*newobj.find('#text_template').prop('id', 'text_'+count).prop('name', 'text_'+count);
+				newobj.find('#title_template').prop('id', 'title_'+count).prop('name', 'title_'+count);
+				newobj.find('#radio_A_template').prop('id', 'radio_A_'+count).prop('name', 'radiosel_'+count);
+				newobj.find('#radio_B_template').prop('id', 'radio_B_'+count).prop('name', 'radiosel_'+count);*/
+				
+				newobj.appendTo('#anchor');
+				
+				newobj.show();
+			}
+			
+			function hideAll(countval){
+				let section = $('#section_'+countval);
+				section.find('div[id=input-libraryText]').hide();
+				section.find('#library_file_'+countval).hide();
+			}
+			
+			function onChangeRadio(elem){
+				let sel = '';
+				console.log(elem);
+				
+				let countval = elem.target.name.replace('radiosel_', '');
+				switch(elem.target.value){
+					case 'library_text':
+						sel = 'input-libraryText';
+						break;
+					case 'library_file':
+						sel = 'library_file_'+countval;
+						break;
+				}
+				
+				if(sel){
+					hideAll(countval);
+					$('#section_'+countval).find('#'+sel).show()
+				}
+
+			}
+			
+			function remove(){
+				$('#anchor').find('.section:last-child').remove();
+				count--;
+                 if(count <= 0){
+                    let deleteItem = $('#removeLibrariesBlock');
+                    deleteItem.hide();
+                }
+			}
+</script>
 {% endblock %}

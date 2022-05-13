@@ -23,6 +23,7 @@ class CT_Exercise implements \JsonSerializable {
     private $owner;
     private $author;
     private $sessionLanguage;
+    private $libraries;
 
     //get the exercise from de db
     static function withId($exercise_id = null) {
@@ -58,6 +59,7 @@ class CT_Exercise implements \JsonSerializable {
             $this->owner = $_SESSION["lti"]["link_title"];
             $this->author = $_SESSION["lti"]["user_displayname"];
             $this->sessionLanguage = $SESSION["lti"]["user_locale"];
+            $this->libraries = $exercise->getLibraries();
         }
     }
 
@@ -80,7 +82,8 @@ class CT_Exercise implements \JsonSerializable {
             'keywords' => $this->getKeywords(),
             'owner' => $this->getOwner(),
             'author' => $this->getAuthor(),
-            'sessionLanguage' => $this->getSessionLanguage()
+            'sessionLanguage' => $this->getSessionLanguage(),
+            'libraries' => $this->getLibraries(),
         ];
     }
 
@@ -387,6 +390,17 @@ class CT_Exercise implements \JsonSerializable {
 
     public function getMain() {
         return new CT_Main($this->getCtId());
+    }
+
+    public function getLibraries() {
+        return $this->libraries;
+    }
+
+    /**
+     * @param mixed $libraries
+     */
+    public function setLibraries($libraries) {
+        $this->libraries = $libraries;
     }
 
     public function getSessionLanguage() {

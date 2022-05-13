@@ -171,7 +171,10 @@ return [
         "hard" => "Hard",
         "save-exercise" => "Save Exercise",
         "cancel-exercise" => "Cancel Exercise",
-        "close" => "Close"
+        "close" => "Close",
+        "library-title" => "Libraries",
+        "add-library" => "Add library",
+        "delete-library" => "Delete library"
     ],
     "delete-exercise-modal" => [
         "confirmation" => "Are you sure you want to delete this exercise? This action cannot be undone.",
