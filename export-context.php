@@ -20,10 +20,14 @@ $exercisesMetaRequest = $REST_CLIENT_REPO->getClient()->request('POST','api/exer
         'exerciseIds' => join(",", $exercise_ids)
     ]
 ]);
+
 $exercisesMeta = $exercisesMetaRequest->toArray();
+
 $exercisesMetaMap = array_reduce($exercisesMeta,function($acc, $el){
     $acc[$el['id']] = $el;
+    
     return $acc;
+    
 },[]);
 
 $in = str_repeat('?,', count($exercise_ids) - 1) . '?';
@@ -65,7 +69,6 @@ $toArrayWithMeta = function ($data) use ($exercisesMetaMap){
     return $result;
 };
 
-
 // Clone exercises
 $clone_exercises = array_map(function($el){
     $el->setCtId(null);
@@ -73,24 +76,11 @@ $clone_exercises = array_map(function($el){
 } ,$exercises);
 $clone_exercises = json_decode(json_encode($clone_exercises), true);
 
-// Clone coding exercises
-if($mainIsCode){
-    $clone_ex_code = array_map(function($el){
-        $el->setCtId(null);
-        return $el;
-    } ,$codeExercises);
-    $clone_ex_code = json_decode(json_encode($clone_ex_code), true);
-}
-
-// Clone sql exercises
-if($mainIsSQL){
-    $clone_ex_sql = array_map(function($el){
-        $el->setCtId(null);
-        return $el;
-    } ,$sqlExercises);
-    $clone_ex_sql = json_decode(json_encode($clone_exercises), true);
-}
-
+$clone_ex_code = array_map(function($el){
+    $el->setCtId(null);
+    return $el;
+} ,$codeExercises);
+$clone_ex_code = json_decode(json_encode($clone_ex_code), true);
 $exercisesMappedWithMeta = $toArrayWithMeta($clone_exercises);
 
 // ---------------------------------------
@@ -112,7 +102,7 @@ $timeFormat = new DateTime('now', new DateTimeZone("Europe/Madrid"));
 $timeFormat = $timeFormat->format('Ymd_Hi');
 
 $zip = new ZipArchive();
-$zipFinalFilename = "Codetest_export_$timeFormat [{$CONTEXT->id}]-{$CONTEXT->title}.zip";
+$zipFinalFilename = "Codetest_export_{$timeFormat}_{$CONTEXT->id}-{$CONTEXT->title}.zip";
 $openZipFile = $zip->open($zipFinalFilename, ZipArchive::CREATE);
 if(!$openZipFile) {
     exit("cannot open <$zipFinalFilename>\n");
