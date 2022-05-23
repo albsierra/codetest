@@ -180,7 +180,13 @@ $DATABASE_UPGRADE = function($oldversion) {
 
     // Add answer_language column to allow student select the language of the answer
     if (!$PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
-        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD answer_language INTEGER NULL DEFAULT NULL";
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD answer_language VARCHAR(20) NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+    if ($PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer MODIFY answer_language VARCHAR(20) NULL DEFAULT NULL";
         echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
