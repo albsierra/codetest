@@ -185,6 +185,12 @@ $DATABASE_UPGRADE = function($oldversion) {
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
+    if ($PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer MODIFY answer_language VARCHAR(20) NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
 
     return '202012201622';
 };
