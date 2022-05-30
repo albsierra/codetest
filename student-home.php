@@ -14,8 +14,7 @@ if($totalExercises > 0){
     
     $firstExerciseId = $exercises[$currentExerciseNumber - 1]->getAkId();
     $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/tests");
-    $testsResponseObj = $exerciseTestsResponse->toArray();
-    $testsObj = sizeof($testsResponseObj) > 0 ? $testsResponseObj[0] : null;
+    $testsList = $exerciseTestsResponse->toArray();
 }
 
 $user = new \CT\CT_User($USER->id);
@@ -26,7 +25,7 @@ echo $twig->render('pages/student-view.php.twig', array(
     'menu' => $menu,
     'user' => $user,
     'exercises' => $exercises,
-    'testsObj' => $testsObj,
+    'testsList' => $testsList,
     'totalExercises' => $totalExercises,
     'currentExerciseNumber' => $currentExerciseNumber,
     'exerciseNum' => $currentExerciseNumber,

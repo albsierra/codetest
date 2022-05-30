@@ -6,7 +6,7 @@
     {% block text %}
         <div
         {% if dataToggle is defined %}data-toggle="{{dataToggle}}"{% endif %}
-        {% if href is defined %}href="{{href}}"{% endif %}
+        {% if href is defined %}href="{{href}}" role="button"{% endif %}
         {% if role is defined %}role="{{role}}"{% endif %}
         {% if ariaExpanded is defined %}aria-expanded="{{ariaExpanded}}"{% endif %}
         {% if ariaControls is defined %}aria-controls="{{ariaControls}}"{% endif %}>

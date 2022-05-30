@@ -126,16 +126,50 @@
                 {% endblock %}
                 {% endembed %}
             </div>
+            <!--div class="w-full mt-4">
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "new-exercise-form.labels.tests"|trans,
+                        name: '',
+                        required:true
+                    } only
+                %}
+                {% block input %}
+                    <!-- TODO: Sacar a plantilla -- >
+                    <div class="p-0 flex gap-3 items-stretch">
+                        <div class="w-full">
+                            <div class="text-center">
+                                {%trans%}new-exercise-form.labels.inputs{%endtrans%}
+                            </div>
 
-            <div class="w-full mt-4 full-section-class">
-                <div  class="full-section-tittle" data-toggle="collapse" href="#testsCollapse" role="button" aria-expanded="true" aria-controls="testsCollapse">
+                            <textarea class="tests-textarea" name="exercise[exercise_input_test]" cols="30" rows="5" id="input"></textarea>
+                        </div>
+                        <div class="flex items-center pt-6">
+                            <span>
+                                 →
+                             </span>
+                        </div>
+                        <div class="w-full">
+                            <div class="text-center">
+                                {%trans%}new-exercise-form.labels.outputs{%endtrans%}
+                            </div>
+
+                            <textarea class="tests-textarea" name="exercise[exercise_output_test]" cols="30" rows="5" id="output"></textarea>
+                        </div>
+                    </div>
+                {% endblock %}
+                {% endembed %}
+            </div-->
+
+            <div class="w-full mt-4 librariesClass">
+                <div  class="librariesTittle" data-toggle="collapse" href="#testsCollapse" role="button" aria-expanded="true" aria-controls="testsCollapse">
                     <span class="p-2">{%trans%}new-exercise-form.labels.tests{%endtrans%}</span>
-                    <span style="color: red; font-size: 15px; font-weight: bolder">*</span>
+                    <span class="requiredElement">*</span>
                 </div>
                 <div class="collapse in" id="testsCollapse">
                     <div>
                         <div class="m-2">
-                            <input class="w-1/12 rounded" type='button' onclick='add_tests()' value=' + '/>
+                            <input class="w-1/12 librariInput" type='button' onclick='add_tests()' value=' + '/>
                             <span class="ml-1">{%trans%}new-exercise-form.buttons.add-tests{%endtrans%}</span>
                         </div>
 
@@ -167,21 +201,75 @@
                             </div>
                         </div>
                         <div id="removeTestsBlock" class="m-2" style='display:none'>
-                            <input class="w-1/12 rounded" type='button' onclick='remove_tests()' value=' - ' />
+                            <input class="w-1/12 librariInput" type='button' onclick='remove_tests()' value=' - ' />
                             <span class="ml-1">{%trans%}new-exercise-form.buttons.delete-tests{%endtrans%}</span>
                         </div>
                     </div>
                 </div>
             </div>
+						
+						<!--div class="w-full mt-4">
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "new-exercise-form.labels.tests"|trans,
+                        name: '',
+												dataToggle: 'collapse',
+												href: '#testsCollapse',
+                        required:true
+                    } only
+                %}
+                {% block input %}
+										<div id="testsCollapse" class="collapse in">
+												
+												<div class="m-2">
+                            <input class="w-1/12 rounded" type='button' onclick='add_tests()' value=' + '/>
+                            <span class="ml-1">{%trans%}new-exercise-form.buttons.add-tests{%endtrans%}</span>
+                        </div>
+												
+												<div id='anchor_tests' class="mr-1">
+														<div class='pb-1 mt-1 mx-1 border p-4'>
+																<div class="p-0 flex gap-3 items-stretch">
+																		<div class="w-full">
+																				<div class="text-center">
+																						{%trans%}new-exercise-form.labels.inputs{%endtrans%}
+																				</div>
 
-            <div class="w-full mt-4 full-section-class">
-                <div  class="full-section-tittle" data-toggle="collapse" href="#fileCollapse" role="button" aria-expanded="true" aria-controls="fileCollapse">
+																				<textarea class="tests-textarea" cols="30" rows="5" id="input_1" name="exercise[exercise_input_test][1]"></textarea>
+																		</div>
+																		<div class="flex items-center pt-6">
+																				<span>
+																						 →
+																				 </span>
+																		</div>
+																		<div class="w-full">
+																				<div class="text-center">
+																						{%trans%}new-exercise-form.labels.outputs{%endtrans%}
+																				</div>
+
+																				<textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][1]"></textarea>
+																		</div>
+																</div>
+														</div>
+												</div>
+										
+												<div id="removeTestsBlock" class="m-2" style='display:none'>
+                            <input class="w-1/12 rounded" type='button' onclick='remove_tests()' value=' - ' />
+                            <span class="ml-1">{%trans%}new-exercise-form.buttons.delete-tests{%endtrans%}</span>
+                        </div>
+										
+										</div>
+								{% endblock %}
+                {% endembed %}
+						</div-->
+
+            <div class="w-full mt-4 librariesClass">
+                <div  class="librariesTittle" data-toggle="collapse" href="#fileCollapse" role="button" aria-expanded="true" aria-controls="fileCollapse">
                     <span class="p-2">{%trans%}new-exercise-form.labels.library-title{%endtrans%}</span>
                 </div>
                 <div class="collapse in" id="fileCollapse">
                     <div>
                         <div class="m-2">
-                            <input class="w-1/12 rounded" type='button' onclick='add_library()' value=' + '/>
+                            <input class="w-1/12 librariInput" type='button' onclick='add_library()' value=' + '/>
                             <span class="ml-1">{%trans%}new-exercise-form.buttons.add-library{%endtrans%}</span>
                         </div>
 
@@ -189,7 +277,7 @@
                             <div id='anchor_library' class="mr-1"></div>
                         </div>
                         <div id="removeLibrariesBlock" class="m-2" style='display:none'>
-                            <input class="w-1/12 rounded" type='button' onclick='remove_library()' value=' - ' />
+                            <input class="w-1/12 librariInput" type='button' onclick='remove_library()' value=' - ' />
                             <span class="ml-1">{%trans%}new-exercise-form.buttons.delete-library{%endtrans%}</span>
                         </div>
                     </div>

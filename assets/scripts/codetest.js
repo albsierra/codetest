@@ -933,8 +933,8 @@ global.showNewExerciseRow = function() {
     const statementField = getCKEditor('exercise[statement]').getData();
     const solutionField =  codeEditor.getValue();
     const tittleField = document.getElementById("exerciseTitleText");
-    const inputField = document.getElementById("input");
-    const outputField = document.getElementById("output");
+    const inputField = document.getElementById("input_1");
+    const outputField = document.getElementById("output_1");
     const statementLabel = document.querySelector('label[for="exercise[statement]"]');
     const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
     
@@ -961,16 +961,6 @@ global.showNewExerciseRow = function() {
             value: solutionField,
             element: solutionLabel
         },
-        {
-            key: 'input',
-            value: inputField.value,
-            element: inputField
-        },
-        {
-            key: 'output',
-            value: outputField.value,
-            element: outputField
-        },
     ]
 
     fieldValues.forEach((el , i) => {
@@ -982,25 +972,21 @@ global.showNewExerciseRow = function() {
         booleanValues[i] = !!el.value
     })
 
-    if(booleanValues.every(el => el)){
+    let ok = true;
+    if(!inputField.value && !outputField.value){
+      inputField.classList.add(invalidClassName);
+      outputField.classList.add(invalidClassName);
+      ok = false;
+    } else {
+      inputField.classList.remove(invalidClassName);
+      outputField.classList.remove(invalidClassName);
+    }
+
+    if(booleanValues.every(el => el) && ok){
         console.log(_TSUGI.ajax_session);
         theForm.submit();
-    /*$.ajax({
-        type: "POST",
-        dataType: "json",
-        url: theForm.prop("action"),
-        data: theForm.serialize() +'&' + _TSUGI.ajax_session,
-        success: function (data) {
-        resetForm(theForm);
-        location = location.href.replace("create-exercise.php?", "exercises-list.php?")
-        },
-        error: function (data) {
-            console.error('FAIL');
-            console.error(data);
-        }
-    });*/
     }else{
-    $("#requiredAlert").removeClass("hidden");
+        $("#requiredAlert").removeClass("hidden");
     }
 }
 

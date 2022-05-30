@@ -172,9 +172,6 @@ return [
         "save-exercise" => "Save Exercise",
         "cancel-exercise" => "Cancel Exercise",
         "close" => "Close",
-        "library-title" => "Libraries",
-        "add-library" => "Add library",
-        "delete-library" => "Delete library"
     ],
     "delete-exercise-modal" => [
         "confirmation" => "Are you sure you want to delete this exercise? This action cannot be undone.",
@@ -272,6 +269,17 @@ return [
             "inputs" => "With this inputs",
             "outputs" => "Expect this outputs",
             "restrictions" => "Restrictions (separated by lines)",
+            "library-title" => "Libraries",
+            "title" => "Title",
+            "body" => "Body",
+            "text" => "Text",
+            "file" => "File",
+        ],
+        "buttons" => [
+          "add-tests" => "Add tests",
+          "delete-tests" => "Delete tests",
+          "add-library" => "Add library",
+          "delete-library" => "Delete library",
         ]
     ],
     "import-authorkit" => [

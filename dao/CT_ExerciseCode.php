@@ -341,9 +341,7 @@ class CT_ExerciseCode extends CT_Exercise
             ':exercise_id' => $this->getExerciseId(),
             ':ct_id' => $this->getCtId(),
             ':exercise_language' => $this->getExerciseLanguage(),
-            ':exercise_input_test' => $this->getExerciseInputTest(),
             ':exercise_input_grade' => $this->getExerciseInputGrade(),
-            ':exercise_output_test' => $this->getExerciseOutputTest(),
             ':exercise_output_grade' => $this->getExerciseOutputGrade(),
             ':exercise_solution' => $this->getExerciseSolution(),
         );

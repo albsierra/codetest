@@ -131,14 +131,12 @@ class CT_DAO {
         );
         $ExerciseCodeQueries = array(
             'insert' => "INSERT INTO {$connection['p']}ct_code_exercise  "
-                . "(`exercise_id`,  `ct_id`, `exercise_language`, `exercise_input_test`, `exercise_input_grade`, `exercise_output_test`, `exercise_output_grade`, `exercise_solution` ) "
-                . "VALUES (:exercise_id, :ct_id, :exercise_language, :exercise_input_test, :exercise_input_grade, :exercise_output_test, :exercise_output_grade, :exercise_solution )",
+                . "(`exercise_id`,  `ct_id`, `exercise_language`, `exercise_input_grade`, `exercise_output_grade`, `exercise_solution` ) "
+                . "VALUES (:exercise_id, :ct_id, :exercise_language, :exercise_input_grade, :exercise_output_grade, :exercise_solution )",
             'update' => "UPDATE {$connection['p']}ct_code_exercise set "
                 . "`exercise_language` = :exercise_language, "
                 . " `ct_id` = :ct_id,"
-                . "`exercise_input_test` = :exercise_input_test, "
                 . "`exercise_input_grade` = :exercise_input_grade, "
-                . "`exercise_output_test` = :exercise_output_test, "
                 . "`exercise_output_grade` = :exercise_output_grade, "
                 . "`exercise_solution` = :exercise_solution "
                 . "WHERE exercise_id = :exercise_id",

@@ -1,33 +1,39 @@
 <div class="w-full mt-4">
-    {% embed "components/ct-textarea.php.twig"
-        with { 
-            label: "new-exercise-form.labels.tests"|trans,
-            name: '',
-            exercise: exercise,
-            inputValue: inputValue,
-            outputValue: outputValue
-        } only
-        %}
-        {% block input %}
-            <div class="p-0 flex gap-3 items-stretch justify-between">
-                <div class="w-[48%]" style="flex-basis:48%">
-                    <div class="text-center">
-                       {%trans%}new-exercise-form.labels.inputs{%endtrans%}
-                    </div>
-                    <pre class="min-h-[150px]">{{ inputValue }}</pre>
-                </div>
-                <div class="flex items-center pt-6">
-                    <span>
-                        →
-                    </span>
-                </div>
-                <div class="w-[48%] flex flex-col" style="flex-basis:48%">
-                    <div class="text-center">
-                        {%trans%}new-exercise-form.labels.outputs{%endtrans%}
-                    </div>
-                    <pre class="h-full min-h-[150px] border">{{ outputValue }}</pre>
-                </div>
-            </div>
-        {% endblock %}
-    {% endembed %}
+		{% embed "components/ct-textarea.php.twig"
+				with { 
+						label: "new-exercise-form.labels.tests"|trans,
+						name: '',
+						dataToggle: 'collapse',
+						href: '#tests_section',
+						testsList: testsList
+				} only
+				%}
+				{% block input %}
+						<div id="tests_section" class="collapse in">
+						{% for testsObj in testsList %}
+							<div class='pb-1 mt-1 mx-1 border p-4'>
+								<div class="p-0 flex gap-3 items-stretch justify-between">
+										<div class="w-[48%]" style="flex-basis:48%">
+												<div class="text-center">
+													 {%trans%}new-exercise-form.labels.inputs{%endtrans%}
+												</div>
+												<pre class="min-h-[150px]">{{ testsObj.inputValue }}</pre>
+										</div>
+										<div class="flex items-center pt-6">
+												<span>
+														→
+												</span>
+										</div>
+										<div class="w-[48%] flex flex-col" style="flex-basis:48%">
+												<div class="text-center">
+														{%trans%}new-exercise-form.labels.outputs{%endtrans%}
+												</div>
+												<pre class="h-full min-h-[150px] border">{{ testsObj.outputValue }}</pre>
+										</div>
+								</div>
+							</div>
+						{% endfor %}
+						</div>
+				{% endblock %}
+		{% endembed %}
 </div>
