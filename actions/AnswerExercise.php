@@ -32,7 +32,8 @@ if (!isset($answerText) || trim($answerText) == "") {
             'json' => [
                 'date' => date("c"),
                 'program' => $answerText,
-                'learningObject' => $exercise1->getAkId() //$exerciseId
+                'learningObject' => $exercise1->getAkId(), //$exerciseId,
+                'studentID' => $USER->id
             ]
         ]);
         $answerOutput = $response->getContent();
