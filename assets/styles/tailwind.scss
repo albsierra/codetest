@@ -345,4 +345,69 @@
     }
 }
 
+div.section {
+    --tw-bg-opacity: 1;
+    --tw-bg-opacity: 0.3;
+    --tw-backdrop-blur: blur(16px);
+    -webkit-backdrop-filter: var(--tw-backdrop-filter);
+    backdrop-filter: var(--tw-backdrop-filter);
+    background-color: rgba(255,255,255,var(--tw-bg-opacity));
+    border-radius: 0.25rem;
+    border-width: 1px;
+    display: block;
+    font-weight: unset;
+}
 
+input.ct-input-text {
+    --tw-bg-opacity: 1;
+    --tw-bg-opacity: 0.3;
+    --tw-backdrop-blur: blur(16px);
+    --tw-border-opacity: 1;
+    background-color: rgba(248,250,252,var(--tw-bg-opacity));
+    border-color: rgba(156,163,175,var(--tw-border-opacity));
+    border-radius: 0.25rem;
+    border-width: 1px;
+    caret-color: #05a1e6;
+    height: 2.5rem;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    width: 100%;
+}
+
+.buttonCollapse{
+    border-radius: 0.25rem;
+    border: 1px solid rgba(156,163,175,var(--tw-border-opacity));;
+    color: rgba(105,98,103,var(--tw-text-opacity));
+}
+
+.fileButtons{
+    border-radius: 0.25rem;
+}
+
+.ct-input-text:focus{
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);
+}
+
+.librariesClass{
+    border: 1px solid #94a3b8;
+    color: #696267;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    & div span{
+        color: rgba(105,98,103,var(--tw-text-opacity));
+        font-weight: 500;
+    }
+}
+
+.librariesTittle{
+    border-bottom: 1px solid #94a3b8;
+    padding:.5rem .75rem;
+}
+
+.librariInput{
+    border-radius: 0.25rem;
+}

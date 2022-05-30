@@ -937,6 +937,7 @@ global.showNewExerciseRow = function() {
     const outputField = document.getElementById("output");
     const statementLabel = document.querySelector('label[for="exercise[statement]"]');
     const solutionLabel = document.querySelector('label[for="exercise[exercise_solution]"]');
+    
 
     var theForm = $("#exerciseTextForm-1");
     updateCKeditorElements();
@@ -982,22 +983,24 @@ global.showNewExerciseRow = function() {
     })
 
     if(booleanValues.every(el => el)){
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: theForm.prop("action"),
-            data: theForm.serialize() +'&' + _TSUGI.ajax_session,
-            success: function (data) {
-             resetForm(theForm);
-             location = location.href.replace("create-exercise.php?", "exercises-list.php?")
-            },
-            error: function (data) {
-                console.error('FAIL');
-                console.error(data);
-            }
-        });
+        console.log(_TSUGI.ajax_session);
+        theForm.submit();
+    /*$.ajax({
+        type: "POST",
+        dataType: "json",
+        url: theForm.prop("action"),
+        data: theForm.serialize() +'&' + _TSUGI.ajax_session,
+        success: function (data) {
+        resetForm(theForm);
+        location = location.href.replace("create-exercise.php?", "exercises-list.php?")
+        },
+        error: function (data) {
+            console.error('FAIL');
+            console.error(data);
+        }
+    });*/
     }else{
-        $("#requiredAlert").removeClass("hidden");
+    $("#requiredAlert").removeClass("hidden");
     }
 }
 
