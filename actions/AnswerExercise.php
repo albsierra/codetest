@@ -36,7 +36,9 @@ if (!isset($answerText) || trim($answerText) == "") {
                 'studentID' => $USER->id
             ]
         ]);
-        $answerOutput = $response->getContent();
+        $responseArray = $response->toArray();
+        $answerOutput = $response->toArray()['feedback'];
+        $answerPearl = $response->toArray()['pearl'];
     }
 
     // Remove quotes from start and beggining if they exist
