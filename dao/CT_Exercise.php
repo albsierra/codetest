@@ -130,9 +130,9 @@ class CT_Exercise implements \JsonSerializable {
         $answer->setAnswerTxt($answer_txt);
         $answer->setAnswerLanguage($answer_language);
         if(isset($answer_output)){
-            $answer->setAnswerOutput($answer_output);
+            $answer->setAnswerOutput($answer_output['feedback']);
         }
-        $answer->setAnswerSuccess(str_starts_with(strtolower($answer_output), strtolower('Correct')));
+        $answer->setAnswerSuccess(str_starts_with(strtolower($answer_output['classify']), strtolower('Accepted')));
         $answer->setCtId($this->getCtId());
 
         //save the answer
