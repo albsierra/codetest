@@ -36,14 +36,8 @@ if (!isset($answerText) || trim($answerText) == "") {
                 'studentID' => $USER->id
             ]
         ]);
-        $responseArray = $response->toArray();
-        $answerOutput = $response->toArray()['feedback'];
-        $answerPearl = $response->toArray()['pearl'];
-    }
-
-    // Remove quotes from start and beggining if they exist
-    if(!is_null($answerOutput) && strlen($answerOutput) > 0 && substr($answerOutput, 0, 1) == "\"" && substr($answerOutput, -1) == "\""){
-        $answerOutput = substr($answerOutput, 1, strlen($answerOutput) -2);
+        $responsePearl = $response->toArray();
+        $answerOutput = $responsePearl['summary'];
     }
 
     $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput);
@@ -69,7 +63,7 @@ if (!isset($answerText) || trim($answerText) == "") {
 
     // var_dump($answerOutput);die;
     // echo json_encode(json_decode($answerOutput), JSON_PRETTY_PRINT);die;
-    echo $answerOutput;die;
+    echo $answerOutput['feedback'];die;
 }
 
 $OUTPUT->buffer = true;
