@@ -15,7 +15,7 @@ $result = array();
 
 //if the answer is blank
 if (!isset($answerText) || trim($answerText) == "") {
-    $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed');
+    $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed.empty');
     $result["answer_content"] = false;
 } else {
     //Search for the exercise on the db and map
@@ -25,45 +25,53 @@ if (!isset($answerText) || trim($answerText) == "") {
     $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());   
     $answerOutput = null;
     
-    if($answerLanguage != '') {
-        $client = HttpClient::create();
+    try {
+        if($answerLanguage != '') {
+            $client = HttpClient::create();
 
-        $response = $client->request("POST", "{$validatorService->getValidatorUrl($answerLanguage)}eval", [
-            'json' => [
-                'date' => date("c"),
-                'program' => $answerText,
-                'learningObject' => $exercise1->getAkId(), //$exerciseId,
-                'studentID' => $USER->id
-            ]
-        ]);
-        $responsePearl = $response->toArray();
-        $answerOutput = $responsePearl['summary'];
+            $response = $client->request("POST", "{$validatorService->getValidatorUrl($answerLanguage)}eval", [
+                'json' => [
+                    'date' => date("c"),
+                    'program' => $answerText,
+                    'learningObject' => $exercise1->getAkId(), //$exerciseId,
+                    'studentID' => $USER->id
+                ]
+            ]);
+            $responsePearl = $response->toArray();
+            $answerOutput = $responsePearl['summary'];
+            $testsOutput = $responsePearl['reply']['report']['tests'];
+        }
+
+        $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput, $testsOutput);
+        $answer = $array['answer'];
+
+        $result["answer_content"] = true;
+        $result['exists'] = $array['exists'];
+        $result['success'] = $answer->getAnswerSuccess();
+        $result['answerOutput'] = $answerOutput['feedback'];
+        $result['testsOutput'] = $testsOutput;
+
+        // Notify elearning that there is a new answer
+        // the message
+        $msg = "A new code test was submitted on Learn by " . $USER->displayname . " (" . $USER->email . ").\n
+        Exercise: " . $exercise->getTitle() . "\n
+        Answer: " . $answer->getAnswerTxt();
+
+        // use wordwrap() if lines are longer than 70 characters
+        $msg = wordwrap($msg, 70);
+
+        $headers = "From: LEARN < @gmail.com >\n";
+
+        $_SESSION['success'] = $translator->trans('backend-messages.answer.exercise.saved');
+
+        // echo json_encode(json_decode($answerOutput), JSON_PRETTY_PRINT);die;
+        //echo $answerOutput['feedback'];die;
+    } catch(Exception $ex){
+        $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed.exception').$ex->getMessage();
+        $result["answer_content"] = false;
+        $result["error"] = $ex->getMessage();
+        header("HTTP/1.0 500 Internal Server Error");
     }
-
-    $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput);
-    $answer = $array['answer'];
-
-    $result["answer_content"] = true;
-    $result['exists'] = $array['exists'];
-    $result['success'] = $answer->getAnswerSuccess();
-    $result['answerText'] = $answer->getAnswerTxt();
-
-    // Notify elearning that there is a new answer
-    // the message
-    $msg = "A new code test was submitted on Learn by " . $USER->displayname . " (" . $USER->email . ").\n
-    Exercise: " . $exercise->getTitle() . "\n
-    Answer: " . $answer->getAnswerTxt();
-
-    // use wordwrap() if lines are longer than 70 characters
-    $msg = wordwrap($msg, 70);
-
-    $headers = "From: LEARN < @gmail.com >\n";
-
-    $_SESSION['success'] = $translator->trans('backend-messages.answer.exercise.saved');
-
-    // var_dump($answerOutput);die;
-    // echo json_encode(json_decode($answerOutput), JSON_PRETTY_PRINT);die;
-    echo $answerOutput['feedback'];die;
 }
 
 $OUTPUT->buffer = true;

@@ -23,12 +23,12 @@ $DATABASE_INSTALL = array(
     ct_id       INTEGER NOT NULL AUTO_INCREMENT,
     user_id     INTEGER NOT NULL,
     context_id  INTEGER NOT NULL,
-	link_id     INTEGER NOT NULL,
-	title       VARCHAR(255) NULL,
-	seen_splash BOOL NOT NULL DEFAULT 0,
-	preloaded BOOL NOT NULL DEFAULT 0,
-	shuffle BOOL NOT NULL DEFAULT 0,
-	points      FLOAT NOT NULL DEFAULT 100,
+  link_id     INTEGER NOT NULL,
+  title       VARCHAR(255) NULL,
+  seen_splash BOOL NOT NULL DEFAULT 0,
+  preloaded BOOL NOT NULL DEFAULT 0,
+  shuffle BOOL NOT NULL DEFAULT 0,
+  points      FLOAT NOT NULL DEFAULT 100,
     modified    datetime NULL,
 
     PRIMARY KEY(ct_id)
@@ -123,7 +123,7 @@ ENGINE = InnoDB DEFAULT CHARACTER SET = utf8"),
     ct_id           INTEGER NOT NULL,
     user_id         INTEGER NOT NULL,
     grade           FLOAT NOT NULL DEFAULT 0,
-	modified        datetime NULL,
+  modified        datetime NULL,
 
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_5`
         FOREIGN KEY (`ct_id`)
@@ -187,6 +187,14 @@ $DATABASE_UPGRADE = function($oldversion) {
     }
     if ($PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer MODIFY answer_language VARCHAR(20) NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    // Add tests_output column to save output from each test (in JSON)
+    if (!$PDOX->columnExists('tests_output', "{$CFG->dbprefix}ct_answer")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD COLUMN tests_output TEXT NULL DEFAULT NULL";
         echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);

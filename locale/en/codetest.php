@@ -274,6 +274,8 @@ return [
             "body" => "Body",
             "text" => "Text",
             "file" => "File",
+            "test-expected" => "Expected output",
+            "test-output" => "Obtained output",
         ],
         "buttons" => [
           "add-tests" => "Add tests",
@@ -342,7 +344,8 @@ return [
         "title.saved.failed" => "Title failed to save. Please try again.",
         "add.exercise.success" => "Exercise Saved.",
         "add.exercise.failed" => "Unable to save blank exercise.",
-        "answer.exercise.failed" => "Your answer cannot be blank.",
+        "answer.exercise.failed.empty" => "Your answer cannot be blank.",
+        "answer.exercise.failed.exception" => "Error sending answer: ",
         "answer.exercise.saved" => "Answer saved.",
         "exercise.deleted.success" => "Exercise Deleted.",
         "grade.invalid" => "Invalid Grade.",

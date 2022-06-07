@@ -68,36 +68,57 @@
                 {% endblock %}
             {% endembed %}
         </div>
-        <div class="w-full mt-4">
-            {% embed "components/ct-textarea.php.twig"
-                with {
-                    label: "student-exercise.answer-output"|trans,
-                    name: '',
-                    exercise: exercise,
-                    answer: answer
-                } only
-                %}
-                {% block input %}
-                    <div class="answer-output">
-                        <pre class="min-h-[150px] border-0 -mx-1">{{ answer.getAnswerOutput() }}</pre>
-                    </div>
-                {% endblock %}
-            {% endembed %}
-        </div>
+        {% if answer %}
+            <div class="w-full mt-4">
+                {% embed "components/ct-textarea.php.twig"
+                    with {
+                        label: "student-exercise.answer-output"|trans,
+                        name: '',
+                        dataToggle: 'collapse',
+                        href: '.answer-output',
+                        answer: answer
+                    } only
+                    %}
+                    {% block input %}
+                        <div class="answer-output collapse in">
+                            {% for testOutput in answer.getTestsOutput() %}
+                                <div class='pb-1 mt-1 mx-1 border p-4'>
+                                    <div class="p-0 flex gap-3 items-stretch justify-between">
+                                        <div class="w-[48%]" style="flex-basis:48%">
+                                            <div class="text-center">
+                                               {%trans%}new-exercise-form.labels.test-expected{%endtrans%}
+                                            </div>
+                                            <pre class="min-h-[150px]">{{ testOutput.expectedOutput }}</pre>
+                                        </div>
+                                        <div class="flex items-center pt-6">
+                                            <span>
+                                                →
+                                            </span>
+                                        </div>
+                                        <div class="w-[48%] flex flex-col" style="flex-basis:48%">
+                                            <div class="text-center">
+                                                {%trans%}new-exercise-form.labels.test-output{%endtrans%}
+                                            </div>
+                                            <pre style="border-width: 3px" class="h-full min-h-[150px] border {{ testOutput.classify == "Accepted" ? 'border-green-600' : 'border-red-600' }}">{{ testOutput.obtainedOutput }}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endblock %}
+                {% endembed %}
+            </div>
+        {% endif %}
         <div class="student-footer mt-4">
             <div class="flex-grow">
                 <div class="h4 flex flx-cntnr flx-row flx-nowrap flx-start exercise-row mt-0 mb-5">
-                    <div class="flex-grow exercise-solution overflow-auto p-0">
-                        <h4>{%trans%}student-exercise.answer{%endtrans%}:</h4>
-                        <pre id="answerSavedText" class="min-h-[80px] !whitespace-pre">{{ answer.getAnswerTxt() }}</pre>
-                    </div>
                     <div class="flex flex-col gap-1 flex-shrink exercise-text pt-[30px]">
                         <i id="modified"></i>
                         <div class="border-t border-blueGray-300">
                         </div>
                         <div class="flex items-center justify-between gap-2">
                             <span class="result-text">
-                                {{ (answer.getAnswerTxt()|length > 0 ? (answer.getAnswerSuccess() ? 'student-exercise.correct' : 'student-exercise.incorrect') : 'student-exercise.blank')|trans }}
+                                {{ (answer.getAnswerOutput()|length > 0 ? answer.getAnswerOutput() : 'student-exercise.blank'|trans) }}
                             </span>
                             {% embed "components/answer-info-box.php.twig" with { answer: answer } only %}
                             {% endembed %}

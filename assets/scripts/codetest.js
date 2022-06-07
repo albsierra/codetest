@@ -609,43 +609,50 @@ global.answerExercise = function(exerciseId, exerciseNum) {
         url: answerForm.prop("action"),
         data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
+            if(data.answer_content){
+                $('.answer-output').html("-");
 
-            $('.answer-output pre').html(data);
-            $('#answerSavedText').html(solutionCode);
+                //If the answer is not empty and it is the first time it has been answered, the usage modal opens
+                if (data) {
+                    $('.usage-modal').modal({
+                        backdrop: 'static',
+                        keyboard: false,
+                        show: true,
 
-            //If the answer is not empty and it is the first time it has been answered, the usage modal opens
-            if (data) {
-                $('.usage-modal').modal({
-                    backdrop: 'static',
-                    keyboard: false,
-                    show: true,
+                    })
+                }
+                document.querySelector('.exercises-nav-header .active .answer-info-box')
 
-                })
+                updateExerciseBadge(data);
+
+                $("#modified").text(formatDate(new Date()));
+                sendButton.removeAttribute("disabled");
+                sendButton.appendChild(paperPlaneSymbol);
+                sendButton.removeChild(spinner);
+                
+                if(!$('.usage-modal').length){
+                  window.location.reload(true);
+                }
+            } else {
+                $("#flashmessages").html(data.flashmessage);
+                setupAlertHide();
             }
-            document.querySelector('.exercises-nav-header .active .answer-info-box')
-
-            updateExerciseBadge(data);
-
-            $("#answerSavedText").text(data.answerText);
-            $("#modified").text(formatDate(new Date()));
-            sendButton.removeAttribute("disabled");
-            sendButton.appendChild(paperPlaneSymbol);
-            sendButton.removeChild(spinner);
         },
         error: function (data) {
             alert('ERROR');
             sendButton.removeAttribute("disabled");
             sendButton.appendChild(paperPlaneSymbol);
             sendButton.removeChild(spinner);
+            $("#flashmessages").html(data.responseJSON.flashmessage);
+            setupAlertHide();
         }
     });
 }
 
-const updateExerciseBadge = (value) => {
-    if(!value){
+const updateExerciseBadge = (data) => {
+    if(!data){
         return;
     }
-    const val = `${value}`.toLowerCase();
 
     const activeItem = '.exercises-nav-header .active .answer-info-box';
     const activeItemIcon = '.exercises-nav-header .active .answer-info-box .fa';
@@ -669,28 +676,21 @@ const updateExerciseBadge = (value) => {
         el.classList.remove('fa-times')
         el.classList.remove('fa-file')
     })
-    document.querySelector(studentFooterItemLabel).textContent = value
+    document.querySelector(studentFooterItemLabel).textContent = data.answerOutput
 
-    if(val.startsWith('correct')) {
+    if(data.success) {
         elements.forEach(el => {
             el.classList.add('bg-green-600')
         })
         elementIcons.forEach(el => {
             el.classList.add('fa-check')
         })
-    } else if (val.includes('incorrect')) {
+    } else {
         elements.forEach(el => {
             el.classList.add('bg-red-600')
         })
         elementIcons.forEach(el => {
             el.classList.add('fa-times')
-        })
-    } else {
-        elements.forEach(el => {
-            el.classList.add('bg-yellow-500')
-        })
-        elementIcons.forEach(el => {
-            el.classList.add('fa-file')
         })
     }
 }
@@ -779,6 +779,7 @@ global.sendUsage = function(exerciseId) {
             setTimeout(() => {
                 $('#usageModal'+exerciseId).remove()
                 // location.reload();
+                window.location.reload(true)
             },350)
         },
         error: function(data){

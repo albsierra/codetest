@@ -15,6 +15,7 @@ class CT_Answer
     private $answer_success;
     private $modified;
     private $answer_output;
+    private $tests_output;
 
     public function __construct($answer_id = null)
     {
@@ -189,6 +190,26 @@ class CT_Answer
         $this->ct_id = $ct_id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getTestsOutput()
+    {
+        return $this->tests_output;
+    }
+
+    /**
+     * @param mixed $answer_output
+     */
+    public function setTestsOutput($tests_output)
+    {
+        if(is_array($tests_output)){
+          $this->tests_output = $tests_output;
+        } else if(is_string($tests_output)){
+          $this->tests_output = json_decode($tests_output);
+        }
+    }
+
         
     public function isNew()
     {
@@ -216,6 +237,7 @@ class CT_Answer
             ':answerSuccess' => $this->getAnswerSuccess(),
             ':answerLanguage' => $this->getAnswerLanguage(),
             ':answerOutput' => $this->getAnswerOutput(),
+            ':testsOutput' => json_encode($this->getTestsOutput()),
         );
         if(!$this->isNew()) $arr[':answer_id'] = $this->getAnswerId();
         $query['PDOX']->queryDie($query['sentence'], $arr);
@@ -249,11 +271,11 @@ class CT_Answer
 
     public static function getDiffWithSolution($outputAnswer, $solution)
     {
-		global $CFG;
-		// include the Diff class
-		require_once $CFG->codetestRootDir . '/util/class.Diff.php';
-		// compare two strings line by line
-		return \Diff::toString(\Diff::compare($solution, $outputAnswer));
+    global $CFG;
+    // include the Diff class
+    require_once $CFG->codetestRootDir . '/util/class.Diff.php';
+    // compare two strings line by line
+    return \Diff::toString(\Diff::compare($solution, $outputAnswer));
     }
 
 }
