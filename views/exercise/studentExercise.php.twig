@@ -80,7 +80,13 @@
                     } only
                     %}
                     {% block input %}
-                        <div class="answer-output collapse in">
+                        {% set render_in = 'in' %}
+                        {% for testOutput in answer.getTestsOutput() %}
+                            {%if  testOutput.classify == "Accepted" %}
+                                {% set render_in = '' %}
+                            {% endif %}
+                        {% endfor %}
+                        <div class="answer-output collapse {{ render_in }}">
                             {% for testOutput in answer.getTestsOutput() %}
                                 <div class='pb-1 mt-1 mx-1 border p-4'>
                                     <div class="p-0 flex gap-3 items-stretch justify-between">
