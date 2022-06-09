@@ -1,5 +1,7 @@
 <?php
 
+use CT\CT_Exercise;
+use CT\CT_ExerciseCode;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -66,10 +68,10 @@ class RestClient
         return $this->client;
     }
 
-    public static function generatePOSTData($exerciseCode, $files){
+    public static function generatePOSTData($exercisesCode, $files, $exerciseReplace){
 
         $formFields = [
-            'json' => json_encode($exerciseCode),
+            'json' => json_encode($exercisesCode)
         ];
 
         if (count($files) != 0) {
@@ -77,6 +79,15 @@ class RestClient
                 $formFields[]['file_field'] = DataPart::fromPath($file['path'], $file['name']);
             }
         }
+
+        if ($exercisesCode[0]->getExerciseLibraries() != null) {
+            $recLibs = array();
+            foreach ($exercisesCode[0]->getExerciseLibraries() as $value) {
+                array_push($recLibs, $value);
+            }
+            $formFields['recuperated_libraries'] = json_encode($recLibs);
+        }
+        $formFields['exercise_replace'] = $exerciseReplace;
 
         $formData = new FormDataPart($formFields);
 

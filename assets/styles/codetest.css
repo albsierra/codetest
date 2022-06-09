@@ -338,7 +338,7 @@ form .btn button:hover{
 .descriptions{
     font-size: 12px;
 }
- 
+
 .buttonIn {
     width: 100%;
     position: relative;
@@ -392,6 +392,19 @@ form .btn button:hover{
 .modalDelete{
     margin: auto;
     width: 50%;
+}
+
+.modalEdit{
+    margin: auto;
+    width: 50%;
+}
+
+.none{
+    display: none;
+}
+
+.block{
+    display: block;
 }
 
 .test-list{

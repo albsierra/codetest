@@ -2,6 +2,8 @@
 
 namespace CT;
 
+use Exception;
+
 class CT_Exercise implements \JsonSerializable {
 
     private $exercise_id;
@@ -262,6 +264,22 @@ class CT_Exercise implements \JsonSerializable {
         return $CTExercise;
     }
 
+    //Find libaries by exercise id
+    static function findLibrariesForExerciseId($id) {
+        global $REST_CLIENT_REPO;
+        $url = "api/exercises/$id/libraries";
+        $main = new \CT\CT_Main($_SESSION["ct_id"]);
+        $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
+        $respBody = $response->getContent();
+        if(strlen($respBody) == 0){
+            return null;
+        }
+        $librariesArray = $response->toArray();
+        $libraries = json_decode(json_encode($librariesArray));
+
+        return $libraries;
+    }
+
     static function MapJsonToExercisesArray($json) {
         $response = json_decode($json);
         $exercises = array();
@@ -352,22 +370,21 @@ class CT_Exercise implements \JsonSerializable {
         global $CFG;
         $currentTime = new \DateTime('now', new \DateTimeZone($CFG->timezone));
         $currentTime = $currentTime->format("Y-m-d H:i:s");
-        if ($this->isNew()) {
-            $this->setExerciseNum($this->getNextExerciseNumber());
-            $query = \CT\CT_DAO::getQuery('exercise', 'insert');
+        $isNew = $this->isNew();
+        $this->setExerciseNum($this->getNextExerciseNumber());
+        $query = \CT\CT_DAO::getQuery('exercise', $isNew ? 'insert' : 'updateAll');
 
-            $arr = array(
-                ':exercise_id' => $this->getExerciseId(),
-                ':ct_id' => $this->getCtId(),
-                ':exercise_num' => $this->getExerciseNum(),
-                ':akId' => $this->getAkId(),
-                ':title' => $this->getTitle(),
-                ':statement' => $this->getStatement(),
-                ':hint' => $this->getHint(),
-            );
-            $query['PDOX']->queryDie($query['sentence'], $arr);
+        $arr = array(
+            ':exercise_id' => $this->getExerciseId(),
+            ':ct_id' => $this->getCtId(),
+            ':akId' => $this->getAkId(),
+            ':title' => $this->getTitle(),
+            ':statement' => $this->getStatement(),
+            ':hint' => $this->getHint(),
+        );
+        ($isNew) ? ($arr[':exercise_num'] = $this->getExerciseNum()) : "";
+        $query['PDOX']->queryDie($query['sentence'], $arr);
 
-        }
     }
 
     public function update() {

@@ -58,10 +58,11 @@ if ($USER->instructor) {
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
         $exercise = $main->createExercise($exercisePost,strtolower($exercisePost['exercise_language']),$exercisePost["difficulty"],$libraries);
         $exercises = Array();
+
         array_push($exercises, $exercise);
 
         //save the exercise on the repository
-        $result = $main->saveExercises($exercises);
+        $result = $main->saveExercises($exercises, (isset($_POST['exercise_replace']) ? $_POST['exercise_replace'] : $exercise->getAkId() . ':false'));
 
         foreach ($temporalFile as $key => $value) {
             fclose($value);

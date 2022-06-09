@@ -72,7 +72,7 @@ class CT_Main implements \JsonSerializable
     }
 
     //Save exercise on the repo
-    function saveExercises($exercises) {
+    function saveExercises($exercises, $exerciseReplace) {
         global $REST_CLIENT_REPO;
 
         $libraries = array();
@@ -83,13 +83,13 @@ class CT_Main implements \JsonSerializable
 
         $saveExerciseRequest = $REST_CLIENT_REPO->
                                 getClient()->
-                                request('POST','api/exercises/createExercise', $REST_CLIENT_REPO::generatePostData($exercises, $libraries));
+                                request('POST','api/exercises/createExercise', $REST_CLIENT_REPO::generatePostData($exercises, $libraries, $exerciseReplace));
 
         return $saveExerciseRequest->getContent();
     }
 
     //Create exercise object
-    function createExercise($context, $language, $difficulty,$libraries) {
+    function createExercise($context, $language, $difficulty, $libraries) {
         global $CFG;
         if(is_array($context)) {
             $class = $CFG->ExerciseProperty['class'];

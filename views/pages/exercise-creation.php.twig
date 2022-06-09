@@ -2,6 +2,7 @@
 {% block pageTitle %}
 {{ OUTPUT.pageTitle("create-exercise-modal.create-exercise"|trans, true, false) }}
 {% endblock %}
+{% set exercise = newExercise %}
 {% block content %}
     <div class="exercises-creation">
         <form
@@ -13,13 +14,16 @@
 
         >
             <input id="ownerName" type="hidden" value={{owner}} name="owner">
-
+            {% if exerciseReplace|length > 0 %}
+                <input type="hidden" value='{{exerciseReplace}}' name="exercise_replace">
+            {% endif %}
             <div class="w-full mb-2">
                 {% embed "components/ct-input.php.twig"
                     with {
                         label: "new-exercise-form.exercisetitle"|trans,
                         name: 'exercise[title]',
                         id: 'exerciseTitleText',
+                        value: exercise.getTitle(),
                         required: true
                     } only
                 %}
@@ -32,23 +36,26 @@
                             label: "new-exercise-form.keywordsseparatedlines"|trans,
                             name: 'exercise[keywords]',
                             id: 'exerciseKeywords',
+                            value: exercise.getKeywords()[0]
 
                         } only
                     %}
                     {% endembed %}
                 </div>
                 <div class="w-3/12">
+                    {% set difficulty = exercise.getDifficulty() %}
                     {% embed "components/ct-input.php.twig"
                         with {
                             label: "create-exercise-modal.difficulty"|trans,
-                            name: 'exercise[title]'
+                            name: 'exercise[title]',
+                            difficulty: difficulty
                         } only
                     %}
                         {% block input %}
                             <select id="difficultySelect" name="exercise[difficulty]">
-                                <option value="Easy">{%trans%}create-exercise-modal.easy{%endtrans%}</option>
-                                <option value="Medium">{%trans%}create-exercise-modal.medium{%endtrans%}</option>
-                                <option value="Hard">{%trans%}create-exercise-modal.hard{%endtrans%}</option>
+                                <option value="Easy" {{ (difficulty == "Easy")? "selected" : ""}}>{%trans%}create-exercise-modal.easy{%endtrans%}</option>
+                                <option value="Medium" {{ (difficulty == "Medium")? "selected" : ""}}>{%trans%}create-exercise-modal.medium{%endtrans%}</option>
+                                <option value="Hard" {{ (difficulty == "Hard")? "selected" : ""}}>{%trans%}create-exercise-modal.hard{%endtrans%}</option>
                             </select>
                         {% endblock %}
                     {% endembed %}
@@ -63,7 +70,8 @@
                         id: 'exercise[statement]',
                         labelFor: 'exercise[statement]',
                         inputClass: 'ckeditor',
-                        required: true
+                        required: true,
+                        value: exercise.getStatement(),
                     } only
                 %}
                 {% endembed %}
@@ -72,14 +80,13 @@
             <div class="w-full mt-4">
 
                 {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1" } only
+                    with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1", value: exercise.getHint() } only
                 %}
                 {% endembed %}
 
             </div>
 
             <div class="w-full mt-4">
-                {% set exercise = newExercise %}
                 {% set languages = validatorService.getCodeLanguages() %}
                 {% set exerciseLanguage = exercise.getExerciseLanguage() %}
                 {% embed "components/ct-textarea.php.twig"
@@ -91,7 +98,8 @@
                         labelFor: 'exercise[exercise_solution]',
                         languages: languages,
                         exerciseLanguage: exerciseLanguage,
-                        required: true
+                        required: true,
+                        value: exercise.getExerciseSolution()
                     } only
                 %}
 
@@ -116,7 +124,7 @@
                             {% block input %}
                                 <select id="typeSelect" name="exercise[exercise_language]" style="background: #fff;" id="exerciseLanguagee">
                                 {% for language in languages %}
-                                <option value="{{ language }}" {{ exercise.getExerciseLanguage() == language ? "selected" : "" }}>{{ language}}</option>
+                                <option value="{{ language }}" {{ exerciseLanguage == language ? "selected" : "" }}>{{ language}}</option>
                                 {% endfor %}
                                 </select>
                             {% endblock %}
@@ -141,14 +149,17 @@
 
                         <div class="flex buttons flex-col gap-2 ml-1">
                             <div id='anchor_tests' class="mr-1">
-                              <div id='tests_section_1' class='section pb-1 mt-1 border p-4'>
+                            {% set count = (exercise.getExerciseOutputTest()|length != 0)? exercise.getExerciseOutputTest()|length : 1 %}
+                            <input type="hidden" id="quantity-tests" value="{{count}}">
+                            {% for i in 1..count %}
+                              <div id='tests_section_{{i}}' class='section pb-1 mt-1 border p-4'>
                                 <div class="p-0 flex gap-3 items-stretch">
                                     <div class="w-full">
                                         <div class="text-center">
                                             {%trans%}new-exercise-form.labels.inputs{%endtrans%}
                                         </div>
 
-                                        <textarea class="tests-textarea" cols="30" rows="5" id="input_1" name="exercise[exercise_input_test][1]"></textarea>
+                                        <textarea class="tests-textarea" cols="30" rows="5" id="input_1" name="exercise[exercise_input_test][{{i}}]">{{exercise.getExerciseInputTest()[count]}}</textarea>
                                     </div>
                                     <div class="flex items-center pt-6">
                                         <span>
@@ -160,13 +171,14 @@
                                             {%trans%}new-exercise-form.labels.outputs{%endtrans%}
                                         </div>
 
-                                        <textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][1]"></textarea>
+                                        <textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][{{i}}]">{{exercise.getExerciseOutputTest()[count]}}</textarea>
                                     </div>
                                 </div>
                               </div>
+                            {% endfor %}
                             </div>
                         </div>
-                        <div id="removeTestsBlock" class="m-2" style='display:none'>
+                        <div id="removeTestsBlock" class="m-2" style='{{(count != 1) ? '' : 'display:none'}}'>
                             <input class="w-1/12 rounded" type='button' onclick='remove_tests()' value=' - ' />
                             <span class="ml-1">{%trans%}new-exercise-form.buttons.delete-tests{%endtrans%}</span>
                         </div>
@@ -186,7 +198,37 @@
                         </div>
 
                         <div class="flex buttons flex-col gap-2 ml-1">
-                            <div id='anchor_library' class="mr-1"></div>
+                            <div id='anchor_library' class="mr-1">
+                                {% set count = (exercise.getLibraries()|length != 0)? exercise.getLibraries()|length : 0 %}
+                                {% if count != 0 %}
+                                    <input type="hidden" id="quantity-rec-lib" value="{{count}}">
+                                    <div id="library_recuperated_section" style="" class="section border p-4 mb-2">
+                                    {% for i in 1..count%}
+                                        {% set library = exercise.getLibraries()[i-1] %}
+                                        <span id="recuperated_library_{{i - 1}}" class="border p-2 rounded mr-2">
+                                            {{library["pathname"]}} <button class="text-danger" id="delete-recuperated-library-{{i}}">x</button>
+                                            <input type="hidden" name="exercise[exercise_libraries][{{i - 1}}]" value="{{exercise.getAkId()}}:{{library["id"]}}">
+                                        </span>
+                                    {% endfor %}
+                                    </div>
+                                    <input type="hidden" name="exercise[exercise_num]" value="{{exercise.getExerciseNum()}}">
+                                    <script>
+                                    let recLibCount = document.getElementById("quantity-rec-lib").value;
+                                    for (let i = 1; i <= document.getElementById("quantity-rec-lib").value; i++) {
+                                        document.getElementById("delete-recuperated-library-" + i).addEventListener("click", function(event){
+                                            event.preventDefault();
+                                            console.log(event);
+                                            let recuperatedSection = document.getElementById("library_recuperated_section");
+                                            recuperatedSection.removeChild(event.target.parentElement);
+                                            recLibCount--;
+                                            if(recLibCount == 0){
+                                                recuperatedSection.remove();
+                                            }
+                                        });
+                                    }
+                                    </script>
+                                {% endif %}
+                            </div>
                         </div>
                         <div id="removeLibrariesBlock" class="m-2" style='display:none'>
                             <input class="w-1/12 rounded" type='button' onclick='remove_library()' value=' - ' />
@@ -242,7 +284,7 @@
           </div>
       </div>
     </div>
-    
+
     <div id='template_library' style='display:none' class='section pb-1 mt-1 border p-4'>
 
         <div class="block">
@@ -274,9 +316,13 @@
 <script src="public/build/codemirror/css/css.js"></script>
 <script src="public/build/codemirror/clike/clike.js"></script>
 <script>
-      var count_tests = 1;
+      var count_tests = document.getElementById("quantity-tests").value;
       var count_libraries = 0;
-      
+
+      function setCount_tests(count){
+          this.count_tests = count;
+      }
+
       function setProperties(obj, count, elem, name){
         let base = elem.replace('template', '');
         let jqElem = obj.find('#'+elem);
@@ -288,7 +334,7 @@
         }
         return jqElem;
       }
-      
+
       //Tests
       //--------------------------------------------------------------------------
       function add_tests(){
@@ -300,16 +346,16 @@
         }
 
         let newobj = $('#template_tests').clone();
-        
+
         newobj.prop('id', 'tests_section_'+count_tests);
         newobj.find('#input_template').prop('id', 'input_'+count_tests).prop('name', 'exercise[exercise_input_test]['+count_tests+']');
         newobj.find('#output_template').prop('id', 'output_'+count_tests).prop('name', 'exercise[exercise_output_test]['+count_tests+']');
-        
+
         newobj.appendTo('#anchor_tests');
-        
+
         newobj.show();
       }
-      
+
       function remove_tests(){
         $('#anchor_tests').find('.section:last-child').remove();
         count_tests--;
@@ -318,7 +364,7 @@
             deleteItem.hide();
         }
       }
-      
+
       //Libraries
       //--------------------------------------------------------------------------
       function hideAll_library(countval){
@@ -326,10 +372,10 @@
         section.find('.input-libraryText').hide();
         section.find('#library_file_'+countval).hide();
       }
-      
+
       function onChangeRadio_library(elem){
         let sel = '';
-        
+
         let countval = elem.target.name.replace('radiosel_', '');
         switch(elem.target.value){
           case 'library_text':
@@ -339,14 +385,14 @@
             sel = '#library_file_'+countval;
             break;
         }
-        
+
         if(sel){
           hideAll_library(countval);
           $('#library_section_'+countval).find(sel).show()
         }
 
       }
-      
+
       function add_library(){
         count_libraries++;
 
@@ -356,19 +402,19 @@
         }
 
         let newobj = $('#template_library').clone();
-        
+
         newobj.prop('id', 'library_section_'+count_libraries);
         setProperties(newobj, count_libraries, 'library_texttitle_template');
         setProperties(newobj, count_libraries, 'library_textbody_template');
         setProperties(newobj, count_libraries, 'library_file_template');
         setProperties(newobj, count_libraries, 'radio_librarytext_template', 'radiosel_').change(onChangeRadio_library);
         setProperties(newobj, count_libraries, 'radio_libraryfile_template', 'radiosel_').change(onChangeRadio_library);
-        
+
         newobj.appendTo('#anchor_library');
-        
+
         newobj.show();
       }
-      
+
       function remove_library(){
         $('#anchor_library').find('.section:last-child').remove();
         count_libraries--;
@@ -377,5 +423,11 @@
             deleteItem.hide();
         }
       }
+
+      function deleteLibrary(event){
+        event.preventDefault();
+        console.log(event);
+      }
+
 </script>
 {% endblock %}

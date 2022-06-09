@@ -4,6 +4,57 @@
 {% endblock %}
 {% block content %}
 <div>
+<script>
+    function editExercise(id, answersCount){
+        let currentUrl = location.toString();
+        let sesIdLoc = currentUrl.indexOf('PHPSESSID=') + 10;
+        let endSesIdLoc = currentUrl.indexOf('&', sesIdLoc);
+        endSesIdLoc = (endSesIdLoc != -1)? endSesIdLoc : currentUrl.length;
+
+        let blackBackground = document.createElement("div");
+        blackBackground.classList.add("modal-backdrop", "in", "fade");
+        document.body.appendChild(blackBackground);
+        blackBackground.animate([
+            {opacity: 0},
+            {opacity: 0.5}
+        ], 150)
+
+        let confirmBox = document.getElementById("confirm-edit");
+
+        let inputWithLocation = document.createElement("input");
+        inputWithLocation.appendChild(document.createTextNode("create-exercise.php?PHPSESSID=" + currentUrl.substr(sesIdLoc, endSesIdLoc) + "&exerciseId=" + id));
+        let type = document.createAttribute("type");
+        type.value = "hidden";
+        inputWithLocation.setAttributeNode(type);
+
+        confirmBox.classList.remove("none");
+        confirmBox.classList.add("block", "in");
+        confirmBox.appendChild(inputWithLocation);
+
+        confirmBox.animate([
+            {opacity: 0},
+            {opacity: 1},
+        ], 150);
+        let innerConfirmBox = document.querySelector("#confirm-edit>div.modal-dialog.modal-lg");
+
+        innerConfirmBox.animate([
+            {transform: 'translate(0,-25%)'},
+            {transform: 'translate(0,0)'},
+        ], 300);
+
+        let spanWithAnswer = document.getElementById("withAnswers");
+        let spanWithoutAnswer = document.getElementById("withoutAnswers");
+
+        if(answersCount >= 1){
+            spanWithAnswer.classList = "block";
+            spanWithoutAnswer.classList = "none";
+        }else{
+            spanWithAnswer.classList = "none";
+            spanWithoutAnswer.classList = "block";
+        }
+
+    }
+</script>
     <div class="lead">
         List of exercises for students, drag an drop them to change the order
     </div>
@@ -14,7 +65,9 @@
             {% endfor %}
         </ul>
         {{ include('exercise/deleteModal.php.twig') }}
+        {{ include('exercise/editModal.php.twig') }}
         </div>
     </section>
 </div>
+
 {% endblock %}

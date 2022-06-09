@@ -33,7 +33,7 @@
 
         {{ include('exercise/studentExercise.php.twig') }}
 
-        {% if not answer %}
+        {% if not answer and user.isInstructor(main.getCtId()) == False %}
             {{ include('exercise/usageModal.php.twig') }}
         {% endif %}
 

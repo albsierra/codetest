@@ -2,6 +2,7 @@
 
 namespace CT;
 
+use Exception;
 
 class CT_Test implements \JsonSerializable
 {

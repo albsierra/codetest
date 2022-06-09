@@ -46,7 +46,7 @@ return [
         "grades" => "Grades",
         "grades.average" => "Average:",
         "grades.max" => "Max:",
-        "grades.min" => "Min:",     
+        "grades.min" => "Min:",
         "import/export" => "Import / Export context",
         "import/export.export" => "Export your current context to a ZIP file",
         "import/export.import" => "Import a ZIP file to your current context",
@@ -71,7 +71,8 @@ return [
     ],
     "instructor" => [
         "add.exercise" => "Add exercise",
-        "delete.exercise" => "Delete Exercise"
+        "delete.exercise" => "Delete Exercise",
+        "edit.exercise" => "Edit exercise"
     ],
     "student-home" => [
         "lead" => "Your instructor has not yet configured this learning app.",
@@ -176,6 +177,12 @@ return [
     "delete-exercise-modal" => [
         "confirmation" => "Are you sure you want to delete this exercise? This action cannot be undone.",
         "delete" => "Delete",
+        "cancel" => "Cancel",
+    ],
+    "edit-exercise-modal" => [
+        "confirmation-answer" => "Are you sure you want to edit this exercise? Answers will be lost.",
+        "confirmation-no-answer" => "Are you sure you want to edit this exercise?",
+        "edit" => "Edit",
         "cancel" => "Cancel",
     ],
     "exercise-modal-usage" => [

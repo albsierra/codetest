@@ -1,0 +1,62 @@
+<div id="confirm-edit{{ exercise.getExerciseId() }}" class="modal fade modalEdit none" role="dialog">
+    <div class="modal-dialog modal-lg " style="width: 97%; ">
+        <div class="modal-content ">
+            <div class="container modalContainer">
+            <span class="none" id="withAnswers">
+                {%trans%}edit-exercise-modal.confirmation-answer{%endtrans%}
+            </span>
+            <span class="none" id="withoutAnswers">
+                {%trans%}edit-exercise-modal.confirmation-no-answer{%endtrans%}
+            </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-danger" id="edit" onclick="confirmEdition()">{%trans%}edit-exercise-modal.edit{%endtrans%}</button>
+                <button type="button" data-dismiss="modal" class="btn" id="cancel-edit" onclick="cancelEdition()">{%trans%}edit-exercise-modal.cancel{%endtrans%}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cancelEdition(){
+        let confirmBox = document.getElementById("confirm-edit");
+
+        confirmBox.animate([
+            {opacity: 1},
+            {opacity: 0},
+            {opacity: 0},
+        ], 300);
+
+        let innerConfirmBox = document.querySelector("#confirm-edit>div.modal-dialog.modal-lg");
+        let innerConfirmBoxAnimation = innerConfirmBox.animate([
+            {transform: 'translate(0,0)'},
+            {transform: 'translate(0,-25%)'},
+        ], 300);
+
+
+        let inputHidden = confirmBox.querySelector("input[type=hidden]");
+        confirmBox.removeChild(inputHidden);
+        let blackBackground = document.querySelector("div.modal-backdrop.fade.in");
+        blackBackground.animate([
+            {opacity: 0.5},
+            {opacity: 0},
+            {opacity: 0}
+        ], 300)
+
+        setTimeout(() => {
+            let confirmBox = document.getElementById("confirm-edit");
+            confirmBox.classList.remove("block", "in");
+            confirmBox.classList.add("none");
+            let blackBackground = document.querySelector("div.modal-backdrop.fade.in");
+            document.body.removeChild(blackBackground);
+            window.clearInterval()
+        }, 300)
+    }
+    function confirmEdition(){
+        let confirmBox = document.getElementById("confirm-edit");
+
+        let inputHidden = confirmBox.querySelector("input[type=hidden]");
+        console.log(inputHidden);
+        location.href=inputHidden.textContent;
+    }
+</script>

@@ -105,6 +105,14 @@ class CT_DAO {
                 . "`exercise_num` = :exercise_num, "
                 . "`exercise_id` = :exercise_id "
                 . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
+            'updateAll' => "UPDATE {$connection['p']}ct_exercise set "
+                . "`exercise_id` = :exercise_id, "
+                . "`ct_id` = :ct_id, "
+                . "`ak_id` = :akId, "
+                . "`title` = :title, "
+                . "`statement` = :statement, "
+                . "`hint` = :hint "
+                . "WHERE exercise_id = :exercise_id AND ct_id = :ct_id",
             'updateNum' => "UPDATE {$connection['p']}ct_exercise set "
                 . "`ct_id` = :ct_id, "
                 . "`exercise_num` = :exercise_num, "

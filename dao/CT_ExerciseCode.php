@@ -2,6 +2,8 @@
 
 namespace CT;
 
+use Exception;
+
 class CT_ExerciseCode extends CT_Exercise
 {
     private $exercise_language;

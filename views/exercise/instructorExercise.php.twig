@@ -14,10 +14,14 @@
                 <span aria-hidden="true" class="fa fa-fw fa-trash text-red-600"></span>
                 <span class="sr-only">{%trans%}instructor.delete.exercise{%endtrans%}</span>
             </a>
+            <a id="exerciseEditAction{{ exercise.getExerciseId() }}" href="javascript:void(0);" onclick="editExercise('{{ exercise.getExerciseId() }}', '{{exercise.getNumberAnswers()}}')">
+                <span aria-hidden="true" class="fa fa-fw fa-pencil text-green-600"></span>
+                <span class="sr-only">{%trans%}instructor.edit.exercise{%endtrans%}</span>
+            </a>
         </div>
-    </div>  
+    </div>
     <div class="ml-[48px] pt-4" style="width: calc(100% - 48px);">
          <pre class="bg-[#ffffff8c] backdrop-filter backdrop-blur-lg hover:bg-white transition-colors h-96">{{exercise.getStatement()|raw}}</pre>
-    </div>    
+    </div>
 </li>
 

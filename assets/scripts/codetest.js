@@ -629,12 +629,15 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                 sendButton.removeAttribute("disabled");
                 sendButton.appendChild(paperPlaneSymbol);
                 sendButton.removeChild(spinner);
-                
+
                 if(!$('.usage-modal').length){
                   window.location.reload(true);
                 }
             } else {
                 $("#flashmessages").html(data.flashmessage);
+                sendButton.removeAttribute("disabled");
+                sendButton.appendChild(paperPlaneSymbol);
+                sendButton.removeChild(spinner);
                 setupAlertHide();
             }
         },
