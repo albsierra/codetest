@@ -17,9 +17,6 @@ $mainContentArr = json_decode($mainContent, true);
 $exercisesContent = $zip->getFromName('exercises/exercises.json');
 $exercisesContentArr = json_decode($exercisesContent, true);
 
-$codeExercisesContent = $zip->getFromName('exercises/code_exercises.json');
-$codeExercisesContentArr = json_decode($codeExercisesContent, true);
-
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
 $main = \CT\CT_Main::getMainFromContext($CONTEXT->id, $LINK->id, $USER->id, $currentTime);
@@ -34,44 +31,12 @@ $main->save();
 
 // Main update <<
 
-$getTypeProperty = function ($property, $language) {
-    global $CFG;
-    if (in_array($language, $CFG->programmingLanguajes)) {
-        return $CFG->CT_Types['types']['programming'][$property];
-    } else {
-        return $CFG->CT_Types['types'][$language][$property];
-    }
-};
-
-$setCtIdFromMain = function($el) use ($main) {
-    $el->setCtId($main->getCtId());
-    return $el;
-};
-
 foreach($exercisesContentArr as $exercise) {
-    $oldId = $exercise['exercise_id'];
-    $exercise['exercise_id'] = null;  
-    $difficulty = $exercise['difficulty'];
-    $class = \CT\CT_ExerciseCode::class;
 
-    $exerciseCls = new $class();
+    $exerciseCls = new \CT\CT_ExerciseCode();
     \CT\CT_DAO::setObjectPropertiesFromArray($exerciseCls, $exercise);
-    if (in_array($type, $CFG->programmingLanguajes)) {
-        $array = $getTypeProperty('codeLanguages', $type);
-        foreach ( $array as $k => $v){
-            if($v['name'] == $type){
-                $exerciseCls->setExerciseLanguage($k);
-            }
-        }
-    }
-    $exerciseCls->setType($type);
-    $exerciseCls->setDifficulty($difficulty);
-    $result = $main->saveExercises([$exerciseCls]);
-
-    $object = json_decode($result); 
-    $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);   
-    $exercise1->setCtId($_SESSION["ct_id"]);
-    $exercise1->save();
+    $exerciseCls->setCtId($_SESSION["ct_id"]);
+    $exerciseCls->save();
 }
 
 $_SESSION['success'] = "Main actualizado";
