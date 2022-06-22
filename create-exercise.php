@@ -27,7 +27,6 @@ if (isset($_GET['exerciseId'])) {
 
         $newExercise->setExerciseOutputTest((array) $newExercise->getExerciseOutputTest());
         $newExercise->setExerciseInputTest((array) $newExercise->getExerciseInputTest());
-        $exerciseReplace = ($newExercise->getNumberAnswers() == 0) ? $newExercise->getAkId() . ":true": $newExercise->getAkId() . ":false";
     }
 
 }
@@ -41,7 +40,6 @@ echo $twig->render('pages/exercise-creation.php.twig', array(
     'CFG' => $CFG,
     'menu' => $menu,
     'validatorService' => $validatorService,
-    'help' => $help(),
-    'exerciseReplace' => isset($exerciseReplace) ? $exerciseReplace : "",
+    'help' => $help()
 ));
 

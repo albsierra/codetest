@@ -14,8 +14,9 @@
 
         >
             <input id="ownerName" type="hidden" value={{owner}} name="owner">
-            {% if exerciseReplace|length > 0 %}
-                <input type="hidden" value='{{exerciseReplace}}' name="exercise_replace">
+            {% if exercise.getExerciseId()|length > 0 %}
+                <input type="hidden" value='{{exercise.getExerciseId()}}' name="exercise[exercise_id]">
+                <input type="hidden" value='{{exercise.getAkId()}}' name="exercise[akId]">
             {% endif %}
             <div class="w-full mb-2">
                 {% embed "components/ct-input.php.twig"

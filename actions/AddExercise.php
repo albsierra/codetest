@@ -56,13 +56,16 @@ if ($USER->instructor) {
         $exercisePost['owner'] = $_SESSION["lti"]["link_title"];
         $exercisePost['sessionLanguage'] = isset($_SESSION["lti"]["user_locale"]) ? $_SESSION["lti"]["user_locale"] : "en";
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
+
         $exercise = $main->createExercise($exercisePost,strtolower($exercisePost['exercise_language']),$exercisePost["difficulty"],$libraries);
         $exercises = Array();
 
         array_push($exercises, $exercise);
 
+
         //save the exercise on the repository
-        $result = $main->saveExercises($exercises, (isset($_POST['exercise_replace']) ? $_POST['exercise_replace'] : $exercise->getAkId() . ':false'));
+        $result = $main->saveExercises($exercises);
+
 
         foreach ($temporalFile as $key => $value) {
             fclose($value);
@@ -72,6 +75,10 @@ if ($USER->instructor) {
         $object = json_decode($result);
         $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
         $exercise1->setCtId($_SESSION["ct_id"]);
+        
+        if(!empty($exercise->getExerciseId()) &&  !empty($exercise1->getExerciseId()) && $exercise->getExerciseId() != $exercise1->getExerciseId()){
+          $exercise->delete();
+        }
 
         //Save the returned exercise on the db
         $exercise1->save();

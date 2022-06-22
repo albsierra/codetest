@@ -68,7 +68,7 @@ class CT_Exercise implements \JsonSerializable {
     //necessary to use json_encode with exercise objects
     public function jsonSerialize() {
         return [
-            'exercise_id' => $this->getExerciseId(),
+            'id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
             'exercise_num' => $this->getExerciseNum(),
             'title' => $this->getTitle(),
