@@ -46,7 +46,7 @@ return [
         "grades" => "Puntuaciones",
         "grades.average" => "Media:",
         "grades.max" => "Máx:",
-        "grades.min" => "Mín:",     
+        "grades.min" => "Mín:",
         "import/export" => "Importar/Exportar contexto",
         "import/export.export" => "Exportar el contexto actual a un archivo ZIP",
         "import/export.import" => "Importar un archivo ZIP al contexto actual",
@@ -71,7 +71,8 @@ return [
     ],
     "instructor" => [
         "add.exercise" => "Añadir pregunta",
-        "delete.exercise" => "Borrar pregunta"
+        "delete.exercise" => "Borrar pregunta",
+        "edit.exercise" => "Editar ejercicio"
     ],
     "student-home" => [
         "lead" => "Tu profesor aún no ha configurado esta aplicación.",
@@ -171,11 +172,17 @@ return [
         "hard" => "Difícil",
         "save-exercise" => "Guardar pregunta",
         "cancel-exercise" => "Cancelar pregunta",
-        "close" => "Cerrar"
+        "close" => "Cerrar",
     ],
     "delete-exercise-modal" => [
         "confirmation" => "¿Está seguro de que desea eliminar esta pregunta? Esta acción no se puede deshacer.",
         "delete" => "Eliminar",
+        "cancel" => "Cancelar",
+    ],
+    "edit-exercise-modal" => [
+        "confirmation-answer" => "¿Está seguro de que quiere editar este ejercicio? Las respuestas se perderán.",
+        "confirmation-no-answer" => "¿Está seguro de que quiere editar este ejercicio?",
+        "edit" => "Editar",
         "cancel" => "Cancelar",
     ],
     "exercise-modal-usage" => [
@@ -269,6 +276,19 @@ return [
             "inputs" => "Con las siguientes entradas",
             "outputs" => "Se espera obtener esta salida",
             "restrictions" => "Restricciones (separadas por líneas)",
+            "library-title" => "Librerías",
+            "title" => "Título",
+            "body" => "Cuerpo",
+            "text" => "Texto",
+            "file" => "Archivo",
+            "test-expected" => "Salida esperada",
+            "test-output" => "Salida obtenida",
+        ],
+        "buttons" => [
+          "add-tests" => "Añadir tests",
+          "delete-tests" => "Eliminar tests",
+          "add-library" => "Añadir librería",
+          "delete-library" => "Eliminar librería",
         ]
     ],
     "import-authorkit" => [
@@ -331,7 +351,8 @@ return [
         "title.saved.failed" => "El título no se pudo guardar. Por favor, inténtelo de nuevo.",
         "add.exercise.success" => "Pregunta guardada.",
         "add.exercise.failed" => "No se puede guardar la pregunta en blanco.",
-        "answer.exercise.failed" => "Su respuesta no puede estar vacía.",
+        "answer.exercise.failed.empty" => "Su respuesta no puede estar vacía.",
+        "answer.exercise.failed.exception" => "Error al enviar la respuesta: ",
         "answer.exercise.saved" => "Respuesta guardada.",
         "exercise.deleted.success" => "Pregunta borrada.",
         "grade.invalid" => "Calificación no válida.",
