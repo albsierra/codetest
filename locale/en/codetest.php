@@ -308,7 +308,7 @@ return [
         ]
     ],
     "ak-exercises-list" => [
-        "title" => "Showing exercises from proyect :",
+        "title" => "Showing exercises from project :",
         "home" => "Back to projects list",
         "labels" => [
             "title" => "Title:",
