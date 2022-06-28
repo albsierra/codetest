@@ -57,7 +57,7 @@
                                         {% for language in languages %}
                                             <option
                                                 value="{{ language }}"
-                                                {{ answerLanguage is defined ? (answerLanguage == language ? "selected" : "") : (exerciseLanguage == language ? "selected" : "") }}
+                                                {{ answerLanguage ? (answerLanguage == language ? "selected" : "") : (exerciseLanguage == language ? "selected" : "") }}
                                             >{{ language }}</option>
                                         {% endfor %}
                                     </select>
