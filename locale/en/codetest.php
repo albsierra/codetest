@@ -388,5 +388,7 @@ return [
     ],
     "warning" => [
         "obligatory" =>"Fields marked with an asterisk ' * ' are obligatory"
-    ]
+    ],
+    //feedback-manager messages
+    "Congratulations!!!! you have submitted the correct answer" => "Congratulations!!!! you have submitted the correct answer"
 ];
