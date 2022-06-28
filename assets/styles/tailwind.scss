@@ -135,7 +135,7 @@
 
  
     .cke{
-        padding: 0;
+        padding: 1px;
         border: 0;
     }
     &.ct-focused{
@@ -179,14 +179,14 @@
         @apply text-left;
     }
     > textarea{
-        width: calc(100% - 8px);
+        width: 100%;
         @apply caret-primary;
 
         @apply rounded-sm;
         @apply rounded-t-none;
 
         @apply flex-1;
-        @apply px-2 pt-1 pb-4 m-1 -mb-1;
+        @apply px-2 pt-1 pb-4 mt-1 -mb-1;
 
         @apply bg-transparent;
         @apply outline-none;
