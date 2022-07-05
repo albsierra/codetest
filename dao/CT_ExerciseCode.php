@@ -6,14 +6,14 @@ use Exception;
 
 class CT_ExerciseCode extends CT_Exercise
 {
-    private $exercise_language;
-    private $exercise_input_test;
-    private $exercise_input_grade;
-    private $exercise_output_test;
-    private $exercise_output_grade;
-    private $exercise_solution;
-    private $recalculateOutputs = false;
-    private $exercise_libraries;
+    protected $exercise_language;
+    protected $exercise_input_test;
+    protected $exercise_input_grade;
+    protected $exercise_output_test;
+    protected $exercise_output_grade;
+    protected $exercise_solution;
+    protected $recalculateOutputs = false;
+    protected $exercise_libraries;
 
     public function __construct($exercise_id = null)
     {

@@ -11,7 +11,6 @@ if ($USER->instructor) {
     if (!$exercises) {
         $_SESSION["error"] = $translator->trans('backend-messages.import.exercise.noselect');
     } else {
-        $main = new \CT\CT_Main($_SESSION["ct_id"]);
         foreach ($exercises as $exercise) {
             $origExercise = \CT\CT_Exercise::findExerciseForImportId($exercise);
             if ($origExercise->getExerciseId()) {

@@ -44,6 +44,7 @@ $DATABASE_INSTALL = array(
     title         VARCHAR (50) NOT NULL,
     statement     TEXT NULL,
     hint          VARCHAR (50) NULL,
+    code_exercise TINYINT NULL,
 
     CONSTRAINT `{$CFG->dbprefix}ct_ibfk_6`
         FOREIGN KEY (`ct_id`)
@@ -195,6 +196,14 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add tests_output column to save output from each test (in JSON)
     if (!$PDOX->columnExists('tests_output', "{$CFG->dbprefix}ct_answer")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD COLUMN tests_output TEXT NULL DEFAULT NULL";
+        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    // Add code_exercise column to check if exercise comes form codetest or authorkit
+    if (!$PDOX->columnExists('code_exercise', "{$CFG->dbprefix}ct_exercise")) {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_exercise ADD COLUMN code_exercise TINYINT NULL";
         echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);

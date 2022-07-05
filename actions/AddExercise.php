@@ -73,7 +73,9 @@ if ($USER->instructor) {
 
         //map the returned exercise
         $object = json_decode($result);
-        $exercise1 = \CT\CT_Test::mapObjectToCodeExercise($object);
+
+        $exercise1 = new \CT\CT_ExerciseCode();
+        $exercise1->setFromObject($object);
         $exercise1->setCtId($_SESSION["ct_id"]);
         
         if(!empty($exercise->getExerciseId()) &&  !empty($exercise1->getExerciseId()) && $exercise->getExerciseId() != $exercise1->getExerciseId()){
