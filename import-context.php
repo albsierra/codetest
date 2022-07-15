@@ -34,7 +34,7 @@ $main->save();
 foreach($exercisesContentArr as $exercise) {
 
     $exerciseCls = new \CT\CT_ExerciseCode();
-    \CT\CT_DAO::setObjectPropertiesFromArray($exerciseCls, $exercise);
+    $exerciseCls->setFromObject($exercise);
     $exerciseCls->setCtId($_SESSION["ct_id"]);
     $exerciseCls->save();
 }

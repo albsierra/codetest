@@ -60,7 +60,7 @@ $toArrayWithMeta = function ($data) use ($exercisesMetaMap){
     $resultArr = [];
 
     foreach($arr as $item){
-        $auxObj = $exercisesMetaMap[$item['exercise_id']];
+        $auxObj = $exercisesMetaMap[$item['id']];
         $merge_object = (array) array_merge((array) $item, (array) $auxObj);
         array_push($resultArr, $merge_object);
     }

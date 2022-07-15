@@ -97,8 +97,11 @@ class CT_Exercise implements \JsonSerializable {
                 $this->{$key} = $value;
             }
         }
-        if(isset($data->id)){
+        if(is_object($data) && isset($data->id)){
             $this->setExerciseId($data->id);
+        }
+        if(is_array($data) && isset($data['id'])){
+            $this->setExerciseId($data['id']);
         }
         $this->setCtId($_SESSION["ct_id"]);
     }
