@@ -84,16 +84,17 @@ $clone_ex_code = json_decode(json_encode($clone_ex_code), true);
 $exercisesMappedWithMeta = $toArrayWithMeta($clone_exercises);
 
 // ---------------------------------------
+$tempFolder = '/tmp';
 
-$mainFilename = "main.json";
+$mainFilename = "$tempFolder/main.json";
 $fileHandler = fopen($mainFilename, 'w');
 fwrite($fileHandler, json_encode($clone_main, JSON_PRETTY_PRINT));
 
-$exercisesFilename = "exercises.json";
+$exercisesFilename = "$tempFolder/exercises.json";
 $fileHandler = fopen($exercisesFilename, 'w');
 fwrite($fileHandler, json_encode($exercisesMappedWithMeta, JSON_PRETTY_PRINT));
 
-$codeFilename = "code_exercises.json";
+$codeFilename = "$tempFolder/code_exercises.json";
 $fileHandler = fopen($codeFilename, 'w');
 fwrite($fileHandler, json_encode($clone_ex_code, JSON_PRETTY_PRINT));
 
@@ -102,14 +103,14 @@ $timeFormat = new DateTime('now', new DateTimeZone("Europe/Madrid"));
 $timeFormat = $timeFormat->format('Ymd_Hi');
 
 $zip = new ZipArchive();
-$zipFinalFilename = "Codetest_export_{$timeFormat}_{$CONTEXT->id}-{$CONTEXT->title}.zip";
+$zipFinalFilename = "$tempFolder/Codetest_export_{$timeFormat}_{$CONTEXT->id}-{$CONTEXT->title}.zip";
 $openZipFile = $zip->open($zipFinalFilename, ZipArchive::CREATE);
 if(!$openZipFile) {
     exit("cannot open <$zipFinalFilename>\n");
 }
 $zip->addFile($mainFilename,"main.json");
-$zip->addFile($exercisesFilename, "exercises/".$exercisesFilename);
-$zip->addFile($codeFilename, "exercises/".$codeFilename);
+$zip->addFile($exercisesFilename, "exercises/".basename($exercisesFilename));
+$zip->addFile($codeFilename, "exercises/".basename($codeFilename));
 $zip->close();
 
 unlink($mainFilename);
@@ -124,7 +125,7 @@ $zipFilename_filesize = filesize($zipFinalFilename);
 // var_dump("THE END");die;
 
 header('Content-Type: application/zip');
-header('Content-Disposition: attachment; filename="'.$zipFinalFilename.'"');
+header('Content-Disposition: attachment; filename="'.$zipFilename_basename.'"');
 header('Content-Length: '.$zipFilename_filesize);
 header('Expires: 0');
 header('Pragma: public');
@@ -134,4 +135,5 @@ header('Content-Description: File Transfer');
 flush();
 readfile($zipFinalFilename);
 unlink($zipFinalFilename);
+
 
