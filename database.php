@@ -59,7 +59,7 @@ $DATABASE_INSTALL = array(
     answer_id    INTEGER NOT NULL AUTO_INCREMENT,
     user_id      INTEGER NOT NULL,
     exercise_id  VARCHAR(50) NOT NULL,
-    answer_output  VARCHAR(250) NULL,
+    answer_output  TEXT NULL,
     ct_id        INTEGER NOT NULL,
     answer_txt   TEXT NULL,
     answer_success BOOL NOT NULL DEFAULT 0,
@@ -142,7 +142,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add splash column
     if (!$PDOX->columnExists('seen_splash', "{$CFG->dbprefix}ct_main")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_main ADD seen_splash BOOL NOT NULL DEFAULT 0";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -150,7 +149,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Remove splash table
     if($PDOX->describe("{$CFG->dbprefix}ct_splash")) {
         $sql = "DROP TABLE {$CFG->dbprefix}ct_splash;";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -158,7 +156,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add points column
     if (!$PDOX->columnExists('points', "{$CFG->dbprefix}ct_main")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_main ADD points FLOAT NOT NULL DEFAULT 100";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -166,7 +163,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add title column
     if (!$PDOX->columnExists('title', "{$CFG->dbprefix}ct_main")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_main ADD title VARCHAR(255) NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -174,7 +170,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add onfly column in exercise_sql
     if (!$PDOX->columnExists('exercise_onfly', "{$CFG->dbprefix}ct_sql_exercise")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_sql_exercise ADD exercise_onfly LONGTEXT NULL DEFAULT NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -182,13 +177,11 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add answer_language column to allow student select the language of the answer
     if (!$PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD answer_language VARCHAR(20) NULL DEFAULT NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
-    if ($PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer")) {
+    if ($PDOX->columnExists('answer_language', "{$CFG->dbprefix}ct_answer") && $PDOX->columnType('answer_language', "{$CFG->dbprefix}ct_answer") != 'varchar') {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer MODIFY answer_language VARCHAR(20) NULL DEFAULT NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -196,7 +189,6 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add tests_output column to save output from each test (in JSON)
     if (!$PDOX->columnExists('tests_output', "{$CFG->dbprefix}ct_answer")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer ADD COLUMN tests_output TEXT NULL DEFAULT NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
@@ -204,7 +196,13 @@ $DATABASE_UPGRADE = function($oldversion) {
     // Add code_exercise column to check if exercise comes form codetest or authorkit
     if (!$PDOX->columnExists('code_exercise', "{$CFG->dbprefix}ct_exercise")) {
         $sql = "ALTER TABLE {$CFG->dbprefix}ct_exercise ADD COLUMN code_exercise TINYINT NULL";
-        echo("Upgrading: " . $sql . "<br/>\n");
+        error_log("Upgrading: " . $sql);
+        $q = $PDOX->queryDie($sql);
+    }
+
+    // Change answer_output text length
+    if ($PDOX->columnExists('answer_output', "{$CFG->dbprefix}ct_answer") && $PDOX->columnType('answer_output', "{$CFG->dbprefix}ct_answer") != 'text') {
+        $sql = "ALTER TABLE {$CFG->dbprefix}ct_answer MODIFY answer_output TEXT NULL";
         error_log("Upgrading: " . $sql);
         $q = $PDOX->queryDie($sql);
     }
