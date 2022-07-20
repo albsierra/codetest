@@ -237,14 +237,6 @@ return [
         "last" => "Última",
         "cantconnectrepository" => " No se puede conectar con el repositorio o no hay preguntas "
     ],
-    "exercise-sql-form" => [
-        "exercisetype" => "Tipo de pregunta",
-        "exerciseDBMS" => "Pregunta DBMS",
-        "exercisedatabase" => "Base de datos de preguntas",
-        "exercisesolution" => "Solución de la pregunta",
-        "exerciseprobe" => "Sondeo de pregunta",
-        "databaseonfly" => "Base de datos Onfly"
-    ],
     "exercise-code-form" => [
         "inputforstudent" => "Entrada para alumno",
         "inputforgrade" => "Entrada para nota",
@@ -370,7 +362,7 @@ return [
         "error-preload-empty" => "La lista de ejercicios a precargar está vacía",
         "preload-success" => "Ejercicios precargados correctamente",
         "preload-error-external" => "Error externo durante la precarga de ejercicios",
-        "preload-error" => "Error al cargar ejercicios: exercisesList",
+        "preload-error" => "Error al cargar ejercicios: %exercisesList%",
     ],
     "help-pages" => [
         "ak-projects-list" => [

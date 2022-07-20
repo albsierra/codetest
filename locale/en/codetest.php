@@ -237,14 +237,6 @@ return [
         "last" => "Last",
         "cantconnectrepository" => " Can't connect with the repository or there are no exercises "
     ],
-    "exercise-sql-form" => [
-        "exercisetype" => "Exercise Type",
-        "exerciseDBMS" => "Exercise DBMS",
-        "exercisedatabase" => "Exercise Database",
-        "exercisesolution" => "Exercise Solution",
-        "exerciseprobe" => "Exercise Probe",
-        "databaseonfly" => "Database Onfly"
-    ],
     "exercise-code-form" => [
         "inputforstudent" => "Input for student",
         "inputforgrade" => "Input for grade",
@@ -273,8 +265,8 @@ return [
             "statement" => "Exercise statement",
             "hint" => "Hint",
             "tests" => "Tests (separated by lines)",
-            "inputs" => "With this inputs",
-            "outputs" => "Expect this outputs",
+            "inputs" => "With these inputs",
+            "outputs" => "Expect these outputs",
             "restrictions" => "Restrictions (separated by lines)",
             "library-title" => "Libraries",
             "title" => "Title",
@@ -366,11 +358,11 @@ return [
         "points.posible.failed" => "Points Possible failed to save or you provided an invalid number. Please try again.",
         "grade.saved.success" => "Grade saved.",
         "connection.failed" => "Can't connect with the repository",
-        "exercise.code.percent" => "The output of your code matches a %percent%%% of the correct answer",
+        "exercise.code.percent" => "The output of your code matches %percent%%% of the correct answer",
         "error-preload-empty" => "The list of exercises to preload is empty",
         "preload-success" => "Exercises preloaded successfully",
         "preload-error-external" => "External error while preloading exercises",
-        "preload-error" => "Error preloading exercises: exercisesList",
+        "preload-error" => "Error preloading exercises: %exercisesList%",
     ],
     "help-pages" => [
         "ak-projects-list" => [
