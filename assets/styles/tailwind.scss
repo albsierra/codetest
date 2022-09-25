@@ -260,7 +260,7 @@
             // margin-bottom: 8px !important;
         }
         code{
-            @apply bg-secondary bg-opacity-10 block;
+            @apply bg-secondary bg-opacity-10;
             @apply my-3;
         }
     }
@@ -327,7 +327,7 @@
         }
     }
     code{
-        @apply bg-secondary bg-opacity-10 block;
+        @apply bg-secondary bg-opacity-10;
         @apply my-3;
     }
 }
