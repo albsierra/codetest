@@ -9,22 +9,40 @@ $toolTitle = $main->getTitle() ? $main->getTitle() : "Code Test";
 $exercises = $main->getExercises();
 $totalExercises = count($exercises);
 $currentExerciseNumber = isset($_GET['exerciseNum']) ? $_GET['exerciseNum'] : 1;
+$student_language = $_SESSION["lti"]["user_locale"];
+
+if(empty($student_language)){
+    $student_language = "en";
+}
 
 if($totalExercises > 0){
     
     $firstExerciseId = $exercises[$currentExerciseNumber - 1]->getAkId();
     $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/tests");
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements/$student_language");
+    $statements_list = $exerciseStatementsResponse->toArray();
     $testsList = $exerciseTestsResponse->toArray();
 }
 
-$user = new \CT\CT_User($USER->id);
+if(($statements_list[0] != null)){
+    $statement_value = $statements_list[0]["statementValue"];
+}else{
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements/en");
+    $statements_list = $exerciseStatementsResponse->toArray();
+    $statement_value = $statements_list[0]["statementValue"];
+    if($statements_list[0] == null){
+        $statement_value = getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseId);
+    }
+}
 
+$user = new \CT\CT_User($USER->id);
 echo $twig->render('pages/student-view.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
     'user' => $user,
     'exercises' => $exercises,
+    'statementValue' =>$statement_value,
     'testsList' => $testsList,
     'totalExercises' => $totalExercises,
     'currentExerciseNumber' => $currentExerciseNumber,
@@ -34,3 +52,39 @@ echo $twig->render('pages/student-view.php.twig', array(
     'CFG' => $CFG,
 ));
 
+function getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseId){
+
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements");
+    $statements_list = $exerciseStatementsResponse->toArray();
+    $statement_value;
+    $is_english = false;
+
+    foreach($statements_list as $statement_Array => $statement_array_value){
+
+        if($student_language == $statement_array_value["nat_lang"]){
+
+            $statement_value = $statement_array_value["statementValue"];
+            $is_english = false;
+            break;
+
+        }else if($student_language != $statement_array_value["nat_lang"]){
+
+            if($statement_array_value["nat_lang"] == "en"){
+
+                $statement_value_en = $statement_array_value["statementValue"];
+                $is_english = true;
+
+            }else{
+
+                $statement_value = $statement_array_value["statementValue"];
+            }
+        }
+    }
+
+    if($is_english){
+
+        $statement_value =  $statement_value_en;
+    }
+    
+    return $statement_value;
+}
