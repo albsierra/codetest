@@ -34,7 +34,8 @@ if (!isset($answerText) || trim($answerText) == "") {
                     'date' => date("c"),
                     'program' => $answerText,
                     'learningObject' => $exercise1->getAkId(), //$exerciseId,
-                    'studentID' => $USER->id
+                    'studentID' => $USER->id,
+                    'language' => $answerLanguage
                 ]
             ]);
             $responsePearl = $response->toArray();
