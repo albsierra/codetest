@@ -27,7 +27,7 @@ This is a guide for JuezLTI developers
   - Customizations committed on top of the branch `codetest-customizations`
 
 - [Docker](https://www.docker.com/)
-  - The project is dockerized at [this repository](https://github.com/KA226-COVID/deploy_docker)
+  - The project is dockerized at [this repository](https://github.com/JuezLTI/deploy_docker)
 
 - [Webpack Encore](https://symfony.com/doc/current/frontend.html)
   - Used to managed assets like images, css, js, among other utilities
@@ -64,7 +64,7 @@ This is the guide to follow to get a development environment configured:
 
 - Create a folder called "tsugi" inside your `www` folder
 
-- Clone the branch `codetest-customizations` from the [Tsugi repo](https://github.com/KA226-COVID/tsugi/tree/codetest-customizations) into that folder
+- Clone the branch `codetest-customizations` from the [Tsugi repo](https://github.com/JuezLTI/tsugi/tree/codetest-customizations) into that folder
 
 - Create a file called `config.php` with the content of `config-dist.php` (from tsugi)
 
@@ -74,7 +74,7 @@ This is the guide to follow to get a development environment configured:
 
 > CODETEST CONFIG
 
-- Clone the [Codetest repo](https://github.com/KA226-COVID/codetest/tree/master) inside that folder
+- Clone the [Codetest repo](https://github.com/JuezLTI/codetest/tree/master) inside that folder
 
 - Create a file called `config.php` with the content of `config-dist.php` (from codetest)
 
@@ -124,7 +124,7 @@ s
 
 > QUESTIONS-STORAGE SETUP
 
-- Clone the [questions-storage repository](https://github.com/KA226-COVID/questions-storage) 
+- Clone the [questions-storage repository](https://github.com/JuezLTI/questions-storage) 
 
 - Configure your MongoDB credentials at `application.properties`
 
@@ -163,7 +163,7 @@ s
 
 > SETUP XML-VALIDATOR
 
-- Clone the branch `deployment` of [xml-validator repository](https://github.com/KA226-COVID/xml-evaluator)
+- Clone the branch `deployment` of [xml-validator repository](https://github.com/JuezLTI/xml-evaluator)
 
 - For the next step you must set some environment variables, depending if you are using windows or linux this process will be different
 
@@ -181,7 +181,7 @@ s
 
 > SETUP FEEDBACK-MANAGER
 
-- Clone the branch `main` of [feedback-manager repository](https://github.com/KA226-COVID/feedback-manager)
+- Clone the branch `main` of [feedback-manager repository](https://github.com/JuezLTI/feedback-manager)
 
 - For the next step you must set some environment variables, depending if you are using windows or linux this process will be different
 
