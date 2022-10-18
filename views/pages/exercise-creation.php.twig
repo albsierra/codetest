@@ -160,7 +160,7 @@
                                             {%trans%}new-exercise-form.labels.inputs{%endtrans%}
                                         </div>
 
-                                        <textarea class="tests-textarea" cols="30" rows="5" id="input_1" name="exercise[exercise_input_test][{{i}}]">{{exercise.getExerciseInputTest()[count]}}</textarea>
+                                        <textarea class="tests-textarea" cols="30" rows="5" id="input_1" name="exercise[exercise_input_test][{{i}}]">{{exercise.getExerciseInputTest()[i]}}</textarea>
                                     </div>
                                     <div class="flex items-center pt-6">
                                         <span>
@@ -172,7 +172,7 @@
                                             {%trans%}new-exercise-form.labels.outputs{%endtrans%}
                                         </div>
 
-                                        <textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][{{i}}]">{{exercise.getExerciseOutputTest()[count]}}</textarea>
+                                        <textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][{{i}}]">{{exercise.getExerciseOutputTest()[i]}}</textarea>
                                     </div>
                                 </div>
                               </div>
