@@ -27,6 +27,9 @@
             {% if inputClass is defined %}
                 class="{{inputClass}}"
             {% endif %}
+             {% if maxlength is defined %}
+                maxlength = "{{maxlength}}"
+            {% endif %}
             {% if name is defined %}
                 name="{{name}}"
             {% endif %}
