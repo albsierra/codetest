@@ -102,6 +102,12 @@ class CT_ExerciseCode extends CT_Exercise
     public function setExerciseInputTest($exercise_input_test)
     {
         if($this->exercise_input_test != $exercise_input_test) $this->recalculateOutputs = true;
+		
+		foreach($exercise_input_test as $k=>$item){
+            if(strstr($item, "\r\n")){
+                $exercise_input_test[$k] = str_replace("\r\n", "\n", $item);
+            }
+        }
         $this->exercise_input_test = $exercise_input_test;
     }
 
@@ -135,6 +141,11 @@ class CT_ExerciseCode extends CT_Exercise
      */
     public function setExerciseOutputTest($exercise_output_test)
     {
+		foreach($exercise_output_test as $k=>$item){
+            if(strstr($item, "\r\n")){
+                $exercise_output_test[$k] = str_replace("\r\n", "\n", $item);
+            }
+        }
         $this->exercise_output_test = $exercise_output_test;
     }
 
