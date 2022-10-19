@@ -31,6 +31,9 @@
             {% if onclick is defined %}
                 onclick = "{{onclick}}"
             {% endif %}
+            {% if maxlength is defined %}
+                maxlength = "{{maxlength}}"
+            {% endif %}
             type="{{type|default('text')}}"
         >
     {% endblock %}

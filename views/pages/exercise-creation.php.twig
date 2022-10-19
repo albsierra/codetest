@@ -25,6 +25,7 @@
                         name: 'exercise[title]',
                         id: 'exerciseTitleText',
                         value: exercise.getTitle(),
+                        maxlength: "50",
                         required: true
                     } only
                 %}
@@ -81,7 +82,13 @@
             <div class="w-full mt-4">
 
                 {% embed "components/ct-textarea.php.twig"
-                    with { label: "new-exercise-form.labels.hint"|trans, name: 'exercise[hint]', rows: "1", value: exercise.getHint() } only
+                    with { 
+                    label: "new-exercise-form.labels.hint"|trans,
+                    name: 'exercise[hint]',
+                    rows: "1",
+                    value: exercise.getHint(),
+                    maxlength:"50"
+                } only
                 %}
                 {% endembed %}
 
