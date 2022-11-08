@@ -79,6 +79,17 @@ class CT_User implements \JsonSerializable
         }
     }
 
+    function getHaveCorrectUsage($exercise_id, $user_id){
+        global $REST_CLIENT_REPO;
+        
+        $usageResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/usage/exercise_id/$exercise_id/user_id/$user_id");
+        $usage_list = $usageResponse->toArray();
+        if(!empty($usage_list)){ 
+            return true;
+        }
+        return false;
+    }
+
     function getMostRecentAnswerDate($ct_id) {
         $query = \CT\CT_DAO::getQuery('user','getMostRecentAnswerDate');
         $arr = array(':userId' => $this->getUserId(), ':ctId' => $ct_id);

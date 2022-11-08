@@ -29,11 +29,11 @@
 
         {% set exercise = exercises[exerciseNum-1].getExerciseCode() %}
         {% set exerciseId = exercise.getExerciseId() %}
-        {% set answer = user.getAnswerForExercise(exerciseId, exercise.getCtId()) %}
+        {% set correctAnswer =  answer.getAnswerSuccess() %}
 
         {{ include('exercise/studentExercise.php.twig') }}
 
-        {% if not answer and user.isInstructor(main.getCtId()) == False %}
+        {% if correctUsage == false and user.isInstructor(main.getCtId()) == False %}
             {{ include('exercise/usageModal.php.twig') }}
         {% endif %}
 

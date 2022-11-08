@@ -191,6 +191,7 @@ return [
         "difficulty" => "Difficulty",
         "time" => "Time",
         "send.usage" => "Send Usage",
+        "send.usage.cancel" => "Cancel",
     ],
     "student-code-exercise" => [
         "language" => "Language",

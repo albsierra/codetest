@@ -613,7 +613,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                 $('.answer-output').html("-");
 
                 //If the answer is not empty and it is the first time it has been answered, the usage modal opens
-                if (data) {
+                if (data.success) {
                     $('.usage-modal').modal({
                         backdrop: 'static',
                         keyboard: false,
@@ -630,9 +630,6 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                 sendButton.appendChild(paperPlaneSymbol);
                 sendButton.removeChild(spinner);
 
-                if(!$('.usage-modal').length){
-                  window.location.reload(true);
-                }
             } else {
                 $("#flashmessages").html(data.flashmessage);
                 sendButton.removeAttribute("disabled");
@@ -650,6 +647,10 @@ global.answerExercise = function(exerciseId, exerciseNum) {
             setupAlertHide();
         }
     });
+}
+
+global.cancelModal = function(modalId){
+    $('#'+modalId).modal('hide'); 
 }
 
 const updateExerciseBadge = (data) => {
@@ -782,7 +783,6 @@ global.sendUsage = function(exerciseId) {
             setTimeout(() => {
                 $('#usageModal'+exerciseId).remove()
                 // location.reload();
-                window.location.reload(true)
             },350)
         },
         error: function(data){
@@ -1010,7 +1010,6 @@ global.showNewExerciseRow = function() {
 }
 
 global.exerciseCancelAction = function() {
-    console.log("Dentro del Cancel");
     CKEDITOR.instances['exercise[statement]'].setData('');
     codeEditor.setValue("");
     var theForm = $("#exerciseTextForm-1");
