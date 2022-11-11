@@ -38,6 +38,16 @@ if(($statements_list[0] != null)){
     }
 }
 
+$code_languages = $validatorService->getCodeLanguages();
+$last_used_language = isset($_SESSION["last_used_language"])?$_SESSION["last_used_language"]:"";
+
+foreach($code_languages as $indice => $language){
+    if($last_used_language == $language){
+        unset($code_languages[$indice]);
+        array_unshift($code_languages,$last_used_language);    
+    }
+}
+
 echo $twig->render('pages/student-view.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
@@ -45,6 +55,8 @@ echo $twig->render('pages/student-view.php.twig', array(
     'user' => $user,
     //return true when have a correct usage if not returns false
     'correctUsage' => $user->getHaveCorrectUsage($firsExerciseId,$user_id),
+    // All codelanguages but ordened by last used language
+    'codeLanguagesOrdened' => $code_languages,
     'exercises' => $exercises,
     'statementValue' =>$statement_value,
     'testsList' => $testsList,
