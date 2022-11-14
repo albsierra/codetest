@@ -10,6 +10,8 @@ $exercises = $main->getExercises();
 $totalExercises = count($exercises);
 $currentExerciseNumber = isset($_GET['exerciseNum']) ? $_GET['exerciseNum'] : 1;
 $student_language = $_SESSION["lti"]["user_locale"];
+$user_id = $_SESSION["lti"]["user_id"];
+$user = new \CT\CT_User($user_id);
 
 if(empty($student_language)){
     $student_language = "en";
@@ -17,9 +19,10 @@ if(empty($student_language)){
 
 if($totalExercises > 0){
     
-    $firstExerciseId = $exercises[$currentExerciseNumber - 1]->getAkId();
-    $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/tests");
-    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements/$student_language");
+    $firstExerciseAkId = $exercises[$currentExerciseNumber - 1]->getAkId();
+    $firsExerciseId = $exercises[$currentExerciseNumber - 1]->getExerciseId();
+    $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/tests");
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/statements/$student_language");
     $statements_list = $exerciseStatementsResponse->toArray();
     $testsList = $exerciseTestsResponse->toArray();
 }
@@ -27,20 +30,33 @@ if($totalExercises > 0){
 if(($statements_list[0] != null)){
     $statement_value = $statements_list[0]["statementValue"];
 }else{
-    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements/en");
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/statements/en");
     $statements_list = $exerciseStatementsResponse->toArray();
     $statement_value = $statements_list[0]["statementValue"];
     if($statements_list[0] == null){
-        $statement_value = getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseId);
+        $statement_value = getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseAkId);
     }
 }
 
-$user = new \CT\CT_User($USER->id);
+$code_languages = $validatorService->getCodeLanguages();
+$last_used_language = isset($_SESSION["last_used_language"])?$_SESSION["last_used_language"]:"";
+
+foreach($code_languages as $indice => $language){
+    if($last_used_language == $language){
+        unset($code_languages[$indice]);
+        array_unshift($code_languages,$last_used_language);    
+    }
+}
+
 echo $twig->render('pages/student-view.php.twig', array(
     'OUTPUT' => $OUTPUT,
     'help' => $help(),
     'menu' => $menu,
     'user' => $user,
+    //return true when have a correct usage if not returns false
+    'correctUsage' => $user->getHaveCorrectUsage($firsExerciseId,$user_id),
+    // All codelanguages but ordened by last used language
+    'codeLanguagesOrdened' => $code_languages,
     'exercises' => $exercises,
     'statementValue' =>$statement_value,
     'testsList' => $testsList,
@@ -52,9 +68,9 @@ echo $twig->render('pages/student-view.php.twig', array(
     'CFG' => $CFG,
 ));
 
-function getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseId){
+function getStatemets($student_language,$REST_CLIENT_REPO,$firstExerciseAkId){
 
-    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseId/statements");
+    $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/statements");
     $statements_list = $exerciseStatementsResponse->toArray();
     $statement_value;
     $is_english = false;

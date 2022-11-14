@@ -75,6 +75,9 @@
                 <button type="button" class="btn btn-success" onclick="sendUsage('{{exercise.getExerciseId()}}')">
                     {%trans%}exercise-modal-usage.send.usage{%endtrans%}
                 </button>
+                <button type="button" class="btn btn-success btn-danger" onclick="cancelModal('usageModal{{exerciseId}}')">
+                    {%trans%}exercise-modal-usage.send.usage.cancel{%endtrans%}
+                </button>
             </div>
         </div>
     </div>

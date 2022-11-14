@@ -7,6 +7,7 @@ $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $exerciseId = $_POST["exerciseId"];
 $answerText = $_POST["answerText"];
 $exerciseNum = $_POST["exerciseNum"];
+$_SESSION["last_used_language"] = isset($_POST["answer_language"])? $_POST["answer_language"] : "";
 
 // In databases doesn't exists answer_language, so we use -1
 $answerLanguage = $_POST["answer_language"] ?? '';
@@ -45,7 +46,7 @@ if (!isset($answerText) || trim($answerText) == "") {
 
         $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput, $testsOutput);
         $answer = $array['answer'];
-
+        
         $result["answer_content"] = true;
         $result['exists'] = $array['exists'];
         $result['success'] = $answer->getAnswerSuccess();
