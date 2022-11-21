@@ -29,7 +29,7 @@
 
         {% set exercise = exercises[exerciseNum-1].getExerciseCode() %}
         {% set exerciseId = exercise.getExerciseId() %}
-        {% set correctAnswer =  answer.getAnswerSuccess() %}
+        {% set answer = user.getAnswerForExercise(exerciseId, exercise.getCtId()) %}
 
         {{ include('exercise/studentExercise.php.twig') }}
 

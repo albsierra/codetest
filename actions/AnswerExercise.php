@@ -8,6 +8,8 @@ $exerciseId = $_POST["exerciseId"];
 $answerText = $_POST["answerText"];
 $exerciseNum = $_POST["exerciseNum"];
 $_SESSION["last_used_language"] = isset($_POST["answer_language"])? $_POST["answer_language"] : "";
+$user_id = $_SESSION["lti"]["user_id"];
+$user = new \CT\CT_User($user_id);
 
 // In databases doesn't exists answer_language, so we use -1
 $answerLanguage = $_POST["answer_language"] ?? '';
@@ -50,7 +52,10 @@ if (!isset($answerText) || trim($answerText) == "") {
         $result["answer_content"] = true;
         $result['exists'] = $array['exists'];
         $result['success'] = $answer->getAnswerSuccess();
-        $result['answerOutput'] = $answerOutput['feedback'];
+        $result['answerOutput'] = $answerOutput['feedback'];      
+        $result['studentTestOutputRender'] = $twig->render('exercise/student-solution-output.php.twig', array(
+                                        'answer' => $user->getAnswerForExercise($exerciseId, $_SESSION["ct_id"])                                     
+                                    ));
         $result['testsOutput'] = $testsOutput;
 
         // Notify elearning that there is a new answer
@@ -84,4 +89,3 @@ header('Content-Type: application/json');
 echo json_encode($result, JSON_HEX_QUOT | JSON_HEX_TAG);
 
 exit;
-
