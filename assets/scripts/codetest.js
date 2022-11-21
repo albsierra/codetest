@@ -621,6 +621,10 @@ global.answerExercise = function(exerciseId, exerciseNum) {
 
                     })
                 }
+                
+                //Refresh Student Solution Output Component
+                $('#solution-output').remove();
+                $('#code-solution-container').after(data.studentTestOutputRender);
                 document.querySelector('.exercises-nav-header .active .answer-info-box')
 
                 updateExerciseBadge(data);
@@ -636,7 +640,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                 sendButton.appendChild(paperPlaneSymbol);
                 sendButton.removeChild(spinner);
                 setupAlertHide();
-            }
+            }    
         },
         error: function (data) {
             alert('ERROR');
