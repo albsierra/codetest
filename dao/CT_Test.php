@@ -197,7 +197,7 @@ class CT_Test implements \JsonSerializable
 
     static function findTestForImportByPage($page) {
         global $REST_CLIENT_REPO;
-        $url = "api/tests/getAllTest/$page";
+        $url = "api/exercises/getAllTest/$page";
 
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $responseArr = $response->toArray();
@@ -313,7 +313,7 @@ class CT_Test implements \JsonSerializable
 
     static function findTestForImportId($id) {
         global $REST_CLIENT_REPO;
-        $url = "api/tests/getTestId/$id";
+        $url = "api/exercises/getTestId/$id";
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
 
         $result = $response->getContent();
@@ -327,7 +327,7 @@ class CT_Test implements \JsonSerializable
     //Find a exercise by Test_id and exercise_id
     static function findTestForImportExerciseId($exercise_id, $test_id) {
         global $CFG, $REST_CLIENT_REPO;
-        $url = "api/tests/getTestId/$test_id";
+        $url = "api/exercises/getTestId/$test_id";
         $responseObj = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $response = $responseObj->toArray();
 

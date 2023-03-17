@@ -68,7 +68,7 @@ public function save() {
         global $REST_CLIENT_REPO;
         
         //call to recover the object from the repo
-        $url = "api/tests/getTestExerciseId1/{$this->getIdExercise()}";
+        $url = "api/exercises/getTestExerciseId1/{$this->getIdExercise()}";
 
         $requestResponse = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
             'json' => $this

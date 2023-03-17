@@ -256,6 +256,8 @@ return [
         "answer" => "Resposta",
         "next" => "Seguinte",
         "previous" => "Anterior",
+        "hidden-test" => "Este teste foi ocultado pelo professor",
+        "no-test-output-answers" => "Nenhuma resposta disponível",
     ],
     "new-exercise-form" => [
         "exercisetitle" => "Título do exercício",

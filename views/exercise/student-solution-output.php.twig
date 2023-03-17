@@ -14,31 +14,35 @@
                             {% set render_in = '' %}
                         {% endif %}
                     {% endfor %}
-                    <div class="answer-output collapse {{ render_in }}">
-                        {% for testOutput in answer.getTestsOutput() %}
-                            <div class='pb-1 mt-1 mx-1 border p-4'>
-                                <div class="p-0 flex gap-3 items-stretch justify-between">
-                                    <div class="w-[48%]" style="flex-basis:48%">
-                                        <div class="text-center">
-                                            {%trans%}new-exercise-form.labels.test-expected{%endtrans%}
+                    <div class="answer-output collapse {{ render_in }}">     
+                        {% for testResult in answer.getTestsOutput() %}
+                            {% if testResult.visible %}
+                                <div class='pb-1 mt-1 mx-1 border p-4'>
+                                    <div class="p-0 flex gap-3 items-stretch justify-between">
+                                        <div class="w-[48%]" style="flex-basis:48%">
+                                            <div class="text-center">
+                                                {%trans%}new-exercise-form.labels.test-expected{%endtrans%}
+                                            </div>
+                                            <pre class="min-h-[150px]">{{ testResult.expectedOutput | raw }}</pre>
                                         </div>
-                                        <pre class="min-h-[150px]">{{ testOutput.expectedOutput | raw }}</pre>
-                                    </div>
-                                    <div class="flex items-center pt-6">
-                                        <span>
-                                            →
-                                        </span>
-                                    </div>
-                                    <div class="w-[48%] flex flex-col" style="flex-basis:48%">
-                                        <div class="text-center">
-                                            {%trans%}new-exercise-form.labels.test-output{%endtrans%}
+                                        <div class="flex items-center pt-6">
+                                            <span>
+                                                →
+                                            </span>
                                         </div>
-                                        <pre style="border-width: 3px" class="h-full min-h-[150px]border {{ testOutput.classify == "Accepted" ? 'border-green-600' : 'border-red-600' }}">{{ testOutput.obtainedOutput | raw }}</pre>
+                                        <div class="w-[48%] flex flex-col" style="flex-basis:48%">
+                                            <div class="text-center">
+                                                {%trans%}new-exercise-form.labels.test-output{%endtrans%}
+                                            </div>
+                                            <pre style="border-width: 3px" class="h-full min-h-[150px]border {{ testResult.classify == "Accepted" ? 'border-green-600' : 'border-red-600' }}">{{ testResult.obtainedOutput | raw }}</pre>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>                               
-                        {% endfor %}
+                                </div> 
+                            {% else %}                             
+                                <p class='pb-1 mt-1 mx-1 border p-4'>{%trans%}student-exercise.hidden-test{%endtrans%}<p>
+                            {% endif %}
+                        {% endfor %}                  
                     </div>
                 {% endblock %}
-        {% endembed %}
+    {% endembed %}
 </div>

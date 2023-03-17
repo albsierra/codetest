@@ -62,7 +62,7 @@ class CT_Exercise implements \JsonSerializable {
             $this->keywords = $exercise->getKeywords();
             $this->owner = $_SESSION["lti"]["link_title"];
             $this->author = $_SESSION["lti"]["user_displayname"];
-            $this->sessionLanguage = $SESSION["lti"]["user_locale"];
+            $this->sessionLanguage = $_SESSION["lti"]["user_locale"];
             $this->libraries = $exercise->getLibraries();
         }
     }
@@ -112,7 +112,7 @@ class CT_Exercise implements \JsonSerializable {
         $response = array();
 
         foreach ($exercises as $exercise) {
-            $url = "api/tests/getTestId/{$exercise['test_id']}";
+            $url = "api/exercises/getTestId/{$exercise['test_id']}";
             $reqResponse = $REST_CLIENT_REPO->getClient()->request('GET', $url);
             $result = $reqResponse->toArray();
             if (isset($result)) {
@@ -250,7 +250,7 @@ class CT_Exercise implements \JsonSerializable {
     //Find exercise by id
     static function findExerciseForImportId($id) {
         global $REST_CLIENT_REPO;
-        $url = "api/tests/getExercise/$id";
+        $url = "api/exercises/getExercise/$id";
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $exerciseArray = $response->toArray();
         $object = json_decode(json_encode($exerciseArray));
@@ -264,7 +264,7 @@ class CT_Exercise implements \JsonSerializable {
     //Find exercise by akId
     static function findExerciseForImportAkId($id) {
         global $REST_CLIENT_REPO;
-        $url = "api/tests/getExercise/id/$id";
+        $url = "api/exercises/getExercise/id/$id";
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url);
         $respBody = $response->getContent();
         if(strlen($respBody) == 0){

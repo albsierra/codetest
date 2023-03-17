@@ -11,12 +11,13 @@ $main = new \CT\CT_Main($_SESSION["ct_id"]);
 $owner = $_SESSION["lti"]["user_displayname"];
 $language = array_keys($_GET, 'language') ? $_GET['language'] : "PHP";
 $newExercise = new CT\CT_ExerciseCode();
+
 if (isset($_GET['exerciseId'])) {
     $newExercise = $newExercise->findExerciseForImportId($_GET['exerciseId']);
 
     if ($newExercise->getCtId() != $_SESSION["ct_id"]) {
         $newExercise = new CT\CT_ExerciseCode();
-    }else{
+    } else {
         $libraries = $newExercise->findLibrariesForExerciseId($newExercise->getAkId());
         $librariesNames = array();
         foreach ($libraries as $key => $value) {
@@ -27,12 +28,14 @@ if (isset($_GET['exerciseId'])) {
 
         $newExercise->setExerciseOutputTest((array) $newExercise->getExerciseOutputTest());
         $newExercise->setExerciseInputTest((array) $newExercise->getExerciseInputTest());
+        $newExercise->setVisibleTest((array) $newExercise->getVisibleTest());
     }
 
 }
 
 echo $twig->render('pages/exercise-creation.php.twig', array(
     'main' => $main,
+    'checked' => true,
     'type' => $language,
     'owner' => $owner,
     'newExercise' => $newExercise,
@@ -41,5 +44,5 @@ echo $twig->render('pages/exercise-creation.php.twig', array(
     'menu' => $menu,
     'validatorService' => $validatorService,
     'help' => $help()
-));
-
+)
+);
