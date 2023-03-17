@@ -21,7 +21,7 @@ if ($USER->instructor) {
         }
         $_SESSION['success'] = $translator->trans('backend-messages.import.exercise.success', [
             "exercises" => $arr
-        ])
+        ]);
     }
 
     header('Location: ' . addSession('../instructor-home.php'));

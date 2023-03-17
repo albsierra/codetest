@@ -2,17 +2,17 @@
 
 // Init listeners >>
 $(() => {
-    $('.results-collapse.collapse').on('show.bs.collapse', function(){
+    $('.results-collapse.collapse').on('show.bs.collapse', function () {
         var rowDiv = $(this).parent();
         rowDiv.find(".fa.rotate").addClass("open");
         rowDiv.parent().addClass("selected-row");
-    }).on('hide.bs.collapse', function(){
+    }).on('hide.bs.collapse', function () {
         var rowDiv = $(this).parent();
         rowDiv.find(".fa.rotate").removeClass("open");
         rowDiv.parent().removeClass("selected-row");
     });
 
-    $("#importModal").on("hidden.bs.modal", function() {
+    $("#importModal").on("hidden.bs.modal", function () {
         $(this).find('.results-collapse.collapse').collapse("hide");
         $(this).find("input[name='exercise']").prop("checked", false);
     });
@@ -29,19 +29,19 @@ $(() => {
         $('#import-file-label').addClass('hidden')
         const inputEl = ev.target;
         const { files } = inputEl;
-        if(files.length <= 0){
+        if (files.length <= 0) {
             return
         }
         const firstFile = files[0]
 
         $('#import-confirmation .file-info').text(`${firstFile.name}`)
-        $('#import-confirmation .file-info').prop('title',`${firstFile.name}`)
+        $('#import-confirmation .file-info').prop('title', `${firstFile.name}`)
         $('#import-confirmation .file-size').text(bytesToHuman(firstFile.size))
     })
 
     $('#import-confirmation').on('click', () => {
         let confirmation = confirm("Confirm import?")
-        if(confirmation){
+        if (confirmation) {
             document.querySelector('#form-confirm-import').submit()
         }
     })
@@ -57,7 +57,7 @@ $(() => {
         $('#import-confirmation .file-size').text("")
     })
 
-    if(document.getElementById('exercise[statement]')){
+    if (document.getElementById('exercise[statement]')) {
         const ckExerciseInput = getCKEditor('exercise[statement]');
         ckExerciseInput.on('focus', (e) => {
             const wrapperEl = e.editor.element.$.parentElement
@@ -69,7 +69,7 @@ $(() => {
         })
     }
 
-    if(document.getElementById('exercise[exercise_solution]')){
+    if (document.getElementById('exercise[exercise_solution]')) {
         const codeTextArea = document.getElementById('exercise[exercise_solution]');
         const selectElement = document.getElementById('typeSelect');
 
@@ -82,7 +82,7 @@ $(() => {
         });
 
         window.codeEditor = codeEditor;
-        if(document.getElementById('typeSelect')){
+        if (document.getElementById('typeSelect')) {
             $('#typeSelect').on('change', (ev) => {
                 // debugger;
                 const selectedEl = ev.target
@@ -92,7 +92,7 @@ $(() => {
         }
     }
 
-    if(document.querySelector('[id*=answerText]')){
+    if (document.querySelector('[id*=answerText]')) {
         const codeTextArea = document.querySelector('[id*=answerText]');
         const selectElement = document.getElementById('typeSelect');
 
@@ -105,7 +105,7 @@ $(() => {
         });
 
         window.codeEditor = codeEditor;
-        if(document.getElementById('typeSelect')){
+        if (document.getElementById('typeSelect')) {
             $('#typeSelect').on('change', (ev) => {
                 // debugger;
                 const selectedEl = ev.target
@@ -115,7 +115,7 @@ $(() => {
         }
     }
 
-    if(document.querySelector('.exercise-import.page')){
+    if (document.querySelector('.exercise-import.page')) {
         let i = 0;
         let object = 'test';
 
@@ -146,7 +146,7 @@ $(() => {
         }
     }
 
-    if(document.querySelector('#exerciseIdsModal')){
+    if (document.querySelector('#exerciseIdsModal')) {
         const originalText = $('.copy-ids-to-clip').text()
 
         $('#exerciseIdsModal').on('show.bs.modal', function (e) {
@@ -171,7 +171,7 @@ $(() => {
         })
     }
 
-    if(document.querySelector('.ak-exercises-list')){
+    if (document.querySelector('.ak-exercises-list')) {
         $('.ak-exercises-list .exercises-list > a').on('click', async (ev) => {
 
             ev.preventDefault()
@@ -203,11 +203,11 @@ $(() => {
 
 // Init listeners <<
 
-function getCodeOptionText(el){
+function getCodeOptionText(el) {
     const selectedIndex = el.options.selectedIndex
     const selectedOption = el.options[selectedIndex]
     const selectedText = (selectedOption.text || '').toLowerCase()
-    if(selectedText === 'java'){
+    if (selectedText === 'java') {
         return 'text/x-java'
     }
     return selectedText
@@ -219,19 +219,19 @@ function bytesToHuman(bytes) {
     return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
 }
 
-global.confirmDeleteExercise = function() {
+global.confirmDeleteExercise = function () {
     return confirm("Are you sure you want to delete this exercise? This action cannot be undone.");
 }
 
-global.confirmDeleteExerciseBlank = function(exerciseId) {
-    if ($("#exerciseTextInput"+exerciseId).val().trim().length < 1) {
+global.confirmDeleteExerciseBlank = function (exerciseId) {
+    if ($("#exerciseTextInput" + exerciseId).val().trim().length < 1) {
         return confirm("Saving this exercise with blank text will delete this exercise. Are you sure you want to delete this exercise? This action cannot be undone.");
     } else {
         return true;
     }
 }
 
-global.importLtiContexts = function(i = 0, object = 'test') {
+global.importLtiContexts = function (i = 0, object = 'test') {
     if (object == 'test') {
         $.ajax({
             type: "GET",
@@ -272,12 +272,12 @@ global.importLtiContexts = function(i = 0, object = 'test') {
     }
 }
 
-global.updateDate = function(ty) {
+global.updateDate = function (ty) {
     var date = new Date(ty);
     $("#modified").text(formatDate(date));
 }
 
-global.importLtiContextsPage = function(i = 0, object='test') {
+global.importLtiContextsPage = function (i = 0, object = 'test') {
     var object;
     var body;
     if ($("#tab-test").hasClass("active")) {
@@ -289,7 +289,7 @@ global.importLtiContextsPage = function(i = 0, object='test') {
     }
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportLtiContextsValue.php?page=" + i + "&action=page&object="+object+"&" + _TSUGI.ajax_session,
+        url: "actions/import/ImportLtiContextsValue.php?page=" + i + "&action=page&object=" + object + "&" + _TSUGI.ajax_session,
         success: function (data) {
             $(body).html(data);
         },
@@ -299,7 +299,7 @@ global.importLtiContextsPage = function(i = 0, object='test') {
     });
 }
 
-global.importLtiContextsButtons = function(value) {
+global.importLtiContextsButtons = function (value) {
     var object;
     var body;
 
@@ -324,7 +324,7 @@ global.importLtiContextsButtons = function(value) {
     });
 }
 
-global.deleteTag = function(value) {
+global.deleteTag = function (value) {
     var object;
     var body;
 
@@ -349,22 +349,22 @@ global.deleteTag = function(value) {
     });
 }
 
-global.importMains = function(contextId) {
+global.importMains = function (contextId) {
 
     $.ajax({
         type: "GET",
         url: "actions/import/ImportMains.php?contextId=" + contextId + "&" + _TSUGI.ajax_session,
-        success: function(data) {
+        success: function (data) {
             $('#site' + contextId).html(data);
             $('#site' + contextId + '.collapse').collapse();
         },
-        error: function(data) {
+        error: function (data) {
             console.error(data.responseText);
         }
     });
 }
 
-global.showTestInfo = function(testId) {
+global.showTestInfo = function (testId) {
     element = $('#divTest' + testId);
 
     if ($(element).is(':visible')) {
@@ -375,7 +375,7 @@ global.showTestInfo = function(testId) {
 
 }
 
-global.showExercises = function(exerciseId) {
+global.showExercises = function (exerciseId) {
     element = $('#main' + exerciseId);
 
     if ($(element).is(':visible')) {
@@ -386,7 +386,7 @@ global.showExercises = function(exerciseId) {
 }
 
 
-global.importExercises = function(exerciseId, testId) {
+global.importExercises = function (exerciseId, testId) {
     $.ajax({
         type: "GET",
         url: "actions/import/ImportExercises.php?" + _TSUGI.ajax_session,
@@ -402,7 +402,7 @@ global.importExercises = function(exerciseId, testId) {
         }
     });
 }
-global.editExerciseText = function(exerciseId) {
+global.editExerciseText = function (exerciseId) {
     var exerciseText = $("#exerciseText" + exerciseId);
     exerciseText.hide();
     $("#exerciseDeleteAction" + exerciseId).hide();
@@ -414,9 +414,41 @@ global.editExerciseText = function(exerciseId) {
     editor = getCKEditor("exerciseTextInput" + exerciseId);
     theForm.show();
     theForm.find('#exerciseTextInput' + exerciseId).focus()
-            .off("keypress").on("keypress", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
+        .off("keypress").on("keypress", function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                if ($('#exerciseTextInput' + exerciseId).val().trim() === '') {
+                    if (confirmDeleteExerciseBlank(exerciseId)) {
+                        // User entered blank exercise text and wants to delete.
+                        deleteExercise(exerciseId, true);
+                    }
+                } else {
+                    // Still has text in exercise. Save it.
+                    $.ajax({
+                        type: "POST",
+                        url: theForm.prop("action"),
+                        data: theForm.serialize(),
+                        success: function (data) {
+                            exerciseText.text($('#exerciseTextInput' + exerciseId).val());
+                            exerciseText.show();
+                            $("#exerciseDeleteAction" + exerciseId).show();
+                            $("#exerciseEditAction" + exerciseId).show();
+                            $("#exerciseReorderAction" + exerciseId).show();
+                            $("#exerciseSaveAction" + exerciseId).hide();
+                            $("#exerciseCancelAction" + exerciseId).hide();
+                            theForm.hide();
+                            $("#flashmessages").html(data.flashmessage);
+                            setupAlertHide();
+                        }
+                    });
+                }
+            }
+        });
+    $("#exerciseSaveAction" + exerciseId).show()
+        .off("click").on("click", function (e) {
+            updateCKeditorElements();
+            if (editor)
+                editor.destroy();
             if ($('#exerciseTextInput' + exerciseId).val().trim() === '') {
                 if (confirmDeleteExerciseBlank(exerciseId)) {
                     // User entered blank exercise text and wants to delete.
@@ -427,9 +459,9 @@ global.editExerciseText = function(exerciseId) {
                 $.ajax({
                     type: "POST",
                     url: theForm.prop("action"),
-                    data: theForm.serialize(),
+                    data: theForm.serialize() + '&' + _TSUGI.ajax_session,
                     success: function (data) {
-                        exerciseText.text($('#exerciseTextInput' + exerciseId).val());
+                        exerciseText.html($('#exerciseTextInput' + exerciseId).val());
                         exerciseText.show();
                         $("#exerciseDeleteAction" + exerciseId).show();
                         $("#exerciseEditAction" + exerciseId).show();
@@ -442,62 +474,53 @@ global.editExerciseText = function(exerciseId) {
                     }
                 });
             }
-        }
-    });
-    $("#exerciseSaveAction" + exerciseId).show()
-            .off("click").on("click", function (e) {
-        updateCKeditorElements();
-        if (editor)
-            editor.destroy();
-        if ($('#exerciseTextInput' + exerciseId).val().trim() === '') {
-            if (confirmDeleteExerciseBlank(exerciseId)) {
-                // User entered blank exercise text and wants to delete.
-                deleteExercise(exerciseId, true);
-            }
-        } else {
-            // Still has text in exercise. Save it.
-            $.ajax({
-                type: "POST",
-                url: theForm.prop("action"),
-                data: theForm.serialize() + '&' + _TSUGI.ajax_session,
-                success: function (data) {
-                    exerciseText.html($('#exerciseTextInput' + exerciseId).val());
-                    exerciseText.show();
-                    $("#exerciseDeleteAction" + exerciseId).show();
-                    $("#exerciseEditAction" + exerciseId).show();
-                    $("#exerciseReorderAction" + exerciseId).show();
-                    $("#exerciseSaveAction" + exerciseId).hide();
-                    $("#exerciseCancelAction" + exerciseId).hide();
-                    theForm.hide();
-                    $("#flashmessages").html(data.flashmessage);
-                    setupAlertHide();
-                }
-            });
-        }
-    });
+        });
 
     $("#exerciseCancelAction" + exerciseId).show()
-            .off("click").on("click", function (e) {
-        var theText = $("#exerciseText" + exerciseId);
-        theText.show();
-        theForm.hide();
-        $("#exerciseTextInput" + exerciseId).val(theText.text());
-        $("#exerciseDeleteAction" + exerciseId).show();
-        $("#exerciseEditAction" + exerciseId).show();
-        $("#exerciseReorderAction" + exerciseId).show();
-        $("#exerciseSaveAction" + exerciseId).hide();
-        $("#exerciseCancelAction" + exerciseId).hide();
-    });
+        .off("click").on("click", function (e) {
+            var theText = $("#exerciseText" + exerciseId);
+            theText.show();
+            theForm.hide();
+            $("#exerciseTextInput" + exerciseId).val(theText.text());
+            $("#exerciseDeleteAction" + exerciseId).show();
+            $("#exerciseEditAction" + exerciseId).show();
+            $("#exerciseReorderAction" + exerciseId).show();
+            $("#exerciseSaveAction" + exerciseId).hide();
+            $("#exerciseCancelAction" + exerciseId).hide();
+        });
 }
 
-global.editTitleText = function() {
+global.editTitleText = function () {
     $("#toolTitle").hide();
     var titleForm = $("#toolTitleForm");
     titleForm.show();
     titleForm.find("#toolTitleInput").focus()
-            .off("keypress").on("keypress", function (e) {
-        if (e.which === 13) {
-            e.preventDefault();
+        .off("keypress").on("keypress", function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: titleForm.prop("action"),
+                    data: titleForm.serialize(),
+                    success: function (data) {
+                        $(".title-text-span").text($("#toolTitleInput").val());
+                        if ($("#mainTypeSelect") && $("#mainTypeSelect")[0]) {
+                            $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                        }
+                        var titleText = $("#toolTitle");
+                        titleText.show();
+                        titleForm.hide();
+                        $("#toolTitleCancelLink").hide();
+                        $("#toolTitleSaveLink").hide();
+                        $("#flashmessages").html(data.flashmessage);
+                        setupAlertHide();
+                    }
+                });
+            }
+        });
+    $("#toolTitleSaveLink").show()
+        .off("click").on("click", function (e) {
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -505,8 +528,10 @@ global.editTitleText = function() {
                 data: titleForm.serialize(),
                 success: function (data) {
                     $(".title-text-span").text($("#toolTitleInput").val());
-                    if ($("#mainTypeSelect") && $("#mainTypeSelect")[0]) {
-                        $(".mainType-text-span").text($("#mainTypeSelect")[0].options[$("#mainTypeSelect")[0].value].label);
+                    if ($("#mainTypeSelect").length > 0) {
+                        let value = $("#mainTypeSelect")[0].value;
+                        let options = $("#mainTypeSelect")[0].options;
+                        $(".mainType-text-span").text(options[value].label);
                     }
                     var titleText = $("#toolTitle");
                     titleText.show();
@@ -517,45 +542,20 @@ global.editTitleText = function() {
                     setupAlertHide();
                 }
             });
-        }
-    });
-    $("#toolTitleSaveLink").show()
-            .off("click").on("click", function (e) {
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: titleForm.prop("action"),
-            data: titleForm.serialize(),
-            success: function (data) {
-                $(".title-text-span").text($("#toolTitleInput").val());
-                if ($("#mainTypeSelect").length > 0) {
-                    let value = $("#mainTypeSelect")[0].value;
-                    let options = $("#mainTypeSelect")[0].options;
-                    $(".mainType-text-span").text(options[value].label);
-                }
-                var titleText = $("#toolTitle");
-                titleText.show();
-                titleForm.hide();
-                $("#toolTitleCancelLink").hide();
-                $("#toolTitleSaveLink").hide();
-                $("#flashmessages").html(data.flashmessage);
-                setupAlertHide();
-            }
         });
-    });
     $("#toolTitleCancelLink").show()
-            .off("click").on("click", function (e) {
-        var titleText = $("#toolTitle");
-        titleText.show();
-        titleForm.hide();
-        $("#toolTitleInput").val($(".title-text-span").text());
-        $("#toolTitleCancelLink").hide();
-        $("#toolTitleSaveLink").hide();
-    });
+        .off("click").on("click", function (e) {
+            var titleText = $("#toolTitle");
+            titleText.show();
+            titleForm.hide();
+            $("#toolTitleInput").val($(".title-text-span").text());
+            $("#toolTitleCancelLink").hide();
+            $("#toolTitleSaveLink").hide();
+        });
 }
 
 //unused?
-global.moveExerciseUp = function(exerciseId, testId) {
+global.moveExerciseUp = function (exerciseId, testId) {
     $.ajax({
         type: "POST",
         url: "actions/ReorderExercise.php?" + _TSUGI.ajax_session,
@@ -591,7 +591,7 @@ global.moveExerciseUp = function(exerciseId, testId) {
     });
 }
 
-global.answerExercise = function(exerciseId, exerciseNum) {
+global.answerExercise = function (exerciseId, exerciseNum) {
     var answerForm = $("#answerForm" + exerciseId);
 
     let sendButton = answerForm[0].querySelector("div>button.btn.btn-success.gap-3[type=button]");
@@ -609,7 +609,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
         url: answerForm.prop("action"),
         data: answerForm.serialize() + '&exerciseNum=' + exerciseNum + '&' + _TSUGI.ajax_session,
         success: function (data) {
-            if(data.answer_content){
+            if (data.answer_content) {
                 $('.answer-output').html("-");
 
                 //If the answer is not empty and it is the first time it has been answered, the usage modal opens
@@ -621,7 +621,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
 
                     })
                 }
-                
+
                 //Refresh Student Solution Output Component
                 $('#solution-output').remove();
                 $('#code-solution-container').after(data.studentTestOutputRender);
@@ -640,7 +640,7 @@ global.answerExercise = function(exerciseId, exerciseNum) {
                 sendButton.appendChild(paperPlaneSymbol);
                 sendButton.removeChild(spinner);
                 setupAlertHide();
-            }    
+            }
         },
         error: function (data) {
             alert('ERROR');
@@ -653,12 +653,12 @@ global.answerExercise = function(exerciseId, exerciseNum) {
     });
 }
 
-global.cancelModal = function(modalId){
-    $('#'+modalId).modal('hide'); 
+global.cancelModal = function (modalId) {
+    $('#' + modalId).modal('hide');
 }
 
 const updateExerciseBadge = (data) => {
-    if(!data){
+    if (!data) {
         return;
     }
 
@@ -686,7 +686,7 @@ const updateExerciseBadge = (data) => {
     })
     document.querySelector(studentFooterItemLabel).textContent = data.answerOutput
 
-    if(data.success) {
+    if (data.success) {
         elements.forEach(el => {
             el.classList.add('bg-green-600')
         })
@@ -703,7 +703,7 @@ const updateExerciseBadge = (data) => {
     }
 }
 
-global.formatDate = function(dateVal) {
+global.formatDate = function (dateVal) {
     var newDate = new Date(dateVal);
     var sMonth = padValue(newDate.getMonth() + 1);
     var sDay = padValue(newDate.getDate());
@@ -728,18 +728,18 @@ global.formatDate = function(dateVal) {
     // return sMonth + "/" + sDay + "/" + sYear + " - " + sHour + ":" + sMinute + " " + sAMPM;
 }
 
-global.padValue = function(value) {
+global.padValue = function (value) {
     return (value < 10) ? "0" + value : value;
 }
 
-global.setupAlertHide = function() {
+global.setupAlertHide = function () {
     // On load hide any alerts after 3 seconds
     /*setTimeout(function() {
      $(".alert-banner").slideUp();
      }, 3000);*/
 }
 
-global.getCKEditor = function(elementName) {
+global.getCKEditor = function (elementName) {
     let editor;
     for (var i in CKEDITOR.instances) {
         if (elementName == CKEDITOR.instances[i].name)
@@ -750,22 +750,22 @@ global.getCKEditor = function(elementName) {
     return editor;
 }
 
-global.updateCKeditorElements = function() {
+global.updateCKeditorElements = function () {
     for (var i in CKEDITOR.instances) {
         CKEDITOR.instances[i].updateElement();
     }
 }
 
-global.resetCKeditorElements = function() {
+global.resetCKeditorElements = function () {
     for (var i in CKEDITOR.instances) {
         let element = $('#' + i);
-        if(element && element[0]) {
+        if (element && element[0]) {
             CKEDITOR.instances[i].setData(element[0].value);
         }
     }
 }
 
-global.resetForm = function($form) {
+global.resetForm = function ($form) {
     $form.find('input:text, input:password, input:file, textarea').val(''); // agregar select
     $form.find('input:radio, input:checkbox')
         .removeAttr('checked').removeAttr('selected');
@@ -773,30 +773,30 @@ global.resetForm = function($form) {
 }
 
 //This method calls the action that sends the usage to the repository
-global.sendUsage = function(exerciseId) {
-    var usageForm = $("#usageForm"+exerciseId);
+global.sendUsage = function (exerciseId) {
+    var usageForm = $("#usageForm" + exerciseId);
 
     //url = actions/SendUsage.php
     $.ajax({
         type: "POST",
         dataType: "text",
         url: usageForm.prop("action"),
-        data: usageForm.serialize() + '&exerciseId='+exerciseId+'&' + _TSUGI.ajax_session,
-        success: function(data) {
-            $('#usageModal'+exerciseId).modal('hide');
+        data: usageForm.serialize() + '&exerciseId=' + exerciseId + '&' + _TSUGI.ajax_session,
+        success: function (data) {
+            $('#usageModal' + exerciseId).modal('hide');
             setTimeout(() => {
-                $('#usageModal'+exerciseId).remove()
+                $('#usageModal' + exerciseId).remove()
                 // location.reload();
-            },350)
+            }, 350)
         },
-        error: function(data){
+        error: function (data) {
             alert('ERROR');
         }
     });
 }
 
 //this method adds the keyword to the search parameters
-global.keyword = function() {
+global.keyword = function () {
     var keyword = $("#keywordText").val();
     if (keyword) {
         var object;
@@ -824,25 +824,25 @@ global.keyword = function() {
 }
 
 //this method adds the punctuation to the search parameters
-global.score = function() {
+global.score = function () {
     var score = $("#customRange1").val();
-         var object;
-        var body;
-        if ($("#tab-test").hasClass("active")) {
-            object = "test";
-            body = ".import-body";
-        } else if ($("#tab-exercise").hasClass("active")) {
-            object = "exercise";
-            body = ".import-body-exercises";
-        }
+    var object;
+    var body;
+    if ($("#tab-test").hasClass("active")) {
+        object = "test";
+        body = ".import-body";
+    } else if ($("#tab-exercise").hasClass("active")) {
+        object = "exercise";
+        body = ".import-body-exercises";
+    }
 
-        //if the punctuation is 0 the parameter is cleared
-        if(score==0){
-            score="delete";
-        }
+    //if the punctuation is 0 the parameter is cleared
+    if (score == 0) {
+        score = "delete";
+    }
     $.ajax({
         type: "GET",
-        url: "actions/import/ImportLtiContextsValue.php?value=" + score + "&action=add&object=" + object +"&" + _TSUGI.ajax_session,
+        url: "actions/import/ImportLtiContextsValue.php?value=" + score + "&action=add&object=" + object + "&" + _TSUGI.ajax_session,
         success: function (data) {
             $(body).html(data);
         },
@@ -852,45 +852,45 @@ global.score = function() {
     });
 }
 
-global.deleteExercise = function(exerciseId, skipconfirm = false) {
+global.deleteExercise = function (exerciseId, skipconfirm = false) {
     $('#confirm').modal('show')
-            $('#confirm').on('click', '#delete', function (e) {
-                $.ajax({
-                    type: "POST",
-                    url: "actions/DeleteExercise.php?" + _TSUGI.ajax_session,
-                    dataType: "text",
-                    data: {
-                        exercise_id: exerciseId,
-                    },
-                    success: function (data) {
-                        $("#exerciseRow" + exerciseId).remove();
-                        // Fix up exercise numbers
-                        var exerciseNum = 1;
-                        $(".exercise-number").each(function () {
-                            $(this).text(exerciseNum);
-                            $(this).parent().data("exercise-number", exerciseNum);
-                            exerciseNum++;
-                        });
-                        // Fix new exercise number
-                        $("#newExerciseRow").data("exercise-number", exerciseNum);
-                        $("#newExerciseNumber").text(exerciseNum + ".");
-
-                        $("#flashmessages").html(data.flashmessage);
-                        setupAlertHide();
-                    },
-                    error: function (data) {
-                        alert("error");
-                    }
+    $('#confirm').on('click', '#delete', function (e) {
+        $.ajax({
+            type: "POST",
+            url: "actions/DeleteExercise.php?" + _TSUGI.ajax_session,
+            dataType: "text",
+            data: {
+                exercise_id: exerciseId,
+            },
+            success: function (data) {
+                $("#exerciseRow" + exerciseId).remove();
+                // Fix up exercise numbers
+                var exerciseNum = 1;
+                $(".exercise-number").each(function () {
+                    $(this).text(exerciseNum);
+                    $(this).parent().data("exercise-number", exerciseNum);
+                    exerciseNum++;
                 });
-            })
-            .on('click', '#cancel', function (e) {
-                e.preventDefault();
-                $('#confirm' + exerciseId).modal.model('close');
-            });
+                // Fix new exercise number
+                $("#newExerciseRow").data("exercise-number", exerciseNum);
+                $("#newExerciseNumber").text(exerciseNum + ".");
+
+                $("#flashmessages").html(data.flashmessage);
+                setupAlertHide();
+            },
+            error: function (data) {
+                alert("error");
+            }
+        });
+    })
+        .on('click', '#cancel', function (e) {
+            e.preventDefault();
+            $('#confirm' + exerciseId).modal.model('close');
+        });
 }
 
 //this method updates the exercise numbers
-global.updateList = function(exerciseId, oldIndex, newIndex) {
+global.updateList = function (exerciseId, oldIndex, newIndex) {
     $.ajax({
         type: "POST",
         url: "actions/ReorderExercise.php?" + _TSUGI.ajax_session,
@@ -903,7 +903,7 @@ global.updateList = function(exerciseId, oldIndex, newIndex) {
         success: function (data) {
             var exerciseNum = 1;
             $(".exercise-number").each(function () {
-                $(this).text(exerciseNum+".-");
+                $(this).text(exerciseNum + ".-");
                 $(this).parent().data("exercise-number", exerciseNum);
                 exerciseNum++;
             });
@@ -918,7 +918,7 @@ global.updateList = function(exerciseId, oldIndex, newIndex) {
 }
 
 
-global.showCreateModal = function() {
+global.showCreateModal = function () {
     var language = $("#typeSelect").val();
 
     $.ajax({
@@ -934,27 +934,27 @@ global.showCreateModal = function() {
     $('#createModal').modal('show');
 }
 
-global.typeChange = function(){
-     var language = $("#typeSelect").val();
+global.typeChange = function () {
+    var language = $("#typeSelect").val();
 
-     $.ajax({
+    $.ajax({
         type: "GET",
-        url: "actions/newExerciseForm.php?language=" +language+"&"+ _TSUGI.ajax_session,
-        success: function(data) {
+        url: "actions/newExerciseForm.php?language=" + language + "&" + _TSUGI.ajax_session,
+        success: function (data) {
             $('#createBody').html(data);
         },
-        error: function(data) {
+        error: function (data) {
             console.error(data.responseText);
         }
     });
 
 }
 
-global.showNewExerciseRow = function() {
+global.showNewExerciseRow = function () {
 
     const invalidClassName = "invalid-field";
     const statementField = getCKEditor('exercise[statement]').getData();
-    const solutionField =  codeEditor.getValue();
+    const solutionField = codeEditor.getValue();
     const tittleField = document.getElementById("exerciseTitleText");
     const inputField = document.getElementById("input_1");
     const outputField = document.getElementById("output_1");
@@ -986,41 +986,52 @@ global.showNewExerciseRow = function() {
         },
     ]
 
-    fieldValues.forEach((el , i) => {
-        if(!el.value){
+    fieldValues.forEach((el, i) => {
+        if (!el.value) {
             el.element.classList.add(invalidClassName)
-        }else{
+        } else {
             el.element.classList.remove(invalidClassName)
         }
         booleanValues[i] = !!el.value
     })
 
     let ok = true;
-    if(!inputField.value && !outputField.value){
-      inputField.classList.add(invalidClassName);
-      outputField.classList.add(invalidClassName);
-      ok = false;
-    } else {
-      inputField.classList.remove(invalidClassName);
-      outputField.classList.remove(invalidClassName);
-    }
+    const inputs = document.querySelectorAll('[name^="exercise[exercise_input_test]"]');
+    inputs.forEach(input => {
+        if (!input.value) {
+            input.classList.add(invalidClassName);
+            ok = false;
+        } else {
+            input.classList.remove(invalidClassName);
+        }
+    });
 
-    if(booleanValues.every(el => el) && ok){
+    const outputs = document.querySelectorAll('[name^="exercise[exercise_output_test]"]');
+    outputs.forEach(output => {
+        if (!output.value) {
+            output.classList.add(invalidClassName);
+            ok = false;
+        } else {
+            output.classList.remove(invalidClassName);
+        }
+    });
+
+    if (booleanValues.every(el => el) && ok) {
         console.log(_TSUGI.ajax_session);
         theForm.submit();
-    }else{
+    } else {
         $("#requiredAlert").removeClass("hidden");
     }
 }
 
-global.exerciseCancelAction = function() {
+global.exerciseCancelAction = function () {
     CKEDITOR.instances['exercise[statement]'].setData('');
     codeEditor.setValue("");
     var theForm = $("#exerciseTextForm-1");
     resetForm(theForm);
 }
 
-global.showImportExercise = function() {
+global.showImportExercise = function () {
     var theForm = $("#importExercisesForm");
 
     $('#newExerciseRow').html("");
@@ -1039,7 +1050,7 @@ global.showImportExercise = function() {
     });
 }
 
-global.showModal = function(id){
+global.showModal = function (id) {
     var modalCode = document.getElementById("modalCode" + id);
     var btnModalCode = document.getElementById("btnModalCode" + id);
 
@@ -1047,7 +1058,7 @@ global.showModal = function(id){
     modalCode.style.display = "block";
 
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modalCode) {
             modalCode.style.display = "none";
         }

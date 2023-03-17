@@ -7,7 +7,7 @@ $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $exerciseId = $_POST["exerciseId"];
 $answerText = $_POST["answerText"];
 $exerciseNum = $_POST["exerciseNum"];
-$_SESSION["last_used_language"] = isset($_POST["answer_language"])? $_POST["answer_language"] : "";
+$_SESSION["last_used_language"] = isset($_POST["answer_language"]) ? $_POST["answer_language"] : "";
 $user_id = $_SESSION["lti"]["user_id"];
 $user = new \CT\CT_User($user_id);
 
@@ -24,19 +24,19 @@ if (!isset($answerText) || trim($answerText) == "") {
     //Search for the exercise on the db and map
     $exercise = \CT\CT_Exercise::withId($exerciseId);
     $main = $exercise->getMain();
-    
-    $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());   
+
+    $exercise1 = new \CT\CT_ExerciseCode($exercise->getExerciseId());
     $answerOutput = null;
-    
+
     try {
-        if($answerLanguage != '') {
+        if ($answerLanguage != '') {
             $client = HttpClient::create();
 
             $response = $client->request("POST", "{$validatorService->getValidatorUrl($answerLanguage)}eval", [
                 'json' => [
                     'date' => date("c"),
                     'program' => $answerText,
-                    'learningObject' => $exercise1->getAkId(), //$exerciseId,
+                    'learningObject' => $exercise1->getAkId(), // $exerciseId,
                     'studentID' => $USER->id,
                     'language' => $answerLanguage
                 ]
@@ -48,14 +48,16 @@ if (!isset($answerText) || trim($answerText) == "") {
 
         $array = $exercise1->createAnswer($USER->id, $answerText, $answerLanguage, $answerOutput, $testsOutput);
         $answer = $array['answer'];
-        
         $result["answer_content"] = true;
         $result['exists'] = $array['exists'];
         $result['success'] = $answer->getAnswerSuccess();
-        $result['answerOutput'] = $answerOutput['feedback'];      
-        $result['studentTestOutputRender'] = $twig->render('exercise/student-solution-output.php.twig', array(
-                                        'answer' => $user->getAnswerForExercise($exerciseId, $_SESSION["ct_id"])                                     
-                                    ));
+        $result['answerOutput'] = $answerOutput['feedback'];
+        $result['studentTestOutputRender'] = $twig->render(
+            'exercise/student-solution-output.php.twig',
+            array(
+                'answer' => $user->getAnswerForExercise($exerciseId, $_SESSION["ct_id"])
+            )
+        );
         $result['testsOutput'] = $testsOutput;
 
         // Notify elearning that there is a new answer
@@ -73,8 +75,8 @@ if (!isset($answerText) || trim($answerText) == "") {
 
         // echo json_encode(json_decode($answerOutput), JSON_PRETTY_PRINT);die;
         //echo $answerOutput['feedback'];die;
-    } catch(Exception $ex){
-        $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed.exception').$ex->getMessage();
+    } catch (Exception $ex) {
+        $_SESSION['error'] = $translator->trans('backend-messages.answer.exercise.failed.exception') . $ex->getMessage();
         $result["answer_content"] = false;
         $result["error"] = $ex->getMessage();
         header("HTTP/1.0 500 Internal Server Error");

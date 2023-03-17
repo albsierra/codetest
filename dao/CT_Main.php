@@ -61,7 +61,7 @@ class CT_Main implements \JsonSerializable
     //Save test on the repo
     function saveTest($tests) {
         global $REST_CLIENT_REPO;
-        $url = "api/tests/createTest/";
+        $url = "api/exercises/createTest/";
 
         $response = $REST_CLIENT_REPO->getClient()->request('GET', $url, [
             'json' => $tests
@@ -89,7 +89,7 @@ class CT_Main implements \JsonSerializable
     }
 
     //Create exercise object
-    function createExercise($context, $language, $difficulty, $libraries) {
+    function createExercise($context, $language, $difficulty, $libraries, $visibleTest) {
         global $CFG;
         if(is_array($context)) {
             $class = $CFG->ExerciseProperty['class'];
@@ -104,6 +104,7 @@ class CT_Main implements \JsonSerializable
                 }
             $exercise->setDifficulty($difficulty);
             $exercise->setLibraries($libraries);
+            $exercise->setVisibleTest($visibleTest);
         }
         $exercise->setCtId($this->getCtId());
         return $exercise;

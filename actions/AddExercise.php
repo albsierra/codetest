@@ -10,46 +10,46 @@ if ($USER->instructor) {
     $temporalFile = array();
 
     do {
-        if(isset($_POST["radiosel_".$counter])){
+        if (isset($_POST["radiosel_" . $counter])) {
 
-            switch($_POST["radiosel_".$counter]){
+            switch ($_POST["radiosel_" . $counter]) {
                 case "library_text":
 
-                    $textBody = trim($_POST["library_textbody_".$counter], ' ');
-                    $textName = trim($_POST["library_texttitle_".$counter], ' ');
+                    $textBody = trim($_POST["library_textbody_" . $counter], ' ');
+                    $textName = trim($_POST["library_texttitle_" . $counter], ' ');
 
                     if (!empty($textBody) && !empty($textName)) {
                         $temporalFile[$counter] = tmpfile();
-                        fwrite($temporalFile[$counter], $_POST["library_textbody_".$counter]);
+                        fwrite($temporalFile[$counter], $_POST["library_textbody_" . $counter]);
                         fseek($temporalFile[$counter], 0);
                         $metaData = stream_get_meta_data($temporalFile[$counter]);
                         $filepath = $metaData['uri'];
 
                         $data = $array = [
-                            "name" => $_POST["library_texttitle_".$counter],
+                            "name" => $_POST["library_texttitle_" . $counter],
                             "path" => $filepath,
                         ];
 
-                        array_push($libraries,$data);
+                        array_push($libraries, $data);
                     }
                     break;
 
                 case "library_file":
 
-                    if (isset($_FILES["library_file_".$counter]["name"])) {
+                    if (isset($_FILES["library_file_" . $counter]["name"])) {
                         $data = $array = [
-                            "name" => $_FILES["library_file_".$counter]["name"],
-                            "path" => $_FILES["library_file_".$counter]["tmp_name"],
+                            "name" => $_FILES["library_file_" . $counter]["name"],
+                            "path" => $_FILES["library_file_" . $counter]["tmp_name"],
                         ];
 
-                        array_push($libraries,$data);
+                        array_push($libraries, $data);
                     }
                     break;
             }
         }
         $counter++;
 
-      } while (isset($_POST["radiosel_".$counter]));
+    } while (isset($_POST["radiosel_" . $counter]));
 
     if (isset($exercisePost['title']) && trim($exercisePost['title']) != '' && isset($exercisePost['exercise_language']) && trim($exercisePost['exercise_language']) != '') {
         $exercisePost['author'] = $_SESSION["lti"]["user_displayname"];
@@ -57,11 +57,15 @@ if ($USER->instructor) {
         $exercisePost['sessionLanguage'] = isset($_SESSION["lti"]["user_locale"]) ? $_SESSION["lti"]["user_locale"] : "en";
         $main = new \CT\CT_Main($_SESSION["ct_id"]);
 
-        $exercise = $main->createExercise($exercisePost,strtolower($exercisePost['exercise_language']),$exercisePost["difficulty"],$libraries);
-        $exercises = Array();
+        // Change to Boolean Values
+        $exercisePost['visibleTest'] = array_map(function($value) {
+            return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+          }, $exercisePost['visibleTest']);
+
+        $exercise = $main->createExercise($exercisePost, strtolower($exercisePost['exercise_language']), $exercisePost["difficulty"], $libraries, $exercisePost['visibleTest']);
+        $exercises = array();
 
         array_push($exercises, $exercise);
-
 
         //save the exercise on the repository
         $result = $main->saveExercises($exercises);
@@ -77,9 +81,9 @@ if ($USER->instructor) {
         $exercise1 = new \CT\CT_ExerciseCode();
         $exercise1->setFromObject($object);
         $exercise1->setCtId($_SESSION["ct_id"]);
-        
-        if(!empty($exercise->getExerciseId()) &&  !empty($exercise1->getExerciseId()) && $exercise->getExerciseId() != $exercise1->getExerciseId()){
-          $exercise->delete();
+
+        if (!empty($exercise->getExerciseId()) && !empty($exercise1->getExerciseId()) && $exercise->getExerciseId() != $exercise1->getExerciseId()) {
+            $exercise->delete();
         }
 
         //Save the returned exercise on the db

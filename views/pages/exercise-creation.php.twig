@@ -175,10 +175,20 @@
                                          </span>
                                     </div>
                                     <div class="w-full">
-                                        <div class="text-center">
-                                            {%trans%}new-exercise-form.labels.outputs{%endtrans%}
-                                        </div>
-
+                                            <div class="flex justify-between">
+                                                <p>{%trans%}new-exercise-form.labels.outputs{%endtrans%}</p>
+                                                <label>
+                                                    <input type="hidden"  id="hidden_visibleTest_0" name="exercise[visibleTest][{{i}}]" value = "false">
+                                                    <input type="checkbox" id="visibleTest_0" name="exercise[visibleTest][{{i}}]" value = "true"
+                                                    {% if exercise.getExerciseId()|length > 0 %}
+                                                        {% if exercise.getVisibleTest()[i] %} checked {% endif %}
+                                                    {% else %}
+                                                        {% if checked %} checked {% endif %}
+                                                    {% endif %}
+                                                    >
+                                                    Test Visible
+                                                </label>       
+                                            </div>
                                         <textarea class="tests-textarea" cols="30" rows="5" id="output_1" name="exercise[exercise_output_test][{{i}}]">{{exercise.getExerciseOutputTest()[i]}}</textarea>
                                     </div>
                                 </div>
@@ -284,10 +294,14 @@
                </span>
           </div>
           <div class="w-full">
-              <div class="text-center">
-                  {%trans%}new-exercise-form.labels.outputs{%endtrans%}
-              </div>
-
+                <div class="flex justify-between">
+                    <p>{%trans%}new-exercise-form.labels.outputs{%endtrans%}</p>
+                    <label>
+                        <input type="hidden"  id="hidden_visibleTest_template" value = "false">
+                        <input type="checkbox" id="visibleTest_template" value = "true" {% if checked %}checked{% endif %}>
+                        Test Visible
+                    </label>       
+                </div>
               <textarea class="tests-textarea" cols="30" rows="5" id="output_template"></textarea>
           </div>
       </div>
@@ -357,6 +371,8 @@
 
         newobj.prop('id', 'tests_section_'+count_tests);
         newobj.find('#input_template').prop('id', 'input_'+count_tests).prop('name', 'exercise[exercise_input_test]['+count_tests+']');
+        newobj.find('#visibleTest_template').prop('id', 'visibleTest_'+count_tests).prop('name', 'exercise[visibleTest]['+count_tests+']');
+        newobj.find('#hidden_visibleTest_template').prop('id', 'hidden_visibleTest_'+count_tests).prop('name', 'exercise[visibleTest]['+count_tests+']');
         newobj.find('#output_template').prop('id', 'output_'+count_tests).prop('name', 'exercise[exercise_output_test]['+count_tests+']');
 
         newobj.appendTo('#anchor_tests');

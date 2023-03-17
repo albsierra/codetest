@@ -6,6 +6,7 @@ use Exception;
 
 class CT_ExerciseCode extends CT_Exercise
 {
+    protected $visibleTest;
     protected $exercise_language;
     protected $exercise_input_test;
     protected $exercise_input_grade;
@@ -34,6 +35,7 @@ class CT_ExerciseCode extends CT_Exercise
             'exercise_id' => $this->getExerciseId(),
             'ct_id' => $this->getCtId(),
             'exercise_num' => $this->getExerciseNum(),
+            'visibleTest' => $this->getVisibleTest(),
             'title' => $this->getTitle(),
             'statement' => $this->getStatement(),
             'hint' => $this->getHint(),
@@ -54,6 +56,22 @@ class CT_ExerciseCode extends CT_Exercise
             'exercise_libraries' => $this->getExerciseLibraries(),
 
         ] + parent::jsonSerialize();
+    }
+    
+     /**
+     * @return mixed
+     */
+    public function getVisibleTest()
+    {
+        return $this->visibleTest;
+    }
+
+    /**
+     * @param mixed $visibleTest
+     */
+    public function setVisibleTest($visibleTest)
+    {
+        $this->visibleTest = $visibleTest;
     }
 
     /**
