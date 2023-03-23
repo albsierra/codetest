@@ -1,6 +1,7 @@
 <?php
 require_once('initTsugi.php');
 include('views/dao/menu.php');
+include('util/Functions.php');
 
 $SetID = $_SESSION["ct_id"];
 $main = new \CT\CT_Main($_SESSION["ct_id"]);
@@ -16,6 +17,9 @@ if ($totalExercises > 0) {
 
     $firstExerciseAkId = $exercises[$currentExerciseNumber - 1]->getAkId();
     $firsExerciseId = $exercises[$currentExerciseNumber - 1]->getExerciseId();
+    if ( $USER->instructor ) {
+        $renewed = downloadAkExercise($firstExerciseAkId);
+    }
     $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/tests");
     $exerciseStatementsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/statements/$student_language");
     $statements_list = $exerciseStatementsResponse->toArray();
