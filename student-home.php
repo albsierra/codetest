@@ -17,7 +17,8 @@ if ($totalExercises > 0) {
 
     $firstExerciseAkId = $exercises[$currentExerciseNumber - 1]->getAkId();
     $firstExerciseId = $exercises[$currentExerciseNumber - 1]->getExerciseId();
-    if ( $USER->instructor ) {
+    $isAK_exercise = !$exercises[$currentExerciseNumber - 1]->getCodeExercise();
+    if ( $USER->instructor && $isAK_exercise) {
         $renewed = downloadAkExercise($firstExerciseAkId);
     }
     $exerciseTestsResponse = $REST_CLIENT_REPO->getClient()->request('GET', "api/exercises/$firstExerciseAkId/tests");
